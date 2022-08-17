@@ -17,8 +17,8 @@ apply plugin: 'net.minecraftforge.gradle'
 
 
 version = '1.0'
-group = 'com.yourname.modid' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'modid'
+group = 'com.quartzshard.as_above_so_below' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = 'as_above_so_below'
 
 // Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
@@ -61,10 +61,10 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
-            property 'forge.enabledGameTestNamespaces', 'examplemod'
+            property 'forge.enabledGameTestNamespaces', 'as_above_so_below'
 
             mods {
-                examplemod {
+                as_above_so_below {
                     source sourceSets.main
                 }
             }
@@ -78,10 +78,10 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
-            property 'forge.enabledGameTestNamespaces', 'examplemod'
+            property 'forge.enabledGameTestNamespaces', 'as_above_so_below'
 
             mods {
-                examplemod {
+                as_above_so_below {
                     source sourceSets.main
                 }
             }
@@ -106,10 +106,10 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
-            property 'forge.enabledGameTestNamespaces', 'examplemod'
+            property 'forge.enabledGameTestNamespaces', 'as_above_so_below'
 
             mods {
-                examplemod {
+                as_above_so_below {
                     source sourceSets.main
                 }
             }
@@ -122,11 +122,11 @@ minecraft {
 
             property 'forge.logging.console.level', 'debug'
 
-            // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-            args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            // Specify the as_above_so_below for data generation, where to output the resulting resource, and where to look for existing resources.
+            args '--mod', 'as_above_so_below', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
             mods {
-                examplemod {
+                as_above_so_below {
                     source sourceSets.main
                 }
             }
@@ -145,6 +145,12 @@ repositories {
     // flatDir {
     //     dir 'libs'
     // }
+     maven { // JEI
+        url "https://dvs1.progwml6.com/files/maven"
+    }
+    maven { // TOP
+        url "https://cursemaven.com"
+    }
 }
 
 dependencies {
@@ -154,9 +160,9 @@ dependencies {
     minecraft 'net.minecraftforge:forge:1.18.2-40.1.73'
 
     // Real mod deobf dependency examples - these get remapped to your current mappings
-    // compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api") // Adds JEI API as a compile dependency
-    // runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}") // Adds the full JEI mod as a runtime dependency
-    // implementation fg.deobf("com.tterrag.registrate:Registrate:MC${mc_version}-${registrate_version}") // Adds registrate as a dependency
+    compileOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.1.232:api") // Adds JEI API as a compile dependency
+    runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.1.232") // Adds the full JEI mod as a runtime dependency
+    implementation fg.deobf("curse.maven:the-one-probe-245211:3550084")
 
     // Examples using mod jars from ./libs
     // implementation fg.deobf("blank:coolmod-${mc_version}:${coolmod_version}")
@@ -170,12 +176,12 @@ dependencies {
 jar {
     manifest {
         attributes([
-                "Specification-Title"     : "examplemod",
-                "Specification-Vendor"    : "examplemodsareus",
+                "Specification-Title"     : "as_above_so_below",
+                "Specification-Vendor"    : "quartzshard",
                 "Specification-Version"   : "1", // We are version 1 of ourselves
                 "Implementation-Title"    : project.name,
                 "Implementation-Version"  : project.jar.archiveVersion,
-                "Implementation-Vendor"   : "examplemodsareus",
+                "Implementation-Vendor"   : "quartzshard",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
