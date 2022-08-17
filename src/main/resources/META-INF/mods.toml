@@ -44,7 +44,7 @@ logoFile="as_above_so_below.png" #optional
 authors="quartzshard" #optional
 # The description text for the mod (multi line!) (#mandatory)
 description='''
-An alchemy mod, thematically and mechanically inspired by EquvalentExchange/ProjectE and Fullmetal Alchemist
+An alchemy mod, thematically and mechanically inspired by EquvalentExchange, Thaumcraft and Fullmetal Alchemist
 '''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.as_above_so_below]] #optional
