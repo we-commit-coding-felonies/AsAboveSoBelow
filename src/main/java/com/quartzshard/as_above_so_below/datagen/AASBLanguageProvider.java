@@ -16,5 +16,7 @@ public class AASBLanguageProvider extends LanguageProvider {
     protected void addTranslations() {
         add("itemGroup." + AsAboveSoBelow.DISPLAYNAME, "As Above, So Below");
         add(ItemInit.PHILOSOPHERS_STONE.get(), "Philosopher's Stone");
+        add(ItemInit.WHITE_STONE.get(),"White Stone");
+
     }
 }

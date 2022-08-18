@@ -23,4 +23,6 @@ public class ItemInit {
 
     //Items
     public static final RegistryObject<Item> PHILOSOPHERS_STONE = ITEMS.register("philosophers_stone", () -> new Item(ITEM_PROPERTIES));
+    public static final RegistryObject<Item> WHITE_STONE = ITEMS.register("white_stone", () -> new Item(ITEM_PROPERTIES));
+
 }

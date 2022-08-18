@@ -16,5 +16,6 @@ public class AASBItemModels extends ItemModelProvider {
     @Override
     protected void registerModels() {
         singleTexture(ItemInit.PHILOSOPHERS_STONE.getId().getPath(), mcLoc("item/generated"),"layer0", modLoc("item/philosophers_stone"));
+        singleTexture(ItemInit.WHITE_STONE.getId().getPath(), mcLoc("item/generated"),"layer0", modLoc("item/white_stone"));
     }
 }
