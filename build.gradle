@@ -162,7 +162,6 @@ dependencies {
     // Real mod deobf dependency examples - these get remapped to your current mappings
     compileOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.1.232:api") // Adds JEI API as a compile dependency
     runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.1.232") // Adds the full JEI mod as a runtime dependency
-    implementation fg.deobf("curse.maven:the-one-probe-245211:3550084")
 
     // Examples using mod jars from ./libs
     // implementation fg.deobf("blank:coolmod-${mc_version}:${coolmod_version}")
