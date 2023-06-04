@@ -6,33 +6,32 @@ license="GNU GPLv3"
 
 # A list of mods - how many allowed here is determined by the individual mod loader
 [[mods]]
-modId="as_above_so_below"
+modId="aasb"
 version="${file.jarVersion}"
 displayName="As Above, So Below"
 updateJSONURL="https://github.com/we-commit-coding-felonies/AsAboveSoBelow/blob/main/update.json"
 displayURL="https://github.com/we-commit-coding-felonies/AsAboveSoBelow"
 
 # A file name (in the root of the mod JAR) containing a logo for display
-logoFile="as_above_so_below.png"
+logoFile="logo.png"
 
 # A text field displayed in the mod UI
 #credits="ProjectE, Thaumcraft, Full Metal Alchemist for inspiration"
 # A text field displayed in the mod UI
 authors="quartzshard, solunareclipse1"
-# The description text for the mod (multi line!) (#mandatory)
 description='''
 An alchemy mod, thematically and mechanically inspired by EquvalentExchange, Thaumcraft and Fullmetal Alchemist
 A spiritual successor to the abandoned Equivalent Exchange 3
 '''
 
-[[dependencies.as_above_so_below]]
+[[dependencies.aasb]]
     # the modid of the dependency
     modId="forge"
     mandatory=true
     versionRange="[40,)"
     ordering="NONE"
     side="BOTH"
-[[dependencies.as_above_so_below]]
+[[dependencies.aasb]]
     modId="minecraft"
     mandatory=true
     versionRange="[1.18.2,1.19)"

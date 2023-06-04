@@ -21,8 +21,8 @@ apply plugin: 'org.spongepowered.mixin'
 
 
 version = '0.0.0.1'
-group = 'com.quartzshard.as_above_so_below'
-archivesBaseName = 'as_above_so_below'
+group = 'com.quartzshard.aasb'
+archivesBaseName = 'AsAboveSoBelow'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
@@ -38,13 +38,13 @@ minecraft {
 
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
-            property 'forge.enabledGameTestNamespaces', 'as_above_so_below'
+            property 'forge.enabledGameTestNamespaces', 'aasb'
             
             property 'mixin.env.remapRefMap', 'true'
 			property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
 
             mods {
-                as_above_so_below {
+                aasb {
                     source sourceSets.main
                 }
             }
@@ -56,13 +56,13 @@ minecraft {
 
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
-            property 'forge.enabledGameTestNamespaces', 'as_above_so_below'
+            property 'forge.enabledGameTestNamespaces', 'aasb'
             
             property 'mixin.env.remapRefMap', 'true'
 			property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
 
             mods {
-                as_above_so_below {
+                aasb {
                     source sourceSets.main
                 }
             }
@@ -74,10 +74,10 @@ minecraft {
 
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
-            property 'forge.enabledGameTestNamespaces', 'as_above_so_below'
+            property 'forge.enabledGameTestNamespaces', 'aasb'
 
             mods {
-                as_above_so_below {
+                aasb {
                     source sourceSets.main
                 }
             }
@@ -90,10 +90,10 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
             property 'mixin.env.disableRefMap', 'true'
 
-            args '--mod', 'as_above_so_below', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            args '--mod', 'aasb', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
             mods {
-                as_above_so_below {
+                aasb {
                     source sourceSets.main
                 }
             }
@@ -137,27 +137,27 @@ dependencies {
     minecraft 'net.minecraftforge:forge:1.18.2-40.2.4'
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
-    implementation fg.deobf("curse.maven:projecte-226410:${projecte_version}-api")
+    //implementation fg.deobf("curse.maven:projecte-226410:${projecte_version}-api")
     
-    implementation fg.deobf("vazkii.botania:Botania:${mc_version}-${botania_version}")
-    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${mc_version}-${patchouli_version}")
+    //implementation fg.deobf("vazkii.botania:Botania:${mc_version}-${botania_version}")
+    //runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${mc_version}-${patchouli_version}")
     
     implementation fg.deobf("top.theillusivec4.curios:curios-forge:${mc_version}-${curios_version}")
 
     compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
     implementation fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
     
-    implementation fg.deobf("curse.maven:avaritia-261348:${avaritia_version}")
-    implementation fg.deobf("curse.maven:codechickenlib-242818:${codechickenlib_version_cf}")
+    //implementation fg.deobf("curse.maven:avaritia-261348:${avaritia_version}")
+    //implementation fg.deobf("curse.maven:codechickenlib-242818:${codechickenlib_version_cf}")
     
-    implementation fg.deobf("com.simibubi.create:create-${mc_version}:${create_version}:slim") { transitive = false }
-    implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge-${mc_version}:${flywheel_version}")
-    implementation fg.deobf("com.tterrag.registrate:Registrate:MC${mc_version}-${registrate_version}")
+    //implementation fg.deobf("com.simibubi.create:create-${mc_version}:${create_version}:slim") { transitive = false }
+    //implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge-${mc_version}:${flywheel_version}")
+    //implementation fg.deobf("com.tterrag.registrate:Registrate:MC${mc_version}-${registrate_version}")
     
-    implementation fg.deobf("mekanism:Mekanism:${mc_version}-${mekanism_version}")
-    implementation fg.deobf("mekanism:Mekanism:${mc_version}-${mekanism_version}:generators")
+    //implementation fg.deobf("mekanism:Mekanism:${mc_version}-${mekanism_version}")
+    //implementation fg.deobf("mekanism:Mekanism:${mc_version}-${mekanism_version}:generators")
     
-	implementation fg.deobf("curse.maven:bloodmagic-224791:${bloodmagic_version}")
+	//implementation fg.deobf("curse.maven:bloodmagic-224791:${bloodmagic_version}")
 }
 
 mixin {
@@ -168,7 +168,7 @@ mixin {
 jar {
     manifest {
         attributes([
-                "Specification-Title"     : "as_above_so_below",
+                "Specification-Title"     : "aasb",
                 "Specification-Vendor"    : "quartzshard",
                 "Specification-Version"   : "1",
                 "Implementation-Title"    : project.name,
