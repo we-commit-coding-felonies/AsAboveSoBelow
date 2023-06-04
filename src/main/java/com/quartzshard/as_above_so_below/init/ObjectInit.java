@@ -16,6 +16,10 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+/**
+ * anything tangible, such as blocks items or entities
+ * @author solunareclipse1
+ */
 public class ObjectInit {
 
 

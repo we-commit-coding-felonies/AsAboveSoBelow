@@ -15,6 +15,7 @@ public class AASBLang extends LanguageProvider {
     @Override
     protected void addTranslations() {
         add("itemGroup." + AsAboveSoBelow.MODID, "As Above, So Below");
+        
         add(ObjectInit.Items.PHILOSOPHERS_STONE.get(), "The Philosopher's Stone");
         add(ObjectInit.Items.MINIUM_STONE.get(),"Minium Stone");
 
