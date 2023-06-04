@@ -1,20 +1,21 @@
-package com.quartzshard.as_above_so_below.datagen;
+package com.quartzshard.as_above_so_below.data;
 
 import com.quartzshard.as_above_so_below.AsAboveSoBelow;
 
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
+import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
-public class AASBBlockTags extends BlockTagsProvider {
+public class AASBItemTags extends ItemTagsProvider {
 
-    public AASBBlockTags(DataGenerator gen, ExistingFileHelper helper) {
-        super(gen, AsAboveSoBelow.MODID, helper);
+    public AASBItemTags(DataGenerator gen, BlockTagsProvider blockTags, ExistingFileHelper helper) {
+        super(gen, blockTags, AsAboveSoBelow.MODID, helper);
     }
 
     @Override
     protected void addTags() {
-        
+
     }
 
     @Override

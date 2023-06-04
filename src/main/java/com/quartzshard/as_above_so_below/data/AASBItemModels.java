@@ -1,7 +1,7 @@
-package com.quartzshard.as_above_so_below.datagen;
+package com.quartzshard.as_above_so_below.data;
 
 import com.quartzshard.as_above_so_below.AsAboveSoBelow;
-import com.quartzshard.as_above_so_below.setup.ItemInit;
+import com.quartzshard.as_above_so_below.init.ObjectInit;
 
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
@@ -15,7 +15,7 @@ public class AASBItemModels extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
-        singleTexture(ItemInit.PHILOSOPHERS_STONE.getId().getPath(), mcLoc("item/generated"),"layer0", modLoc("item/philosophers_stone"));
-        singleTexture(ItemInit.WHITE_STONE.getId().getPath(), mcLoc("item/generated"),"layer0", modLoc("item/white_stone"));
+        singleTexture(ObjectInit.Items.PHILOSOPHERS_STONE.getId().getPath(), mcLoc("item/generated"),"layer0", modLoc("item/philosophers_stone"));
+        singleTexture(ObjectInit.Items.MINIUM_STONE.getId().getPath(), mcLoc("item/generated"),"layer0", modLoc("item/white_stone"));
     }
 }

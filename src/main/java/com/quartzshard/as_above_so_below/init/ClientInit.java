@@ -1,4 +1,4 @@
-package com.quartzshard.as_above_so_below.setup;
+package com.quartzshard.as_above_so_below.init;
 
 import com.quartzshard.as_above_so_below.AsAboveSoBelow;
 

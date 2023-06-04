@@ -1,4 +1,4 @@
-package com.quartzshard.as_above_so_below.datagen;
+package com.quartzshard.as_above_so_below.data;
 
 import java.util.function.Consumer;
 

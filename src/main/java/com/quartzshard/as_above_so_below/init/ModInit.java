@@ -1,4 +1,4 @@
-package com.quartzshard.as_above_so_below.setup;
+package com.quartzshard.as_above_so_below.init;
 
 import com.quartzshard.as_above_so_below.AsAboveSoBelow;
 
@@ -14,7 +14,7 @@ public class ModInit {
     public static final CreativeModeTab ITEM_GROUP = new CreativeModeTab(TAB_NAME) {
         @Override
         public ItemStack makeIcon() {
-            return new ItemStack(ItemInit.PHILOSOPHERS_STONE.get());
+            return new ItemStack(ObjectInit.Items.PHILOSOPHERS_STONE.get());
         }
     };
 }
