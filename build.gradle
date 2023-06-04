@@ -44,7 +44,7 @@ minecraft {
 			property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
 
             mods {
-                magitekkit {
+                as_above_so_below {
                     source sourceSets.main
                 }
             }
@@ -62,7 +62,7 @@ minecraft {
 			property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
 
             mods {
-                magitekkit {
+                as_above_so_below {
                     source sourceSets.main
                 }
             }
@@ -77,7 +77,7 @@ minecraft {
             property 'forge.enabledGameTestNamespaces', 'as_above_so_below'
 
             mods {
-                magitekkit {
+                as_above_so_below {
                     source sourceSets.main
                 }
             }
@@ -93,7 +93,7 @@ minecraft {
             args '--mod', 'as_above_so_below', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
             mods {
-                magitekkit {
+                as_above_so_below {
                     source sourceSets.main
                 }
             }
