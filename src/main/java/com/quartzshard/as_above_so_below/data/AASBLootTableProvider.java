@@ -1,16 +1,9 @@
 package com.quartzshard.as_above_so_below.data;
 
-
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.quartzshard.as_above_so_below.AsAboveSoBelow;
+import com.quartzshard.as_above_so_below.util.LogHelper;
 
 import net.minecraft.advancements.critereon.EnchantmentPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
@@ -30,32 +23,37 @@ import net.minecraft.world.level.storage.loot.LootTables;
 import net.minecraft.world.level.storage.loot.entries.AlternativesEntry;
 import net.minecraft.world.level.storage.loot.entries.DynamicLoot;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
-import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
-import net.minecraft.world.level.storage.loot.functions.ApplyExplosionDecay;
-import net.minecraft.world.level.storage.loot.functions.CopyNameFunction;
-import net.minecraft.world.level.storage.loot.functions.CopyNbtFunction;
-import net.minecraft.world.level.storage.loot.functions.SetContainerContents;
-import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
+import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.predicates.MatchTool;
 import net.minecraft.world.level.storage.loot.providers.nbt.ContextNbtProvider;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-public abstract class BaseLootTableProvider extends LootTableProvider {
-    private static final Logger LOGGER = LogManager.getLogger();
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
+
+
+// thanks mcjty :)
+public abstract class AASBLootTableProvider extends LootTableProvider {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
-    protected final Map<Block, LootTable.Builder> lootTables = new HashMap<>();
+    protected final Map<Block, LootTable.Builder> blockLootTables = new HashMap<>();
+    protected final Map<Item, LootTable.Builder> itemLootTables = new HashMap<>();
     private final DataGenerator generator;
 
-    public BaseLootTableProvider(DataGenerator dataGeneratorIn) {
+    public AASBLootTableProvider(DataGenerator dataGeneratorIn) {
         super(dataGeneratorIn);
         this.generator = dataGeneratorIn;
     }
+
     protected abstract void addTables();
 
-    protected LootTable.Builder createStandardTable(String name, Block block, BlockEntityType<?> type) {
+    protected LootTable.Builder createStandardBlockTable(String name, Block block, BlockEntityType<?> type) {
         LootPool.Builder builder = LootPool.lootPool()
                 .name(name)
                 .setRolls(ConstantValue.exactly(1))
@@ -71,7 +69,7 @@ public abstract class BaseLootTableProvider extends LootTableProvider {
         return LootTable.lootTable().withPool(builder);
     }
 
-    protected LootTable.Builder createSimpleTable(String name, Block block) {
+    protected LootTable.Builder createSimpleBlockTable(String name, Block block) {
         LootPool.Builder builder = LootPool.lootPool()
                 .name(name)
                 .setRolls(ConstantValue.exactly(1))
@@ -102,7 +100,7 @@ public abstract class BaseLootTableProvider extends LootTableProvider {
         addTables();
 
         Map<ResourceLocation, LootTable> tables = new HashMap<>();
-        for (Map.Entry<Block, LootTable.Builder> entry : lootTables.entrySet()) {
+        for (Map.Entry<Block, LootTable.Builder> entry : blockLootTables.entrySet()) {
             tables.put(entry.getKey().getLootTable(), entry.getValue().setParamSet(LootContextParamSets.BLOCK).build());
         }
         writeTables(cache, tables);
@@ -115,13 +113,13 @@ public abstract class BaseLootTableProvider extends LootTableProvider {
             try {
                 DataProvider.save(GSON, cache, LootTables.serialize(lootTable), path);
             } catch (IOException e) {
-                LOGGER.error("Couldn't write loot table {}", path, e);
+            	LogHelper.LOGGER.error("Couldn't write loot table {}", path, e);
             }
         });
     }
 
     @Override
     public String getName() {
-        return "As Above, So Below LootTables";
+        return AsAboveSoBelow.DISPLAYNAME + " Loot Tables";
     }
 }

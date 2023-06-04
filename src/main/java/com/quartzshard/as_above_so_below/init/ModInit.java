@@ -10,7 +10,7 @@ public class ModInit {
     public static void init(final FMLCommonSetupEvent event) {
     }
 
-    public static final String TAB_NAME = AsAboveSoBelow.DISPLAYNAME;
+    public static final String TAB_NAME = AsAboveSoBelow.MODID;
     public static final CreativeModeTab ITEM_GROUP = new CreativeModeTab(TAB_NAME) {
         @Override
         public ItemStack makeIcon() {

@@ -40,8 +40,8 @@ public class AASBTags {
 	        super(generator, AsAboveSoBelow.MODID, helper);
 	    }
 
-		public static final TagKey<Block> ARROW_NOCLIP = makeTag("sentient_arrow_pathfind_noclip");
-		public static final TagKey<Block> ARROW_ANNIHILATE = makeTag("sentient_arrow_pathfind_annihilate");
+		public static final TagKey<Block> ARROW_NOCLIP = makeTag("sentient_arrow_noclip");
+		public static final TagKey<Block> ARROW_ANNIHILATE = makeTag("sentient_arrow_annihilate");
 
 		public static final TagKey<Block> NUKE_RESIST = makeTag("nuke_resist");
 		public static final TagKey<Block> NUKE_IMMUNE = makeTag("nuke_immune");

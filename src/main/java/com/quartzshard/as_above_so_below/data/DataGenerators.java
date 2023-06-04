@@ -16,7 +16,7 @@ public class DataGenerators {
         DataGenerator generator = event.getGenerator();
         if (event.includeServer()) {
             generator.addProvider(new AASBRecipes(generator));
-            generator.addProvider(new AASBLootTables(generator));
+            generator.addProvider(new AASBLoot(generator));
             AASBTags.BlockTP blockTags = AASBTags.INSTANCE.new BlockTP(generator, event.getExistingFileHelper());
             generator.addProvider(blockTags);
             AASBTags.ItemTP itemTags = AASBTags.INSTANCE.new ItemTP(generator, blockTags, event.getExistingFileHelper());
