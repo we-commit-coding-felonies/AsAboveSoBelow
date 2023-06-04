@@ -6,9 +6,9 @@ import com.quartzshard.as_above_so_below.init.ObjectInit;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.LanguageProvider;
 
-public class AASBLanguageProvider extends LanguageProvider {
+public class AASBLang extends LanguageProvider {
 
-    public AASBLanguageProvider(DataGenerator gen, String locale) {
+    public AASBLang(DataGenerator gen, String locale) {
         super(gen, AsAboveSoBelow.MODID, locale);
     }
 

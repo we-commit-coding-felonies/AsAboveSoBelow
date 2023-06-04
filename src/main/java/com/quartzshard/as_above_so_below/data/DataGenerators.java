@@ -17,15 +17,15 @@ public class DataGenerators {
         if (event.includeServer()) {
             generator.addProvider(new AASBRecipes(generator));
             generator.addProvider(new AASBLootTables(generator));
-            AASBBlockTags blockTags = new AASBBlockTags(generator, event.getExistingFileHelper());
+            AASBTags.BlockTP blockTags = AASBTags.INSTANCE.new BlockTP(generator, event.getExistingFileHelper());
             generator.addProvider(blockTags);
-            generator.addProvider(new AASBItemTags(generator, blockTags, event.getExistingFileHelper()));
+            AASBTags.ItemTP itemTags = AASBTags.INSTANCE.new ItemTP(generator, blockTags, event.getExistingFileHelper());
+            generator.addProvider(itemTags);
         }
         if (event.includeClient()) {
             generator.addProvider(new AASBBlockStates(generator, event.getExistingFileHelper()));
             generator.addProvider(new AASBItemModels(generator, event.getExistingFileHelper()));
-            generator.addProvider(new AASBLanguageProvider(generator, "en_gb"));
-            generator.addProvider(new AASBLanguageProvider(generator, "en_us"));
+            generator.addProvider(new AASBLang(generator, "en_us"));
 
         }
     }
