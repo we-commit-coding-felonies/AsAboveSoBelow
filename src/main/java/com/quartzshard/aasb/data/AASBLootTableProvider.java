@@ -115,9 +115,12 @@ public abstract class AASBLootTableProvider extends LootTableProvider {
             }
         });
     }
+	
+	
 
-    @Override
-    public String getName() {
-        return AsAboveSoBelow.DISPLAYNAME + " Loot Tables";
-    }
+
+	@Override
+	public String getName() {
+		return AsAboveSoBelow.DISPLAYNAME + " | Loot Tables";
+	}
 }

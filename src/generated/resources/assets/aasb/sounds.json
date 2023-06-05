@@ -1,0 +1,20 @@
+{
+  "way.waste": {
+    "subtitle": "subtitles.aasb.way.waste",
+    "sounds": [
+      "aasb:way/waste"
+    ]
+  },
+  "way.leak": {
+    "subtitle": "subtitles.aasb.way.leak",
+    "sounds": [
+      "aasb:way/leak"
+    ]
+  },
+  "way.explode": {
+    "subtitle": "subtitles.aasb.way.explode",
+    "sounds": [
+      "aasb:way/explode"
+    ]
+  }
+}

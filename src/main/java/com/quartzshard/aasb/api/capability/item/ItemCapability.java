@@ -1,4 +1,4 @@
-package com.quartzshard.aasb.api.capability;
+package com.quartzshard.aasb.api.capability.item;
 
 import net.minecraft.world.item.ItemStack;
 

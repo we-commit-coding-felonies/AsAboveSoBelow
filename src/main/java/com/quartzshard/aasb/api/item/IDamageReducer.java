@@ -10,5 +10,4 @@ import net.minecraft.world.item.ItemStack;
 public interface IDamageReducer {
 	
 	float getDr(ItemStack stack, DamageSource source);
-
 }

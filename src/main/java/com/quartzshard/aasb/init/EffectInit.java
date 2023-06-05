@@ -5,6 +5,8 @@ import com.quartzshard.aasb.AsAboveSoBelow;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -15,8 +17,15 @@ import net.minecraftforge.registries.RegistryObject;
  *
  */
 public class EffectInit {
+
+    public static void init() {
+        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+        Sounds.REG.register(bus);
+        //MOB_EFFECTS.register(bus);
+        //PARTICLES.register(bus);
+    }
 	public class Sounds {
-		private static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, AsAboveSoBelow.MODID);
+		private static final DeferredRegister<SoundEvent> REG = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, AsAboveSoBelow.MODID);
 		
 	    public static final RegistryObject<SoundEvent> BARRIER_AMBIENT = registerSound("barrier.ambient");
 	    public static final RegistryObject<SoundEvent> BARRIER_PROTECT = registerSound("barrier.protect");
@@ -35,7 +44,7 @@ public class EffectInit {
 	    public static final RegistryObject<SoundEvent> TRANSMUTE_SHAPE_ALIVE = registerSound("transmute.living");
 	    
 	    private static RegistryObject<SoundEvent> registerSound(String name) {
-	    	return SOUNDS.register(name, () -> new SoundEvent(new ResourceLocation(AsAboveSoBelow.MODID, name)));
+	    	return REG.register(name, () -> new SoundEvent(new ResourceLocation(AsAboveSoBelow.MODID, name)));
 	    }
 		
 	}

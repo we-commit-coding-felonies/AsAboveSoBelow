@@ -1,4 +1,4 @@
-package com.quartzshard.aasb.api.capability;
+package com.quartzshard.aasb.api.capability.item;
 
 import java.util.List;
 import java.util.function.Supplier;

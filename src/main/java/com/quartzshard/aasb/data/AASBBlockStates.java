@@ -21,7 +21,7 @@ public class AASBBlockStates extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-		placeholder(ObjectInit.Blocks.WAYSTONE.get());
+		simpleBlock(ObjectInit.Blocks.WAYSTONE.get());
 		
 		getVariantBuilder(ObjectInit.Blocks.AIR_ICE.get())
 			.partialState().with(AirIceBlock.AGE, 0).addModels(modelOf(Blocks.FROSTED_ICE, "_0"))
@@ -47,6 +47,14 @@ public class AASBBlockStates extends BlockStateProvider {
     @Deprecated
 	private void placeholder(Block block) {
 		simpleBlock(block, models().cubeAll(block.getRegistryName().getPath(), AsAboveSoBelow.rl("placeholder")));
+	}
+	
+	
+
+
+	@Override
+	public String getName() {
+		return AsAboveSoBelow.DISPLAYNAME + " | Block States";
 	}
 
 }

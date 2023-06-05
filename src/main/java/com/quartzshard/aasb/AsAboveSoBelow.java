@@ -1,6 +1,7 @@
 package com.quartzshard.aasb;
 
 import com.quartzshard.aasb.init.ClientInit;
+import com.quartzshard.aasb.init.EffectInit;
 import com.quartzshard.aasb.init.ModInit;
 import com.quartzshard.aasb.init.ObjectInit;
 
@@ -20,6 +21,7 @@ public class AsAboveSoBelow {
 
 	public AsAboveSoBelow() {
 		ObjectInit.init();
+		EffectInit.init();
 
 		IEventBus modbus = FMLJavaModLoadingContext.get().getModEventBus();
 		modbus.addListener(ModInit::init);

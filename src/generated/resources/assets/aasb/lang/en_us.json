@@ -1,7 +1,17 @@
 {
   "block.aasb.air_ice": "Frozen Air",
   "block.aasb.waystone": "Waystone",
+  "item.aasb.dark_matter_boots": "Dark-Matter Boots",
+  "item.aasb.dark_matter_chestplate": "Dark-Matter Chestplate",
+  "item.aasb.dark_matter_helmet": "Dark-Matter Helmet",
+  "item.aasb.dark_matter_leggings": "Dark-Matter Leggings",
   "item.aasb.minium_stone": "Minium Stone",
   "item.aasb.philosophers_stone": "The Philosopher's Stone",
-  "itemGroup.aasb": "As Above, So Below"
+  "itemGroup.aasb": "As Above, So Below",
+  "tip.aasb.dm.armor.burnout": "Burnout: %s/%s",
+  "tip.aasb.dm.armor.desc.1": "Provides enormous amounts of protection by absorbing damage",
+  "tip.aasb.dm.armor.desc.2": "Protection decreases with more damage absorbed, regenerates over time",
+  "tip.aasb.dm.armor.desc.3": "Will violently release all stored energy at once if it absorbs to much",
+  "tip.aasb.dm.armor.dr": "Currently providing a %s damage reduction",
+  "tip.aasb.dm.armor.flavor": "Absorbs almost all damage with the infalliable Ultrashield"
 }

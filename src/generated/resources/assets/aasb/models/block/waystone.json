@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/cube_all",
   "textures": {
-    "all": "aasb:placeholder"
+    "all": "aasb:block/waystone"
   }
 }

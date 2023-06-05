@@ -3,15 +3,20 @@ package com.quartzshard.aasb.common.item.equipment.armor;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.quartzshard.aasb.AsAboveSoBelow;
 import com.quartzshard.aasb.api.item.IDamageReducer;
 import com.quartzshard.aasb.common.damage.source.AASBDmgSrc.ICustomDamageSource;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
@@ -19,6 +24,11 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
 
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+
+@Mod.EventBusSubscriber(modid = AsAboveSoBelow.MODID)
 public abstract class AlchArmor extends ArmorItem implements IDamageReducer {
 	private float baseDr;
 	
@@ -109,4 +119,47 @@ public abstract class AlchArmor extends ArmorItem implements IDamageReducer {
 	public boolean isBookEnchantable(ItemStack stack, ItemStack book) {return false;}
 	@Override
 	public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment ench) {return false;}
+	
+
+	/**
+	 * damage absorb handling
+	 * @param event
+	 */
+	@SubscribeEvent
+	public static void reduceDamage(LivingHurtEvent event) {
+		float damage = event.getAmount();
+		if (damage > 0) {
+			LivingEntity entity = event.getEntityLiving();
+			DamageSource source = event.getSource();
+			Map<ItemStack, Float> absorbList = new HashMap<>();
+			float totalDr = 0;
+			for (ItemStack stack : entity.getArmorSlots()) {
+				if (!stack.isEmpty() && stack.getItem() instanceof IDamageReducer drItem) {
+					float dr = drItem.getDr(stack, source);
+					totalDr += dr;
+					absorbList.put(stack, dr);
+				}
+			}
+			if (totalDr > 0) {
+				if (totalDr >= 1) {
+					event.setCanceled(true);
+				} else {
+					event.setAmount(damage * (1f-totalDr));
+				}
+				entity.level.playSound(null, entity, SoundEvents.SHIELD_BLOCK, entity.getSoundSource(), Math.min(1, totalDr), 1);
+				for (Entry<ItemStack, Float> absorber : absorbList.entrySet()) {
+					ItemStack stack = absorber.getKey();
+					float absorbed = absorber.getValue()*event.getAmount();
+					stack.hurtAndBreak(Math.round(absorbed), entity, ent -> {
+						armorBreak(stack, ent);
+					});
+				}
+			}
+		}
+	}
+	
+	private static void armorBreak(ItemStack stack, LivingEntity entity) {
+		entity.broadcastBreakEvent(LivingEntity.getEquipmentSlotForItem(stack));
+	}
+
 }

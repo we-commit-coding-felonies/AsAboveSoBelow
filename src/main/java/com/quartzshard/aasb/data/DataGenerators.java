@@ -4,6 +4,7 @@ import com.quartzshard.aasb.AsAboveSoBelow;
 
 import net.minecraft.data.DataGenerator;
 
+import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
@@ -13,20 +14,20 @@ public class DataGenerators {
     
     @SubscribeEvent
     public static void gatherData(GatherDataEvent event) {
-        DataGenerator generator = event.getGenerator();
+        DataGenerator gen = event.getGenerator();
+        ExistingFileHelper help = event.getExistingFileHelper();
         if (event.includeServer()) {
-            generator.addProvider(new AASBRecipes(generator));
-            generator.addProvider(new AASBLoot(generator));
-            AASBTags.BlockTP blockTags = AASBTags.INSTANCE.new BlockTP(generator, event.getExistingFileHelper());
-            generator.addProvider(blockTags);
-            AASBTags.ItemTP itemTags = AASBTags.INSTANCE.new ItemTP(generator, blockTags, event.getExistingFileHelper());
-            generator.addProvider(itemTags);
+            gen.addProvider(new AASBRecipes(gen));
+            gen.addProvider(new AASBLoot(gen));
+            AASBTags.BlockTP blockTags = AASBTags.INSTANCE.new BlockTP(gen, help);
+            gen.addProvider(blockTags);
+            gen.addProvider(AASBTags.INSTANCE.new ItemTP(gen, blockTags, help));
         }
         if (event.includeClient()) {
-            generator.addProvider(new AASBBlockStates(generator, event.getExistingFileHelper()));
-            generator.addProvider(new AASBItemModels(generator, event.getExistingFileHelper()));
-            generator.addProvider(new AASBLang(generator, "en_us"));
-
+            gen.addProvider(new AASBBlockStates(gen, help));
+            gen.addProvider(new AASBItemModels(gen, help));
+            gen.addProvider(AASBLang.INSTANCE.new Provider(gen, "en_us"));
+            gen.addProvider(new AASBSounds(gen, help));
         }
     }
 }

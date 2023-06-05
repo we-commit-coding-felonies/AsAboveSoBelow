@@ -27,10 +27,13 @@ public class AASBTags {
 		protected void addTags() {
 
 		}
+		
+		
+
 
 		@Override
 		public String getName() {
-			return AsAboveSoBelow.DISPLAYNAME + " item tags";
+			return AsAboveSoBelow.DISPLAYNAME + " | Item Tags";
 		}
 	}
 	
@@ -90,10 +93,13 @@ public class AASBTags {
 	    private static TagKey<Block> makeTag(String name) {
 	    	return TagKey.create(Registry.BLOCK_REGISTRY, AsAboveSoBelow.rl(name));
 	    }
+		
+		
+
 
 		@Override
 		public String getName() {
-			return AsAboveSoBelow.DISPLAYNAME + " block tags";
+			return AsAboveSoBelow.DISPLAYNAME + " | Block Tags";
 		}
 	}
 }
