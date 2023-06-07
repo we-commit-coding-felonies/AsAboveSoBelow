@@ -2,6 +2,7 @@ package com.quartzshard.aasb.init;
 
 import com.quartzshard.aasb.AsAboveSoBelow;
 import com.quartzshard.aasb.common.block.AirIceBlock;
+import com.quartzshard.aasb.common.item.equipment.BandOfArcana;
 import com.quartzshard.aasb.common.item.equipment.armor.DarkMatterArmor;
 import com.quartzshard.aasb.common.item.equipment.armor.DarkMatterArmor.DarkMatterArmorMaterial;
 
@@ -36,17 +37,19 @@ public class ObjectInit {
         public static final DeferredRegister<Item> REG = DeferredRegister.create(ForgeRegistries.ITEMS, AsAboveSoBelow.MODID);
         //Common item properties
         public static final Item.Properties ITEM_PROPERTIES_GENERIC = new Item.Properties().tab(ModInit.ITEM_GROUP);
-        public static final Item.Properties ITEM_PROPERTIES_CRIMSON_GEAR = new Item.Properties().tab(ModInit.ITEM_GROUP).durability(0).fireResistant().stacksTo(1);//.rarity(MGTKRarity.CRIMSON.get());
+        public static final Item.Properties ITEM_PROPERTIES_DM_GEAR = new Item.Properties().tab(ModInit.ITEM_GROUP).durability(0).fireResistant().stacksTo(1);//.rarity(MGTKRarity.CRIMSON.get());
 
         //Items
         public static final RegistryObject<Item>
     		MINIUM_STONE = REG.register("minium_stone", () -> new Item(ITEM_PROPERTIES_GENERIC)),
         	PHILOSOPHERS_STONE = REG.register("philosophers_stone", () -> new Item(ITEM_PROPERTIES_GENERIC)),
         
-        	DARK_MATTER_HELMET = REG.register("dark_matter_helmet", () -> new DarkMatterArmor(DarkMatterArmorMaterial.MAT, EquipmentSlot.HEAD, ITEM_PROPERTIES_CRIMSON_GEAR, 0.17f)),
-    		DARK_MATTER_CHESTPLATE = REG.register("dark_matter_chestplate", () -> new DarkMatterArmor(DarkMatterArmorMaterial.MAT, EquipmentSlot.CHEST, ITEM_PROPERTIES_CRIMSON_GEAR, 0.4f)),
-    		DARK_MATTER_LEGGINGS = REG.register("dark_matter_leggings", () -> new DarkMatterArmor(DarkMatterArmorMaterial.MAT, EquipmentSlot.LEGS, ITEM_PROPERTIES_CRIMSON_GEAR, 0.3f)),
-    		DARK_MATTER_BOOTS = REG.register("dark_matter_boots", () -> new DarkMatterArmor(DarkMatterArmorMaterial.MAT, EquipmentSlot.FEET, ITEM_PROPERTIES_CRIMSON_GEAR, 0.13f));
+        	DARK_MATTER_HELMET = REG.register("dark_matter_helmet", () -> new DarkMatterArmor(DarkMatterArmorMaterial.MAT, EquipmentSlot.HEAD, ITEM_PROPERTIES_DM_GEAR, 0.17f)),
+    		DARK_MATTER_CHESTPLATE = REG.register("dark_matter_chestplate", () -> new DarkMatterArmor(DarkMatterArmorMaterial.MAT, EquipmentSlot.CHEST, ITEM_PROPERTIES_DM_GEAR, 0.4f)),
+    		DARK_MATTER_LEGGINGS = REG.register("dark_matter_leggings", () -> new DarkMatterArmor(DarkMatterArmorMaterial.MAT, EquipmentSlot.LEGS, ITEM_PROPERTIES_DM_GEAR, 0.3f)),
+    		DARK_MATTER_BOOTS = REG.register("dark_matter_boots", () -> new DarkMatterArmor(DarkMatterArmorMaterial.MAT, EquipmentSlot.FEET, ITEM_PROPERTIES_DM_GEAR, 0.13f)),
+    		
+    		BAND_OF_ARCANA = REG.register("band_of_arcana", () -> new BandOfArcana(ITEM_PROPERTIES_GENERIC));
 
         // BlockItems
         public static final RegistryObject<Item> WAYSTONE_BLOCKITEM = fromBlock(Blocks.WAYSTONE);

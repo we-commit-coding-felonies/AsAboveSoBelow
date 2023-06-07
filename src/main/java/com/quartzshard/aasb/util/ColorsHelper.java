@@ -22,14 +22,20 @@ public class ColorsHelper {
 	 * <li> <b>I</b> = Integer color value (0xRRGGBB)
 	 */
 	public enum Color {
-		RED_MATTER(143, 0, 0, 0, 100, 56, 0x8f0000),
-		WEIRD_ORANGE(209, 84, 0, 24, 100, 82, 0xd15400),
-		MIDGREEN(0, 128, 0, 120, 100, 50, 0x008000),
-		PHILOSOPHERS(179, 47, 103, 335, 74, 70, 0xb32f67),
-		COVALENCE_GREEN(0, 210, 74, 141, 100, 82, 0x00d149),
-		COVALENCE_TEAL(0, 209, 207, 179, 100, 82, 0x00d1cf),
-		COVALENCE_BLUE(0, 77, 210, 218, 100, 82, 0x004dd1),
-		COVALENCE_GREEN_TRUE(39, 210, 0, 109, 100, 82, 0x26d100);
+		MID_RED(128,0,0, 0,100,50, 0x800000),
+		MID_YELLOW(128,128,0, 60,100,50, 0x808000),
+		MID_GREEN(0,128,0, 120,100,50, 0x008000),
+		MID_TEAL(0,128,128, 180,100,50, 0x008080),
+		MID_BLUE(0,0,128, 240,100,50, 0x000080),
+		MID_PURPLE(128,0,128, 300,100,50, 0x800080),
+		MID_GRAY(128,128,128, 0,0,50, 0x808080),
+		
+		COVALENCE_GREEN(48,191,100, 142,75,75, 0x30bf64),
+		COVALENCE_TEAL(48,182,191, 184,75,75, 0x30b6bf),
+		COVALENCE_BLUE(48,81,191, 226,75,75, 0x3051bf),
+		COVALENCE_PURPLE(115,48,191, 268,75,75, 0x7330bf),
+		COVALENCE_MAGENTA(191,48,167, 310,75,75, 0xbf30a7),
+		PHILOSOPHERS(191,48,117, 331,75,75, 0xbf3075);
 		public final int R,G,B,H,S,V,I;
 		
 		private Color(int r, int g, int b, int h, int s, int v, int i) {
@@ -152,6 +158,44 @@ public class ColorsHelper {
 	}
 	
 	
+
+	/**
+	 * Fades from 1 value to the next
+	 * 
+	 * @param timer An incrementing value
+	 * @param length How many timer ticks for a full cycle
+	 * @param offset The amount of timer ticks to offset
+	 * @param invert if true, will go max -> min instead of min -> max
+	 * 
+	 * @return Value corresponding to position in the cycle
+	 */
+	public static float fade(long timer, int length, int offset, boolean invert, float a, float b) {
+		float val,
+			lower = Math.min(a, b),	// we figure out which of the vals is bigger
+			upper = Math.max(a, b),	// means you can put the vals in backwards without issue
+			diff = upper - lower,	// difference of the 2 values
+			fade = (timer+offset) % length,	// our current spot on the timer
+			change = diff * (fade/length);	// how much we should change by
+		if (invert)
+			val = upper - change;
+		else
+			val = lower + change;
+		if (val < 0) {
+			// if val is negative, something has gone wrong
+        	LinkedHashMap<String,String> info = new LinkedHashMap<String,String>();
+        	info.put("Val", val+"");
+        	info.put("Diff", diff+"");
+        	info.put("Change", change+"");
+        	info.put("Fade", fade+"");
+        	info.put("Timer", timer+"");
+        	info.put("Length", length+"");
+        	info.put("Offset", offset+"");
+        	info.put("Min", lower+"");
+        	info.put("Max", upper+"");
+        	LogHelper.error("ColorsHelper.fade()", "NegativeFade", "A fade was calculated to be negative!", info);
+		}
+		return val;
+	}
 	
 	/**
 	 * Fades back and forth between 2 values <br>
@@ -159,18 +203,31 @@ public class ColorsHelper {
 	 * @param timer An incrementing value
 	 * @param length How many timer ticks for a full cycle
 	 * @param offset The amount of timer ticks to offset
-	 * @param lower Minimum
-	 * @param upper Maximum
 	 * 
 	 * @return Value corresponding to position in the cycle
 	 */
-	public static float fadingValue(long timer, int length, int offset, float lower, float upper) {
-		float val, diff = Math.max(lower, upper) - Math.min(lower, upper);
-		int swap = length / 2;
-		float fade = ((timer % length) + offset) % length;
-		if (fade > swap) val = upper - ((diff * (fade - swap)) / swap);
-		else val = lower + ((diff * fade) / swap);
+	public static float loopFade(long timer, int length, int offset, float a, float b) {
+		float val,
+			lower = Math.min(a, b),	// we figure out which of the vals is bigger
+			upper = Math.max(a, b),	// means you can put the vals in backwards without issue
+			diff = upper - lower,	// difference of the 2 values
+			fade = (timer+offset) % length;	// our current spot on the timer
+		int swap = length / 2;	// the halfway point, where we change directions
+		if (fade > swap)
+			/* 
+			 * Heres a more readable pseudocode verson of this:
+			 * 
+			 * halfFade = fade - swap					// shift our current spot on the timer down by the swap point, to get a "half timer"
+			 * decAmount = (diff * halfFade) / swap		// the amount we should decrement
+			 * output = upper - decAmount				// do the decrement operation
+			 */
+			val = upper - ((diff * (fade - swap)) / swap);
+		else
+			// see above, this is the same except were going up instead of down
+			// dont need to subtract swap because were in the lower half of the timer
+			val = lower + ((diff * fade) / swap);
 		if (val < 0) {
+			// if val is negative, something has gone wrong
         	LinkedHashMap<String,String> info = new LinkedHashMap<String,String>();
         	info.put("Val", val+"");
         	info.put("Diff", diff+"");
@@ -181,7 +238,7 @@ public class ColorsHelper {
         	info.put("Offset", offset+"");
         	info.put("Min", lower+"");
         	info.put("Max", upper+"");
-        	LogHelper.error("fadingValue()", "NegativeFade", "A fade was calculated to be negative!", info);
+        	LogHelper.error("ColorsHelper.loopFade()", "NegativeFade", "A fade was calculated to be negative!", info);
 		}
 		return val;
 	}

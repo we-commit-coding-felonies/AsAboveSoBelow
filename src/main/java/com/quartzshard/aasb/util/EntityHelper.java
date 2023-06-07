@@ -115,5 +115,16 @@ public class EntityHelper {
 		//				&& lEnt.getMainHandItem().getItem() == AvaritiaModContent.INFINITY_SWORD.get());
 	}
 	
-	
+	/**
+	 * Hurts an entity, completely bypassing iframes
+	 * @param ent
+	 * @param src
+	 * @param dmg
+	 */
+	public static void hurtNoDamI(LivingEntity ent, DamageSource src, float dmg) {
+		int iframes = ent.invulnerableTime;
+		ent.invulnerableTime = 0;
+		ent.hurt(src, dmg);
+		ent.invulnerableTime = iframes;
+	}
 }

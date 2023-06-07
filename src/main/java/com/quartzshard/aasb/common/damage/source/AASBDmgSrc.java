@@ -9,7 +9,7 @@ import net.minecraft.world.entity.Entity;
 public class AASBDmgSrc {
 
 	/** alchemical magic status effect damage, ignores almost all forms of protection, doesnt aggro */
-	public static final AASBSimpleDamageSource TRANSMUTATION_POTION = (AASBSimpleDamageSource) new AASBSimpleDamageSource("transmutation.potion")
+	public static final AASBSimpleDamageSource TRANSMUTATION_POTION = (AASBSimpleDamageSource) new AASBSimpleDamageSource("transmutation2.indirect")
 			.setAlchemy()
 			.bypassNotInvul()
 			.setNoAggro().setMagic();
@@ -30,15 +30,23 @@ public class AASBDmgSrc {
 
 	/** alchemical magic, ignores almost all forms of protection */
 	public static AASBEntityDamageSource strongTransmutation(Entity culprit) {
-		return (AASBEntityDamageSource) new AASBEntityDamageSource("transmutation.strong", culprit)
+		return (AASBEntityDamageSource) new AASBEntityDamageSource("transmutation2", culprit)
 			.setAlchemy()
 			.bypassNotInvul()
 			.setMagic();
 	}
 	
+	/** alchemical magic explosion, ignores non-physical protection */
+	public static AASBEntityDamageSource waybomb(Entity culprit) {
+		return (AASBEntityDamageSource) new AASBEntityDamageSource("waybomb", culprit)
+			.setAlchemy()
+			.bypassDr().bypassMagic()
+			.setMagic().setExplosion();
+	}
+	
 	/** alchemical magic explosion, ignores non-physical protection, doesnt aggro */
-	public static AASBEntityDamageSource emcNuke(Entity culprit) {
-		return (AASBEntityDamageSource) new AASBEntityDamageSource("emcnuke", culprit)
+	public static AASBEntityDamageSource waybombAccident(Entity culprit) {
+		return (AASBEntityDamageSource) new AASBEntityDamageSource("waybomb.accident", culprit)
 			.setAlchemy()
 			.bypassDr().bypassMagic()
 			.setNoAggro().setMagic().setExplosion();
@@ -53,8 +61,8 @@ public class AASBDmgSrc {
 	}
 	
 	/** alchemical magic, ignores armor */
-	public static AASBEntityDamageSource matterAoe(Entity culprit) {
-		return (AASBEntityDamageSource) new AASBEntityDamageSource("matter_aoe", culprit)
+	public static AASBEntityDamageSource autoslash(Entity culprit) {
+		return (AASBEntityDamageSource) new AASBEntityDamageSource("autoslash", culprit)
 			.setAlchemy()
 			.bypassArmor()
 			.setMagic();

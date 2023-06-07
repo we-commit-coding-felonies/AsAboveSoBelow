@@ -12,8 +12,8 @@ import com.quartzshard.aasb.common.damage.BlockAgnosticDamageCalculator;
 import com.quartzshard.aasb.common.damage.source.AASBDmgSrc;
 import com.quartzshard.aasb.data.AASBLang;
 import com.quartzshard.aasb.init.EffectInit;
-import com.quartzshard.aasb.init.ObjectInit;
 import com.quartzshard.aasb.util.ColorsHelper;
+import com.quartzshard.aasb.util.ColorsHelper.Color;
 import com.quartzshard.aasb.util.EntityHelper;
 import com.quartzshard.aasb.util.LogHelper;
 import com.quartzshard.aasb.util.NBTHelper;
@@ -27,6 +27,7 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -90,12 +91,13 @@ public class DarkMatterArmor extends AlchArmor implements IBurnoutItem {
 	
 	@Override
 	public int getBarColor(ItemStack stack) {
-		return ColorsHelper.covColorInt(getBurnoutPercent(stack));
+		float hue = Mth.lerp(getBurnoutPercent(stack), Color.COVALENCE_GREEN.H/360f, Color.COVALENCE_MAGENTA.H/360f);
+		return Mth.hsvToRgb(hue, 1f, 0.85f);
 	}
 	
 	@Override
 	public int getBarWidth(ItemStack stack) {
-		return  (int)( 13f - (13f * (1f - getBurnoutPercent(stack))) );
+		return  (int)( 13f * getBurnoutPercent(stack) );
 	}
 	
 	@Override
@@ -140,11 +142,11 @@ public class DarkMatterArmor extends AlchArmor implements IBurnoutItem {
 			Optional<IItemHandler> itemHandlerCap = wearer.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.NORTH).resolve();
 			if (itemHandlerCap.isPresent()) {
 				IItemHandler inv = itemHandlerCap.get();
-				float detPower = 1f;
+				float totalBurnOutPercent = 0f;
 				for (int i = 0; i < inv.getSlots(); i++) {
 					ItemStack stack = inv.getStackInSlot(i);
-					if (stack.getItem() instanceof DarkMatterArmor) {
-						detPower += getBurnoutPercent(stack);
+					if (stack.getItem() instanceof DarkMatterArmor armor) {
+						totalBurnOutPercent += Math.min(armor.getBurnoutMax(), getBurnout(stack))/16384f;
 						EquipmentSlot slot = LivingEntity.getEquipmentSlotForItem(stack);
 						inv.extractItem(slot.getIndex(), stack.getCount(), false);
 						ItemStack toInsert = DEGRADE_REPLACEMENTS[slot.getIndex()].copy();
@@ -154,9 +156,10 @@ public class DarkMatterArmor extends AlchArmor implements IBurnoutItem {
 						}
 					}
 				}
-				DamageSource dmgSrc = AASBDmgSrc.emcNuke(wearer);
+				DamageSource dmgSrc = AASBDmgSrc.waybombAccident(wearer);
+				float detPower = 5f*totalBurnOutPercent;
 				if (!EntityHelper.isInvincible(wearer)) {
-					wearer.hurt(dmgSrc, (float) Math.exp(detPower));
+					EntityHelper.hurtNoDamI(wearer, AASBDmgSrc.waybombAccident(wearer).bypassArmor(), (float) Math.exp(detPower));
 				}
 				BlockAgnosticDamageCalculator nukeCalc = new BlockAgnosticDamageCalculator(1f/detPower);
 				Vec3 cent = wearer.getBoundingBox().getCenter();

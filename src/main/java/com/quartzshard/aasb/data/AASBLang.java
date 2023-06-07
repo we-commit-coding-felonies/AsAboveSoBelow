@@ -8,15 +8,27 @@ import net.minecraftforge.common.data.LanguageProvider;
 
 public class AASBLang {
 	public static final AASBLang INSTANCE = new AASBLang();
-	
+	private static String id(String template) {
+		return String.format(template, AsAboveSoBelow.MODID);
+	}
 	public static final String
-		CREATIVE_TAB = "itemGroup." + AsAboveSoBelow.MODID,
-		TOOLTIP_DM_ARMOR_FLAVOR = "tip.aasb.dm.armor.flavor",
-		TOOLTIP_DM_ARMOR_DESC_1 = "tip.aasb.dm.armor.desc.1",
-		TOOLTIP_DM_ARMOR_DESC_2 = "tip.aasb.dm.armor.desc.2",
-		TOOLTIP_DM_ARMOR_DESC_3 = "tip.aasb.dm.armor.desc.3",
-		TOOLTIP_DM_ARMOR_DR = "tip.aasb.dm.armor.dr",
-		TOOLTIP_DM_ARMOR_BURNOUT = "tip.aasb.dm.armor.burnout";
+		CREATIVE_TAB = id("itemGroup.%s"),
+		
+		TOOLTIP_DM_ARMOR_FLAVOR = id("tip.%s.dm.armor.flavor"),
+		TOOLTIP_DM_ARMOR_DESC_1 = id("tip.%s.dm.armor.desc.1"),
+		TOOLTIP_DM_ARMOR_DESC_2 = id("tip.%s.dm.armor.desc.2"),
+		TOOLTIP_DM_ARMOR_DESC_3 = id("tip.%s.dm.armor.desc.3"),
+		TOOLTIP_DM_ARMOR_DR = id("tip.%s.dm.armor.dr"),
+		TOOLTIP_DM_ARMOR_BURNOUT = id("tip.%s.dm.armor.burnout"),
+		
+		KEY_HEADMODE = id("key.%s.headMode"),
+		KEY_CHESTMODE = id("key.%s.chestMode"),
+		KEY_LEGSMODE = id("key.%s.legsMode"),
+		KEY_FEETMODE = id("key.%s.feetMode"),
+		KEY_ITEMMODE = id("key.%s.itemMode"),
+		KEY_ITEMFUNC_1 = id("key.%s.itemFunc.1"),
+		KEY_ITEMFUNC_2 = id("key.%s.itemFunc.2"),
+		KEY_EMPOWER = id("key.%s.empower");
 	
 	public class Provider extends LanguageProvider {
 		public Provider(DataGenerator gen, String locale) {

@@ -14,6 +14,7 @@ import com.quartzshard.aasb.common.damage.source.AASBDmgSrc.ICustomDamageSource;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -146,11 +147,11 @@ public abstract class AlchArmor extends ArmorItem implements IDamageReducer {
 				} else {
 					event.setAmount(damage * (1f-totalDr));
 				}
-				entity.level.playSound(null, entity, SoundEvents.SHIELD_BLOCK, entity.getSoundSource(), Math.min(1, totalDr), 1);
+				entity.level.playSound(null, entity, SoundEvents.SHIELD_BLOCK, entity.getSoundSource(), Math.min(1, totalDr), 1.5f);
 				for (Entry<ItemStack, Float> absorber : absorbList.entrySet()) {
 					ItemStack stack = absorber.getKey();
 					float absorbed = absorber.getValue()*event.getAmount();
-					stack.hurtAndBreak(Math.round(absorbed), entity, ent -> {
+					stack.hurtAndBreak(Mth.ceil(absorbed), entity, ent -> {
 						armorBreak(stack, ent);
 					});
 				}
