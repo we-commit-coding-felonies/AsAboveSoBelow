@@ -15,7 +15,11 @@ import com.quartzshard.aasb.data.AASBLang;
 
 import com.mojang.blaze3d.platform.InputConstants;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.KeyMapping;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.ClientRegistry;
@@ -45,6 +49,15 @@ public class AASBKeys {
 		
 		public KeyMapping getKey() {
 			return this.key;
+		}
+		
+		public Component loc() {
+			return this.getKey().getTranslatedKeyMessage();
+		}
+		
+		public Component fLoc() {
+			Component key = loc().copy().withStyle(ChatFormatting.AQUA);
+			return new TranslatableComponent("[%s]", key);
 		}
 		
 		/**

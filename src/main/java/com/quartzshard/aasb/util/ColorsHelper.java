@@ -2,7 +2,10 @@ package com.quartzshard.aasb.util;
 
 import java.util.LinkedHashMap;
 
+import com.quartzshard.aasb.util.ColorsHelper.Color;
+
 import net.minecraft.util.Mth;
+import net.minecraft.world.item.ItemStack;
 
 /**
  * Contains functions for calculating & working with RGB / HSV values <br>
@@ -241,5 +244,11 @@ public class ColorsHelper {
         	LogHelper.error("ColorsHelper.loopFade()", "NegativeFade", "A fade was calculated to be negative!", info);
 		}
 		return val;
+	}
+	
+	
+	public static int covalenceGradient(float f) {
+		float hue = Mth.lerp(f, Color.COVALENCE_GREEN.H/360f, Color.COVALENCE_MAGENTA.H/360f);
+		return Mth.hsvToRgb(hue, 1f, 0.85f);
 	}
 }

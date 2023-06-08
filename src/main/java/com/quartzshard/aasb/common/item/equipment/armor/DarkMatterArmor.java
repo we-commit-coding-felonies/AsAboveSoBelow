@@ -71,17 +71,17 @@ public class DarkMatterArmor extends AlchArmor implements IBurnoutItem {
 	public void appendHoverText(ItemStack stack, Level level, List<Component> tips, TooltipFlag flags) {
 		super.appendHoverText(stack, level, tips, flags);
 		tips.add(new TextComponent(" "));
-		tips.add(new TranslatableComponent(AASBLang.TOOLTIP_DM_ARMOR_FLAVOR).withStyle(ChatFormatting.UNDERLINE)); // Flavor
-		tips.add(new TranslatableComponent(AASBLang.TOOLTIP_DM_ARMOR_DESC_1)); //
-		tips.add(new TranslatableComponent(AASBLang.TOOLTIP_DM_ARMOR_DESC_2)); // info
-		tips.add(new TranslatableComponent(AASBLang.TOOLTIP_DM_ARMOR_DESC_3)); //
+		tips.add(new TranslatableComponent(AASBLang.TIP_DM_ARMOR_FLAVOR).withStyle(ChatFormatting.UNDERLINE)); // Flavor
+		tips.add(new TranslatableComponent(AASBLang.TIP_DM_ARMOR_DESC_1)); //
+		tips.add(new TranslatableComponent(AASBLang.TIP_DM_ARMOR_DESC_2)); // info
+		tips.add(new TranslatableComponent(AASBLang.TIP_DM_ARMOR_DESC_3)); //
 		float dr = getDr(stack, DamageSource.GENERIC)*100;
 		Component drText = new TextComponent(ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(dr)+"%").withStyle(ChatFormatting.GREEN);
-		tips.add(new TranslatableComponent(AASBLang.TOOLTIP_DM_ARMOR_DR, drText));
+		tips.add(new TranslatableComponent(AASBLang.TIP_DM_ARMOR_DR, drText));
 		Style style = Style.EMPTY.withColor(getBarColor(stack));
 		Component burnoutText = new TextComponent(ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(getBurnout(stack))).withStyle(style);
 		Component maxText = new TextComponent(ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(getBurnoutMax())).withStyle(ChatFormatting.DARK_RED);
-		tips.add(new TranslatableComponent(AASBLang.TOOLTIP_DM_ARMOR_BURNOUT, burnoutText, maxText));
+		tips.add(new TranslatableComponent(AASBLang.TIP_DM_ARMOR_BURNOUT, burnoutText, maxText));
 	}
 	
 	@Override
@@ -91,8 +91,7 @@ public class DarkMatterArmor extends AlchArmor implements IBurnoutItem {
 	
 	@Override
 	public int getBarColor(ItemStack stack) {
-		float hue = Mth.lerp(getBurnoutPercent(stack), Color.COVALENCE_GREEN.H/360f, Color.COVALENCE_MAGENTA.H/360f);
-		return Mth.hsvToRgb(hue, 1f, 0.85f);
+		return ColorsHelper.covalenceGradient(getBurnoutPercent(stack));
 	}
 	
 	@Override
@@ -150,6 +149,9 @@ public class DarkMatterArmor extends AlchArmor implements IBurnoutItem {
 						EquipmentSlot slot = LivingEntity.getEquipmentSlotForItem(stack);
 						inv.extractItem(slot.getIndex(), stack.getCount(), false);
 						ItemStack toInsert = DEGRADE_REPLACEMENTS[slot.getIndex()].copy();
+						int maxDamage = toInsert.getMaxDamage();
+						int itemDamageValue = wearer.getRandom().nextInt(maxDamage);
+						toInsert.setDamageValue(itemDamageValue);
 						ItemStack inserted = inv.insertItem(slot.getIndex(), toInsert, false);
 						if (inserted == toInsert) {
 							LogHelper.warn("DarkMatterArmor.checkDegrade()", "ReplaceFailed", "Replacing ["+stack+"] with ["+toInsert+"] failed!");

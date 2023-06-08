@@ -1,4 +1,22 @@
 {
+  "way.barrier.ambient": {
+    "subtitle": "subtitles.aasb.way.barrier.ambient",
+    "sounds": [
+      "block/beacon/ambient"
+    ]
+  },
+  "way.barrier.protect": {
+    "subtitle": "subtitles.aasb.way.barrier.protect",
+    "sounds": [
+      "aasb:way/barrier/protect"
+    ]
+  },
+  "way.barrier.fail": {
+    "subtitle": "subtitles.aasb.way.barrier.fail",
+    "sounds": [
+      "aasb:way/barrier/fail"
+    ]
+  },
   "way.waste": {
     "subtitle": "subtitles.aasb.way.waste",
     "sounds": [
@@ -15,6 +33,18 @@
     "subtitle": "subtitles.aasb.way.explode",
     "sounds": [
       "aasb:way/explode"
+    ]
+  },
+  "way.charge": {
+    "subtitle": "subtitles.aasb.way.charge",
+    "sounds": [
+      "aasb:way/charge"
+    ]
+  },
+  "way.slash": {
+    "subtitle": "subtitles.aasb.way.slash",
+    "sounds": [
+      "aasb:way/slash"
     ]
   }
 }

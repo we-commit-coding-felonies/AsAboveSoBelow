@@ -1,12 +1,15 @@
 package com.quartzshard.aasb.data;
 
 import com.quartzshard.aasb.AsAboveSoBelow;
+import com.quartzshard.aasb.api.item.IDarkMatterTool;
+import com.quartzshard.aasb.init.ClientInit;
 import com.quartzshard.aasb.init.ObjectInit;
 
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 
+import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
@@ -29,6 +32,7 @@ public class AASBItemModels extends ItemModelProvider {
 		placeholder(ObjectInit.Items.DARK_MATTER_CHESTPLATE);
 		placeholder(ObjectInit.Items.DARK_MATTER_LEGGINGS);
 		placeholder(ObjectInit.Items.DARK_MATTER_BOOTS);
+		dmTool(ObjectInit.Items.DARK_MATTER_SWORD, "item/equipment/tool/dm/sword/");
     }
     
     /**
@@ -61,6 +65,30 @@ public class AASBItemModels extends ItemModelProvider {
 	}
 	private void block(RegistryObject<? extends Item> ro, ResourceLocation tex) {
 		withExistingParent(ro.getId().getPath(), tex);
+	}
+	
+	protected ItemModelBuilder dmTool(RegistryObject<? extends Item> reg, String folder) {
+		ItemModelBuilder builder = getBuilder(reg.getId().getPath());
+		if (!(reg.get() instanceof IDarkMatterTool item)) throw new IllegalArgumentException(reg + " is not a dark matter tool");
+		for (int i = 0; i < 13; i++) {
+			if (!item.validateRunes(i)) continue;
+			String name = folder+"off/"+i;
+			builder.override()
+			.predicate(ClientInit.SHAPE_RUNE, i)
+			.predicate(ClientInit.EMPOWER_CHARGE, 0)
+			.model(withExistingParent(name, "item/handheld")
+					.texture("layer0", modLoc(name)))
+			.end();
+			
+			name = folder+"on/"+i;
+			builder.override()
+			.predicate(ClientInit.SHAPE_RUNE, i)
+			.predicate(ClientInit.EMPOWER_CHARGE, 1)
+			.model(withExistingParent(name, "item/handheld")
+					.texture("layer0", modLoc(name)))
+			.end();
+		}
+		return builder;
 	}
 
 

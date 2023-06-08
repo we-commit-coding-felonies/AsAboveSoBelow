@@ -1,15 +1,61 @@
 package com.quartzshard.aasb.init;
 
 import com.quartzshard.aasb.AsAboveSoBelow;
+import com.quartzshard.aasb.api.item.IDarkMatterTool;
 import com.quartzshard.aasb.client.AASBKeys;
+import com.quartzshard.aasb.client.particle.CutParticle;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.particle.ParticleEngine;
+import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 @Mod.EventBusSubscriber(modid = AsAboveSoBelow.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ClientInit {
+	public static final ResourceLocation EMPOWER_CHARGE = AsAboveSoBelow.rl("empowerment_charge");
+	public static final ResourceLocation SHAPE_RUNE = AsAboveSoBelow.rl("shape_rune");
+	
     public static void init(final FMLClientSetupEvent event) {
     	AASBKeys.register();
+    	event.enqueueWork(() -> {
+    		ItemProperties.registerGeneric(EMPOWER_CHARGE, ClientInit::getEmpowerCharge);
+    		ItemProperties.registerGeneric(SHAPE_RUNE, ClientInit::getShapeRune);
+    	});
+    }
+	
+	private static float getEmpowerCharge(ItemStack stack, ClientLevel level, LivingEntity entity, int seed) {
+		if (stack.getItem() instanceof IDarkMatterTool item) {
+			return item.getCharge(stack) > 0 ? 1 : 0;
+		}
+		return 0;
+	}
+	
+	private static float getShapeRune(ItemStack stack, ClientLevel level, LivingEntity entity, int seed) {
+		if (stack.getItem() instanceof IDarkMatterTool item) {
+			return item.getRunesVal(stack);
+		}
+		return 0;
+	}
+	
+
+	
+    @SubscribeEvent
+    public static void registerParticleFactories(ParticleFactoryRegisterEvent event) {
+    	registerParticleProvider(EffectInit.Particles.CUT_PARTICLE.get(), CutParticle.Provider::new);
+    }
+    
+    private static <T extends ParticleOptions> void registerParticleProvider(ParticleType<T> type, ParticleEngine.SpriteParticleRegistration<T> provider) {
+    	Minecraft.getInstance().particleEngine.register(type, provider);
     }
 }

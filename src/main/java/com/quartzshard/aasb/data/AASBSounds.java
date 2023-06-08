@@ -21,9 +21,16 @@ public class AASBSounds extends SoundDefinitionsProvider {
 
 	@Override
 	public void registerSounds() {
+		simple(EffectInit.Sounds.BARRIER_AMBIENT, new ResourceLocation("block/beacon/ambient"));
+		simple(EffectInit.Sounds.BARRIER_PROTECT, "way/barrier/protect");
+		simple(EffectInit.Sounds.BARRIER_FAIL, "way/barrier/fail");
+		//simple(EffectInit.Sounds.BARRIER_IGNORED, "way/barrier/ignored");
+		
 		simple(EffectInit.Sounds.WAY_WASTE, "way/waste");
 		simple(EffectInit.Sounds.WAY_LEAK, "way/leak");
 		simple(EffectInit.Sounds.WAY_EXPLODE, "way/explode");
+		simple(EffectInit.Sounds.WAY_CHARGE, "way/charge");
+		simple(EffectInit.Sounds.WAY_SLASH, "way/slash");
 	}
 
 	private void simple(Supplier<SoundEvent> ro, String loc) {

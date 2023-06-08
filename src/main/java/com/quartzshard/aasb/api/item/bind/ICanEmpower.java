@@ -13,17 +13,17 @@ public interface ICanEmpower extends ICanHandleKeybind {
 		if (ctx.bind() == ServerBind.EMPOWER) {
 			switch (ctx.state()) {
 			case PRESSED:
-				return onEmpowerPressed(ctx.stack(), ctx.player(), ctx.level());
+				return onPressedEmpower(ctx.stack(), ctx.player(), ctx.level());
 			case HELD:
-				return onEmpowerHeld(ctx.stack(), ctx.player(), ctx.level());
+				return onHeldEmpower(ctx.stack(), ctx.player(), ctx.level());
 			case RELEASED:
-				return onEmpowerReleased(ctx.stack(), ctx.player(), ctx.level());
+				return onReleasedEmpower(ctx.stack(), ctx.player(), ctx.level());
 			}
 		}
 		return false;
 	}
 	
-	default boolean onEmpowerPressed(ItemStack stack, ServerPlayer player, ServerLevel level) {return false;}
-	default boolean onEmpowerHeld(ItemStack stack, ServerPlayer player, ServerLevel level) {return false;}
-	default boolean onEmpowerReleased(ItemStack stack, ServerPlayer player, ServerLevel level) {return false;}
+	default boolean onPressedEmpower(ItemStack stack, ServerPlayer player, ServerLevel level) {return false;}
+	default boolean onHeldEmpower(ItemStack stack, ServerPlayer player, ServerLevel level) {return false;}
+	default boolean onReleasedEmpower(ItemStack stack, ServerPlayer player, ServerLevel level) {return false;}
 }
