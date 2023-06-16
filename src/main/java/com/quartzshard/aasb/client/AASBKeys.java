@@ -32,6 +32,10 @@ import net.minecraftforge.fml.common.Mod;
 public class AASBKeys {
 	public static final String CATEGORY = "key.categories."+AsAboveSoBelow.MODID;
 	
+	public static Component fLoc(KeyMapping key) {
+		return new TranslatableComponent("[%s]", key.getTranslatedKeyMessage().copy().withStyle(ChatFormatting.AQUA));
+	}
+	
 	public enum Bind {
 		HEADMODE(new KeyMapping(AASBLang.KEY_HEADMODE, KeyConflictContext.IN_GAME, keyById(GLFW.GLFW_KEY_H), CATEGORY)),
 		CHESTMODE(new KeyMapping(AASBLang.KEY_CHESTMODE, KeyConflictContext.IN_GAME, keyById(GLFW.GLFW_KEY_J), CATEGORY)),

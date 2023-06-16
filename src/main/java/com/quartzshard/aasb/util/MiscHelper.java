@@ -12,6 +12,7 @@ import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.jetbrains.annotations.Nullable;
 
 import com.quartzshard.aasb.common.damage.source.AASBDmgSrc;
+import com.quartzshard.aasb.common.item.LootBallItem;
 import com.quartzshard.aasb.common.network.AASBNet;
 import com.quartzshard.aasb.common.network.client.CutParticlePacket;
 import com.quartzshard.aasb.init.EffectInit;
@@ -31,6 +32,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
+import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -80,6 +82,7 @@ import net.minecraft.world.phys.Vec3;
 
 import net.minecraftforge.common.IForgeShearable;
 import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.ToolActions;
 
 /**
@@ -239,45 +242,6 @@ public class MiscHelper {
 		}
 		//level.playSound(null, player.getX(), player.getY(), player.getZ(), PESoundEvents.CHARGE.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
 		return consumed;
-	}
-	
-	public static boolean attackRandomInRange(float power, AABB area, Level level, Player culprit, Predicate<LivingEntity> validator) {
-		List<LivingEntity> validTargets = level.getEntitiesOfClass(LivingEntity.class, area, validator);
-		Map<Entity,Integer> hit = new HashMap<>();
-		if (!validTargets.isEmpty()) {
-			int limit = Math.round(power);// + validTargets.size()/2;
-			for (int i = 0; i < limit; i++) {
-				LivingEntity victim = validTargets.get(level.random.nextInt(validTargets.size()));
-				float damage = Mth.clamp(victim.getMaxHealth()/10f, 1f, 3f*power);
-				//if (victim instanceof Player plr && GemJewelryBase.fullPristineSet(plr)) {
-				//	damage = 16*power;
-				//}
-				EntityHelper.hurtNoDamI(victim, AASBDmgSrc.autoslash(culprit), damage);
-				if (hit.containsKey(victim)) {
-					hit.put(victim, hit.get(victim)+1);
-				} else hit.put(victim, 1);
-				//level.playSound(null, victim.blockPosition(), PESoundEvents.DESTRUCT.get(), SoundSource.PLAYERS, 0.3f, 1.5f);
-			}
-			if (level instanceof ServerLevel lvl) {
-				double rot1 = (double)(-Mth.sin(culprit.getYRot() * ((float)Math.PI / 180f)));
-				double rot2 = (double)Mth.cos(culprit.getYRot() * ((float)Math.PI / 180f));
-				lvl.sendParticles(ParticleTypes.SWEEP_ATTACK, culprit.getX()+rot1, culprit.getY(0.5), culprit.getZ()+rot2, 1, 0, 0, 0, 0);
-				for (Entry<Entity,Integer> hitEnt : hit.entrySet()) {
-					// this kinda sucks and i should find a better way to do it
-					AABB box = BoxHelper.growToCube(hitEnt.getKey().getBoundingBox());
-					for (ServerPlayer plr : lvl.players()) {
-						BlockPos pos = plr.blockPosition();
-						if (pos.closerToCenterThan(box.getCenter(), 128)) {
-							AASBNet.toClient(new CutParticlePacket(hitEnt.getValue(), box), plr);
-						}
-					}
-				}
-				
-			}
-			level.playSound(null, culprit.blockPosition(), EffectInit.Sounds.WAY_SLASH.get(), SoundSource.PLAYERS, 1f, 1.5f);
-			return true;
-		}
-		return false;
 	}
 	
 	/**
@@ -472,9 +436,9 @@ public class MiscHelper {
 	}
 	
 	private static void harvestBlock(Level level, BlockPos pos, @Nullable ServerPlayer player) {
-		//if (player == null || PlayerHelper.hasBreakPermission(player, pos)) {
+		if (player == null || PlayerHelper.hasBreakPermission(player, pos)) {
 			level.destroyBlock(pos, true, player);
-		//}
+		}
 	}
 	
 	private static void makeDrop(ItemStack stack, Level world, Vec3 vec) {
@@ -524,129 +488,6 @@ public class MiscHelper {
 		if (ench instanceof FishingSpeedEnchantment || ench instanceof QuickChargeEnchantment)
 			return 5;
 		return 10;
-	}
-
-	/**
-	 * veinmines all ores in the given AABB <br>
-	 * based on ToolHelper.mineOreVeinsInAOE <br>
-	 * uses avaritia matter clusters to imitate old EE2 loot balls
-	 */
-	public static boolean aoeOreCollect(Player player, AABB area, Level level, ItemStack stack) {
-		boolean hasAction = false;
-		List<ItemStack> drops = new ArrayList<>();
-		ItemStack fortunePick = stack.copy();
-		fortunePick.enchant(Enchantments.BLOCK_FORTUNE, 5);
-		int count = 1;
-		/*for (BlockPos pos : WorldHelper.getPositionsFromBox(area)) {
-			if (level.isEmptyBlock(pos)) continue;
-			BlockState state = level.getBlockState(pos);
-			if (ItemHelper.isOre(state) && state.getDestroySpeed(level, pos) != -1 && stack.isCorrectToolForDrops(state)) {
-				if (level.isClientSide) {
-					return true;
-				}
-				//Ensure we are immutable so that changing blocks doesn't act weird
-				int oresMined = WorldHelper.harvestVein(level, player, fortunePick, pos.immutable(), state.getBlock(), drops, 0);
-				if (oresMined > 0) {
-					if (level.random.nextInt(count) == 0) {
-						// prevents extreme LOUD
-						if (count < 50) count++;
-						level.playSound(null, pos, PESoundEvents.DESTRUCT.get(), SoundSource.PLAYERS, 0.5f, 0.8f);
-					}
-					hasAction = true;
-				}
-			}
-		}
-		if (hasAction) {
-			List<ItemStack> lootBalls = MatterClusterItem.makeClusters(drops);
-			for (ItemStack cluster : lootBalls) {
-				ItemUtils.dropItem(cluster, level, Vector3.fromEntityCenter(player));
-			}
-			return true;
-		}*/
-		return false;
-	}
-
-	/**
-	 * harvests tree blocks in the given area <br>
-	 * based on ToolHelper.clearTagAOE <br>
-	 * uses avaritia matter clusters to imitate old EE2 loot balls
-	 */
-	public static boolean ecosystemDestroyer(Player player, AABB area, Level level, ItemStack stack) {
-		/*boolean hasAction = false;
-		List<ItemStack> drops = new ArrayList<>();
-		int count = 1;
-		for (BlockPos pos : WorldHelper.getPositionsFromBox(area)) {
-			BlockState state = level.getBlockState(pos);
-			if (state.is(BlockTags.LEAVES) || state.is(BlockTags.LOGS)) {
-				//Ensure we are immutable so that changing blocks doesn't act weird
-				pos = pos.immutable();
-				if (!level.isClientSide && PlayerHelper.hasBreakPermission((ServerPlayer) player, pos)) {
-					drops.addAll(Block.getDrops(state, (ServerLevel) level, pos, WorldHelper.getBlockEntity(level, pos), player, stack));
-					level.removeBlock(pos, false);
-					if (level.random.nextInt(count) == 0) {
-						// prevents extreme LOUD
-						if (count < 50) count++;
-						level.playSound(null, pos, PESoundEvents.DESTRUCT.get(), SoundSource.PLAYERS, 0.5f, 0.8f);
-					}
-					hasAction = true;
-				}
-			}
-		}
-		if (hasAction) {
-			List<ItemStack> lootBalls = MatterClusterItem.makeClusters(drops);
-			for (ItemStack cluster : lootBalls) {
-				ItemUtils.dropItem(cluster, level, Vector3.fromEntityCenter(player));
-			}
-			return true;
-		}*/
-		return false;
-	}
-	
-	/**
-	 * morning-star right click <br>
-	 * based on ToolHelper.digAOE
-	 * @return
-	 */
-	public static boolean insuranceClaimGenerator(Player player, BlockPos pos, Direction dir, int size, Level level, ItemStack stack) {
-		/*AABB box = WorldHelper.getBroadDeepBox(pos, dir, size);
-		if (player.isOnGround() && !dir.getAxis().isVertical()) {
-			// move the area up so that it matches with player feet
-			double shift = box.getSize()/2d;
-			box = box.move(0, (int)shift, 0);
-		}
-		boolean hasAction = false;
-		List<ItemStack> drops = new ArrayList<>();
-		ItemStack breakerStack = new ItemStack(PEItems.RED_MATTER_MORNING_STAR.get());
-		for (BlockPos newPos : WorldHelper.getPositionsFromBox(box)) {
-			if (level.isEmptyBlock(newPos)) {
-				continue;
-			}
-			BlockState state = level.getBlockState(newPos);
-			if (state.getDestroySpeed(level, newPos) != -1 && breakerStack.isCorrectToolForDrops(state)) {
-				if (level.isClientSide) {
-					return true;
-				}
-				//Ensure we are immutable so that changing blocks doesn't act weird
-				newPos = newPos.immutable();
-				if (PlayerHelper.hasBreakPermission((ServerPlayer) player, newPos)) {
-					drops.addAll(Block.getDrops(state, (ServerLevel) level, newPos, WorldHelper.getBlockEntity(level, newPos), player, breakerStack));
-					level.removeBlock(newPos, false);
-					hasAction = true;
-				}
-			}
-		}
-		if (hasAction) {
-			List<ItemStack> lootBalls = MatterClusterItem.makeClusters(drops);
-			for (ItemStack cluster : lootBalls) {
-				ItemUtils.dropItem(cluster, level, Vector3.fromEntityCenter(player));
-			}
-			level.playSound(null, new BlockPos(box.getCenter()), EffectInit.EMC_EXPLODE.get(), SoundSource.PLAYERS, 2, 1.5f);
-			if (level instanceof ServerLevel lvl) {
-				lvl.sendParticles(ParticleTypes.EXPLOSION_EMITTER, box.getCenter().x, box.getCenter().y, box.getCenter().z, 1, 0, 0, 0, 0);
-			}
-			return true;
-		}*/
-		return false;
 	}
 	
 	@Nullable

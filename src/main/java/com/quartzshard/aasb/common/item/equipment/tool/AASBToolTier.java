@@ -19,8 +19,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.TierSortingRegistry;
 
 public enum AASBToolTier implements Tier {
-	//VOID("void", 0, 13, 9, 5, 30, () -> Ingredient.EMPTY, Tiers.NETHERITE, AsAboveSoBelow.rl("crimson")),
-	DARK_MATTER("dark_matter", 0, 13, 9, 5, 30, () -> Ingredient.EMPTY, Tiers.NETHERITE, null);
+	HERMETIC("hermetic", 0, 13, 9, 5, 30, () -> Ingredient.EMPTY, Tiers.NETHERITE, null);
 
 	private final String name;
 	private final int durability;

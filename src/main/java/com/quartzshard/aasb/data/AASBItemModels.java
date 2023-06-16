@@ -1,7 +1,7 @@
 package com.quartzshard.aasb.data;
 
 import com.quartzshard.aasb.AsAboveSoBelow;
-import com.quartzshard.aasb.api.item.IDarkMatterTool;
+import com.quartzshard.aasb.api.item.IHermeticTool;
 import com.quartzshard.aasb.init.ClientInit;
 import com.quartzshard.aasb.init.ObjectInit;
 
@@ -27,12 +27,19 @@ public class AASBItemModels extends ItemModelProvider {
 
 		basic(ObjectInit.Items.MINIUM_STONE, "item/minium_stone");
 		basic(ObjectInit.Items.PHILOSOPHERS_STONE, "item/philosophers_stone");
+		basic(ObjectInit.Items.LOOT_BALL, "item/loot_ball");
 
-		placeholder(ObjectInit.Items.DARK_MATTER_HELMET);
-		placeholder(ObjectInit.Items.DARK_MATTER_CHESTPLATE);
-		placeholder(ObjectInit.Items.DARK_MATTER_LEGGINGS);
-		placeholder(ObjectInit.Items.DARK_MATTER_BOOTS);
-		dmTool(ObjectInit.Items.DARK_MATTER_SWORD, "item/equipment/tool/dm/sword/");
+		placeholder(ObjectInit.Items.HERMETIC_HELMET);
+		placeholder(ObjectInit.Items.HERMETIC_CHESTPLATE);
+		placeholder(ObjectInit.Items.HERMETIC_LEGGINGS);
+		placeholder(ObjectInit.Items.HERMETIC_BOOTS);
+		hermTool(ObjectInit.Items.HERMETIC_SWORD, "item/equipment/tool/herm/sword/");
+		hermTool(ObjectInit.Items.HERMETIC_PICKAXE, "item/equipment/tool/herm/pickaxe/");
+		hermTool(ObjectInit.Items.HERMETIC_SHOVEL, "item/equipment/tool/herm/shovel/");
+		hermTool(ObjectInit.Items.HERMETIC_AXE, "item/equipment/tool/herm/axe/");
+		hermTool(ObjectInit.Items.HERMETIC_HOE, "item/equipment/tool/herm/hoe/");
+		
+		tool(ObjectInit.Items.OMNITOOL, "item/equipment/tool/devtool");
     }
     
     /**
@@ -67,9 +74,9 @@ public class AASBItemModels extends ItemModelProvider {
 		withExistingParent(ro.getId().getPath(), tex);
 	}
 	
-	protected ItemModelBuilder dmTool(RegistryObject<? extends Item> reg, String folder) {
+	protected ItemModelBuilder hermTool(RegistryObject<? extends Item> reg, String folder) {
 		ItemModelBuilder builder = getBuilder(reg.getId().getPath());
-		if (!(reg.get() instanceof IDarkMatterTool item)) throw new IllegalArgumentException(reg + " is not a dark matter tool");
+		if (!(reg.get() instanceof IHermeticTool item)) throw new IllegalArgumentException(reg + " is not a hermetic tool");
 		for (int i = 0; i < 13; i++) {
 			if (!item.validateRunes(i)) continue;
 			String name = folder+"off/"+i;

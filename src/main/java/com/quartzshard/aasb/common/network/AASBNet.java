@@ -4,8 +4,12 @@ import com.quartzshard.aasb.AsAboveSoBelow;
 import com.quartzshard.aasb.common.network.client.CutParticlePacket;
 import com.quartzshard.aasb.common.network.server.KeyPressPacket;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.phys.Vec3;
+
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
@@ -47,4 +51,43 @@ public class AASBNet {
 		CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), message);
 	}
 
+	/**
+	 * sends a packet to clients within a certain distance of a point
+	 * @param <PKT>
+	 * @param level
+	 * @param sendPos the point with which to do the distance check
+	 * @param sendRange max distace, in blocks
+	 * @param message
+	 */
+	public static <PKT> void toNearbyClients(PKT message, ServerLevel level, Vec3 sendPos, double sendRange) {
+		for (ServerPlayer player : level.players()) {
+			if (player.position().closerThan(sendPos, sendRange)) {
+				toClient(message, player);
+			}
+		}
+	}
+
+	/**
+	 * Sends a packet to *all* clients in the level
+	 * @param <PKT>
+	 * @param level
+	 * @param message
+	 */
+	public static <PKT> void toAllClients(ServerLevel level, PKT message) {
+		for (ServerPlayer player : level.players()) {
+			toClient(message, player);
+		}
+	}
+	
+	/**
+	 * Sends a packet to multiple clients
+	 * @param <PKT>
+	 * @param message
+	 * @param players
+	 */
+	public static <PKT> void toClients(PKT message, ServerPlayer... players) {
+		for (ServerPlayer player : players) {
+			toClient(message, player);
+		}
+	}
 }

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "aasb:item/equipment/tool/herm/hoe/off/4"
+  }
+}

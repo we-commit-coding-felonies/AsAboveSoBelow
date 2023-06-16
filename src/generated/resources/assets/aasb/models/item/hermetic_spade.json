@@ -1,0 +1,130 @@
+{
+  "overrides": [
+    {
+      "predicate": {
+        "aasb:shape_rune": 0.0,
+        "aasb:empowerment_charge": 0.0
+      },
+      "model": "aasb:item/equipment/tool/herm/shovel/off/0"
+    },
+    {
+      "predicate": {
+        "aasb:shape_rune": 0.0,
+        "aasb:empowerment_charge": 1.0
+      },
+      "model": "aasb:item/equipment/tool/herm/shovel/on/0"
+    },
+    {
+      "predicate": {
+        "aasb:shape_rune": 1.0,
+        "aasb:empowerment_charge": 0.0
+      },
+      "model": "aasb:item/equipment/tool/herm/shovel/off/1"
+    },
+    {
+      "predicate": {
+        "aasb:shape_rune": 1.0,
+        "aasb:empowerment_charge": 1.0
+      },
+      "model": "aasb:item/equipment/tool/herm/shovel/on/1"
+    },
+    {
+      "predicate": {
+        "aasb:shape_rune": 2.0,
+        "aasb:empowerment_charge": 0.0
+      },
+      "model": "aasb:item/equipment/tool/herm/shovel/off/2"
+    },
+    {
+      "predicate": {
+        "aasb:shape_rune": 2.0,
+        "aasb:empowerment_charge": 1.0
+      },
+      "model": "aasb:item/equipment/tool/herm/shovel/on/2"
+    },
+    {
+      "predicate": {
+        "aasb:shape_rune": 3.0,
+        "aasb:empowerment_charge": 0.0
+      },
+      "model": "aasb:item/equipment/tool/herm/shovel/off/3"
+    },
+    {
+      "predicate": {
+        "aasb:shape_rune": 3.0,
+        "aasb:empowerment_charge": 1.0
+      },
+      "model": "aasb:item/equipment/tool/herm/shovel/on/3"
+    },
+    {
+      "predicate": {
+        "aasb:shape_rune": 4.0,
+        "aasb:empowerment_charge": 0.0
+      },
+      "model": "aasb:item/equipment/tool/herm/shovel/off/4"
+    },
+    {
+      "predicate": {
+        "aasb:shape_rune": 4.0,
+        "aasb:empowerment_charge": 1.0
+      },
+      "model": "aasb:item/equipment/tool/herm/shovel/on/4"
+    },
+    {
+      "predicate": {
+        "aasb:shape_rune": 6.0,
+        "aasb:empowerment_charge": 0.0
+      },
+      "model": "aasb:item/equipment/tool/herm/shovel/off/6"
+    },
+    {
+      "predicate": {
+        "aasb:shape_rune": 6.0,
+        "aasb:empowerment_charge": 1.0
+      },
+      "model": "aasb:item/equipment/tool/herm/shovel/on/6"
+    },
+    {
+      "predicate": {
+        "aasb:shape_rune": 8.0,
+        "aasb:empowerment_charge": 0.0
+      },
+      "model": "aasb:item/equipment/tool/herm/shovel/off/8"
+    },
+    {
+      "predicate": {
+        "aasb:shape_rune": 8.0,
+        "aasb:empowerment_charge": 1.0
+      },
+      "model": "aasb:item/equipment/tool/herm/shovel/on/8"
+    },
+    {
+      "predicate": {
+        "aasb:shape_rune": 9.0,
+        "aasb:empowerment_charge": 0.0
+      },
+      "model": "aasb:item/equipment/tool/herm/shovel/off/9"
+    },
+    {
+      "predicate": {
+        "aasb:shape_rune": 9.0,
+        "aasb:empowerment_charge": 1.0
+      },
+      "model": "aasb:item/equipment/tool/herm/shovel/on/9"
+    },
+    {
+      "predicate": {
+        "aasb:shape_rune": 12.0,
+        "aasb:empowerment_charge": 0.0
+      },
+      "model": "aasb:item/equipment/tool/herm/shovel/off/12"
+    },
+    {
+      "predicate": {
+        "aasb:shape_rune": 12.0,
+        "aasb:empowerment_charge": 1.0
+      },
+      "model": "aasb:item/equipment/tool/herm/shovel/on/12"
+    }
+  ]
+}
