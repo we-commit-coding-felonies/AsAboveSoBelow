@@ -160,6 +160,10 @@ public class AASBLang {
 			add(ObjectInit.Items.HERMETIC_AXE.get(), "Hermetic Hatchet");
 			add(ObjectInit.Items.HERMETIC_HOE.get(), "Hermetic Scythe");
 			add(ObjectInit.Items.OMNITOOL.get(), "Test item, please ignore.");
+			add(ObjectInit.Items.CIRCLET.get(), "Circlet of the Seer");
+			add(ObjectInit.Items.AMULET.get(), "Amulet of the Philosopher");
+			add(ObjectInit.Items.POCKETWATCH.get(), "Watch of the Astrologer");
+			add(ObjectInit.Items.ANKLET.get(), "Anklet of the Prophet");
 			add(ObjectInit.Items.BAND_OF_ARCANA.get(), "Band of Arcana");
 			
 			// Blocks
@@ -222,6 +226,7 @@ public class AASBLang {
 			add(TIP_HERM_TOOL_EMPOWER_GUIDE, "Hold %s to empower with Way");
 			
 			// Death Messages
+			add("death.attack.surface_tension", "%s learned a painful lesson about surface tension");
 			
 			// Subtitles
 		}

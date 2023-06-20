@@ -2,7 +2,10 @@
   "way.barrier.ambient": {
     "subtitle": "subtitles.aasb.way.barrier.ambient",
     "sounds": [
-      "block/beacon/ambient"
+      {
+        "name": "block/beacon/ambient",
+        "pitch": 0.5
+      }
     ]
   },
   "way.barrier.protect": {

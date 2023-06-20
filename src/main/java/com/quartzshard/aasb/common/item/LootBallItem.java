@@ -157,7 +157,7 @@ public class LootBallItem extends Item {
 	}
 
 	@SubscribeEvent
-	public static void itemPickupEvent(EntityItemPickupEvent event) {
+	public static void checkCombineBalls(EntityItemPickupEvent event) {
 		ItemEntity itemEnt = event.getItem();
 		ItemStack stack = itemEnt.getItem();
 		ItemStack oldStack = stack.copy();
@@ -176,7 +176,9 @@ public class LootBallItem extends Item {
 			if (didMerge) {
 				if (!stack.isEmpty()) {
 					// there was leftovers, so lets spawn a new ball
-					itemEnt.spawnAtLocation(stack);
+					ItemEntity newEnt = itemEnt.spawnAtLocation(stack);
+					if (newEnt != null)
+						newEnt.setNoPickUpDelay();
 				}
 				itemEnt.kill();
 				event.setCanceled(true);
@@ -346,6 +348,21 @@ public class LootBallItem extends Item {
 			}
 		}
 		return balls;
+	}
+	
+	public static List<ItemEntity> dropBalls(Player player, List<ItemStack> contents) {
+		List<ItemEntity> ballEnts = new ArrayList<>();
+		if (!contents.isEmpty()) {
+			List<ItemStack> lootBalls = makeValidLootBalls(contents);
+			for (ItemStack ball : lootBalls) {
+				ItemEntity item = player.spawnAtLocation(ball);
+				if (item != null) {
+					item.setNoPickUpDelay();
+					ballEnts.add(item);
+				}
+			}	
+		}
+		return ballEnts;
 	}
 	
 	public static boolean canBeStoredInLootBall(ItemStack stack) {

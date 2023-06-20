@@ -6,6 +6,10 @@ import com.quartzshard.aasb.common.item.LootBallItem;
 import com.quartzshard.aasb.common.item.equipment.BandOfArcana;
 import com.quartzshard.aasb.common.item.equipment.armor.HermeticArmorItem;
 import com.quartzshard.aasb.common.item.equipment.armor.HermeticArmorItem.HermeticArmorMaterial;
+import com.quartzshard.aasb.common.item.equipment.armor.jewelry.AmuletItem;
+import com.quartzshard.aasb.common.item.equipment.armor.jewelry.AnkletItem;
+import com.quartzshard.aasb.common.item.equipment.armor.jewelry.CircletItem;
+import com.quartzshard.aasb.common.item.equipment.armor.jewelry.PocketwatchItem;
 import com.quartzshard.aasb.common.item.equipment.tool.AASBToolTier;
 import com.quartzshard.aasb.common.item.equipment.tool.herm.HermeticAxeItem;
 import com.quartzshard.aasb.common.item.equipment.tool.herm.HermeticHoeItem;
@@ -50,26 +54,31 @@ public class ObjectInit {
 		public static final Item.Properties PROPS_GENERIC_UNSTACKABLE = new Item.Properties().tab(ModInit.ITEM_GROUP).stacksTo(1);
 		public static final Item.Properties PROPS_HERM_GEAR = new Item.Properties().tab(ModInit.ITEM_GROUP).fireResistant().stacksTo(1);//.rarity(MGTKRarity.CRIMSON.get());
 
-		//Items
-		public static final RegistryObject<Item> PHILOSOPHERS_STONE = REG.register("philosophers_stone", () -> new Item(PROPS_GENERIC));
-		public static final RegistryObject<Item> MINIUM_STONE = REG.register("minium_stone", () -> new Item(PROPS_GENERIC));
-		public static final RegistryObject<Item> ELIXIR_OF_LIFE = REG.register("elixir_of_life", () -> new Item(PROPS_GENERIC));
-		public static final RegistryObject<Item> QUINTESSENCE = REG.register("quintessence", () -> new Item(PROPS_GENERIC));
-		public static final RegistryObject<Item> LOOT_BALL = REG.register("loot_ball", () -> new LootBallItem(PROPS_GENERIC_UNSTACKABLE));
+		// Items
+		public static final RegistryObject<Item>
+			PHILOSOPHERS_STONE = REG.register("philosophers_stone", () -> new Item(PROPS_GENERIC)),
+			MINIUM_STONE = REG.register("minium_stone", () -> new Item(PROPS_GENERIC)),
+			ELIXIR_OF_LIFE = REG.register("elixir_of_life", () -> new Item(PROPS_GENERIC)),
+			QUINTESSENCE = REG.register("quintessence", () -> new Item(PROPS_GENERIC)),
+			LOOT_BALL = REG.register("loot_ball", () -> new LootBallItem(PROPS_GENERIC_UNSTACKABLE)),
 			
-		public static final RegistryObject<Item> HERMETIC_HELMET = REG.register("hermetic_armet", () -> new HermeticArmorItem(HermeticArmorMaterial.MAT, EquipmentSlot.HEAD, PROPS_HERM_GEAR, 0.2f));
-		public static final RegistryObject<Item> HERMETIC_CHESTPLATE = REG.register("hermetic_cuirass", () -> new HermeticArmorItem(HermeticArmorMaterial.MAT, EquipmentSlot.CHEST, PROPS_HERM_GEAR, 0.4f));
-		public static final RegistryObject<Item> HERMETIC_LEGGINGS = REG.register("hermetic_greaves", () -> new HermeticArmorItem(HermeticArmorMaterial.MAT, EquipmentSlot.LEGS, PROPS_HERM_GEAR, 0.3f));
-		public static final RegistryObject<Item> HERMETIC_BOOTS = REG.register("hermetic_sabatons", () -> new HermeticArmorItem(HermeticArmorMaterial.MAT, EquipmentSlot.FEET, PROPS_HERM_GEAR, 0.1f));
-		public static final RegistryObject<Item> HERMETIC_SWORD = REG.register("hermetic_blade", () -> new HermeticSwordItem(AASBToolTier.HERMETIC, 3, -2.2f, PROPS_HERM_GEAR));
-		public static final RegistryObject<Item> HERMETIC_PICKAXE = REG.register("hermetic_hammer", () -> new HermeticPickaxeItem(AASBToolTier.HERMETIC, 1, -2.6f, PROPS_HERM_GEAR));
-		public static final RegistryObject<Item> HERMETIC_SHOVEL = REG.register("hermetic_spade", () -> new HermeticShovelItem(AASBToolTier.HERMETIC, 2, -2.8f, PROPS_HERM_GEAR));
-		public static final RegistryObject<Item> HERMETIC_AXE = REG.register("hermetic_hatchet", () -> new HermeticAxeItem(AASBToolTier.HERMETIC, 5, -2.8f, PROPS_HERM_GEAR));
-		public static final RegistryObject<Item> HERMETIC_HOE = REG.register("hermetic_scythe", () -> new HermeticHoeItem(AASBToolTier.HERMETIC, -4, 0.2f, PROPS_HERM_GEAR));
+			HERMETIC_HELMET = REG.register("hermetic_armet", () -> new HermeticArmorItem(HermeticArmorMaterial.MAT, EquipmentSlot.HEAD, PROPS_HERM_GEAR, 0.2f)),
+			HERMETIC_CHESTPLATE = REG.register("hermetic_cuirass", () -> new HermeticArmorItem(HermeticArmorMaterial.MAT, EquipmentSlot.CHEST, PROPS_HERM_GEAR, 0.4f)),
+			HERMETIC_LEGGINGS = REG.register("hermetic_greaves", () -> new HermeticArmorItem(HermeticArmorMaterial.MAT, EquipmentSlot.LEGS, PROPS_HERM_GEAR, 0.3f)),
+			HERMETIC_BOOTS = REG.register("hermetic_sabatons", () -> new HermeticArmorItem(HermeticArmorMaterial.MAT, EquipmentSlot.FEET, PROPS_HERM_GEAR, 0.1f)),
+			HERMETIC_SWORD = REG.register("hermetic_blade", () -> new HermeticSwordItem(AASBToolTier.HERMETIC, 3, -2.2f, PROPS_HERM_GEAR)),
+			HERMETIC_PICKAXE = REG.register("hermetic_hammer", () -> new HermeticPickaxeItem(AASBToolTier.HERMETIC, 1, -2.6f, PROPS_HERM_GEAR)),
+			HERMETIC_SHOVEL = REG.register("hermetic_spade", () -> new HermeticShovelItem(AASBToolTier.HERMETIC, 2, -2.8f, PROPS_HERM_GEAR)),
+			HERMETIC_AXE = REG.register("hermetic_hatchet", () -> new HermeticAxeItem(AASBToolTier.HERMETIC, 5, -2.8f, PROPS_HERM_GEAR)),
+			HERMETIC_HOE = REG.register("hermetic_scythe", () -> new HermeticHoeItem(AASBToolTier.HERMETIC, -4, 0.2f, PROPS_HERM_GEAR)),
 			
-		public static final RegistryObject<Item> OMNITOOL = REG.register("internal_omnitool", () -> new InternalOmnitool(9999, 9999, AASBToolTier.HERMETIC, BlockTags.MINEABLE_WITH_PICKAXE, PROPS_GENERIC_UNSTACKABLE));
+			OMNITOOL = REG.register("internal_omnitool", () -> new InternalOmnitool(9999, 9999, AASBToolTier.HERMETIC, BlockTags.MINEABLE_WITH_PICKAXE, PROPS_GENERIC_UNSTACKABLE)),
 			
-		public static final RegistryObject<Item> BAND_OF_ARCANA = REG.register("band_of_arcana", () -> new BandOfArcana(PROPS_GENERIC));
+			CIRCLET = REG.register("seer_circlet", () -> new CircletItem(PROPS_GENERIC_UNSTACKABLE)),
+			AMULET = REG.register("philosopher_amulet", () -> new AmuletItem(PROPS_GENERIC_UNSTACKABLE)),
+			POCKETWATCH = REG.register("astrologer_pocketwatch", () -> new PocketwatchItem(PROPS_GENERIC_UNSTACKABLE)),
+			ANKLET = REG.register("prophet_anklet", () -> new AnkletItem(PROPS_GENERIC_UNSTACKABLE)),
+			BAND_OF_ARCANA = REG.register("band_of_arcana", () -> new BandOfArcana(PROPS_GENERIC_UNSTACKABLE));
 
 		// BlockItems
 		public static final RegistryObject<Item> WAYSTONE_BLOCKITEM = fromBlock(Blocks.WAYSTONE);

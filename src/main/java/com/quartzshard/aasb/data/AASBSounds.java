@@ -21,7 +21,7 @@ public class AASBSounds extends SoundDefinitionsProvider {
 
 	@Override
 	public void registerSounds() {
-		simple(EffectInit.Sounds.BARRIER_AMBIENT, new ResourceLocation("block/beacon/ambient"));
+		simple(EffectInit.Sounds.BARRIER_AMBIENT, new ResourceLocation("block/beacon/ambient"), 0.5);
 		simple(EffectInit.Sounds.BARRIER_PROTECT, "way/barrier/protect");
 		simple(EffectInit.Sounds.BARRIER_FAIL, "way/barrier/fail");
 		//simple(EffectInit.Sounds.BARRIER_IGNORED, "way/barrier/ignored");
@@ -38,6 +38,9 @@ public class AASBSounds extends SoundDefinitionsProvider {
 	}
 	private void simple(Supplier<SoundEvent> ro, ResourceLocation loc) {
 		add(ro, definition().with(sound(loc)).subtitle(subFor(ro)));
+	}
+	private void simple(Supplier<SoundEvent> ro, ResourceLocation loc, double pitch) {
+		add(ro, definition().with(sound(loc).pitch(pitch)).subtitle(subFor(ro)));
 	}
 	
 	private void multi(Supplier<SoundEvent> ro, String... locs) {

@@ -147,7 +147,7 @@ public abstract class AlchArmor extends ArmorItem implements IDamageReducer {
 				} else {
 					event.setAmount(damage * (1f-totalDr));
 				}
-				entity.level.playSound(null, entity, SoundEvents.SHIELD_BLOCK, entity.getSoundSource(), Math.min(1, totalDr), 1.5f);
+				entity.level.playSound(null, entity, SoundEvents.SHIELD_BLOCK, entity.getSoundSource(), Math.min(1, totalDr), 0.5f);
 				for (Entry<ItemStack, Float> absorber : absorbList.entrySet()) {
 					ItemStack stack = absorber.getKey();
 					float absorbed = absorber.getValue()*event.getAmount();

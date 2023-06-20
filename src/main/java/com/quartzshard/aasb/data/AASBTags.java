@@ -44,6 +44,8 @@ public class AASBTags {
 
 		public static final TagKey<Block> ARROW_NOCLIP = makeTag("sentient_arrow_noclip");
 		public static final TagKey<Block> ARROW_ANNIHILATE = makeTag("sentient_arrow_annihilate");
+		
+		public static final TagKey<Block> HYPERSICKLE_CAN_CULL = makeTag("hypersickle_can_cull");
 
 		public static final TagKey<Block> WAYBLAST_RESIST = makeTag("wayblast_resist");
 		public static final TagKey<Block> WAYBLAST_IMMUNE = makeTag("wayblast_immune");
@@ -83,11 +85,21 @@ public class AASBTags {
 	        	.addTag(BlockTags.FLOWERS)
 	        	.addTag(BlockTags.CLIMBABLE);
 	        
-	        tag(WAYBLAST_RESIST)
-	        	.add(Blocks.NETHERITE_BLOCK);
+	        tag(HYPERSICKLE_CAN_CULL)
+	        	.addTag(BlockTags.CAVE_VINES)
+	        	.addTag(BlockTags.FLOWERS)
+	        	.addTag(BlockTags.REPLACEABLE_PLANTS)
+	        	.add(Blocks.VINE)
+	        	.add(Blocks.BIG_DRIPLEAF)
+	        	.add(Blocks.BIG_DRIPLEAF_STEM)
+	        	.add(Blocks.SMALL_DRIPLEAF)
+	        	.add(Blocks.CACTUS);
 	        
-	        tag(WAYBLAST_IMMUNE)
+	        tag(WAYBLAST_RESIST)
 	        	.addTag(BlockTags.WITHER_IMMUNE);
+	        
+	        //tag(WAYBLAST_IMMUNE)
+	        //	.addTag(BlockTags.WITHER_IMMUNE);
 	    }
 	    
 	    private static TagKey<Block> makeTag(String name) {

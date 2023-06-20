@@ -4,11 +4,13 @@ import com.quartzshard.aasb.AsAboveSoBelow;
 import com.quartzshard.aasb.api.item.IHermeticTool;
 import com.quartzshard.aasb.client.AASBKeys;
 import com.quartzshard.aasb.client.particle.CutParticle;
+import com.quartzshard.aasb.client.render.layer.AASBPlayerLayer;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.particle.ParticleProvider;
+import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
@@ -17,6 +19,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -61,5 +64,15 @@ public class ClientInit {
 	}
 	private static <T extends ParticleOptions> void spriteProvider(ParticleType<T> type, ParticleEngine.SpriteParticleRegistration<T> provider) {
 		Minecraft.getInstance().particleEngine.register(type, provider);
+	}
+
+	@SubscribeEvent
+	public static void addLayers(EntityRenderersEvent.AddLayers event) {
+		for (String skinName : event.getSkins()) {
+			PlayerRenderer skin = event.getSkin(skinName);
+			if (skin != null) {
+				skin.addLayer(new AASBPlayerLayer(skin));
+			}
+		}
 	}
 }

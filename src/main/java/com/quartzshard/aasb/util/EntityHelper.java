@@ -1,9 +1,14 @@
 package com.quartzshard.aasb.util;
 
+import java.util.Random;
 import java.util.UUID;
 
 import com.quartzshard.aasb.init.ObjectInit;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -12,7 +17,10 @@ import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.animal.Fox;
 import net.minecraft.world.entity.animal.Ocelot;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
+import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 
 /**
  * generic entity helper functions <br>
@@ -20,6 +28,55 @@ import net.minecraft.world.entity.player.Player;
  * @author solunareclipse1
  */
 public class EntityHelper {
+	
+	/**
+	 * makes an entity teleport like an enderman
+	 * @param ent
+	 * @return if the teleport was sucessful
+	 */
+	public static boolean attemptRandomTeleport(LivingEntity ent) {
+		boolean didDo = false;
+		Random rand = ent.getRandom();
+		Level level =  ent.level;
+		boolean shouldTry = !level.isClientSide() && ent.isAlive();
+		for (int i = 0; i < 64; ++i) {
+			if (shouldTry) {
+				double tryX = ent.getX() + (rand.nextDouble() - 0.5) * 64d;
+				double tryY = ent.getY() + (double)(rand.nextInt(64) - 32);
+				double tryZ = ent.getZ() + (rand.nextDouble() - 0.5D) * 64.0D;
+				if (true) {
+					BlockPos.MutableBlockPos mbPos = new BlockPos.MutableBlockPos(tryX, tryY, tryZ);
+					while (mbPos.getY() > level.getMinBuildHeight() && !level.getBlockState(mbPos).getMaterial().blocksMotion()) {
+						mbPos.move(Direction.DOWN);
+					}
+					BlockState targetBlock = level.getBlockState(mbPos);
+					boolean targetIsSolid = targetBlock.getMaterial().blocksMotion();
+					boolean targetIsWater = targetBlock.getFluidState().is(FluidTags.WATER);
+					if (targetIsSolid && (!targetIsWater || !ent.isSensitiveToWater())) {
+						if (ent instanceof EnderMan man) {
+							// only send the enderman tele event if we are an enderman
+							net.minecraftforge.event.entity.EntityTeleportEvent.EnderEntity event = net.minecraftforge.event.ForgeEventFactory.onEnderTeleport(man, tryX, tryY, tryZ);
+							if (event.isCanceled()) return false;
+							didDo = ent.randomTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true);
+						} else {
+							didDo = ent.randomTeleport(tryX, tryY, tryZ, true);
+						}
+						if (didDo) {
+							if (!ent.isSilent()) {
+								level.playSound(null, ent.xo, ent.yo, ent.zo, SoundEvents.ENDERMAN_TELEPORT, ent.getSoundSource(), 1, 1);
+								ent.playSound(SoundEvents.ENDERMAN_TELEPORT, 1, 1);
+							}
+							break;
+						}
+					}
+				}
+			} else {
+				// invalid, return early
+				return false;
+			}
+		}
+		return didDo;
+	}
 	
 	/**
 	 * checks if an entity should never be harmed <br>

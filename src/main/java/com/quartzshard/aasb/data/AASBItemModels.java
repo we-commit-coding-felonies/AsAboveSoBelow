@@ -7,6 +7,7 @@ import com.quartzshard.aasb.init.ObjectInit;
 
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
@@ -29,15 +30,20 @@ public class AASBItemModels extends ItemModelProvider {
 		basic(ObjectInit.Items.PHILOSOPHERS_STONE, "item/philosophers_stone");
 		basic(ObjectInit.Items.LOOT_BALL, "item/loot_ball");
 
-		placeholder(ObjectInit.Items.HERMETIC_HELMET);
-		placeholder(ObjectInit.Items.HERMETIC_CHESTPLATE);
-		placeholder(ObjectInit.Items.HERMETIC_LEGGINGS);
-		placeholder(ObjectInit.Items.HERMETIC_BOOTS);
+		armor(ObjectInit.Items.HERMETIC_HELMET, "item/equipment/armor/herm/");
+		armor(ObjectInit.Items.HERMETIC_CHESTPLATE, "item/equipment/armor/herm/");
+		armor(ObjectInit.Items.HERMETIC_LEGGINGS, "item/equipment/armor/herm/");
+		armor(ObjectInit.Items.HERMETIC_BOOTS, "item/equipment/armor/herm/");
 		hermTool(ObjectInit.Items.HERMETIC_SWORD, "item/equipment/tool/herm/sword/");
 		hermTool(ObjectInit.Items.HERMETIC_PICKAXE, "item/equipment/tool/herm/pickaxe/");
 		hermTool(ObjectInit.Items.HERMETIC_SHOVEL, "item/equipment/tool/herm/shovel/");
 		hermTool(ObjectInit.Items.HERMETIC_AXE, "item/equipment/tool/herm/axe/");
 		hermTool(ObjectInit.Items.HERMETIC_HOE, "item/equipment/tool/herm/hoe/");
+
+		armor(ObjectInit.Items.CIRCLET, "item/equipment/armor/jewelry/");
+		armor(ObjectInit.Items.AMULET, "item/equipment/armor/jewelry/");
+		armor(ObjectInit.Items.POCKETWATCH, "item/equipment/armor/jewelry/");
+		armor(ObjectInit.Items.ANKLET, "item/equipment/armor/jewelry/");
 		
 		tool(ObjectInit.Items.OMNITOOL, "item/equipment/tool/devtool");
     }
@@ -65,6 +71,14 @@ public class AASBItemModels extends ItemModelProvider {
 	}
 	private void tool(RegistryObject<? extends Item> ro, ResourceLocation tex) {
         singleTexture(ro.getId().getPath(), mcLoc("item/handheld"), "layer0", tex);
+	}
+
+	private void armor(RegistryObject<? extends Item> ro, String folder) {
+		if (ro.get() instanceof ArmorItem armor) {
+			ResourceLocation tex = AsAboveSoBelow.rl(folder+armor.getSlot().getName());
+	        basic(ro, tex);
+		} else
+			throw new IllegalArgumentException(ro + " is not armor");
 	}
 
 	private void block(RegistryObject<? extends Item> ro, String tex) {

@@ -200,11 +200,7 @@ public class HermeticPickaxeItem extends PickaxeItem implements IHermeticTool {
 			}
 		}
 		if (didDo) {
-			List<ItemStack> lootBalls = LootBallItem.makeValidLootBalls(drops);
-			for (ItemStack ball : lootBalls) {
-				player.spawnAtLocation(ball);
-				//player.drop(ball, false, false);
-			}
+			LootBallItem.dropBalls(player, drops);
 			return true;
 		}
 		return false;

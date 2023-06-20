@@ -13,7 +13,6 @@ import org.jetbrains.annotations.NotNull;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.ImmutableMultimap.Builder;
-import com.quartzshard.aasb.api.item.IShapeRuneItem.ShapeRune;
 import com.quartzshard.aasb.api.item.bind.ICanEmpower;
 import com.quartzshard.aasb.api.item.bind.ICanItemFunc1;
 import com.quartzshard.aasb.api.item.bind.ICanItemFunc2;
@@ -27,30 +26,24 @@ import com.quartzshard.aasb.init.EffectInit;
 import com.quartzshard.aasb.util.ClientHelper;
 import com.quartzshard.aasb.util.ColorsHelper;
 import com.quartzshard.aasb.util.NBTHelper;
-import com.quartzshard.aasb.util.PlayerHelper;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.Tuple;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
 
 /**
  * common stuff for the herm tool set
@@ -89,7 +82,7 @@ public interface IHermeticTool extends IShapeRuneItem, IStaticSpeedBreaker, ICan
 		boolean shouldTry = !player.getCooldowns().isOnCooldown(stack.getItem()) && charge <= getMaxCharge(stack)-4;
 		if (shouldTry) {
 			setCharge(stack, charge+4);
-			level.playSound(null, player, EffectInit.Sounds.WAY_CHARGE.get(), SoundSource.PLAYERS, 0.5f, 0.48f + 0.5f * getChargePercent(stack));
+			level.playSound(null, player, EffectInit.Sounds.WAY_CHARGE.get(), SoundSource.PLAYERS, 0.25f, 0.48f + 0.5f * getChargePercent(stack));
 			return true;
 		}
 		return false;
@@ -282,6 +275,8 @@ public interface IHermeticTool extends IShapeRuneItem, IStaticSpeedBreaker, ICan
 				return onPressedFunc1(ctx.stack(), ctx.player(), ctx.level());
 			case ITEMFUNC_2:
 				return onPressedFunc2(ctx.stack(), ctx.player(), ctx.level());
+			case ITEMMODE:
+				return onPressedItemMode(ctx.stack(), ctx.player(), ctx.level());
 			default:
 				return false;
 			}

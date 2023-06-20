@@ -211,11 +211,7 @@ public class HermeticShovelItem extends ShovelItem implements IHermeticTool {
 			}
 		}
 		if (hasAction) {
-			List<ItemStack> lootBalls = LootBallItem.makeValidLootBalls(drops);
-			for (ItemStack ball : lootBalls) {
-				player.spawnAtLocation(ball);
-				//player.drop(ball, false, false);
-			}
+			LootBallItem.dropBalls(player, drops);
 			level.playSound(null, new BlockPos(box.getCenter()), EffectInit.Sounds.WAY_EXPLODE.get(), SoundSource.PLAYERS, 2, 1.5f);
 			if (level instanceof ServerLevel lvl) {
 				lvl.sendParticles(ParticleTypes.EXPLOSION_EMITTER, box.getCenter().x, box.getCenter().y, box.getCenter().z, 1, 0, 0, 0, 0);

@@ -73,6 +73,16 @@ public class BoxHelper {
 		return AABB.ofSize(box.getCenter(), s,s,s);
 	}
 
+	public static AABB moveBoxTo(AABB box, BlockPos pos) {
+		return moveBoxTo(box, Vec3.atCenterOf(pos));
+	}
+	public static AABB moveBoxTo(AABB box, Vec3 pos) {
+		double x = box.getXsize();
+		double y = box.getYsize();
+		double z = box.getZsize();
+		return AABB.ofSize(pos, x,y,z);
+	}
+
 	/**
 	 * gets a random point within the box
 	 * @param box

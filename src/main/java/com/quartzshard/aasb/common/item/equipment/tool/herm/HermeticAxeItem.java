@@ -186,10 +186,7 @@ public class HermeticAxeItem extends AxeItem implements IHermeticTool {
 		}
 		if (hasAction) {
 			if (!air) {
-				List<ItemStack> lootBalls = LootBallItem.makeValidLootBalls(drops);
-				for (ItemStack ball : lootBalls) {
-					player.spawnAtLocation(ball);
-				}	
+				LootBallItem.dropBalls(player, drops);
 			}
 			return true;
 		}

@@ -1,5 +1,6 @@
 package com.quartzshard.aasb.common.damage.source;
 
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 
 /**
@@ -19,6 +20,11 @@ public class AASBDmgSrc {
 			.setDivine()
 			.bypassEverything()
 			.setNoAggro();
+	
+	/** ignores armor, flagged as fall damage */
+	public static final AASBSimpleDamageSource SURFACE_TENSION = (AASBSimpleDamageSource) new AASBSimpleDamageSource("surface_tension")
+			.bypassArmor()
+			.setIsFall();
 	
 	/** alchemical magic, bypasses armor, enchants & DR */
 	public static AASBEntityDamageSource transmutation(Entity culprit) {
@@ -64,7 +70,7 @@ public class AASBDmgSrc {
 	public static AASBEntityDamageSource autoslash(Entity culprit) {
 		return (AASBEntityDamageSource) new AASBEntityDamageSource("autoslash", culprit)
 			.setAlchemy()
-			.bypassArmor()
+			//.bypassArmor()
 			.setMagic();
 	}
 	

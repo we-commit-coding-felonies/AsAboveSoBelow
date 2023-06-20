@@ -74,7 +74,7 @@ public class HermeticArmorItem extends AlchArmor implements IBurnoutItem, IShape
 		tips.add(new TranslatableComponent(AASBLang.TIP_HERM_ARMOR_DESC_1)); //
 		tips.add(new TranslatableComponent(AASBLang.TIP_HERM_ARMOR_DESC_2)); // info
 		tips.add(new TranslatableComponent(AASBLang.TIP_HERM_ARMOR_DESC_3)); //
-		float dr = getDr(stack, DamageSource.GENERIC)*100;
+		float dr = getDr(stack, DamageSource.CACTUS)*100;
 		Component drText = new TextComponent(ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(dr)+"%").withStyle(ChatFormatting.GREEN);
 		tips.add(new TranslatableComponent(AASBLang.TIP_HERM_ARMOR_DR, drText));
 		Style style = Style.EMPTY.withColor(getBarColor(stack));
@@ -159,18 +159,19 @@ public class HermeticArmorItem extends AlchArmor implements IBurnoutItem, IShape
 					ItemStack stack = inv.getStackInSlot(i);
 					if (stack.getItem() instanceof HermeticArmorItem armor) {
 						totalBurnOutPercent += Math.min(armor.getBurnoutMax(), getBurnout(stack))/16384f;
-						EquipmentSlot slot = LivingEntity.getEquipmentSlotForItem(stack);
-						inv.extractItem(slot.getIndex(), stack.getCount(), false);
-						ItemStack toInsert = stack.copy();// = DEGRADE_REPLACEMENTS[slot.getIndex()].copy();
-						toInsert.getEnchantmentTags().clear();
+						//EquipmentSlot slot = LivingEntity.getEquipmentSlotForItem(stack);
+						//inv.extractItem(slot.getIndex(), stack.getCount(), false);
+						//ItemStack toInsert = stack.copy();// = DEGRADE_REPLACEMENTS[slot.getIndex()].copy();
+						stack.getEnchantmentTags().clear();
 						setBurnout(stack, 0);
+						NBTHelper.Item.setBoolean(to, "burnout_overload", false);
 						//int maxDamage = toInsert.getMaxDamage();
 						//int itemDamageValue = wearer.getRandom().nextInt(maxDamage);
 						//toInsert.setDamageValue(itemDamageValue);
-						ItemStack inserted = inv.insertItem(slot.getIndex(), toInsert, false);
-						if (inserted == toInsert) {
-							LogHelper.warn("DarkMatterArmor.checkDegrade()", "ReplaceFailed", "Replacing ["+stack+"] with ["+toInsert+"] failed!");
-						}
+						//ItemStack inserted = inv.insertItem(slot.getIndex(), toInsert, false);
+						//if (inserted == toInsert) {
+						//	LogHelper.warn("DarkMatterArmor.checkDegrade()", "ReplaceFailed", "Replacing ["+stack+"] with ["+toInsert+"] failed!");
+						//}
 					}
 				}
 				DamageSource dmgSrc = AASBDmgSrc.waybombAccident(wearer);
@@ -188,7 +189,7 @@ public class HermeticArmorItem extends AlchArmor implements IBurnoutItem, IShape
 
 	@Override
 	public float getDr(ItemStack stack, DamageSource source) {
-		float dr = super.getDr(stack, source) * (1 - 0.75f*getBurnoutPercent(stack));
+		float dr = super.getDr(stack, source);// * (1 - 0.75f*getBurnoutPercent(stack));
 		return dr;
 	}
 	

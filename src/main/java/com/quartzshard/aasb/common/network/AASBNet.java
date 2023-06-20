@@ -1,10 +1,12 @@
 package com.quartzshard.aasb.common.network;
 
 import com.quartzshard.aasb.AsAboveSoBelow;
-import com.quartzshard.aasb.common.network.client.CutParticlePacket;
-import com.quartzshard.aasb.common.network.server.KeyPressPacket;
+import com.quartzshard.aasb.common.network.client.*;
+import com.quartzshard.aasb.common.network.server.*;
+import com.quartzshard.aasb.util.ClientHelper;
 
-import net.minecraft.core.BlockPos;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -34,6 +36,11 @@ public class AASBNet {
 				.decoder(KeyPressPacket::dec)
 				.consumer(KeyPressPacket::handle)
 				.add();
+		CHANNEL.messageBuilder(SlowFallPacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
+				.encoder(SlowFallPacket::enc)
+				.decoder(SlowFallPacket::dec)
+				.consumer(SlowFallPacket::handle)
+				.add();
 			
 		// server -> client
 		CHANNEL.messageBuilder(CutParticlePacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
@@ -44,6 +51,8 @@ public class AASBNet {
 	}
 	
 	public static <PKT> void toServer(PKT packet) {
+		if (ClientHelper.mc().getConnection() == null)
+			return;
 		CHANNEL.sendToServer(packet);
 	}
 
