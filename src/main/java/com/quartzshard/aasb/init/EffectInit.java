@@ -20,8 +20,7 @@ import net.minecraftforge.registries.RegistryObject;
  */
 public class EffectInit {
 
-    public static void init() {
-        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+    public static void init(IEventBus bus) {
         Sounds.REG.register(bus);
         //MOB_EFFECTS.register(bus);
         Particles.REG.register(bus);

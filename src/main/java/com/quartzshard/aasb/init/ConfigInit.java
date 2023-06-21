@@ -3,6 +3,7 @@ package com.quartzshard.aasb.init;
 import com.quartzshard.aasb.config.DebugCfg;
 
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
 
