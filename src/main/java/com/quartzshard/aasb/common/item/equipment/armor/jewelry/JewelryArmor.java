@@ -3,7 +3,6 @@ package com.quartzshard.aasb.common.item.equipment.armor.jewelry;
 import com.quartzshard.aasb.AsAboveSoBelow;
 import com.quartzshard.aasb.util.LogHelper;
 
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -28,7 +27,7 @@ public abstract class JewelryArmor extends ArmorItem {
 	 * @param player The player with the armor
 	 * @return Info about the set's current state
 	 */
-	public static JewelrySetInfo jewelryTick(ItemStack stack, Level level, Player player) {
+	public static JewelrySetInfo getArmorSetInfo(ItemStack stack, Level level, Player player) {
 		//long plrEmc = EmcHelper.getAvaliableEmc(player);
 		JewelryInfo head = getInfo(player, EquipmentSlot.HEAD),
 				chest = getInfo(player, EquipmentSlot.CHEST),

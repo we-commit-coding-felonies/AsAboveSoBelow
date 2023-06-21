@@ -16,6 +16,23 @@ public class AASBLang {
 		return String.format(template, AsAboveSoBelow.MODID);
 	}
 	
+	private static String dm(String template) {
+		return dm(template, false);
+	}
+	private static String dm(String template, boolean suffix) {
+		return dm(template, suffix, false);
+	}
+	private static String edm(String template, boolean suffix) {
+		return dm(template, suffix, true);
+	}
+	private static String dm(String template, boolean suffix, boolean entity) {
+		String id = "death.attack."+template;
+		if (suffix) {
+			id = id + (entity ? ".item" : ".player");
+		}
+		return id;
+	}
+	
 	/**
 	 * text component containing a single space character <br>
 	 * works like a newline in tooltips
@@ -98,7 +115,18 @@ public class AASBLang {
 		TIP_HERM_TOOL_STATICDIG_STATE =  id("tip.%s.herm.tool.staticDig.state"),
 				
 		TIP_HERM_TOOL_EMPOWER_DESC = id("tip.%s.herm.tool.empower.desc"),
-		TIP_HERM_TOOL_EMPOWER_GUIDE = id("tip.%s.herm.tool.empower.guide");
+		TIP_HERM_TOOL_EMPOWER_GUIDE = id("tip.%s.herm.tool.empower.guide"),
+		
+		// Death Messages
+		DM_AUTOSLASH = "autoslash",
+		DM_GOD = "divine",
+		DM_MUSTANG = "mustang",
+		DM_SURFACE_TENSION = "surface_tension",
+		DM_TRANSMUTING = "transmutation",
+		DM_TRANSMUTING_2 = "transmutation.strong",
+		DM_TRANSMUTING_POT = "transmutation.indirect",
+		DM_WAYBOMB = "waybomb",
+		DM_WAYBOMB_OOPS = "waybomb.accident";
 
 	public static Component tc(String key, Object... args) {
 		return new TranslatableComponent(key, args);
@@ -145,10 +173,20 @@ public class AASBLang {
 			add(KEY_EMPOWER, "Empower item");
 			
 			// Items
+			add(ObjectInit.Items.ASH.get(), "Ash");
+			add(ObjectInit.Items.SOOT.get(), "Soot");
+			add(ObjectInit.Items.SALT.get(), "Salt");
+			add(ObjectInit.Items.SUBLIT.get(), "Sublit");
+			add(ObjectInit.Items.AETHER.get(), "Aether");
+			add(ObjectInit.Items.QUINTESSENCE.get(), "Quintessential Condensate");
+			add(ObjectInit.Items.MATERIA_1.get(), "Materia Infirma");
+			add(ObjectInit.Items.MATERIA_2.get(), "Materia Minor");
+			add(ObjectInit.Items.MATERIA_3.get(), "Materia Modica");
+			add(ObjectInit.Items.MATERIA_4.get(), "Materia Major");
+			add(ObjectInit.Items.MATERIA_5.get(), "Materia Prima");
 			add(ObjectInit.Items.PHILOSOPHERS_STONE.get(), "The Philosopher's Stone");
 			add(ObjectInit.Items.MINIUM_STONE.get(), "Minium Stone");
 			add(ObjectInit.Items.ELIXIR_OF_LIFE.get(), "Elixir of Life");
-			add(ObjectInit.Items.QUINTESSENCE.get(), "Quintessence");
 			add(ObjectInit.Items.LOOT_BALL.get(), "Complex Mass");
 			add(ObjectInit.Items.HERMETIC_HELMET.get(), "Hermetic Armet");
 			add(ObjectInit.Items.HERMETIC_CHESTPLATE.get(), "Hermetic Cuirass");
@@ -164,9 +202,9 @@ public class AASBLang {
 			add(ObjectInit.Items.AMULET.get(), "Amulet of the Philosopher");
 			add(ObjectInit.Items.POCKETWATCH.get(), "Watch of the Astrologer");
 			add(ObjectInit.Items.ANKLET.get(), "Anklet of the Prophet");
-			add(ObjectInit.Items.BAND_OF_ARCANA.get(), "Band of Arcana");
 			
 			// Blocks
+			add(ObjectInit.Blocks.ASH_STONE.get(), "Ashen Stone");
 			add(ObjectInit.Blocks.WAYSTONE.get(), "Waystone");
 			add(ObjectInit.Blocks.AIR_ICE.get(), "Frozen Air");
 			
@@ -226,7 +264,24 @@ public class AASBLang {
 			add(TIP_HERM_TOOL_EMPOWER_GUIDE, "Hold %s to empower with Way");
 			
 			// Death Messages
-			add("death.attack.surface_tension", "%s learned a painful lesson about surface tension");
+			add(dm(DM_AUTOSLASH), "%s was decimated by %s");
+			add(edm(DM_AUTOSLASH, true), "%s got butchered by %s's %s");
+			add(dm(DM_GOD), "%s became a work of fiction");
+			add(dm(DM_GOD, true), "%s was retconned after losing a fight with %s");
+			add(dm(DM_MUSTANG), "%s was phlogistonated by %s");
+			add(edm(DM_MUSTANG, true), "%s was reduced to ash by %s's %s");
+			add(dm(DM_SURFACE_TENSION), "%s learned a painful lesson about surface tension");
+			add(dm(DM_SURFACE_TENSION, true), "%s was proven guilty of witchcraft by %s");
+			add(dm(DM_TRANSMUTING), "%s was turned into an eldritch horror by %s");
+			add(edm(DM_TRANSMUTING, true), "%s was inhumanely transmuted by %s using %s");
+			add(dm(DM_TRANSMUTING_2), "%s was told the story of King Midas by %s");
+			add(edm(DM_TRANSMUTING_2, true), "%s underwent chrysopoeia because of %s's %s");
+			add(dm(DM_TRANSMUTING_POT), "%s lost their Way");
+			add(dm(DM_TRANSMUTING_POT, true), "%s became unrecognizable whilst fighting %s");
+			add(dm(DM_WAYBOMB), "%s's aspects were annihilated at the hands of %s");
+			add(edm(DM_WAYBOMB, true), "%s's aspects were annihilated at the hands of %s");
+			add(dm(DM_WAYBOMB_OOPS), "%s was vaporized when %s underwent alchemical fission");
+			add(edm(DM_WAYBOMB_OOPS, true), "%s was vaporized when %s underwent alchemical fission");
 			
 			// Subtitles
 		}

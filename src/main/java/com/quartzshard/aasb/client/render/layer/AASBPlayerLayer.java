@@ -7,6 +7,8 @@ import java.util.UUID;
 import com.quartzshard.aasb.AsAboveSoBelow;
 import com.quartzshard.aasb.client.render.AASBRenderType;
 import com.quartzshard.aasb.common.item.equipment.armor.jewelry.CircletItem;
+import com.quartzshard.aasb.common.item.equipment.armor.jewelry.JewelryArmor;
+import com.quartzshard.aasb.config.DebugCfg;
 import com.quartzshard.aasb.util.ColorsHelper;
 import com.quartzshard.aasb.util.ColorsHelper.Color;
 
@@ -46,16 +48,17 @@ public class AASBPlayerLayer extends RenderLayer<AbstractClientPlayer, PlayerMod
 		
 		// sinkillerj (Inspiration, lots of borrowed code)
 		SPECIAL_HALOS.put(SIN_UUID,
-				new MagnumOpusHaloData(AsAboveSoBelow.rl("textures/models/halo/sin.png"), Color.COVALENCE_GREEN, Color.COVALENCE_GREEN));
+				new MagnumOpusHaloData(AsAboveSoBelow.rl(HALOS+"sin.png"), Color.COVALENCE_GREEN, Color.COVALENCE_GREEN));
 		
 		// Clarissa (Because I feel like being nice)
 		SPECIAL_HALOS.put(CLAR_UUID,
-				new MagnumOpusHaloData(AsAboveSoBelow.rl("textures/models/halo/heart.png"), Color.COVALENCE_GREEN, Color.COVALENCE_GREEN));
+				new MagnumOpusHaloData(AsAboveSoBelow.rl(HALOS+"heart.png"), Color.COVALENCE_GREEN, Color.COVALENCE_GREEN));
 	}
 	
 	private final PlayerRenderer renderer;
 	private static final Map<UUID,MagnumOpusHaloData> SPECIAL_HALOS = new HashMap<>();
-	private static final ResourceLocation DEFAULT_HALO = AsAboveSoBelow.rl("textures/models/halo/normal.png");
+	private static final String HALOS = "textures/models/halo/";
+	private static final ResourceLocation DEFAULT_HALO = AsAboveSoBelow.rl(HALOS+"normal.png");
 	private static final MagnumOpusHaloData DEFAULT_HALO_DATA = new MagnumOpusHaloData(DEFAULT_HALO, Color.COVALENCE_GREEN, Color.COVALENCE_MAGENTA);
 	
 	// special people uuids
@@ -75,14 +78,25 @@ public class AASBPlayerLayer extends RenderLayer<AbstractClientPlayer, PlayerMod
 	/** for the alchemical barrier */
 	private void renderMagnumOpusHalo(PoseStack poseStack, MultiBufferSource renderBuffer, AbstractClientPlayer player, float ageInTicks) {
 		float emcLevel = 1;
-		for (ItemStack stack : player.getArmorSlots()) {
-			//if (!(stack.getItem() instanceof JewelryArmor)) return;
-			//if (stack.getItem() instanceof GemAmulet) {
-			//	GemAmulet amulet = (GemAmulet) stack.getItem();
-			//	emcLevel = 1;// (float)amulet.getStoredEmc(stack) / (float)amulet.getMaximumEmc(stack);
-			//}
+		String debugStr = DebugCfg.HALO_UUID.get();
+		UUID debugUUID = null;
+		if (!FMLEnvironment.production) {
+			try {
+				debugUUID = UUID.fromString(debugStr);
+			} catch (IllegalArgumentException e) {
+				// if its not a valid UUID, thats fine
+				debugUUID = null;
+			}
 		}
-		//if (emcLevel <= 0) return;
+		// in production, this should always be false, as debugUUID will never not be null
+		boolean isDev = debugUUID != null && player.getScoreboardName() == "Dev" && SPECIAL_HALOS.containsKey(debugUUID);
+		if (!isDev) {
+			// checks if the halo should render
+			for (ItemStack stack : player.getArmorSlots())
+				if (!(stack.getItem() instanceof JewelryArmor))
+					return;
+			if (emcLevel <= 0) return;
+		}
 		int timer = Math.round(ageInTicks);
 		poseStack.pushPose();
 		renderer.getModel().jacket.translateAndRotate(poseStack);
@@ -92,8 +106,7 @@ public class AASBPlayerLayer extends RenderLayer<AbstractClientPlayer, PlayerMod
 		poseStack.translate(-0.5, -0.25, -0.5); // positioning behind the head
 		
 		// set up data about halo
-		boolean isDev = (!FMLEnvironment.production && player.getScoreboardName() == "Dev");
-		UUID uuid = isDev ? SOL_UUID : player.getUUID();
+		UUID uuid = isDev ? debugUUID : player.getUUID();
 		MagnumOpusHaloData data = SPECIAL_HALOS.get(uuid);
 		if (data == null) {
 			data = DEFAULT_HALO_DATA;

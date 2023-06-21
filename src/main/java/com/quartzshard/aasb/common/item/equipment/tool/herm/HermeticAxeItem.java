@@ -9,6 +9,7 @@ import com.quartzshard.aasb.api.item.IHermeticTool;
 import com.quartzshard.aasb.api.item.IShapeRuneItem.ShapeRune;
 import com.quartzshard.aasb.client.AASBKeys;
 import com.quartzshard.aasb.common.item.LootBallItem;
+import com.quartzshard.aasb.common.item.equipment.tool.AASBToolTier;
 import com.quartzshard.aasb.common.network.AASBNet;
 import com.quartzshard.aasb.common.network.client.CutParticlePacket;
 import com.quartzshard.aasb.data.AASBLang;
@@ -40,6 +41,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.Item.Properties;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -51,8 +53,8 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.Tags;
 
 public class HermeticAxeItem extends AxeItem implements IHermeticTool {
-	public HermeticAxeItem(Tier tier, int damage, float speed, Properties props) {
-		super(tier, damage, speed, props);
+	public HermeticAxeItem(int damage, float speed, Properties props) {
+		super(AASBToolTier.HERMETIC, damage, speed, props);
 	}
 	
 	@Override

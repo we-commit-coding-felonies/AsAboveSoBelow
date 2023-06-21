@@ -23,12 +23,24 @@ public class AASBItemModels extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
-    	// BlockItems
-		block(ObjectInit.Items.WAYSTONE_BLOCKITEM, "block/waystone");
+    	// Items
+		basic(ObjectInit.Items.ASH);
+		basic(ObjectInit.Items.SOOT);
+		basic(ObjectInit.Items.SALT);
+		basic(ObjectInit.Items.SUBLIT);
+		basic(ObjectInit.Items.AETHER);
+		basic(ObjectInit.Items.QUINTESSENCE);
+		
+		materia(ObjectInit.Items.MATERIA_1, 1);
+		materia(ObjectInit.Items.MATERIA_2, 2);
+		materia(ObjectInit.Items.MATERIA_3, 3);
+		materia(ObjectInit.Items.MATERIA_4, 4);
+		materia(ObjectInit.Items.MATERIA_5, 5);
 
-		basic(ObjectInit.Items.MINIUM_STONE, "item/minium_stone");
-		basic(ObjectInit.Items.PHILOSOPHERS_STONE, "item/philosophers_stone");
-		basic(ObjectInit.Items.LOOT_BALL, "item/loot_ball");
+		basic(ObjectInit.Items.MINIUM_STONE);
+		placeholder(ObjectInit.Items.ELIXIR_OF_LIFE);
+		basic(ObjectInit.Items.PHILOSOPHERS_STONE);
+		basic(ObjectInit.Items.LOOT_BALL);
 
 		armor(ObjectInit.Items.HERMETIC_HELMET, "item/equipment/armor/herm/");
 		armor(ObjectInit.Items.HERMETIC_CHESTPLATE, "item/equipment/armor/herm/");
@@ -46,6 +58,10 @@ public class AASBItemModels extends ItemModelProvider {
 		armor(ObjectInit.Items.ANKLET, "item/equipment/armor/jewelry/");
 		
 		tool(ObjectInit.Items.OMNITOOL, "item/equipment/tool/devtool");
+		
+		
+    	// BlockItems
+		block(ObjectInit.Items.WAYSTONE_BLOCKITEM, "block/waystone");
     }
     
     /**
@@ -59,11 +75,18 @@ public class AASBItemModels extends ItemModelProvider {
         singleTexture(ro.getId().getPath(), mcLoc("item/generated"), "layer0", modLoc("placeholder"));
     }
 
+	private void basic(RegistryObject<? extends Item> ro) {
+		basic(ro, "item/"+ro.getId().getPath());
+	}
 	private void basic(RegistryObject<? extends Item> ro, String tex) {
 		basic(ro, modLoc(tex));
 	}
 	private void basic(RegistryObject<? extends Item> ro, ResourceLocation tex) {
         singleTexture(ro.getId().getPath(), mcLoc("item/generated"), "layer0", tex);
+	}
+
+	private void materia(RegistryObject<? extends Item> ro, int tier) {
+		basic(ro, "item/materia/"+tier);
 	}
 
 	private void tool(RegistryObject<? extends Item> ro, String tex) {

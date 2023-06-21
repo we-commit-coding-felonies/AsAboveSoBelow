@@ -21,6 +21,7 @@ public class AASBBlockStates extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
+		simpleBlock(ObjectInit.Blocks.ASH_STONE.get());
 		simpleBlock(ObjectInit.Blocks.WAYSTONE.get());
 		
 		getVariantBuilder(ObjectInit.Blocks.AIR_ICE.get())

@@ -9,6 +9,7 @@ import com.quartzshard.aasb.api.item.IHermeticTool;
 import com.quartzshard.aasb.api.item.IShapeRuneItem.ShapeRune;
 import com.quartzshard.aasb.client.AASBKeys;
 import com.quartzshard.aasb.common.item.LootBallItem;
+import com.quartzshard.aasb.common.item.equipment.tool.AASBToolTier;
 import com.quartzshard.aasb.common.network.AASBNet;
 import com.quartzshard.aasb.common.network.client.CutParticlePacket;
 import com.quartzshard.aasb.data.AASBLang;
@@ -45,6 +46,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.Item.Properties;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ClipContext;
@@ -65,8 +67,8 @@ import net.minecraftforge.common.ToolAction;
 import net.minecraftforge.common.ToolActions;
 
 public class HermeticHoeItem extends HoeItem implements IHermeticTool {
-	public HermeticHoeItem(Tier tier, int damage, float speed, Properties props) {
-		super(tier, damage, speed, props);
+	public HermeticHoeItem(int damage, float speed, Properties props) {
+		super(AASBToolTier.HERMETIC, damage, speed, props);
 	}
 	
 	public static final String TAG_OPERATION = "hoe_operation";

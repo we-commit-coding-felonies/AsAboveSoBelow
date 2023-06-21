@@ -13,6 +13,7 @@ import com.google.common.collect.Multimap;
 import com.quartzshard.aasb.api.item.IHermeticTool;
 import com.quartzshard.aasb.client.AASBKeys;
 import com.quartzshard.aasb.common.damage.source.AASBDmgSrc;
+import com.quartzshard.aasb.common.item.equipment.tool.AASBToolTier;
 import com.quartzshard.aasb.common.network.AASBNet;
 import com.quartzshard.aasb.common.network.client.CutParticlePacket;
 import com.quartzshard.aasb.data.AASBLang;
@@ -51,8 +52,8 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 public class HermeticSwordItem extends SwordItem implements IHermeticTool {
-	public HermeticSwordItem(Tier tier, int damage, float speed, Properties props) {
-		super(tier, damage, speed, props);
+	public HermeticSwordItem(int damage, float speed, Properties props) {
+		super(AASBToolTier.HERMETIC, damage, speed, props);
 	}
 	
 	public enum KillMode {

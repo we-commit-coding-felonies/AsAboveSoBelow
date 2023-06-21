@@ -61,8 +61,8 @@ public class HermeticArmorItem extends AlchArmor implements IBurnoutItem, IShape
 	 * @param props The item's properties
 	 * @param maxDR The maximum amount of damage reduction this item can provide
 	 */
-	public HermeticArmorItem(ArmorMaterial mat, EquipmentSlot slot, Properties props, float maxDr) {
-		super(mat, slot, props, maxDr);
+	public HermeticArmorItem(EquipmentSlot slot, Properties props, float maxDr) {
+		super(HermeticArmorMaterial.MAT, slot, props, maxDr);
 		MinecraftForge.EVENT_BUS.addListener(this::checkDegrade);
 	}
 	
