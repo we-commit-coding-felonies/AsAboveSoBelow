@@ -74,9 +74,9 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 		boolean wasInstamine = NBTHelper.Item.getBoolean(stack, "Instamine", false);
 		NBTHelper.Item.setBoolean(stack, "Instamine", !wasInstamine);
 		if (wasInstamine)
-			ObjectInit.TrinketRunes.FIRE.get().combatAbility();
+			ObjectInit.TrinketRunes.FIRE.get().combatAbility(stack, player, level);
 		else
-			ObjectInit.TrinketRunes.WATER.get().combatAbility();
+			ObjectInit.TrinketRunes.WATER.get().combatAbility(stack, player, level);
 		return false;
 	}
 

@@ -153,7 +153,6 @@ public class ObjectInit {
 	    private static final DeferredRegister<TrinketRune> REG = DeferredRegister.create(AsAboveSoBelow.rl("trinket_runes"), AsAboveSoBelow.MODID);
 	    public static final Supplier<IForgeRegistry<TrinketRune>> REGISTRY_SUPPLIER = REG.makeRegistry(TrinketRune.class, () -> {
 	            	RegistryBuilder<TrinketRune> builder = new RegistryBuilder<>();
-	            	//builder.disableOverrides();//.setDefaultKey(AsAboveSoBelow.rl("none"));
 	            	return builder;
 	            }
 	    );
