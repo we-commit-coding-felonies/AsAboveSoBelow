@@ -2,6 +2,7 @@ package com.quartzshard.aasb.common.item.equipment.trinket.rune;
 
 import org.jetbrains.annotations.Nullable;
 
+import com.quartzshard.aasb.common.network.server.KeyPressPacket.BindState;
 import com.quartzshard.aasb.init.ObjectInit;
 
 import net.minecraft.nbt.CompoundTag;
@@ -51,19 +52,19 @@ public abstract class TrinketRune extends ForgeRegistryEntry<TrinketRune> {
 	 * Called by Gloves
 	 * @return if the ability was used successfully
 	 */
-	public abstract boolean combatAbility(ItemStack stack, ServerPlayer player, ServerLevel level);
+	public abstract boolean combatAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state);
 	
 	/**
 	 * Called by Rings
 	 * @return if the ability was used successfully
 	 */
-	public abstract boolean utilityAbility(ItemStack stack, ServerPlayer player, ServerLevel level);
+	public abstract boolean utilityAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state);
 	
 	/**
 	 * Called by Charms every tick
 	 * @return if the ability was used successfully
 	 */
-	public abstract boolean passiveAbility(ItemStack stack, ServerPlayer player, ServerLevel level);
+	public abstract boolean passiveAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state);
 
 	// TODO: onRuneAdded/Removed
 	//public void onRuneAdded() {}

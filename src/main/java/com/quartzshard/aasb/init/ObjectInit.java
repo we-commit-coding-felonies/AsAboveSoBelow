@@ -2,6 +2,8 @@ package com.quartzshard.aasb.init;
 
 import java.util.function.Supplier;
 
+import org.jetbrains.annotations.Nullable;
+
 import com.quartzshard.aasb.AsAboveSoBelow;
 import com.quartzshard.aasb.common.block.AirIceBlock;
 import com.quartzshard.aasb.common.item.AASBRarity;
@@ -20,10 +22,12 @@ import com.quartzshard.aasb.common.item.equipment.tool.herm.HermeticShovelItem;
 import com.quartzshard.aasb.common.item.equipment.tool.herm.HermeticSwordItem;
 import com.quartzshard.aasb.common.item.equipment.tool.herm.InternalOmnitool;
 import com.quartzshard.aasb.common.item.equipment.trinket.AbilityTrinket;
+import com.quartzshard.aasb.common.item.equipment.trinket.RingItem;
 import com.quartzshard.aasb.common.item.equipment.trinket.rune.TrinketRune;
 import com.quartzshard.aasb.common.item.equipment.trinket.rune.shape.FireRune;
 import com.quartzshard.aasb.common.item.equipment.trinket.rune.shape.WaterRune;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.BlockItem;
@@ -89,6 +93,9 @@ public class ObjectInit {
 				MINIUM_STONE = REG.register("minium_stone", () -> new Item(PROPS_MINIUM)),
 				ELIXIR_OF_LIFE = REG.register("elixir_of_life", () -> new Item(PROPS_MINIUM)),
 				LOOT_BALL = REG.register("complex_mass", () -> new LootBallItem(PROPS_UNSTACKABLE)),
+				
+				// Trinkets
+				RING = REG.register("ring", () -> new RingItem(PROPS_UNSTACKABLE)),
 			
 				// Hermetic Stuff
 				HERMETIC_HELMET = REG.register("hermetic_armet", () -> new HermeticArmorItem(EquipmentSlot.HEAD, PROPS_HERM_GEAR, 0.2f)),
@@ -156,6 +163,20 @@ public class ObjectInit {
 		public static final RegistryObject<TrinketRune>
 				WATER = REG.register("water", () -> new WaterRune()),
 				FIRE = REG.register("fire", () -> new FireRune());
+
+		public static IForgeRegistry<TrinketRune> getReg() {
+			return REGISTRY_SUPPLIER.get();
+		}
+		public static boolean exists(ResourceLocation rl) {
+			return getReg().containsKey(rl);
+		}
+		@Nullable
+		public static TrinketRune get(ResourceLocation rl) {
+			if (exists(rl)) {
+				return getReg().getValue(rl);
+			}
+			return null;
+		}
 	}
 
 }
