@@ -21,7 +21,6 @@ import com.quartzshard.aasb.common.item.equipment.tool.herm.HermeticSwordItem;
 import com.quartzshard.aasb.common.item.equipment.tool.herm.InternalOmnitool;
 import com.quartzshard.aasb.common.item.equipment.trinket.AbilityTrinket;
 import com.quartzshard.aasb.common.item.equipment.trinket.rune.TrinketRune;
-import com.quartzshard.aasb.common.item.equipment.trinket.rune.TrinketRuneRegistry;
 import com.quartzshard.aasb.common.item.equipment.trinket.rune.shape.FireRune;
 import com.quartzshard.aasb.common.item.equipment.trinket.rune.shape.WaterRune;
 
@@ -36,7 +35,6 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
 
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -50,8 +48,7 @@ import net.minecraftforge.registries.RegistryObject;
 public class ObjectInit {
 
 
-	public static void init() {
-		IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+	public static void init(IEventBus bus) {
 		TrinketRunes.REG.register(bus);
 		Blocks.REG.register(bus);
 		Items.REG.register(bus);
@@ -157,8 +154,6 @@ public class ObjectInit {
 	            	return builder;
 	            }
 	    );
-		//private static final DeferredRegister<TrinketRune> REG = DeferredRegister.create(TrinketRuneRegistry.REGISTRY.get(), AsAboveSoBelow.MODID);
-		
 		public static final RegistryObject<TrinketRune>
 				WATER = REG.register("water", () -> new WaterRune()),
 				FIRE = REG.register("fire", () -> new FireRune());

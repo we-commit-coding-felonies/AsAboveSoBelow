@@ -39,12 +39,14 @@ public class AsAboveSoBelow {
 	};
 
 	public AsAboveSoBelow() {
-		LogHelper.info("AsAboveSoBelow()", "Initializing", LOG_SPLASHES[RAND.nextInt(LOG_SPLASHES.length)]);
-		ObjectInit.init();
-		EffectInit.init();
-		ConfigInit.init();
-
+		
 		IEventBus modbus = FMLJavaModLoadingContext.get().getModEventBus();
+		
+		LogHelper.info("AsAboveSoBelow()", "Initializing", LOG_SPLASHES[RAND.nextInt(LOG_SPLASHES.length)]);
+		ObjectInit.init(modbus);
+		EffectInit.init(modbus);
+		ConfigInit.init(); // Uses different bus, ¯\_(ツ)_/¯
+
 		modbus.addListener(ModInit::init);
 		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> modbus.addListener(ClientInit::init));
 
