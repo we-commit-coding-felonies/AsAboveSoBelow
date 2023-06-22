@@ -3,7 +3,7 @@ package com.quartzshard.aasb.init;
 import java.util.function.Supplier;
 
 import com.quartzshard.aasb.AsAboveSoBelow;
-import com.quartzshard.aasb.api.alchemy.AspectForm;
+import com.quartzshard.aasb.api.alchemy.aspects.AspectForm;
 
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -28,8 +28,8 @@ public class AlchemyInit {
 		);
 	
 		public static final RegistryObject<AspectForm> 
-			MATERIA = REG.register("materia", () -> new AspectForm(AsAboveSoBelow.rl("materia"), null)),
-			MINERAL = REG.register("mineral", () -> new AspectForm(AsAboveSoBelow.rl("mineral"), MATERIA.get())),
-			METAL = REG.register("metal", () -> new AspectForm(AsAboveSoBelow.rl("metal"), MINERAL.get()));
+				MATERIA = REG.register("materia", () -> new AspectForm(AsAboveSoBelow.rl("materia"), null)),
+				MINERAL = REG.register("mineral", () -> new AspectForm(AsAboveSoBelow.rl("mineral"), MATERIA.get())),
+				METAL = REG.register("metal", () -> new AspectForm(AsAboveSoBelow.rl("metal"), MINERAL.get()));
 	}
 }

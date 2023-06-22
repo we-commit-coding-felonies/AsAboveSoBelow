@@ -1,8 +1,9 @@
-package com.quartzshard.aasb.api.alchemy;
+package com.quartzshard.aasb.api.alchemy.aspects;
 
 import java.util.Arrays;
 
 import com.quartzshard.aasb.AsAboveSoBelow;
+import com.quartzshard.aasb.api.alchemy.IAlchemicalFlow;
 import com.quartzshard.aasb.common.item.equipment.trinket.rune.TrinketRune;
 import com.quartzshard.aasb.util.LogHelper;
 

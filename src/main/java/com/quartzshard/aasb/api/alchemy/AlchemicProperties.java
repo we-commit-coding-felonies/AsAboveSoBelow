@@ -1,5 +1,11 @@
 package com.quartzshard.aasb.api.alchemy;
 
-public record AlchemicProperties(AspectWay way, AspectShape shape, AspectForm form) {
+import org.jetbrains.annotations.Nullable;
+
+import com.quartzshard.aasb.api.alchemy.aspects.AspectForm;
+import com.quartzshard.aasb.api.alchemy.aspects.AspectShape;
+import com.quartzshard.aasb.api.alchemy.aspects.AspectWay;
+
+public record AlchemicProperties(@Nullable AspectWay way, @Nullable AspectShape shape, @Nullable AspectForm form) {
 
 }

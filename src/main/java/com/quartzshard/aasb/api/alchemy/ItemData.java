@@ -15,6 +15,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 
 // Basically, ItemInfo from projectE. Thanks, sin!
+// https://github.com/sinkillerj/ProjectE/blob/mc1.18.x/src/api/java/moze_intel/projecte/api/ItemInfo.java
 /**
  * Class used for keeping track of a combined {@link Item} and {@link CompoundTag}. Unlike {@link ItemStack} this class does not keep track of count, and overrides {@link
  * #equals(Object)} and {@link #hashCode()} so that it can be used properly in a {@link java.util.Set}.
@@ -22,7 +23,7 @@ import net.minecraftforge.registries.ForgeRegistries;
  * @implNote If the {@link CompoundTag} this {@link ItemData} is given is empty, then it converts it to being null.
  * @apiNote {@link ItemData} and the data it stores is Immutable
  */
-public class ItemData{
+public class ItemData {
 	
 	@NotNull
 	private final Item item;

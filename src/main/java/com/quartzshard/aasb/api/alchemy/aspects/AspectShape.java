@@ -1,8 +1,9 @@
-package com.quartzshard.aasb.api.alchemy;
+package com.quartzshard.aasb.api.alchemy.aspects;
 
+import com.quartzshard.aasb.api.alchemy.IAlchemicalFlow;
 import com.quartzshard.aasb.util.LogHelper;
 
-public enum AspectShape implements IAlchemicalFlow<AspectShape>{
+public enum AspectShape implements IAlchemicalFlow<AspectShape> {
 	UNIVERSAL,
 	WATER,
 	EARTH,
@@ -16,8 +17,9 @@ public enum AspectShape implements IAlchemicalFlow<AspectShape>{
 	 * @return 
 	 */
 	public boolean flows(AspectShape to) {
-		if (to == ASPECT_NULL) return false;
-		switch(this) {
+		if (to == ASPECT_NULL)
+			return false;
+		switch (this) {
 		case AIR:
 			return to == WATER;
 		case EARTH:

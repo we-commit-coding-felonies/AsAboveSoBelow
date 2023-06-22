@@ -3,7 +3,7 @@ package com.quartzshard.aasb.init;
 import java.util.function.Supplier;
 
 import com.quartzshard.aasb.AsAboveSoBelow;
-import com.quartzshard.aasb.api.alchemy.AspectForm;
+import com.quartzshard.aasb.api.alchemy.aspects.AspectForm;
 import com.quartzshard.aasb.common.block.AirIceBlock;
 import com.quartzshard.aasb.common.item.AASBRarity;
 import com.quartzshard.aasb.common.item.LootBallItem;
