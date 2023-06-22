@@ -2,6 +2,7 @@ package com.quartzshard.aasb;
 
 import java.util.Random;
 
+import com.quartzshard.aasb.init.AlchemyInit;
 import com.quartzshard.aasb.init.ClientInit;
 import com.quartzshard.aasb.init.ConfigInit;
 import com.quartzshard.aasb.init.EffectInit;
@@ -44,6 +45,7 @@ public class AsAboveSoBelow {
 		
 		LogHelper.info("AsAboveSoBelow()", "Initializing", LOG_SPLASHES[RAND.nextInt(LOG_SPLASHES.length)]);
 		ObjectInit.init(modbus);
+		AlchemyInit.init(modbus);
 		EffectInit.init(modbus);
 		ConfigInit.init(); // Uses different bus, ¯\_(ツ)_/¯
 
