@@ -11,6 +11,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
@@ -248,5 +249,13 @@ public class PlayerHelper {
 		if (ServerLifecycleHooks.getCurrentServer().isUnderSpawnProtection((ServerLevel) player.getCommandSenderWorld(), pos, player))
 			return false;
 		return Arrays.stream(Direction.values()).allMatch(e -> player.mayUseItemAt(pos, e, ItemStack.EMPTY));
+	}
+	
+	public static void coolDown(Player player, Item item, int ticks) {
+		player.getCooldowns().addCooldown(item, ticks);
+	}
+	
+	public static boolean onCooldown(Player player, Item item) {
+		return player.getCooldowns().isOnCooldown(item);
 	}
 }

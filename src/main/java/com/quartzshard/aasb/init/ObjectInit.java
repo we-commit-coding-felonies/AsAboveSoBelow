@@ -22,10 +22,11 @@ import com.quartzshard.aasb.common.item.equipment.tool.herm.HermeticShovelItem;
 import com.quartzshard.aasb.common.item.equipment.tool.herm.HermeticSwordItem;
 import com.quartzshard.aasb.common.item.equipment.tool.herm.InternalOmnitool;
 import com.quartzshard.aasb.common.item.equipment.trinket.AbilityTrinket;
+import com.quartzshard.aasb.common.item.equipment.trinket.CharmItem;
+import com.quartzshard.aasb.common.item.equipment.trinket.GloveItem;
 import com.quartzshard.aasb.common.item.equipment.trinket.RingItem;
 import com.quartzshard.aasb.common.item.equipment.trinket.rune.TrinketRune;
-import com.quartzshard.aasb.common.item.equipment.trinket.rune.shape.FireRune;
-import com.quartzshard.aasb.common.item.equipment.trinket.rune.shape.WaterRune;
+import com.quartzshard.aasb.common.item.equipment.trinket.rune.shape.*;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
@@ -95,7 +96,9 @@ public class ObjectInit {
 				LOOT_BALL = REG.register("complex_mass", () -> new LootBallItem(PROPS_UNSTACKABLE)),
 				
 				// Trinkets
+				GLOVE = REG.register("glove", () -> new GloveItem(PROPS_UNSTACKABLE)),
 				RING = REG.register("ring", () -> new RingItem(PROPS_UNSTACKABLE)),
+				CHARM = REG.register("charm", () -> new CharmItem(PROPS_UNSTACKABLE)),
 			
 				// Hermetic Stuff
 				HERMETIC_HELMET = REG.register("hermetic_armet", () -> new HermeticArmorItem(EquipmentSlot.HEAD, PROPS_HERM_GEAR, 0.2f)),
@@ -162,7 +165,9 @@ public class ObjectInit {
 	    );
 		public static final RegistryObject<TrinketRune>
 				WATER = REG.register("water", () -> new WaterRune()),
-				FIRE = REG.register("fire", () -> new FireRune());
+				EARTH = REG.register("earth", () -> new EarthRune()),
+				FIRE = REG.register("fire", () -> new FireRune()),
+				AIR = REG.register("air", () -> new AirRune());
 
 		public static IForgeRegistry<TrinketRune> getReg() {
 			return REGISTRY_SUPPLIER.get();
