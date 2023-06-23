@@ -2,7 +2,7 @@ package com.quartzshard.aasb.util;
 
 import com.quartzshard.aasb.AsAboveSoBelow;
 import com.quartzshard.aasb.api.item.IStaticSpeedBreaker;
-import com.quartzshard.aasb.common.item.equipment.tool.herm.InternalOmnitool;
+import com.quartzshard.aasb.common.item.equipment.tool.InternalOmnitool;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;

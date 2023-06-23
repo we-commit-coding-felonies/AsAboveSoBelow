@@ -4,6 +4,7 @@ import com.quartzshard.aasb.AsAboveSoBelow;
 import com.quartzshard.aasb.api.item.IHermeticTool;
 import com.quartzshard.aasb.init.ClientInit;
 import com.quartzshard.aasb.init.ObjectInit;
+import com.quartzshard.aasb.init.ObjectInit.Items;
 
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
@@ -24,44 +25,48 @@ public class AASBItemModels extends ItemModelProvider {
     @Override
     protected void registerModels() {
     	// Items
-		basic(ObjectInit.Items.ASH);
-		basic(ObjectInit.Items.SOOT);
-		basic(ObjectInit.Items.SALT);
-		basic(ObjectInit.Items.SUBLIT);
-		basic(ObjectInit.Items.AETHER);
-		basic(ObjectInit.Items.QUINTESSENCE);
+		basic(Items.ASH);
+		basic(Items.SOOT);
+		basic(Items.SALT);
+		basic(Items.SUBLIT);
+		basic(Items.AETHER);
+		basic(Items.QUINTESSENCE);
 		
-		materia(ObjectInit.Items.MATERIA_1, 1);
-		materia(ObjectInit.Items.MATERIA_2, 2);
-		materia(ObjectInit.Items.MATERIA_3, 3);
-		materia(ObjectInit.Items.MATERIA_4, 4);
-		materia(ObjectInit.Items.MATERIA_5, 5);
+		materia(Items.MATERIA_1, 1);
+		materia(Items.MATERIA_2, 2);
+		materia(Items.MATERIA_3, 3);
+		materia(Items.MATERIA_4, 4);
+		materia(Items.MATERIA_5, 5);
 
-		basic(ObjectInit.Items.MINIUM_STONE);
-		placeholder(ObjectInit.Items.ELIXIR_OF_LIFE);
-		basic(ObjectInit.Items.PHILOSOPHERS_STONE);
-		basic(ObjectInit.Items.LOOT_BALL);
+		basic(Items.MINIUM_STONE);
+		basic(Items.ELIXIR_OF_LIFE);
+		basic(Items.PHILOSOPHERS_STONE);
+		basic(Items.LOOT_BALL);
 
-		armor(ObjectInit.Items.HERMETIC_HELMET, "item/equipment/armor/herm/");
-		armor(ObjectInit.Items.HERMETIC_CHESTPLATE, "item/equipment/armor/herm/");
-		armor(ObjectInit.Items.HERMETIC_LEGGINGS, "item/equipment/armor/herm/");
-		armor(ObjectInit.Items.HERMETIC_BOOTS, "item/equipment/armor/herm/");
-		hermTool(ObjectInit.Items.HERMETIC_SWORD, "item/equipment/tool/herm/sword/");
-		hermTool(ObjectInit.Items.HERMETIC_PICKAXE, "item/equipment/tool/herm/pickaxe/");
-		hermTool(ObjectInit.Items.HERMETIC_SHOVEL, "item/equipment/tool/herm/shovel/");
-		hermTool(ObjectInit.Items.HERMETIC_AXE, "item/equipment/tool/herm/axe/");
-		hermTool(ObjectInit.Items.HERMETIC_HOE, "item/equipment/tool/herm/hoe/");
+		flask(Items.FLASK_LEAD);
+		flask(Items.FLASK_GOLD);
+		flask(Items.FLASK_AETHER);
 
-		armor(ObjectInit.Items.CIRCLET, "item/equipment/armor/jewelry/");
-		armor(ObjectInit.Items.AMULET, "item/equipment/armor/jewelry/");
-		armor(ObjectInit.Items.POCKETWATCH, "item/equipment/armor/jewelry/");
-		armor(ObjectInit.Items.ANKLET, "item/equipment/armor/jewelry/");
+		armor(Items.HERMETIC_HELMET, "item/equipment/armor/herm/");
+		armor(Items.HERMETIC_CHESTPLATE, "item/equipment/armor/herm/");
+		armor(Items.HERMETIC_LEGGINGS, "item/equipment/armor/herm/");
+		armor(Items.HERMETIC_BOOTS, "item/equipment/armor/herm/");
+		hermTool(Items.HERMETIC_SWORD, "item/equipment/tool/herm/sword/");
+		hermTool(Items.HERMETIC_PICKAXE, "item/equipment/tool/herm/pickaxe/");
+		hermTool(Items.HERMETIC_SHOVEL, "item/equipment/tool/herm/shovel/");
+		hermTool(Items.HERMETIC_AXE, "item/equipment/tool/herm/axe/");
+		hermTool(Items.HERMETIC_HOE, "item/equipment/tool/herm/hoe/");
+
+		armor(Items.CIRCLET, "item/equipment/armor/jewelry/");
+		armor(Items.AMULET, "item/equipment/armor/jewelry/");
+		armor(Items.POCKETWATCH, "item/equipment/armor/jewelry/");
+		armor(Items.ANKLET, "item/equipment/armor/jewelry/");
 		
-		tool(ObjectInit.Items.OMNITOOL, "item/equipment/tool/devtool");
+		tool(Items.OMNITOOL, "item/equipment/tool/devtool");
 		
 		
     	// BlockItems
-		block(ObjectInit.Items.WAYSTONE_BLOCKITEM, "block/waystone");
+		block(Items.WAYSTONE_BLOCKITEM, "block/waystone");
     }
     
     /**
@@ -87,6 +92,38 @@ public class AASBItemModels extends ItemModelProvider {
 
 	private void materia(RegistryObject<? extends Item> ro, int tier) {
 		basic(ro, "item/materia/"+tier);
+	}
+	
+	private void flask(RegistryObject<? extends Item> ro) {
+		String name = ro.getId().getPath();
+		withExistingParent(name, mcLoc("item/generated"))
+			.texture("layer0", modLoc("item/flask/liquid"))
+			.texture("layer1", modLoc("item/flask/liquid_mix"))
+			.texture("layer2", modLoc("item/flask/"+name+"_filled"));
+	}
+	
+	private ItemModelBuilder flask2(RegistryObject<? extends Item> reg) {
+		ItemModelBuilder builder = getBuilder(reg.getId().getPath());
+		if (!(reg.get() instanceof IHermeticTool item)) throw new IllegalArgumentException(reg + " is not a hermetic tool");
+		for (int i = 0; i < 13; i++) {
+			if (!item.validateRunes(i)) continue;
+			String name = folder+"off/"+i;
+			builder.override()
+			.predicate(ClientInit.SHAPE_RUNE, i)
+			.predicate(ClientInit.EMPOWER_CHARGE, 0)
+			.model(withExistingParent(name, "item/handheld")
+					.texture("layer0", modLoc(name)))
+			.end();
+			
+			name = folder+"on/"+i;
+			builder.override()
+			.predicate(ClientInit.SHAPE_RUNE, i)
+			.predicate(ClientInit.EMPOWER_CHARGE, 1)
+			.model(withExistingParent(name, "item/handheld")
+					.texture("layer0", modLoc(name)))
+			.end();
+		}
+		return builder;
 	}
 
 	private void tool(RegistryObject<? extends Item> ro, String tex) {

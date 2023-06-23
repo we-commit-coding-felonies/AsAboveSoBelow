@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import com.quartzshard.aasb.api.item.ITrinket;
 import com.quartzshard.aasb.api.item.bind.ICanEmpower;
 import com.quartzshard.aasb.common.item.equipment.trinket.rune.TrinketRune;
-import com.quartzshard.aasb.init.ObjectInit.TrinketRunes;
+import com.quartzshard.aasb.init.AlchemyInit.TrinketRunes;
 import com.quartzshard.aasb.util.NBTHelper;
 
 import net.minecraft.nbt.CompoundTag;

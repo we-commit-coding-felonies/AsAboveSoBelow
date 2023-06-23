@@ -5,8 +5,10 @@ import com.quartzshard.aasb.api.item.IHermeticTool;
 import com.quartzshard.aasb.client.AASBKeys;
 import com.quartzshard.aasb.client.particle.CutParticle;
 import com.quartzshard.aasb.client.render.layer.AASBPlayerLayer;
+import com.quartzshard.aasb.common.item.flask.FlaskItem;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.particle.ParticleProvider;
@@ -17,8 +19,11 @@ import net.minecraft.core.particles.ParticleType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.PotionUtils;
 
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -29,12 +34,16 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 public class ClientInit {
 	public static final ResourceLocation EMPOWER_CHARGE = AsAboveSoBelow.rl("empowerment_charge");
 	public static final ResourceLocation SHAPE_RUNE = AsAboveSoBelow.rl("shape_rune");
+	public static final ResourceLocation FLASK_STATUS = AsAboveSoBelow.rl("flask_status");
 	
 	public static void init(final FMLClientSetupEvent event) {
 		AASBKeys.register();
 		event.enqueueWork(() -> {
 			ItemProperties.registerGeneric(EMPOWER_CHARGE, ClientInit::getEmpowerCharge);
 			ItemProperties.registerGeneric(SHAPE_RUNE, ClientInit::getShapeRune);
+			ItemProperties.register(ObjectInit.Items.FLASK_LEAD.get(), FLASK_STATUS, ClientInit::getFlaskStatus);
+			ItemProperties.register(ObjectInit.Items.FLASK_GOLD.get(), FLASK_STATUS, ClientInit::getFlaskStatus);
+			ItemProperties.register(ObjectInit.Items.FLASK_AETHER.get(), FLASK_STATUS, ClientInit::getFlaskStatus);
 		});
 	}
 	
@@ -48,6 +57,15 @@ public class ClientInit {
 	private static float getShapeRune(ItemStack stack, ClientLevel level, LivingEntity entity, int seed) {
 		if (stack.getItem() instanceof IHermeticTool item) {
 			return item.getRunesVal(stack);
+		}
+		return 0;
+	}
+	
+	private static float getFlaskStatus(ItemStack stack, ClientLevel level, LivingEntity entity, int seed) {
+		if (stack.getItem() instanceof FlaskItem flask) {
+			if (flask.hasStored(stack)) {
+				return 1;
+			}
 		}
 		return 0;
 	}
@@ -75,4 +93,21 @@ public class ClientInit {
 			}
 		}
 	}
+
+	@SubscribeEvent
+	public static void addTints(final ColorHandlerEvent.Item event) {
+		event.getItemColors().register((stack, layer) -> {
+			/*switch (layer) {
+			case 0:
+				return 0xff0000;
+			case 1:
+				return 0x0000ff;
+			default:
+				return -1;
+			}*/
+			return layer > 1 ? -1 : layer > 0 ? AsAboveSoBelow.RAND.nextInt(0xffffff+1) : -1;
+		}, ObjectInit.Items.FLASK_LEAD.get(), ObjectInit.Items.FLASK_GOLD.get(), ObjectInit.Items.FLASK_AETHER.get());
+	}
+
+
 }

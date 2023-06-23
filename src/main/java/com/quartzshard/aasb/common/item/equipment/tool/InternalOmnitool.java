@@ -1,9 +1,10 @@
-package com.quartzshard.aasb.common.item.equipment.tool.herm;
+package com.quartzshard.aasb.common.item.equipment.tool;
 
+import com.quartzshard.aasb.AsAboveSoBelow;
 import com.quartzshard.aasb.api.item.IStaticSpeedBreaker;
 import com.quartzshard.aasb.api.item.bind.ICanItemMode;
-import com.quartzshard.aasb.common.item.equipment.tool.AASBToolTier;
 import com.quartzshard.aasb.common.network.server.KeyPressPacket.BindState;
+import com.quartzshard.aasb.init.AlchemyInit;
 import com.quartzshard.aasb.init.ObjectInit;
 import com.quartzshard.aasb.util.NBTHelper;
 
@@ -42,7 +43,7 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 	
 	@Override
 	public int getBarColor(ItemStack stack) {
-		return Minecraft.getInstance().level.random.nextInt(0, (0xffffff)+1);
+		return AsAboveSoBelow.RAND.nextInt(0, (0xffffff)+1);
 	}
 	
 	@Override
@@ -75,9 +76,9 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 		boolean wasInstamine = NBTHelper.Item.getBoolean(stack, "Instamine", false);
 		NBTHelper.Item.setBoolean(stack, "Instamine", !wasInstamine);
 		if (wasInstamine)
-			ObjectInit.TrinketRunes.FIRE.get().combatAbility(stack, player, level, BindState.PRESSED);
+			AlchemyInit.TrinketRunes.FIRE.get().combatAbility(stack, player, level, BindState.PRESSED);
 		else
-			ObjectInit.TrinketRunes.WATER.get().combatAbility(stack, player, level, BindState.PRESSED);
+			AlchemyInit.TrinketRunes.WATER.get().combatAbility(stack, player, level, BindState.PRESSED);
 		return false;
 	}
 

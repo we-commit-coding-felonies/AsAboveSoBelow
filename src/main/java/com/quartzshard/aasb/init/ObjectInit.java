@@ -1,35 +1,25 @@
 package com.quartzshard.aasb.init;
 
-import java.util.function.Supplier;
-
-import org.jetbrains.annotations.Nullable;
-
 import com.quartzshard.aasb.AsAboveSoBelow;
-import com.quartzshard.aasb.api.alchemy.aspects.AspectForm;
 import com.quartzshard.aasb.common.block.AirIceBlock;
 import com.quartzshard.aasb.common.item.AASBRarity;
 import com.quartzshard.aasb.common.item.LootBallItem;
 import com.quartzshard.aasb.common.item.equipment.armor.HermeticArmorItem;
-import com.quartzshard.aasb.common.item.equipment.armor.HermeticArmorItem.HermeticArmorMaterial;
 import com.quartzshard.aasb.common.item.equipment.armor.jewelry.AmuletItem;
 import com.quartzshard.aasb.common.item.equipment.armor.jewelry.AnkletItem;
 import com.quartzshard.aasb.common.item.equipment.armor.jewelry.CircletItem;
 import com.quartzshard.aasb.common.item.equipment.armor.jewelry.PocketwatchItem;
 import com.quartzshard.aasb.common.item.equipment.tool.AASBToolTier;
+import com.quartzshard.aasb.common.item.equipment.tool.InternalOmnitool;
 import com.quartzshard.aasb.common.item.equipment.tool.herm.HermeticAxeItem;
 import com.quartzshard.aasb.common.item.equipment.tool.herm.HermeticHoeItem;
 import com.quartzshard.aasb.common.item.equipment.tool.herm.HermeticPickaxeItem;
 import com.quartzshard.aasb.common.item.equipment.tool.herm.HermeticShovelItem;
 import com.quartzshard.aasb.common.item.equipment.tool.herm.HermeticSwordItem;
-import com.quartzshard.aasb.common.item.equipment.tool.herm.InternalOmnitool;
-import com.quartzshard.aasb.common.item.equipment.trinket.AbilityTrinket;
 import com.quartzshard.aasb.common.item.equipment.trinket.CharmItem;
 import com.quartzshard.aasb.common.item.equipment.trinket.GloveItem;
 import com.quartzshard.aasb.common.item.equipment.trinket.RingItem;
-import com.quartzshard.aasb.common.item.equipment.trinket.rune.TrinketRune;
-import com.quartzshard.aasb.common.item.equipment.trinket.rune.shape.*;
-
-import net.minecraft.resources.ResourceLocation;
+import com.quartzshard.aasb.common.item.flask.FlaskItem;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.BlockItem;
@@ -43,8 +33,6 @@ import net.minecraft.world.level.material.Material;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.RegistryBuilder;
 import net.minecraftforge.registries.RegistryObject;
 
 /**
@@ -55,7 +43,6 @@ public class ObjectInit {
 
 
 	public static void init(IEventBus bus) {
-		TrinketRunes.REG.register(bus);
 		Blocks.REG.register(bus);
 		Items.REG.register(bus);
 		
@@ -96,6 +83,11 @@ public class ObjectInit {
 				MINIUM_STONE = REG.register("minium_stone", () -> new Item(PROPS_MINIUM)),
 				ELIXIR_OF_LIFE = REG.register("elixir_of_life", () -> new Item(PROPS_MINIUM)),
 				LOOT_BALL = REG.register("complex_mass", () -> new LootBallItem(PROPS_UNSTACKABLE)),
+				
+				// Flasks
+				FLASK_LEAD = REG.register("lead_flask", () -> new FlaskItem(PROPS_UNSTACKABLE)),
+				FLASK_GOLD = REG.register("golden_flask", () -> new FlaskItem(PROPS_UNSTACKABLE)),
+				FLASK_AETHER = REG.register("aether_flask", () -> new FlaskItem(PROPS_UNSTACKABLE)),
 				
 				// Trinkets
 				GLOVE = REG.register("glove", () -> new GloveItem(PROPS_UNSTACKABLE)),
@@ -156,33 +148,6 @@ public class ObjectInit {
 		
 		public static final RegistryObject<AirIceBlock> AIR_ICE = REG.register("air_ice", () -> new AirIceBlock(PROPS_TEMPBLOCK.friction(0.9f).randomTicks().sound(SoundType.GLASS).noOcclusion()));
 		
-	}
-	public class TrinketRunes {
-	    private static final DeferredRegister<TrinketRune> REG = DeferredRegister.create(AsAboveSoBelow.rl("trinket_runes"), AsAboveSoBelow.MODID);
-	    public static final Supplier<IForgeRegistry<TrinketRune>> REGISTRY_SUPPLIER = REG.makeRegistry(TrinketRune.class, () -> {
-	            	RegistryBuilder<TrinketRune> builder = new RegistryBuilder<>();
-	            	return builder;
-	            }
-	    );
-		public static final RegistryObject<TrinketRune>
-				WATER = REG.register("water", () -> new WaterRune()),
-				EARTH = REG.register("earth", () -> new EarthRune()),
-				FIRE = REG.register("fire", () -> new FireRune()),
-				AIR = REG.register("air", () -> new AirRune());
-
-		public static IForgeRegistry<TrinketRune> getReg() {
-			return REGISTRY_SUPPLIER.get();
-		}
-		public static boolean exists(ResourceLocation rl) {
-			return getReg().containsKey(rl);
-		}
-		@Nullable
-		public static TrinketRune get(ResourceLocation rl) {
-			if (exists(rl)) {
-				return getReg().getValue(rl);
-			}
-			return null;
-		}
 	}
 	
 	

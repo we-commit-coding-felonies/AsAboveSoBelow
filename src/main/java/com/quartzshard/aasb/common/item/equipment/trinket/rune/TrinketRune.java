@@ -3,6 +3,7 @@ package com.quartzshard.aasb.common.item.equipment.trinket.rune;
 import org.jetbrains.annotations.Nullable;
 
 import com.quartzshard.aasb.common.network.server.KeyPressPacket.BindState;
+import com.quartzshard.aasb.init.AlchemyInit;
 import com.quartzshard.aasb.init.ObjectInit;
 
 import net.minecraft.nbt.CompoundTag;
@@ -25,7 +26,7 @@ public abstract class TrinketRune extends ForgeRegistryEntry<TrinketRune> {
 	 * @return
 	 */
 	public CompoundTag save(CompoundTag tag) {
-		ResourceLocation rl = ObjectInit.TrinketRunes.REGISTRY_SUPPLIER.get().getKey(this);
+		ResourceLocation rl = AlchemyInit.TrinketRunes.REGISTRY_SUPPLIER.get().getKey(this);
 		tag.putString("rl", rl == null ? "aasb:null" : rl.toString());
 		return tag;
 	}
@@ -43,7 +44,7 @@ public abstract class TrinketRune extends ForgeRegistryEntry<TrinketRune> {
 		if (str == "aasb:null")
 			return null;
 		ResourceLocation rl = ResourceLocation.tryParse(str);
-		TrinketRune rune = ObjectInit.TrinketRunes.REGISTRY_SUPPLIER.get().getValue(rl);
+		TrinketRune rune = AlchemyInit.TrinketRunes.REGISTRY_SUPPLIER.get().getValue(rl);
 		return rune;
 	}
 	
