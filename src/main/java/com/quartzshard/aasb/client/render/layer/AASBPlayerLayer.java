@@ -40,16 +40,15 @@ public class AASBPlayerLayer extends RenderLayer<AbstractClientPlayer, PlayerMod
 
 		// solunareclipse1 (Lead developer)
 		SPECIAL_HALOS.put(SOL_UUID,
-				new MagnumOpusHaloData(DEFAULT_HALO, Color.MID_GREEN, Color.MID_BLUE));
+				new MagnumOpusHaloData(DEFAULT_HALO, Color.MID_GREEN, Color.MID_TEAL));
 
 		// quartzshard / craft_of_mining (Lead developer)
 		SPECIAL_HALOS.put(SHARD_UUID,
-				new MagnumOpusHaloData(AsAboveSoBelow.rl(HALOS + "pentagonal.png"), Color.COVALENCE_PURPLE,
-						Color.PHILOSOPHERS));
+				new MagnumOpusHaloData(AsAboveSoBelow.rl(HALOS + "pentagonal.png"), Color.COVALENCE_PURPLE, Color.PHILOSOPHERS));
 
 		// sinkillerj (Inspiration, lots of borrowed code)
 		SPECIAL_HALOS.put(SIN_UUID,
-				new MagnumOpusHaloData(AsAboveSoBelow.rl(HALOS + "sin.png"), Color.COVALENCE_GREEN, Color.COVALENCE_GREEN));
+				new MagnumOpusHaloData(AsAboveSoBelow.rl(HALOS + "yue.png"), Color.COVALENCE_GREEN, Color.COVALENCE_GREEN));
 
 		// Clarissa (Because I feel like being nice)
 		SPECIAL_HALOS.put(CLAR_UUID,
@@ -60,11 +59,11 @@ public class AASBPlayerLayer extends RenderLayer<AbstractClientPlayer, PlayerMod
 	private static final Map<UUID, MagnumOpusHaloData> SPECIAL_HALOS = new HashMap<>();
 	private static final String HALOS = "textures/models/halo/";
 	private static final ResourceLocation DEFAULT_HALO = AsAboveSoBelow.rl(HALOS + "normal.png");
-	private static final MagnumOpusHaloData DEFAULT_HALO_DATA = new MagnumOpusHaloData(DEFAULT_HALO,
-			Color.COVALENCE_GREEN, Color.COVALENCE_MAGENTA);
+	private static final MagnumOpusHaloData DEFAULT_HALO_DATA = new MagnumOpusHaloData(DEFAULT_HALO, Color.COVALENCE_GREEN, Color.COVALENCE_MAGENTA);
 
 	// special people uuids
-	private static final UUID SOL_UUID = UUID.fromString("89b9a7d2-daa3-48cc-903c-96d125106a6b"),
+	private static final UUID
+			SOL_UUID = UUID.fromString("89b9a7d2-daa3-48cc-903c-96d125106a6b"),
 			SHARD_UUID = UUID.fromString("b9d0673f-51af-446e-a4d0-512eab478561"),
 			SIN_UUID = UUID.fromString("5f86012c-ca4b-451a-989c-8fab167af647"),
 			CLAR_UUID = UUID.fromString("e5c59746-9cf7-4940-a849-d09e1f1efc13");
@@ -77,8 +76,7 @@ public class AASBPlayerLayer extends RenderLayer<AbstractClientPlayer, PlayerMod
 	}
 
 	/** for the alchemical barrier */
-	private void renderMagnumOpusHalo(PoseStack poseStack, MultiBufferSource renderBuffer, AbstractClientPlayer player,
-			float ageInTicks) {
+	private void renderMagnumOpusHalo(PoseStack poseStack, MultiBufferSource renderBuffer, AbstractClientPlayer player, float ageInTicks) {
 		float emcLevel = 1;
 		String debugStr = DebugCfg.HALO_UUID.get();
 		UUID debugUUID = null;
@@ -133,17 +131,13 @@ public class AASBPlayerLayer extends RenderLayer<AbstractClientPlayer, PlayerMod
 			buffer.vertex(pose, 1, 0, 1).color(color[0], color[1], color[2], alpha).uv(1, 1).endVertex();
 			buffer.vertex(pose, 1, 0, 0).color(color[0], color[1], color[2], alpha).uv(1, 0).endVertex();
 		} else {
-			int[] color = ColorsHelper
-					.rgbFromInt(Mth.hsvToRgb(ColorsHelper.loopFade(timer, 2048, 0, c1.H / 360f, c2.H / 360f), 1.0f, 0.824f));
+			int[] color = ColorsHelper.rgbFromInt(Mth.hsvToRgb(ColorsHelper.loopFade(timer, 2048, 0, c1.H / 360f, c2.H / 360f), 1.0f, 0.824f));
 			buffer.vertex(pose, 0, 0, 0).color(color[0], color[1], color[2], alpha).uv(0, 0).endVertex();
-			color = ColorsHelper
-					.rgbFromInt(Mth.hsvToRgb(ColorsHelper.loopFade(timer, 2048, 50, c1.H / 360f, c2.H / 360f), 1.0f, 0.824f));
+			color = ColorsHelper.rgbFromInt(Mth.hsvToRgb(ColorsHelper.loopFade(timer, 2048, 50, c1.H / 360f, c2.H / 360f), 1.0f, 0.824f));
 			buffer.vertex(pose, 0, 0, 1).color(color[0], color[1], color[2], alpha).uv(0, 1).endVertex();
-			color = ColorsHelper
-					.rgbFromInt(Mth.hsvToRgb(ColorsHelper.loopFade(timer, 2048, 100, c1.H / 360f, c2.H / 360f), 1.0f, 0.824f));
+			color = ColorsHelper.rgbFromInt(Mth.hsvToRgb(ColorsHelper.loopFade(timer, 2048, 100, c1.H / 360f, c2.H / 360f), 1.0f, 0.824f));
 			buffer.vertex(pose, 1, 0, 1).color(color[0], color[1], color[2], alpha).uv(1, 1).endVertex();
-			color = ColorsHelper
-					.rgbFromInt(Mth.hsvToRgb(ColorsHelper.loopFade(timer, 2048, 150, c1.H / 360f, c2.H / 360f), 1.0f, 0.824f));
+			color = ColorsHelper.rgbFromInt(Mth.hsvToRgb(ColorsHelper.loopFade(timer, 2048, 150, c1.H / 360f, c2.H / 360f), 1.0f, 0.824f));
 			buffer.vertex(pose, 1, 0, 0).color(color[0], color[1], color[2], alpha).uv(1, 0).endVertex();
 		}
 		poseStack.popPose();
@@ -159,8 +153,7 @@ public class AASBPlayerLayer extends RenderLayer<AbstractClientPlayer, PlayerMod
 	}
 
 	/** for the circlet */
-	private void renderAllSeeingEye(PoseStack poseStack, MultiBufferSource renderBuffer, AbstractClientPlayer player,
-			float ageInTicks) {
+	private void renderAllSeeingEye(PoseStack poseStack, MultiBufferSource renderBuffer, AbstractClientPlayer player, float ageInTicks) {
 		ItemStack circlet = player.getItemBySlot(EquipmentSlot.HEAD);
 		if (circlet.getItem() instanceof CircletItem ci) {
 			// nyi
