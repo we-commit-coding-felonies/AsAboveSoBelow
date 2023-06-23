@@ -16,6 +16,7 @@ public class AspectForm extends ForgeRegistryEntry<AspectForm> implements IAlche
 	private AspectForm[] children;
 	private ResourceLocation name;
 	private final int distance;
+	private final int color;
 	
 	/**
 	 * Creates a new form node on the tree. Will throw an exception if you try to assign multiple parents, don't make cycles!
@@ -24,13 +25,14 @@ public class AspectForm extends ForgeRegistryEntry<AspectForm> implements IAlche
 	 * @param children
 	 * @throws FormTreeException 
 	 */
-	public AspectForm(ResourceLocation name, AspectForm parent, AspectForm[] children) {
+	public AspectForm(ResourceLocation name, AspectForm parent, AspectForm[] children, int color) {
 		if((!name.equals(AsAboveSoBelow.rl("materia")) && parent == null) || (name.equals(AsAboveSoBelow.rl("materia")) && parent != null)) {
 			throw new FormTreeException("Bad root node specified. Don't try to assign parents to materia, or make a node with no parents.");
 		}
 		this.name = name;
 		this.parent = parent;
 		this.children = children;
+		this.color = color;
 		
 		if(!checkChildrenAgree()) throw new FormTreeException("Tried to make a cycle. Nodes can't have multiple parents.");
 		if (parent != null) {
@@ -50,8 +52,8 @@ public class AspectForm extends ForgeRegistryEntry<AspectForm> implements IAlche
 	 * @param parent
 	 * @throws FormTreeException
 	 */
-	public AspectForm(ResourceLocation name, AspectForm parent) {
-		this(name, parent, new AspectForm[0]);
+	public AspectForm(ResourceLocation name, AspectForm parent, int color) {
+		this(name, parent, new AspectForm[0], color);
 	}
 	/**
 	 * Will confirm that each child node agrees that this is the parent. If false, tree structure is invalid.
@@ -100,6 +102,10 @@ public class AspectForm extends ForgeRegistryEntry<AspectForm> implements IAlche
 		public String toString() {
 			return ("Tried to assign an invalid node in the form tree. Reason: " + this.cause + "\n        If you're develping an addon, this is on you. If you're a normal player, please report!");
 		}
+	}
+	
+	public int getColor() {
+		return color;
 	}
 
 	@Override
