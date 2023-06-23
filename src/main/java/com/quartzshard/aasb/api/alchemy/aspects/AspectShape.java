@@ -1,15 +1,21 @@
 package com.quartzshard.aasb.api.alchemy.aspects;
 
 import com.quartzshard.aasb.api.alchemy.IAlchemicalFlow;
+import com.quartzshard.aasb.util.ColorsHelper.Color;
 import com.quartzshard.aasb.util.LogHelper;
 
 public enum AspectShape implements IAlchemicalFlow<AspectShape> {
-	UNIVERSAL,
-	WATER,
-	EARTH,
-	FIRE,
-	AIR,
-	ASPECT_NULL;
+	UNIVERSAL(Color.MID_PURPLE),
+	WATER(Color.MID_BLUE),
+	EARTH(Color.MID_GREEN),
+	FIRE(Color.MID_RED),
+	AIR(Color.MID_YELLOW);
+	
+	public final Color color;
+	
+	private AspectShape(Color color) {
+		this.color = color;
+	}
 	
 	/**
 	 * Checks if the caller flows into the arg. Order matters!
@@ -17,8 +23,6 @@ public enum AspectShape implements IAlchemicalFlow<AspectShape> {
 	 * @return 
 	 */
 	public boolean flows(AspectShape to) {
-		if (to == ASPECT_NULL)
-			return false;
 		switch (this) {
 		case AIR:
 			return to == WATER;
@@ -30,8 +34,6 @@ public enum AspectShape implements IAlchemicalFlow<AspectShape> {
 			return to == EARTH;
 		case UNIVERSAL:
 			return true;
-		case ASPECT_NULL:
-			return false;
 		}
 		LogHelper.error("AspectShape.flows()", "EscapedSwitch", "Somehow, the shape that called this wasn't a shape. Maybe it was null? Please send us logs if you see this!");
 		return false;
@@ -44,7 +46,6 @@ public enum AspectShape implements IAlchemicalFlow<AspectShape> {
 	 */
 	@Override
 	public boolean perpendicular(AspectShape to) {
-		if (this == ASPECT_NULL || to == ASPECT_NULL) return false;
 		return this == to;
 	}
 	
@@ -57,7 +58,4 @@ public enum AspectShape implements IAlchemicalFlow<AspectShape> {
 	public boolean violates(AspectShape to) {
 		return !this.flows(to) && !this.perpendicular(to);
 	}
-
-
-
 } 
