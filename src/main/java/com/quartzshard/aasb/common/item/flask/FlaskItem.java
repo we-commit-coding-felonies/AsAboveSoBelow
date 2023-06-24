@@ -8,7 +8,7 @@ import java.util.Locale;
 import org.jetbrains.annotations.Nullable;
 
 import com.google.common.base.Enums;
-import com.google.common.primitives.Floats;
+import com.quartzshard.aasb.AsAboveSoBelow;
 import com.quartzshard.aasb.api.alchemy.aspects.AspectForm;
 import com.quartzshard.aasb.api.alchemy.aspects.AspectShape;
 import com.quartzshard.aasb.data.AASBLang;
@@ -25,7 +25,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.util.StringUtil;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
@@ -54,13 +53,11 @@ public class FlaskItem extends Item {
 	@Override
 	public void appendHoverText(ItemStack stack, Level level, List<Component> tips, TooltipFlag flags) {
 		if (hasStored(stack)) {
-			//tips.add(AASBLang.NL);
 			AspectShape shape = getStoredShape(stack);
 			AspectForm form = getStoredForm(stack);
-			Component aspects = new TextComponent(shape.name() + " & " + form.getName()).withStyle(ChatFormatting.GOLD);
-			tips.add(AASBLang.tc(AASBLang.TIP_FLASK_ASPECTS, aspects).copy().withStyle(ChatFormatting.GRAY));
+			tips.add(AASBLang.tc(AASBLang.TIP_FLASK_ASPECTS, shape.fLoc(), form.fLoc()).withStyle(ChatFormatting.GRAY));
 			if (isExpired(stack, level.getGameTime())) {
-				tips.add(AASBLang.tc(AASBLang.TIP_FLASK_BAD).copy().withStyle(ChatFormatting.RED));
+				tips.add(AASBLang.tc(AASBLang.TIP_FLASK_BAD).withStyle(ChatFormatting.RED));
 			} else {
 				int ticks = (int) (getExpiry(stack) - level.getGameTime());
 				String ft = "";
@@ -84,10 +81,7 @@ public class FlaskItem extends Item {
 					ft += ".00";
 				boolean soon = !ft.contains(":");
 				Component timeTxt = new TextComponent(ft).withStyle(soon ? ChatFormatting.RED : ChatFormatting.WHITE);
-				tips.add(AASBLang.tc(AASBLang.TIP_FLASK_EXPIRY, timeTxt).copy().withStyle(ChatFormatting.GRAY));
-				DecimalFormat fmt = Util.make(new DecimalFormat("00"), (df) -> {
-					df.setDecimalFormatSymbols(DecimalFormatSymbols.getInstance(Locale.ROOT));
-				});
+				tips.add(AASBLang.tc(AASBLang.TIP_FLASK_EXPIRY, timeTxt).withStyle(ChatFormatting.GRAY));
 			}
 		}
 	}
@@ -97,7 +91,9 @@ public class FlaskItem extends Item {
 		ItemStack stack = player.getItemInHand(hand);
 		clearStored(stack);
 		if (!player.isShiftKeyDown()) {
-			setStored(stack, AspectShape.UNIVERSAL, FormTree.MATERIA.get(), level.getGameTime());
+			//setStored(stack, null, FormTree.MATERIA.get(), level.getGameTime());
+			setStored(stack, AspectShape.UNIVERSAL, null, level.getGameTime());
+			//setStored(stack, AspectShape.UNIVERSAL, FormTree.MATERIA.get(), level.getGameTime());
 		}
 		return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
 	}
@@ -137,7 +133,15 @@ public class FlaskItem extends Item {
 	}
 	
 	public boolean hasStored(ItemStack stack) {
-		return getStoredShape(stack) != null && getStoredForm(stack) != null;
+		return hasStoredShape(stack) && hasStoredForm(stack);
+	}
+	
+	public boolean hasStoredShape(ItemStack stack) {
+		return getStoredShape(stack) != null;
+	}
+	
+	public boolean hasStoredForm(ItemStack stack) {
+		return getStoredForm(stack) != null;
 	}
 
 	/**
@@ -198,7 +202,9 @@ public class FlaskItem extends Item {
 					return ColorsHelper.randomGray(0x80);
 				} else {
 					// covalence colors if you have both universals
-					if (flask.getStoredShape(stack) == AspectShape.UNIVERSAL && flask.getStoredForm(stack) == FormTree.MATERIA.get()) {
+					AspectShape shape = flask.getStoredShape(stack);
+					AspectForm form = flask.getStoredForm(stack);
+					if (shape == AspectShape.UNIVERSAL && form == FormTree.MATERIA.get()) {
 						return Mth.hsvToRgb(
 								ColorsHelper.loopFade(time, Math.min(6000, flask.lifetime/10), 0, Color.COVALENCE_GREEN.H/360f, Color.PHILOSOPHERS.H/360f),
 								Color.PHILOSOPHERS.S/100f,
@@ -206,9 +212,9 @@ public class FlaskItem extends Item {
 					}
 					
 					if (layer == 0) {
-						return flask.getStoredForm(stack).getColor();
+						return form == null ? shape.color.I : form.getColor();
 					} else {
-						return flask.getStoredShape(stack).color.I;
+						return shape == null ? form.getColor() : shape.color.I;
 					}
 				}
 			}

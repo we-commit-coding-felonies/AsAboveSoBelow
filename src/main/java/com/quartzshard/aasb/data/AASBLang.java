@@ -5,6 +5,7 @@ import com.quartzshard.aasb.init.ObjectInit;
 
 import net.minecraft.data.DataGenerator;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 
@@ -43,12 +44,42 @@ public class AASBLang {
 		CREATIVE_TAB = id("itemGroup.%s"),
 
 		ASPECT_WAY = id("misc.%s.aspect.way"),
+		
 		ASPECT_SHAPE = id("misc.%s.aspect.shape"),
 		ASPECT_SHAPE_WATER = id("misc.%s.aspect.shape.water"),
 		ASPECT_SHAPE_EARTH = id("misc.%s.aspect.shape.earth"),
 		ASPECT_SHAPE_FIRE = id("misc.%s.aspect.shape.fire"),
 		ASPECT_SHAPE_AIR = id("misc.%s.aspect.shape.air"),
+		ASPECT_SHAPE_QUINTESSENCE = id("misc.%s.aspect.shape.quintessence"),
+
 		ASPECT_FORM = id("misc.%s.aspect.form"),
+		ASPECT_FORM_MATERIA = id("misc.%s.aspect.form.materia"),
+		//ASPECT_FORM_
+		//ASPECT_FORM_
+		//ASPECT_FORM_
+		//ASPECT_FORM_
+		//ASPECT_FORM_
+		//ASPECT_FORM_
+		//ASPECT_FORM_
+		//ASPECT_FORM_
+		//ASPECT_FORM_
+		//ASPECT_FORM_
+		//ASPECT_FORM_
+		//ASPECT_FORM_
+		//ASPECT_FORM_
+		//ASPECT_FORM_
+		//ASPECT_FORM_
+		//ASPECT_FORM_
+		//ASPECT_FORM_
+		//ASPECT_FORM_
+		//ASPECT_FORM_
+		//ASPECT_FORM_
+		//ASPECT_FORM_
+		//ASPECT_FORM_
+		//ASPECT_FORM_
+		//ASPECT_FORM_
+		//ASPECT_FORM_
+		//ASPECT_FORM_
 		
 		KEY_HEADMODE = id("key.%s.headMode"),
 		KEY_CHESTMODE = id("key.%s.chestMode"),
@@ -67,6 +98,7 @@ public class AASBLang {
 		TIP_GENERIC_MOREINFO = id("tip.%s.generic.moreInfo"),
 
 		TIP_FLASK_ASPECTS = id("tip.%s.flask.aspects"),
+		TIP_FLASK_ASPECTS_ONE = id("tip.%s.flask.aspects.one"),
 		TIP_FLASK_EXPIRY = id("tip.%s.flask.expiry"),
 		TIP_FLASK_BAD = id("tip.%s.flask.bad"),
 		
@@ -130,18 +162,8 @@ public class AASBLang {
 		DM_WAYBOMB = "waybomb",
 		DM_WAYBOMB_OOPS = "waybomb.accident";
 
-	public static Component tc(String key, Object... args) {
+	public static MutableComponent tc(String key, Object... args) {
 		return new TranslatableComponent(key, args);
-	}
-	
-	/**
-	 * blank, useful as a newline in tooltips
-	 * @param key
-	 * @param args
-	 * @return
-	 */
-	public static Component nl(String key, Object... args) {
-		return new TextComponent(" ");
 	}
 	
 	public class Provider extends LanguageProvider {
@@ -161,8 +183,10 @@ public class AASBLang {
 			add(ASPECT_SHAPE_EARTH, "Earth");
 			add(ASPECT_SHAPE_FIRE, "Fire");
 			add(ASPECT_SHAPE_AIR, "Air");
-			
+			add(ASPECT_SHAPE_QUINTESSENCE, "Quintessence");
+
 			add(ASPECT_FORM, "Form");
+			add(ASPECT_FORM_MATERIA, "Materia");
 			
 			// Keybinds
 			add(KEY_HEADMODE, "Circlet mode");
@@ -190,6 +214,9 @@ public class AASBLang {
 			add(ObjectInit.Items.MINIUM_STONE.get(), "Minium Stone");
 			add(ObjectInit.Items.ELIXIR_OF_LIFE.get(), "Elixir of Life");
 			add(ObjectInit.Items.LOOT_BALL.get(), "Complex Mass");
+			add(ObjectInit.Items.FLASK_LEAD.get(), "Lead Flask");
+			add(ObjectInit.Items.FLASK_GOLD.get(), "Golden Flask");
+			add(ObjectInit.Items.FLASK_AETHER.get(), "Aetherglass Flask");
 			add(ObjectInit.Items.HERMETIC_HELMET.get(), "Hermetic Armet");
 			add(ObjectInit.Items.HERMETIC_CHESTPLATE.get(), "Hermetic Cuirass");
 			add(ObjectInit.Items.HERMETIC_LEGGINGS.get(), "Hermetic Greaves");
@@ -216,7 +243,8 @@ public class AASBLang {
 			add(TIP_GENERIC_MODE, "%s: %s");
 			add(TIP_GENERIC_MOREINFO, "Hold %s for more information");
 
-			add(TIP_FLASK_ASPECTS, "Solution of %s");
+			add(TIP_FLASK_ASPECTS, "Solution of %s & %s");
+			add(TIP_FLASK_ASPECTS_ONE, "Solution of pure %s");
 			add(TIP_FLASK_EXPIRY, "Expires in %s");
 			add(TIP_FLASK_BAD, "Expired!");
 			

@@ -20,6 +20,8 @@ import com.quartzshard.aasb.common.item.equipment.trinket.CharmItem;
 import com.quartzshard.aasb.common.item.equipment.trinket.GloveItem;
 import com.quartzshard.aasb.common.item.equipment.trinket.RingItem;
 import com.quartzshard.aasb.common.item.flask.FlaskItem;
+import com.quartzshard.aasb.common.item.flask.StorageFlaskItem;
+
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.BlockItem;
@@ -87,7 +89,7 @@ public class ObjectInit {
 				// Flasks
 				FLASK_LEAD = REG.register("lead_flask", () -> new FlaskItem(6000, PROPS_UNSTACKABLE)),
 				FLASK_GOLD = REG.register("golden_flask", () -> new FlaskItem(600, PROPS_UNSTACKABLE)),
-				FLASK_AETHER = REG.register("aether_flask", () -> new FlaskItem(Integer.MAX_VALUE, PROPS_UNSTACKABLE)),
+				FLASK_AETHER = REG.register("aether_flask", () -> new StorageFlaskItem(PROPS_UNSTACKABLE)),
 				
 				// Trinkets
 				GLOVE = REG.register("glove", () -> new GloveItem(PROPS_UNSTACKABLE)),
