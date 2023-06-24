@@ -85,9 +85,9 @@ public class ObjectInit {
 				LOOT_BALL = REG.register("complex_mass", () -> new LootBallItem(PROPS_UNSTACKABLE)),
 				
 				// Flasks
-				FLASK_LEAD = REG.register("lead_flask", () -> new FlaskItem(PROPS_UNSTACKABLE)),
-				FLASK_GOLD = REG.register("golden_flask", () -> new FlaskItem(PROPS_UNSTACKABLE)),
-				FLASK_AETHER = REG.register("aether_flask", () -> new FlaskItem(PROPS_UNSTACKABLE)),
+				FLASK_LEAD = REG.register("lead_flask", () -> new FlaskItem(6000, PROPS_UNSTACKABLE)),
+				FLASK_GOLD = REG.register("golden_flask", () -> new FlaskItem(600, PROPS_UNSTACKABLE)),
+				FLASK_AETHER = REG.register("aether_flask", () -> new FlaskItem(Integer.MAX_VALUE, PROPS_UNSTACKABLE)),
 				
 				// Trinkets
 				GLOVE = REG.register("glove", () -> new GloveItem(PROPS_UNSTACKABLE)),

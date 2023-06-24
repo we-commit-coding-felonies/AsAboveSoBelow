@@ -96,17 +96,7 @@ public class ClientInit {
 
 	@SubscribeEvent
 	public static void addTints(final ColorHandlerEvent.Item event) {
-		event.getItemColors().register((stack, layer) -> {
-			/*switch (layer) {
-			case 0:
-				return 0xff0000;
-			case 1:
-				return 0x0000ff;
-			default:
-				return -1;
-			}*/
-			return layer > 1 ? -1 : layer > 0 ? AsAboveSoBelow.RAND.nextInt(0xffffff+1) : -1;
-		}, ObjectInit.Items.FLASK_LEAD.get(), ObjectInit.Items.FLASK_GOLD.get(), ObjectInit.Items.FLASK_AETHER.get());
+		event.getItemColors().register(FlaskItem::getLiquidColor, ObjectInit.Items.FLASK_LEAD.get(), ObjectInit.Items.FLASK_GOLD.get(), ObjectInit.Items.FLASK_AETHER.get());
 	}
 
 

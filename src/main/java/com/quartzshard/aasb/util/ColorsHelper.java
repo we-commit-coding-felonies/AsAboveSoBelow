@@ -2,10 +2,8 @@ package com.quartzshard.aasb.util;
 
 import java.util.LinkedHashMap;
 
-import com.quartzshard.aasb.util.ColorsHelper.Color;
-
+import com.quartzshard.aasb.AsAboveSoBelow;
 import net.minecraft.util.Mth;
-import net.minecraft.world.item.ItemStack;
 
 /**
  * Contains functions for calculating & working with RGB / HSV values <br>
@@ -52,6 +50,34 @@ public class ColorsHelper {
 			V = v;
 			I = i;
 		}
+	}
+	
+	// shard is dumb
+	
+	/**
+	 * @return random shade of gray, expressed as an integer
+	 */
+	public static int randomGray() {
+		return randomGray(0xff);
+	}
+	
+	/**
+	 * @param max brightest gray allowed, 0xff is white
+	 * @return random shade of gray, expressed as an integer
+	 */
+	public static int randomGray(int max) {
+		return randomGray(0x00, max);
+	}
+	
+	/**
+	 * @param min darkest gray allowed, 0x00 is black
+	 * @param max brightest gray allowed, 0xff is white
+	 * @return random shade of gray, expressed as an integer
+	 */
+	public static int randomGray(int min, int max) {
+		int shade = AsAboveSoBelow.RAND.nextInt(min, max+1);
+		int color = (shade*0x10000) | (shade*0x100) | shade;
+		return color;
 	}
 	
 	/**

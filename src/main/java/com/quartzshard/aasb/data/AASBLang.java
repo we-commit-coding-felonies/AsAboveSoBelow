@@ -66,7 +66,9 @@ public class AASBLang {
 		TIP_GENERIC_MODE = id("tip.%s.generic.mode"),
 		TIP_GENERIC_MOREINFO = id("tip.%s.generic.moreInfo"),
 
-		
+		TIP_FLASK_ASPECTS = id("tip.%s.flask.aspects"),
+		TIP_FLASK_EXPIRY = id("tip.%s.flask.expiry"),
+		TIP_FLASK_BAD = id("tip.%s.flask.bad"),
 		
 		TIP_HERM_RUNE = id("tip.%s.herm.rune"),
 		TIP_HERM_RUNE_MULTI = id("tip.%s.herm.rune.multi"),
@@ -214,6 +216,10 @@ public class AASBLang {
 			add(TIP_GENERIC_MODE, "%s: %s");
 			add(TIP_GENERIC_MOREINFO, "Hold %s for more information");
 
+			add(TIP_FLASK_ASPECTS, "Solution of %s");
+			add(TIP_FLASK_EXPIRY, "Expires in %s");
+			add(TIP_FLASK_BAD, "Expired!");
+			
 			add(TIP_HERM_RUNE, "Rune of %s");
 			add(TIP_HERM_RUNE_MULTI, "Runes of %s & %s");
 			

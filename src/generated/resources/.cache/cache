@@ -1,11 +1,11 @@
 46aa1185d2510aaa598e95339b4487a006d81681 assets/aasb/blockstates/air_ice.json
 fc12cfc701a1610fe3f48eab3ca0e685f6b62b1b assets/aasb/blockstates/ashen_stone.json
 46b22d842e095dcefdf141d7a2c9043d76518cdb assets/aasb/blockstates/waystone.json
-1184057e7e420bfd9374bf2bdc5d304c083acaaf assets/aasb/lang/en_us.json
+a30501b7ee7629bfedf73d7c1f300c126ed2824a assets/aasb/lang/en_us.json
 dd41a480f319a553d9c076b54d27d5bdc4a8449b assets/aasb/models/block/ashen_stone.json
 03efe873d02349ec07428272c764cbb6be093e20 assets/aasb/models/block/waystone.json
 7e33081136857e10528f14f47119a099727f6245 assets/aasb/models/item/aether.json
-19c3480bf9bb7d1f64474755895c26875cb3cea8 assets/aasb/models/item/aether_flask.json
+8e1cd150c95715379145548db8feb2afaabac1b5 assets/aasb/models/item/aether_flask.json
 b676b82ed2a5e729417c2f8bc9a0321e6652f19f assets/aasb/models/item/ash.json
 528c15a13a06e77d975db8020e0f876195de5e98 assets/aasb/models/item/astrologer_pocketwatch.json
 3b43b1f1d9bf51b7e366a2429722bb43a2611093 assets/aasb/models/item/complex_mass.json
@@ -100,7 +100,13 @@ b83b955c496ecceb9a17b639a39be3a17d0c6a43 assets/aasb/models/item/equipment/tool/
 7ee1704a66d83557f5057136f6d639d853b624dd assets/aasb/models/item/equipment/tool/herm/sword/on/6.json
 45bf26bc6bcc49156442a3340d82f0b5d9cd1522 assets/aasb/models/item/equipment/tool/herm/sword/on/8.json
 72fc5719878f60e2eaaca26daed7ebc72b86b239 assets/aasb/models/item/equipment/tool/herm/sword/on/9.json
-ba04b6af499bed0e000c931d4eb9d8bcff57ccd7 assets/aasb/models/item/golden_flask.json
+e779c8c9c1b65970d50d2fffc1ef34da826cb398 assets/aasb/models/item/flask/aether_flask/empty.json
+19c3480bf9bb7d1f64474755895c26875cb3cea8 assets/aasb/models/item/flask/aether_flask/filled.json
+908d1dcb87b2aa1890815b67a505c9cecb9e3497 assets/aasb/models/item/flask/golden_flask/empty.json
+ba04b6af499bed0e000c931d4eb9d8bcff57ccd7 assets/aasb/models/item/flask/golden_flask/filled.json
+58c6ebcc33ab7de7c10e2caa0c316a71f6d015ae assets/aasb/models/item/flask/lead_flask/empty.json
+d5246f26c291c978b9020360d6a9b0a3a3587cab assets/aasb/models/item/flask/lead_flask/filled.json
+2e3ff6e1da60f6f4798180b27d2026eb450b3d79 assets/aasb/models/item/golden_flask.json
 b87bfb5dde374f635aa0addc648266d257000109 assets/aasb/models/item/hermetic_armet.json
 fefa4bd5ae9eb4cae79b7746c9a9e3357c09e816 assets/aasb/models/item/hermetic_blade.json
 f12827cb712c0b9e3a8bb70b0d0ced43d71aa14d assets/aasb/models/item/hermetic_cuirass.json
@@ -111,7 +117,7 @@ f12827cb712c0b9e3a8bb70b0d0ced43d71aa14d assets/aasb/models/item/hermetic_cuiras
 ef892952e025f9fdacf90143eb3542e70d2c42c2 assets/aasb/models/item/hermetic_scythe.json
 ef9c7e86eab76b409cf2fdd6abf0df9ede0fda68 assets/aasb/models/item/hermetic_spade.json
 3cb789c7ab8dde28157074a38a07b84ce278297f assets/aasb/models/item/internal_omnitool.json
-d5246f26c291c978b9020360d6a9b0a3a3587cab assets/aasb/models/item/lead_flask.json
+1b04c13a2e2a3e007f178f5b2b3a50edfaa2e3a5 assets/aasb/models/item/lead_flask.json
 482fde52128658d1a44dfe9f3c506305e3471e54 assets/aasb/models/item/materia_infirma.json
 ecb996a7dac0063a66d2e913f96dc2f7588ba641 assets/aasb/models/item/materia_major.json
 d20bd1cccb5327efb0e019265bef164aa7034760 assets/aasb/models/item/materia_minor.json

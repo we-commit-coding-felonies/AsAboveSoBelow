@@ -105,6 +105,23 @@ public class MiscHelper {
 		level.playSound(null, pos, soundsList[rand.nextInt(soundsList.length)], SoundSource.PLAYERS, 1, 1);
 	}
 	
+	/**
+	 * Converts the given amount of ticks to Hours, Minutes, Seconds, Milliseconds
+	 * @param t ticks
+	 * @return 
+	 */
+	public static long[] ticksToTime(long ticks) {
+		long t = ticks;
+		long h = t/72000;
+		t -= h*72000;
+		long m = t/1200;
+		t -= m*1200;
+		long s = t/20;
+		t -= s*20;
+		long ms = t*50;
+		return new long[] {h,m,s,ms};
+	}
+	
 	public static void smiteSelf(Level level, ServerPlayer sPlayer) {
 		LightningBolt bolt = EntityType.LIGHTNING_BOLT.create(level);
 		if (bolt != null) {
