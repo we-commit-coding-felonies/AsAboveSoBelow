@@ -1,20 +1,50 @@
 package com.quartzshard.aasb.api.alchemy.aspects;
 
+import com.quartzshard.aasb.AsAboveSoBelow;
 import com.quartzshard.aasb.api.alchemy.IAlchemicalFlow;
+import com.quartzshard.aasb.data.AASBLang;
 import com.quartzshard.aasb.util.ColorsHelper.Color;
 import com.quartzshard.aasb.util.LogHelper;
 
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
+import net.minecraft.resources.ResourceLocation;
+
 public enum AspectShape implements IAlchemicalFlow<AspectShape> {
-	UNIVERSAL(Color.MID_PURPLE),
+	UNIVERSAL("misc.aasb.aspect.shape.quintessence", Color.MID_PURPLE),
 	WATER(Color.MID_BLUE),
 	EARTH(Color.MID_GREEN),
 	FIRE(Color.MID_RED),
 	AIR(Color.MID_YELLOW);
 	
 	public final Color color;
+	private final Component loc, fLoc;
 	
+	// duplicate code because cant call name() in this()
 	private AspectShape(Color color) {
 		this.color = color;
+		String langKey = autoLangKey();
+		loc = AASBLang.tc(langKey);
+		fLoc = loc.copy().withStyle(Style.EMPTY.withColor(color.I));
+	}
+	private AspectShape(String langKey, Color color) {
+		this.color = color;
+		loc = AASBLang.tc(langKey);
+		fLoc = loc.copy().withStyle(Style.EMPTY.withColor(color.I));
+	}
+	
+	private String autoLangKey() {
+		String langKey = "misc."+AsAboveSoBelow.MODID+".aspect.shape."+(this.name().toLowerCase());
+		LogHelper.debug("AspectShape.autoLangKey()", "MadeKey", langKey);
+		return langKey;
+	}
+	
+	public MutableComponent loc() {
+		return loc.copy();
+	}
+	public MutableComponent fLoc() {
+		return fLoc.copy();
 	}
 	
 	/**
