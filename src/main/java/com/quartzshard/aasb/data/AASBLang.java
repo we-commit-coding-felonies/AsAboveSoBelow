@@ -17,6 +17,10 @@ public class AASBLang {
 		return String.format(template, AsAboveSoBelow.MODID);
 	}
 	
+	private static String f(String name) {
+		return id("misc.%s.aspect.form."+name);
+	}
+	
 	private static String dm(String template) {
 		return dm(template, false);
 	}
@@ -46,40 +50,46 @@ public class AASBLang {
 		ASPECT_WAY = id("misc.%s.aspect.way"),
 		
 		ASPECT_SHAPE = id("misc.%s.aspect.shape"),
-		ASPECT_SHAPE_WATER = id("misc.%s.aspect.shape.water"),
-		ASPECT_SHAPE_EARTH = id("misc.%s.aspect.shape.earth"),
-		ASPECT_SHAPE_FIRE = id("misc.%s.aspect.shape.fire"),
-		ASPECT_SHAPE_AIR = id("misc.%s.aspect.shape.air"),
-		ASPECT_SHAPE_QUINTESSENCE = id("misc.%s.aspect.shape.quintessence"),
+		SHAPE_WATER = id("misc.%s.aspect.shape.water"),
+		SHAPE_EARTH = id("misc.%s.aspect.shape.earth"),
+		SHAPE_FIRE = id("misc.%s.aspect.shape.fire"),
+		SHAPE_AIR = id("misc.%s.aspect.shape.air"),
+		SHAPE_QUINTESSENCE = id("misc.%s.aspect.shape.quintessence"),
 
 		ASPECT_FORM = id("misc.%s.aspect.form"),
-		ASPECT_FORM_MATERIA = id("misc.%s.aspect.form.materia"),
-		//ASPECT_FORM_
-		//ASPECT_FORM_
-		//ASPECT_FORM_
-		//ASPECT_FORM_
-		//ASPECT_FORM_
-		//ASPECT_FORM_
-		//ASPECT_FORM_
-		//ASPECT_FORM_
-		//ASPECT_FORM_
-		//ASPECT_FORM_
-		//ASPECT_FORM_
-		//ASPECT_FORM_
-		//ASPECT_FORM_
-		//ASPECT_FORM_
-		//ASPECT_FORM_
-		//ASPECT_FORM_
-		//ASPECT_FORM_
-		//ASPECT_FORM_
-		//ASPECT_FORM_
-		//ASPECT_FORM_
-		//ASPECT_FORM_
-		//ASPECT_FORM_
-		//ASPECT_FORM_
-		//ASPECT_FORM_
-		//ASPECT_FORM_
-		//ASPECT_FORM_
+		FORM_MATERIA = f("materia"),
+			FORM_TERRAIN = f("terrain"),
+				FORM_SOIL = f("soil"),
+				FORM_ROCK = f("rock"),
+					FORM_ROUGH = f("rough"),
+					FORM_SMOOTH = f("smooth"),
+			FORM_MINERAL = f("mineral"),
+				FORM_METAL = f("metal"),
+					FORM_SUN = f("aurum"),
+					FORM_MOON = f("argentum"),
+					FORM_VENUS = f("cuprum"),
+					FORM_MARS = f("ferrum"),
+					FORM_JUPITER = f("stannum"),
+					FORM_SATURN = f("plumbum"),
+				FORM_CRYSTAL = f("crystal"),
+					FORM_BRILLIANT = f("brilliant"),
+					FORM_DULL = f("dull"),
+			FORM_ORGANIC = f("organic"),
+				FORM_DEAD = f("inanimate"),
+				FORM_ALIVE = f("living"),
+					FORM_PLANT = f("plant"),
+						FORM_FOLIAGE = f("foliage"),
+					FORM_BEAST = f("beast"),
+						FORM_ANIMAL = f("animal"),
+						FORM_MONSTER = f("monster"),
+				FORM_IMMORTAL = f("immortal"),
+			FORM_ARCANE = f("arcane"),
+				FORM_ALCHEMY = f("alchemy"),
+				FORM_ENCHANTING = f("enchanting"),
+				FORM_WITCHCRAFT = f("witchcraft"),
+			FORM_ETHEREAL = f("ethereal"),
+				FORM_MIND = f("mind"),
+				FORM_SOUL = f("soul"),
 		
 		KEY_HEADMODE = id("key.%s.headMode"),
 		KEY_CHESTMODE = id("key.%s.chestMode"),
@@ -179,14 +189,46 @@ public class AASBLang {
 			add(ASPECT_WAY, "Way");
 			
 			add(ASPECT_SHAPE, "Shape");
-			add(ASPECT_SHAPE_WATER, "Water");
-			add(ASPECT_SHAPE_EARTH, "Earth");
-			add(ASPECT_SHAPE_FIRE, "Fire");
-			add(ASPECT_SHAPE_AIR, "Air");
-			add(ASPECT_SHAPE_QUINTESSENCE, "Quintessence");
+			add(SHAPE_WATER, "Water");
+			add(SHAPE_EARTH, "Earth");
+			add(SHAPE_FIRE, "Fire");
+			add(SHAPE_AIR, "Air");
+			add(SHAPE_QUINTESSENCE, "Quintessence");
 
 			add(ASPECT_FORM, "Form");
-			add(ASPECT_FORM_MATERIA, "Materia");
+			add(FORM_MATERIA, "Materia");
+				add(FORM_TERRAIN, "Terrain");
+					add(FORM_SOIL, "Soil");
+					add(FORM_ROCK, "Rock");
+						add(FORM_ROUGH, "Rough");
+						add(FORM_SMOOTH, "Smooth");
+				add(FORM_MINERAL, "Mineral");
+					add(FORM_METAL, "Metal");
+						add(FORM_SUN, "Aurum");
+						add(FORM_MOON, "Argentum");
+						add(FORM_VENUS, "Cuprum");
+						add(FORM_MARS, "Ferrum");
+						add(FORM_JUPITER, "Stannum");
+						add(FORM_SATURN, "Plumbum");
+					add(FORM_CRYSTAL, "Crystal");
+						add(FORM_BRILLIANT, "Brilliant");
+						add(FORM_DULL, "Dull");
+				add(FORM_ORGANIC, "Organic");
+					add(FORM_DEAD, "Inanimate");
+					add(FORM_ALIVE, "Living");
+						add(FORM_PLANT, "Plant");
+							add(FORM_FOLIAGE, "Foliage");
+						add(FORM_BEAST, "Beast");
+							add(FORM_ANIMAL, "Animal");
+							add(FORM_MONSTER, "Monster");
+					add(FORM_IMMORTAL, "Immortal");
+				add(FORM_ARCANE, "Arcane");
+					add(FORM_ALCHEMY, "Alchemy");
+					add(FORM_ENCHANTING, "Enchanting");
+					add(FORM_WITCHCRAFT, "Witchcraft");
+				add(FORM_ETHEREAL, "Ethereal");
+					add(FORM_MIND, "Mind");
+					add(FORM_SOUL, "Soul");
 			
 			// Keybinds
 			add(KEY_HEADMODE, "Circlet mode");

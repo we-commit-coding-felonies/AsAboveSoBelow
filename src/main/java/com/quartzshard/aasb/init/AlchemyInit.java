@@ -39,13 +39,39 @@ public class AlchemyInit {
 		);
 	
 		public static final RegistryObject<AspectForm> 
-			MATERIA = make("materia", null, Color.PHILOSOPHERS.I),
-				TERRAIN = make("terrain", MATERIA, Color.BROWN.I),
-				MINERAL = make("mineral", MATERIA, Color.MID_GRAY.I),
-					METAL = make("metal", MINERAL, 0xbbbbbb),
-				ORGANIC = make("organic", MATERIA, Color.MID_GREEN.I),
-				ARCANE = make("arcane", MATERIA, Color.MID_PURPLE.I),
-				ETHEREAL = make("ethereal", MINERAL, Color.MID_TEAL.I);
+			MATERIA = make("materia", null, Color.PHILOSOPHERS.I),			//	Matter
+				TERRAIN = make("terrain", MATERIA, 0xff8000),				//		Basic Blocks
+					SOIL = make("soil", TERRAIN, 0x804000),					//			Dirt & Sand
+					ROCK = make("rock", TERRAIN, 0x404040),					//			Stone
+						ROUGH = make("rough", ROCK, 0x605040),				//				Bumpy / Cobble
+						SMOOTH = make("smooth", ROCK, 0x405060),			//				Smooth / Stone
+				MINERAL = make("mineral", MATERIA, 0x8080c0),				//		Ores & Similar
+					METAL = make("metal", MINERAL, 0x808080),				//			Pure / Mercury
+						SUN = make("aurum", METAL, 0xd4af37),				//				Radiant / Gold
+						MOON = make("argentum", METAL, 0xc0c0c0),			//				Reflective / Silver
+						VENUS = make("cuprum", METAL, 0xda8a67),			//				Beautiful / Copper
+						MARS = make("ferrum", METAL, 0x606060),				//				Sturdy / Iron
+						JUPITER = make("stannum", METAL, 0xc0c0b0),			//				Improvable / Tin
+						SATURN = make("plumbum", METAL, 0x555a63),			//				Malleable / Lead
+					CRYSTAL = make("crystal", MINERAL, 0xbbbbbb),			//			Gems & Crystals
+						BRILLIANT = make("brilliant", CRYSTAL, 0xccccdd),	//				Perfect / Diamond, Amethyst
+						DULL = make("dull", CRYSTAL, 0xaa9999),				//				Flawed / Quartz, Coal
+				ORGANIC = make("organic", MATERIA, 0x889988),				//		Carbony Stuff
+					DEAD = make("inanimate", ORGANIC, 0x222222),			//			Nonliving / Charcoal
+					ALIVE = make("living", ORGANIC, 0xcc4444),				//			Biological
+						PLANT = make("plant", ALIVE, 0xc5deb3),				//				Plantlife / Wood, Flowers
+							FOLIAGE = make("foliage", PLANT, 0x40c040),		//					Greenery / Leaves
+						BEAST = make("beast", ALIVE, 0x9a614d),				//				Creatures
+							ANIMAL = make("animal", BEAST, 0xff8080),		//					Friendly
+							MONSTER = make("monster", BEAST, 0x66000),		//					Aggressive
+					IMMORTAL = make("immortal", ORGANIC, 0xd4af77),			//			Divine / Minium Stone
+				ARCANE = make("arcane", MATERIA, 0x8866aa),					//		Magical
+					ALCHEMY = make("alchemy", ARCANE, 0xff0044),			//			As Above, So Below
+					ENCHANTING = make("enchanting", ARCANE, 0xa152ff),		//			Vanilla Enchantments
+					WITCHCRAFT = make("witchcraft", ARCANE, 0x246658),		//			Vanilla Potions
+				ETHEREAL = make("ethereal", MATERIA, 0xa0c0c0),				//		Intangible
+					MIND = make("mind", ETHEREAL, 0x90c060),				//			XP-related
+					SOUL = make("soul", ETHEREAL, 0x8899ee);				//			Spirit Stuff
 		
 		private static RegistryObject<AspectForm> make(String name, RegistryObject<AspectForm> parent, int color) {
 			return REG.register(name, () -> new AspectForm(AsAboveSoBelow.rl(name), parent == null ? null : parent.get(), color));

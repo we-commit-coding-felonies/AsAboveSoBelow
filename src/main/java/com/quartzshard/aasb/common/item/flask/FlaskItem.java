@@ -2,8 +2,10 @@ package com.quartzshard.aasb.common.item.flask;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -91,9 +93,33 @@ public class FlaskItem extends Item {
 		ItemStack stack = player.getItemInHand(hand);
 		clearStored(stack);
 		if (!player.isShiftKeyDown()) {
-			//setStored(stack, null, FormTree.MATERIA.get(), level.getGameTime());
-			setStored(stack, AspectShape.UNIVERSAL, null, level.getGameTime());
-			//setStored(stack, AspectShape.UNIVERSAL, FormTree.MATERIA.get(), level.getGameTime());
+			Random r = level.random;
+			AspectShape cShape = null;
+			AspectForm cForm = null;
+			if (hand != InteractionHand.MAIN_HAND) {
+				AspectShape[] shapes = AspectShape.values();
+				AspectForm[] forms = FormTree.getReg().getValues().toArray(new AspectForm[FormTree.getReg().getValues().size()]);
+				cShape = shapes[r.nextInt(shapes.length)];
+				cForm = forms[r.nextInt(forms.length)];
+			} else {
+				if (r.nextInt(10) == 0) {
+					AspectShape[] shapes = AspectShape.values();
+					cShape = shapes[r.nextInt(shapes.length)];
+				} else {
+					AspectForm[] forms = FormTree.getReg().getValues().toArray(new AspectForm[FormTree.getReg().getValues().size()]);
+					cForm = forms[r.nextInt(forms.length)];
+				}
+			}
+			if (!level.isClientSide) {
+				if (cForm == null) {
+					player.displayClientMessage(cShape.fLoc(), true);
+				} else if (cShape == null) {
+					player.displayClientMessage(cForm.fLoc(), true);
+				} else {
+					player.displayClientMessage(AASBLang.tc("%s & %s", cShape.fLoc(), cForm.fLoc()), true);
+				}
+			}
+			setStored(stack, cShape, cForm, level.getGameTime());
 		}
 		return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
 	}
