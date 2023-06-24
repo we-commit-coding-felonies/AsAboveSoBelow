@@ -5,18 +5,22 @@ import java.util.Arrays;
 import com.quartzshard.aasb.AsAboveSoBelow;
 import com.quartzshard.aasb.api.alchemy.IAlchemicalFlow;
 import com.quartzshard.aasb.common.item.equipment.trinket.rune.TrinketRune;
+import com.quartzshard.aasb.data.AASBLang;
 import com.quartzshard.aasb.util.LogHelper;
 
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
-public class AspectForm extends ForgeRegistryEntry<AspectForm> implements IAlchemicalFlow<AspectForm>{
+public class AspectForm extends ForgeRegistryEntry<AspectForm> implements IAlchemicalFlow<AspectForm> {
 	
 	private AspectForm parent;
 	private AspectForm[] children;
 	private ResourceLocation name;
-	private final int distance;
-	private final int color;
+	private final int distance, color;
+	private final Component loc, fLoc;
 	
 	/**
 	 * Creates a new form node on the tree. Will throw an exception if you try to assign multiple parents, don't make cycles!
@@ -25,7 +29,7 @@ public class AspectForm extends ForgeRegistryEntry<AspectForm> implements IAlche
 	 * @param children
 	 * @throws FormTreeException 
 	 */
-	public AspectForm(ResourceLocation name, AspectForm parent, AspectForm[] children, int color) {
+	public AspectForm(ResourceLocation name, String langKey, AspectForm parent, AspectForm[] children, int color) {
 		if((!name.equals(AsAboveSoBelow.rl("materia")) && parent == null) || (name.equals(AsAboveSoBelow.rl("materia")) && parent != null)) {
 			throw new FormTreeException("Bad root node specified. Don't try to assign parents to materia, or make a node with no parents.");
 		}
@@ -44,6 +48,8 @@ public class AspectForm extends ForgeRegistryEntry<AspectForm> implements IAlche
 			this.distance = 0;
 		}
 		
+		loc = AASBLang.tc(langKey);
+		fLoc = loc.copy().withStyle(Style.EMPTY.withColor(color));
 	}
 
 	/**
@@ -53,8 +59,33 @@ public class AspectForm extends ForgeRegistryEntry<AspectForm> implements IAlche
 	 * @throws FormTreeException
 	 */
 	public AspectForm(ResourceLocation name, AspectForm parent, int color) {
-		this(name, parent, new AspectForm[0], color);
+		this(name, autoLangKey(name), parent, color);
 	}
+
+	/**
+	 * Creates a new form node on the tree, with no existing children. Will throw an exception if you try to assign multiple parents, don't make cycles! <br>
+	 * This version lets you manually set the localization string, if you need that for some reason.
+	 * @param name
+	 * @param parent
+	 * @throws FormTreeException
+	 */
+	public AspectForm(ResourceLocation name, String langKey, AspectForm parent, int color) {
+		this(name, langKey, parent, new AspectForm[0], color);
+	}
+	
+	public MutableComponent loc() {
+		return loc.copy();
+	}
+	public MutableComponent fLoc() {
+		return fLoc.copy();
+	}
+	
+	private static String autoLangKey(ResourceLocation loc) {
+		String langKey = "misc."+loc.getNamespace()+".aspect.form."+loc.getPath();
+		LogHelper.debug("AspectForm.autoLangKey()", "MadeKey", langKey);
+		return langKey;
+	}
+	
 	/**
 	 * Will confirm that each child node agrees that this is the parent. If false, tree structure is invalid.
 	 * @return
@@ -93,7 +124,7 @@ public class AspectForm extends ForgeRegistryEntry<AspectForm> implements IAlche
 	}
 
 	//Little exception to notify addon devs of their bad behaviour with the form tree.
-	class FormTreeException extends RuntimeException{
+	class FormTreeException extends RuntimeException {
 		private static final long serialVersionUID = 1L;
 		String cause;
 		FormTreeException(String cause) {
