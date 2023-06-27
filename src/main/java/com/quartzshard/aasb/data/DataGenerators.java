@@ -22,6 +22,7 @@ public class DataGenerators {
             AASBTags.BlockTP blockTags = AASBTags.INSTANCE.new BlockTP(gen, help);
             gen.addProvider(blockTags);
             gen.addProvider(AASBTags.INSTANCE.new ItemTP(gen, blockTags, help));
+            gen.addProvider(AASBTags.INSTANCE.new EntityTP(gen, help));
         }
         if (event.includeClient()) {
             gen.addProvider(new AASBBlockStates(gen, help));

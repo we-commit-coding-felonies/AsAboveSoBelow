@@ -30,7 +30,7 @@ public class ConfigInit {
 
 	private static void registerCommonConfigs() {
 		ForgeConfigSpec.Builder COMMON_CFG = new ForgeConfigSpec.Builder();
-		//DebugCfg.registerCommonConfig(COMMON_CFG);
+		DebugCfg.common(COMMON_CFG);
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, COMMON_CFG.build());
 	}
 }

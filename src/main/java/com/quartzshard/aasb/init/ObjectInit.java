@@ -1,29 +1,22 @@
 package com.quartzshard.aasb.init;
 
 import com.quartzshard.aasb.AsAboveSoBelow;
-import com.quartzshard.aasb.common.block.AirIceBlock;
-import com.quartzshard.aasb.common.item.AASBRarity;
-import com.quartzshard.aasb.common.item.LootBallItem;
-import com.quartzshard.aasb.common.item.equipment.armor.HermeticArmorItem;
-import com.quartzshard.aasb.common.item.equipment.armor.jewelry.AmuletItem;
-import com.quartzshard.aasb.common.item.equipment.armor.jewelry.AnkletItem;
-import com.quartzshard.aasb.common.item.equipment.armor.jewelry.CircletItem;
-import com.quartzshard.aasb.common.item.equipment.armor.jewelry.PocketwatchItem;
-import com.quartzshard.aasb.common.item.equipment.tool.AASBToolTier;
-import com.quartzshard.aasb.common.item.equipment.tool.InternalOmnitool;
-import com.quartzshard.aasb.common.item.equipment.tool.herm.HermeticAxeItem;
-import com.quartzshard.aasb.common.item.equipment.tool.herm.HermeticHoeItem;
-import com.quartzshard.aasb.common.item.equipment.tool.herm.HermeticPickaxeItem;
-import com.quartzshard.aasb.common.item.equipment.tool.herm.HermeticShovelItem;
-import com.quartzshard.aasb.common.item.equipment.tool.herm.HermeticSwordItem;
-import com.quartzshard.aasb.common.item.equipment.trinket.CharmItem;
-import com.quartzshard.aasb.common.item.equipment.trinket.GloveItem;
-import com.quartzshard.aasb.common.item.equipment.trinket.RingItem;
-import com.quartzshard.aasb.common.item.flask.FlaskItem;
-import com.quartzshard.aasb.common.item.flask.StorageFlaskItem;
+import com.quartzshard.aasb.common.block.*;
+import com.quartzshard.aasb.common.effect.*;
+import com.quartzshard.aasb.common.entity.projectile.*;
+import com.quartzshard.aasb.common.item.*;
+import com.quartzshard.aasb.common.item.equipment.armor.*;
+import com.quartzshard.aasb.common.item.equipment.armor.jewelry.*;
+import com.quartzshard.aasb.common.item.equipment.tool.*;
+import com.quartzshard.aasb.common.item.equipment.tool.herm.*;
+import com.quartzshard.aasb.common.item.equipment.trinket.*;
+import com.quartzshard.aasb.common.item.flask.*;
 
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
@@ -47,7 +40,8 @@ public class ObjectInit {
 	public static void init(IEventBus bus) {
 		Blocks.REG.register(bus);
 		Items.REG.register(bus);
-		
+		Entities.REG.register(bus);
+		MobEffects.REG.register(bus);
 	}
 	
 	public class Items {
@@ -152,6 +146,29 @@ public class ObjectInit {
 		
 	}
 	
+	public class Entities {
+		private static final DeferredRegister<EntityType<?>> REG = DeferredRegister.create(ForgeRegistries.ENTITIES, AsAboveSoBelow.MODID);
+
+	    public static final RegistryObject<EntityType<SmartArrow>> SMART_ARROW = REG.register("smart_arrow", () -> EntityType.Builder.<SmartArrow>of(SmartArrow::new, MobCategory.MISC)
+				.sized(0.5F, 0.5F)
+				.clientTrackingRange(4)
+				.updateInterval(20)
+				.fireImmune()
+				.noSummon()
+				.build("smart_arrow"));
+	    public static final RegistryObject<EntityType<SentientArrow>> SENTIENT_ARROW = REG.register("sentient_arrow", () -> EntityType.Builder.<SentientArrow>of(SentientArrow::new, MobCategory.MISC)
+				.sized(0.5F, 0.5F)
+				.clientTrackingRange(4)
+				.updateInterval(20)
+				.fireImmune()
+				.noSummon()
+				.build("sentient_arrow"));
+	}
 	
+	public class MobEffects {
+		private static final DeferredRegister<MobEffect> REG = DeferredRegister.create(ForgeRegistries.MOB_EFFECTS, AsAboveSoBelow.MODID);
+		
+	    public static final RegistryObject<MobEffect> TRANSMUTING = REG.register("transmuting", () -> new TransmutingEffect());
+	}
 
 }

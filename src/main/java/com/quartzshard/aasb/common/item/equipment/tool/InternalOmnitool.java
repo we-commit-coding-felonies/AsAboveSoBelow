@@ -27,8 +27,8 @@ import net.minecraft.world.level.block.state.BlockState;
  * @author solunareclipse1
  */
 public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker, ICanItemMode {
-	public InternalOmnitool(float pAttackDamageModifier, float pAttackSpeedModifier, Tier pTier, TagKey<Block> pBlocks, Properties pProperties) {
-		super(pAttackDamageModifier, pAttackSpeedModifier, pTier, pBlocks, pProperties);
+	public InternalOmnitool(float damage, float speed, Tier tier, TagKey<Block> breakableBlocks, Properties props) {
+		super(damage, speed, tier, breakableBlocks, props);
 	}
 	
 	@Override
@@ -75,10 +75,10 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 	public boolean onPressedItemMode(ItemStack stack, ServerPlayer player, ServerLevel level) {
 		boolean wasInstamine = NBTHelper.Item.getBoolean(stack, "Instamine", false);
 		NBTHelper.Item.setBoolean(stack, "Instamine", !wasInstamine);
-		if (wasInstamine)
-			AlchemyInit.TrinketRunes.FIRE.get().combatAbility(stack, player, level, BindState.PRESSED);
-		else
-			AlchemyInit.TrinketRunes.WATER.get().combatAbility(stack, player, level, BindState.PRESSED);
+		//if (wasInstamine)
+		//	AlchemyInit.TrinketRunes.FIRE.get().combatAbility(stack, player, level, BindState.PRESSED);
+		//else
+		//	AlchemyInit.TrinketRunes.WATER.get().combatAbility(stack, player, level, BindState.PRESSED);
 		return false;
 	}
 

@@ -4,6 +4,7 @@ import com.quartzshard.aasb.AsAboveSoBelow;
 import com.quartzshard.aasb.api.item.IHermeticTool;
 import com.quartzshard.aasb.client.AASBKeys;
 import com.quartzshard.aasb.client.particle.CutParticle;
+import com.quartzshard.aasb.client.render.SentientArrowRenderer;
 import com.quartzshard.aasb.client.render.layer.AASBPlayerLayer;
 import com.quartzshard.aasb.common.item.flask.FlaskItem;
 
@@ -76,6 +77,14 @@ public class ClientInit {
 	public static void registerParticleFactories(ParticleFactoryRegisterEvent event) {
 		provider(EffectInit.Particles.CUT_PARTICLE.get(), new CutParticle.Provider());
 	}
+
+	@SubscribeEvent
+	public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
+		//Entities
+		event.registerEntityRenderer(ObjectInit.Entities.SENTIENT_ARROW.get(), context -> new SentientArrowRenderer(context));
+	}
+	
+	
 
 	private static <T extends ParticleOptions> void provider(ParticleType<T> type, ParticleProvider<T> provider) {
 		Minecraft.getInstance().particleEngine.register(type, provider);

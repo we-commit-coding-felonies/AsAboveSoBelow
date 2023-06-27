@@ -7,6 +7,7 @@ dd41a480f319a553d9c076b54d27d5bdc4a8449b assets/aasb/models/block/ashen_stone.js
 7e33081136857e10528f14f47119a099727f6245 assets/aasb/models/item/aether.json
 8e1cd150c95715379145548db8feb2afaabac1b5 assets/aasb/models/item/aether_flask.json
 b676b82ed2a5e729417c2f8bc9a0321e6652f19f assets/aasb/models/item/ash.json
+79b7a854094267dd05fd497206a63e82db0703b8 assets/aasb/models/item/ashen_stone.json
 528c15a13a06e77d975db8020e0f876195de5e98 assets/aasb/models/item/astrologer_pocketwatch.json
 3b43b1f1d9bf51b7e366a2429722bb43a2611093 assets/aasb/models/item/complex_mass.json
 fb6657799f1f727478622eb53b0d430f7cd1bb6d assets/aasb/models/item/elixir_of_life.json
@@ -133,12 +134,14 @@ d6827e4046604fbf0b2e1e97abf684f40a02d93d assets/aasb/models/item/quintessential_
 668da66f411b7f921444f957cd928377dc261c8b assets/aasb/models/item/soot.json
 be7a6cf8bf5601339f6f262c17464ebbfe237dcf assets/aasb/models/item/sublit.json
 79b7a854094267dd05fd497206a63e82db0703b8 assets/aasb/models/item/waystone.json
-16609ac7413cce03ff7df5dd9d0d4e8ec43f1924 assets/aasb/sounds.json
+2c2849a652420f46eeafc92a756e73c814cc5543 assets/aasb/sounds.json
 75cb10a173e3163fdbf834c2bf30cec4ba1c56bc data/aasb/loot_tables/blocks/ashen_stone.json
 9dbdefdaacbac987428283f4b529e85ad87cf1a4 data/aasb/loot_tables/blocks/waystone.json
 67d63048ad615b71385a83e216ee27e5e740455a data/aasb/tags/blocks/hypersickle_can_cull.json
 3c24b5653ca04c7bda9e3339601107cba99e5185 data/aasb/tags/blocks/sentient_arrow_annihilate.json
 01d2a4aaa42e25df971fe4b7251c1bd46efc986c data/aasb/tags/blocks/sentient_arrow_noclip.json
 135095d8981ce58dc4ba140238d5b20941ebe99b data/aasb/tags/blocks/wayblast_resist.json
+574999be8d31a93aed334963dca50a78c5f9b9a4 data/aasb/tags/entity_types/itemizer_entity_blacklist.json
+701896ebbc48c5c26a078cb9cad1dc1282a01ed0 data/aasb/tags/entity_types/philo_homing_arrow_blacklist.json
 85ee38ed0c666d4623f9b715a8146e0624330627 data/minecraft/tags/blocks/ice.json
 9112a8d70ad223a8f06961e2be813291c69415a5 data/minecraft/tags/blocks/mineable/pickaxe.json

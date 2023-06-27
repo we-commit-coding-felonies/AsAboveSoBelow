@@ -21,6 +21,11 @@ public class AASBSounds extends SoundDefinitionsProvider {
 
 	@Override
 	public void registerSounds() {
+		multi(EffectInit.Sounds.WHISTLE,
+				"whistle1",
+				"whistle2",
+				"whistle3");
+		
 		simple(EffectInit.Sounds.BARRIER_AMBIENT, new ResourceLocation("block/beacon/ambient"), 0.5);
 		simple(EffectInit.Sounds.BARRIER_PROTECT, "way/barrier/protect");
 		simple(EffectInit.Sounds.BARRIER_FAIL, "way/barrier/fail");
@@ -31,6 +36,8 @@ public class AASBSounds extends SoundDefinitionsProvider {
 		simple(EffectInit.Sounds.WAY_EXPLODE, "way/explode");
 		simple(EffectInit.Sounds.WAY_CHARGE, "way/charge");
 		simple(EffectInit.Sounds.WAY_SLASH, "way/slash");
+		
+		simple(EffectInit.Sounds.SENTIENT_WHISPERS, "sentient/whispers");
 	}
 
 	private void simple(Supplier<SoundEvent> ro, String loc) {

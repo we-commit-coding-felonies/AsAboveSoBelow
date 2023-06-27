@@ -48,6 +48,21 @@ public class AASBNet {
 				.decoder(CutParticlePacket::dec)
 				.consumer(CutParticlePacket::handle)
 				.add();
+		CHANNEL.messageBuilder(CreateLoopingSoundPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
+			.encoder(CreateLoopingSoundPacket::enc)
+			.decoder(CreateLoopingSoundPacket::dec)
+			.consumer(CreateLoopingSoundPacket::handle)
+			.add();
+		CHANNEL.messageBuilder(DrawParticleAABBPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
+			.encoder(DrawParticleAABBPacket::enc)
+			.decoder(DrawParticleAABBPacket::dec)
+			.consumer(DrawParticleAABBPacket::handle)
+			.add();
+		CHANNEL.messageBuilder(DrawParticleLinePacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
+			.encoder(DrawParticleLinePacket::enc)
+			.decoder(DrawParticleLinePacket::dec)
+			.consumer(DrawParticleLinePacket::handle)
+			.add();
 	}
 	
 	public static <PKT> void toServer(PKT packet) {

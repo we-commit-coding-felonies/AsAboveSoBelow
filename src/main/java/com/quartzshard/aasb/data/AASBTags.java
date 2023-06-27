@@ -6,9 +6,11 @@ import com.quartzshard.aasb.init.ObjectInit;
 import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
+import net.minecraft.data.tags.EntityTypeTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
@@ -113,5 +115,34 @@ public class AASBTags {
 		public String getName() {
 			return AsAboveSoBelow.DISPLAYNAME + " | Block Tags";
 		}
+	}
+	
+	public class EntityTP extends EntityTypeTagsProvider {
+		public EntityTP(DataGenerator generator, ExistingFileHelper helper) {
+	        super(generator, AsAboveSoBelow.MODID, helper);
+	    }
+
+		public static final TagKey<EntityType<?>> ITEMIZER_ENTITY_BLACKLIST = makeTag("itemizer_entity_blacklist");
+		public static final TagKey<EntityType<?>> PHILO_HOMING_ARROW_BLACKLIST = makeTag("philo_homing_arrow_blacklist");
+
+	    @Override
+	    protected void addTags() {
+	        tag(ITEMIZER_ENTITY_BLACKLIST)
+	    		.add(EntityType.ENDER_DRAGON)
+	        ;
+	        
+	        tag(PHILO_HOMING_ARROW_BLACKLIST)
+	    		.add(EntityType.ARMOR_STAND)
+				.add(EntityType.ENDERMAN);
+	    }
+	    
+	    private static TagKey<EntityType<?>> makeTag(String name) {
+	    	return TagKey.create(Registry.ENTITY_TYPE_REGISTRY, AsAboveSoBelow.rl(name));
+	    }
+
+	    @Override
+	    public String getName() {
+			return AsAboveSoBelow.DISPLAYNAME + " | Entity Tags";
+	    }
 	}
 }

@@ -66,6 +66,7 @@ public class AASBItemModels extends ItemModelProvider {
 		
 		
     	// BlockItems
+		block(Items.ASH_STONE_BLOCKITEM, "block/ashen_stone");
 		block(Items.WAYSTONE_BLOCKITEM, "block/waystone");
     }
     

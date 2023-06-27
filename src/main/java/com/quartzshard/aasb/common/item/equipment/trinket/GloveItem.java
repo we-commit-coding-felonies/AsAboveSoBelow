@@ -10,11 +10,19 @@ public class GloveItem extends AbilityTrinket {
 	public GloveItem(Properties props) {
 		super(props);
 	}
-	
+
 	@Override
 	public boolean onPressedFunc1(ItemStack stack, ServerPlayer player, ServerLevel level) {
-		if (hasAnyRune(stack)) {
-			return getRune(stack).combatAbility(stack, player, level, BindState.PRESSED);
+		if (canUse(stack, player)) {
+			return getRune(stack, true).combatAbility(stack, player, level, BindState.PRESSED, isStrong(stack));
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean onPressedFunc2(ItemStack stack, ServerPlayer player, ServerLevel level) {
+		if (canUse(stack, player)) {
+			return getRune(stack, false).combatAbility(stack, player, level, BindState.PRESSED, isStrong(stack));
 		}
 		return false;
 	}

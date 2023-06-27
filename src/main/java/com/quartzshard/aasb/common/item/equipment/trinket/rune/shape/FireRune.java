@@ -26,7 +26,7 @@ import net.minecraftforge.fml.common.Mod;
 public class FireRune extends TrinketRune {
 
 	@Override
-	public boolean combatAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state) {
+	public boolean combatAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong) {
 		// TODO: COST
 		for (int i = 0; i < 5; i++) {
 			ProjectileHelper.fireball(level, player.getEyePosition(), player.getEyePosition().add(player.getLookAngle().scale(2)), player);
@@ -37,7 +37,7 @@ public class FireRune extends TrinketRune {
 	}
 
 	@Override
-	public boolean utilityAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state) {
+	public boolean utilityAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong) {
 		// TODO: COST
 		InteractionHand hand = player.getItemInHand(InteractionHand.OFF_HAND) == stack ?
 				InteractionHand.OFF_HAND :
@@ -52,7 +52,7 @@ public class FireRune extends TrinketRune {
 	}
 
 	@Override
-	public boolean passiveAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state) {
+	public boolean passiveAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong) {
 		// handled elsewhere (fire immunity)
 		return false;
 	}
@@ -69,7 +69,8 @@ public class FireRune extends TrinketRune {
 				};
 				for (ItemStack stack : toCheck) {
 					if (stack.getItem() instanceof CharmItem charm && charm.hasAnyRune(stack)) {
-						if (charm.getRune(stack) instanceof FireRune) {
+						if (charm.getRune(stack, true) instanceof FireRune
+								|| charm.getRune(stack, false) instanceof FireRune) {
 							event.setCanceled(true);
 						}
 					}

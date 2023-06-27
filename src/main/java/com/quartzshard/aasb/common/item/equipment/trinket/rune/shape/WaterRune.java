@@ -10,19 +10,19 @@ import net.minecraft.world.item.ItemStack;
 public class WaterRune extends TrinketRune {
 
 	@Override
-	public boolean combatAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state) {
+	public boolean combatAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong) {
 		System.out.println("WATER combat");
 		return false;
 	}
 
 	@Override
-	public boolean utilityAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state) {
+	public boolean utilityAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong) {
 		System.out.println("WATER utility");
 		return false;
 	}
 
 	@Override
-	public boolean passiveAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state) {
+	public boolean passiveAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong) {
 		System.out.println("WATER passive");
 		return false;
 	}

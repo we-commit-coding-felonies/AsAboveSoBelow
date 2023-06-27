@@ -53,19 +53,19 @@ public abstract class TrinketRune extends ForgeRegistryEntry<TrinketRune> {
 	 * Called by Gloves
 	 * @return if the ability was used successfully
 	 */
-	public abstract boolean combatAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state);
+	public abstract boolean combatAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong);
 	
 	/**
 	 * Called by Rings
 	 * @return if the ability was used successfully
 	 */
-	public abstract boolean utilityAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state);
+	public abstract boolean utilityAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong);
 	
 	/**
 	 * Called by Charms every tick
 	 * @return if the ability was used successfully
 	 */
-	public abstract boolean passiveAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state);
+	public abstract boolean passiveAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong);
 
 	// TODO: onRuneAdded/Removed
 	//public void onRuneAdded() {}

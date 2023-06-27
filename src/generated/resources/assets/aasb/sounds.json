@@ -1,4 +1,12 @@
 {
+  "whistle": {
+    "subtitle": "subtitles.aasb.whistle",
+    "sounds": [
+      "aasb:whistle1",
+      "aasb:whistle2",
+      "aasb:whistle3"
+    ]
+  },
   "way.barrier.ambient": {
     "subtitle": "subtitles.aasb.way.barrier.ambient",
     "sounds": [
@@ -48,6 +56,12 @@
     "subtitle": "subtitles.aasb.way.slash",
     "sounds": [
       "aasb:way/slash"
+    ]
+  },
+  "sentient.whispers": {
+    "subtitle": "subtitles.aasb.sentient.whispers",
+    "sounds": [
+      "aasb:sentient/whispers"
     ]
   }
 }

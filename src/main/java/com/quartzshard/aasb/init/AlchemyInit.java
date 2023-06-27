@@ -6,11 +6,10 @@ import org.jetbrains.annotations.Nullable;
 
 import com.quartzshard.aasb.AsAboveSoBelow;
 import com.quartzshard.aasb.api.alchemy.aspects.AspectForm;
-import com.quartzshard.aasb.common.item.equipment.trinket.rune.TrinketRune;
-import com.quartzshard.aasb.common.item.equipment.trinket.rune.shape.AirRune;
-import com.quartzshard.aasb.common.item.equipment.trinket.rune.shape.EarthRune;
-import com.quartzshard.aasb.common.item.equipment.trinket.rune.shape.FireRune;
-import com.quartzshard.aasb.common.item.equipment.trinket.rune.shape.WaterRune;
+import com.quartzshard.aasb.common.item.equipment.trinket.rune.*;
+import com.quartzshard.aasb.common.item.equipment.trinket.rune.form.*;
+import com.quartzshard.aasb.common.item.equipment.trinket.rune.shape.*;
+import com.quartzshard.aasb.common.item.equipment.trinket.rune.special.*;
 import com.quartzshard.aasb.util.ColorsHelper.Color;
 
 import net.minecraft.resources.ResourceLocation;
@@ -46,7 +45,7 @@ public class AlchemyInit {
 						ROUGH = make("rough", ROCK, 0x605040),				//				Bumpy / Cobble
 						SMOOTH = make("smooth", ROCK, 0x405060),			//				Smooth / Stone
 				MINERAL = make("mineral", MATERIA, 0x8080c0),				//		Ores & Similar
-					METAL = make("metal", MINERAL, 0x808080),				//			Pure / Mercury
+					METAL = make("metal", MINERAL, 0x808080),				//			Pure Metal / Mercury
 						SUN = make("aurum", METAL, 0xd4af37),				//				Radiant / Gold
 						MOON = make("argentum", METAL, 0xc0c0c0),			//				Reflective / Silver
 						VENUS = make("cuprum", METAL, 0xda8a67),			//				Beautiful / Copper
@@ -100,10 +99,22 @@ public class AlchemyInit {
 	            }
 	    );
 		public static final RegistryObject<TrinketRune>
+				// Shape
 				WATER = REG.register("water", () -> new WaterRune()),
 				EARTH = REG.register("earth", () -> new EarthRune()),
 				FIRE = REG.register("fire", () -> new FireRune()),
-				AIR = REG.register("air", () -> new AirRune());
+				AIR = REG.register("air", () -> new AirRune()),
+				
+				// Form
+				TERRAIN = REG.register("terrain", () -> new TerrainRune()),
+				MINERAL = REG.register("mineral", () -> new MineralRune()),
+				ORGANIC = REG.register("organic", () -> new OrganicRune()),
+				ARCANE = REG.register("arcane", () -> new ArcaneRune()),
+				ETHEREAL = REG.register("ethereal", () -> new EtherealRune()),
+				
+				// Special
+				TRANSMUTATION = REG.register("transmutation", () -> new TransmutationRune()),
+				EMPOWERMENT = REG.register("empowerment", () -> new EmpowermentRune());
 
 		public static IForgeRegistry<TrinketRune> getReg() {
 			return REGISTRY_SUPPLIER.get();

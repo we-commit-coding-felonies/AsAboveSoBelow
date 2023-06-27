@@ -12,6 +12,7 @@ import com.quartzshard.aasb.api.alchemy.aspects.AspectForm;
 import com.quartzshard.aasb.api.alchemy.aspects.AspectShape;
 import com.quartzshard.aasb.data.AASBLang;
 import com.quartzshard.aasb.init.AlchemyInit.FormTree;
+import com.quartzshard.aasb.util.CalcHelper;
 import com.quartzshard.aasb.util.ClientHelper;
 import com.quartzshard.aasb.util.ColorsHelper;
 import com.quartzshard.aasb.util.ColorsHelper.Color;
@@ -49,7 +50,7 @@ public class StorageFlaskItem extends FlaskItem {
 			} else {
 				int ticks = (int) (getExpiry(stack) - level.getGameTime());
 				String ft = "";
-				long[] time = MiscHelper.ticksToTime(ticks);
+				long[] time = CalcHelper.ticksToTime(ticks);
 				for (int i = 0; i < time.length; i++) {
 					long t = time[i];
 					if (t > 0 || ft != "") {
