@@ -1,4 +1,4 @@
-package com.quartzshard.aasb.client.render;
+package com.quartzshard.aasb.client.render.entity;
 
 import com.quartzshard.aasb.AsAboveSoBelow;
 import com.quartzshard.aasb.common.entity.projectile.SentientArrow;

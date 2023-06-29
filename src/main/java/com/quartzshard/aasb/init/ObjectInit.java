@@ -3,6 +3,7 @@ package com.quartzshard.aasb.init;
 import com.quartzshard.aasb.AsAboveSoBelow;
 import com.quartzshard.aasb.common.block.*;
 import com.quartzshard.aasb.common.effect.*;
+import com.quartzshard.aasb.common.entity.living.*;
 import com.quartzshard.aasb.common.entity.projectile.*;
 import com.quartzshard.aasb.common.item.*;
 import com.quartzshard.aasb.common.item.equipment.armor.*;
@@ -149,26 +150,39 @@ public class ObjectInit {
 	public class Entities {
 		private static final DeferredRegister<EntityType<?>> REG = DeferredRegister.create(ForgeRegistries.ENTITIES, AsAboveSoBelow.MODID);
 
-	    public static final RegistryObject<EntityType<SmartArrow>> SMART_ARROW = REG.register("smart_arrow", () -> EntityType.Builder.<SmartArrow>of(SmartArrow::new, MobCategory.MISC)
+		public static final RegistryObject<EntityType<SmartArrow>> SMART_ARROW = REG.register("smart_arrow", () -> EntityType.Builder.<SmartArrow>of(SmartArrow::new, MobCategory.MISC)
 				.sized(0.5F, 0.5F)
 				.clientTrackingRange(4)
 				.updateInterval(20)
 				.fireImmune()
-				.noSummon()
+				.noSummon().noSave()
 				.build("smart_arrow"));
-	    public static final RegistryObject<EntityType<SentientArrow>> SENTIENT_ARROW = REG.register("sentient_arrow", () -> EntityType.Builder.<SentientArrow>of(SentientArrow::new, MobCategory.MISC)
+		public static final RegistryObject<EntityType<SentientArrow>> SENTIENT_ARROW = REG.register("sentient_arrow", () -> EntityType.Builder.<SentientArrow>of(SentientArrow::new, MobCategory.MISC)
 				.sized(0.5F, 0.5F)
 				.clientTrackingRange(4)
 				.updateInterval(20)
 				.fireImmune()
-				.noSummon()
+				.noSummon().noSave()
 				.build("sentient_arrow"));
+		public static final RegistryObject<EntityType<HorrorEntity>> HORROR = REG.register("horror", () -> EntityType.Builder.<HorrorEntity>of(HorrorEntity::new, MobCategory.MONSTER)
+				.sized(0.6f, 1.95f)
+				.clientTrackingRange(8)
+				.build("horror"));
+		
+		// modeled after botania mana burst
+		public static final RegistryObject<EntityType<MustangProjectile>> MUSTANG = REG.register("mustang", () -> EntityType.Builder.<MustangProjectile>of(MustangProjectile::new, MobCategory.MISC)
+				.sized(0.5f, 0.5f)
+				.clientTrackingRange(6)
+				.updateInterval(10)
+				.fireImmune()
+				.noSummon().noSave()
+				.build("mustang"));
 	}
 	
 	public class MobEffects {
 		private static final DeferredRegister<MobEffect> REG = DeferredRegister.create(ForgeRegistries.MOB_EFFECTS, AsAboveSoBelow.MODID);
 		
-	    public static final RegistryObject<MobEffect> TRANSMUTING = REG.register("transmuting", () -> new TransmutingEffect());
+		public static final RegistryObject<MobEffect> TRANSMUTING = REG.register("transmuting", () -> new TransmutingEffect());
 	}
 
 }

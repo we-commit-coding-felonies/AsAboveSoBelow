@@ -36,7 +36,7 @@ public abstract class AbilityTrinket extends Item implements ITrinket, ICanItemM
 	private boolean randomizeRunes(ServerPlayer player, ItemStack stack) {
 		if (player.isShiftKeyDown()) {
 			clearRunes(stack);
-			setRune(stack, true, TrinketRunes.ETHEREAL.get());
+			setRune(stack, true, TrinketRunes.FIRE.get());
 			setRune(stack, false, TrinketRunes.EMPOWERMENT.get());
 		} else {
 			TrinketRune[] runes = TrinketRunes.getReg().getValues().toArray(TrinketRune[]::new);
@@ -54,6 +54,10 @@ public abstract class AbilityTrinket extends Item implements ITrinket, ICanItemM
 	
 	public boolean canUse(ItemStack stack, ServerPlayer player) {
 		return !PlayerHelper.onCooldown(player, stack.getItem()) && hasAnyRune(stack);
+	}
+	
+	public boolean canUse(ItemStack stack, ServerPlayer player, boolean main) {
+		return !PlayerHelper.onCooldown(player, stack.getItem()) && hasAnyRune(stack, main);
 	}
 	
 	public boolean isStrong(ItemStack stack) {
@@ -77,6 +81,20 @@ public abstract class AbilityTrinket extends Item implements ITrinket, ICanItemM
 					if (rl != null && TrinketRunes.exists(rl)) {
 						return true;
 					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	public boolean hasAnyRune(ItemStack stack, boolean main) {
+		CompoundTag runeTag = NBTHelper.Item.getCompound(stack, main?TAG_RUNE_1:TAG_RUNE_2, true);
+		if (runeTag != null) {
+			String runeId = runeTag.getString("rl");
+			if (runeId != "aasb:null" && runeId != "") {
+				ResourceLocation rl = ResourceLocation.tryParse(runeId);
+				if (rl != null && TrinketRunes.exists(rl)) {
+					return true;
 				}
 			}
 		}

@@ -1,9 +1,11 @@
 package com.quartzshard.aasb.common.item.equipment.trinket.rune.shape;
 
 import com.quartzshard.aasb.AsAboveSoBelow;
+import com.quartzshard.aasb.common.entity.projectile.MustangProjectile;
 import com.quartzshard.aasb.common.item.equipment.trinket.CharmItem;
 import com.quartzshard.aasb.common.item.equipment.trinket.rune.TrinketRune;
 import com.quartzshard.aasb.common.network.server.KeyPressPacket.BindState;
+import com.quartzshard.aasb.init.EffectInit;
 import com.quartzshard.aasb.util.PlayerHelper;
 import com.quartzshard.aasb.util.ProjectileHelper;
 
@@ -28,6 +30,36 @@ public class FireRune extends TrinketRune {
 	@Override
 	public boolean combatAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong) {
 		// TODO: COST
+		if (player.level.isRainingAt(player.blockPosition())) {
+			player.level.playSound(null, player, SoundEvents.LAVA_EXTINGUISH, SoundSource.PLAYERS, 0.5f, 2f);
+			return true;
+		} else {
+			if (strong) {
+				//EntityManaBurst burst = new EntityManaBurst(player);
+				MustangProjectile burst = new MustangProjectile(level, player);
+
+				float motionModifier = 14f;
+
+				//burst.setColor(0xFF4000);
+				//burst.setMana(1);
+				//burst.setStartingMana(1);
+				//burst.setMinManaLoss(1);
+				//burst.setManaLossPerTick(0f);
+				//burst.setGravity(0F);
+				burst.setDeltaMovement(burst.getDeltaMovement().scale(motionModifier));
+				//burst.setWarped(true);
+				//burst.setSourceLens(stack);
+				//if (player.isUnderWater() || burst.isUnderWater()) {
+				//	// imperceptibly different color
+				//	// used as a "spawnedUnderwater" flag
+				//	burst.setColor(0xFF4100);
+				//}
+				
+				player.level.addFreshEntity(burst);
+				PlayerHelper.coolDown(player, stack.getItem(), 30);
+				return true;
+			}
+		}
 		for (int i = 0; i < 5; i++) {
 			ProjectileHelper.fireball(level, player.getEyePosition(), player.getEyePosition().add(player.getLookAngle().scale(2)), player);
 		}

@@ -1,10 +1,22 @@
 {
-  "whistle": {
-    "subtitle": "subtitles.aasb.whistle",
+  "misc.whistle": {
+    "subtitle": "subtitles.aasb.misc.whistle",
     "sounds": [
-      "aasb:whistle1",
-      "aasb:whistle2",
-      "aasb:whistle3"
+      "aasb:misc/whistle1",
+      "aasb:misc/whistle2",
+      "aasb:misc/whistle3"
+    ]
+  },
+  "misc.mustang": {
+    "subtitle": "subtitles.aasb.misc.mustang",
+    "sounds": [
+      "aasb:misc/mustang"
+    ]
+  },
+  "misc.targetlock": {
+    "subtitle": "subtitles.aasb.misc.targetlock",
+    "sounds": [
+      "aasb:misc/targetlock"
     ]
   },
   "way.barrier.ambient": {
@@ -62,6 +74,33 @@
     "subtitle": "subtitles.aasb.sentient.whispers",
     "sounds": [
       "aasb:sentient/whispers"
+    ]
+  },
+  "trinket.glove": {
+    "subtitle": "subtitles.aasb.trinket.glove",
+    "sounds": [
+      "aasb:trinket/glove1",
+      "aasb:trinket/glove2",
+      "aasb:trinket/glove3",
+      "aasb:trinket/glove4"
+    ]
+  },
+  "trinket.ring": {
+    "subtitle": "subtitles.aasb.trinket.ring",
+    "sounds": [
+      "aasb:trinket/glove1",
+      "aasb:trinket/glove2",
+      "aasb:trinket/glove3",
+      "aasb:trinket/glove4"
+    ]
+  },
+  "trinket.charm": {
+    "subtitle": "subtitles.aasb.trinket.charm",
+    "sounds": [
+      "aasb:trinket/glove1",
+      "aasb:trinket/glove2",
+      "aasb:trinket/glove3",
+      "aasb:trinket/glove4"
     ]
   }
 }

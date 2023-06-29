@@ -7,8 +7,9 @@ dd41a480f319a553d9c076b54d27d5bdc4a8449b assets/aasb/models/block/ashen_stone.js
 7e33081136857e10528f14f47119a099727f6245 assets/aasb/models/item/aether.json
 8e1cd150c95715379145548db8feb2afaabac1b5 assets/aasb/models/item/aether_flask.json
 b676b82ed2a5e729417c2f8bc9a0321e6652f19f assets/aasb/models/item/ash.json
-79b7a854094267dd05fd497206a63e82db0703b8 assets/aasb/models/item/ashen_stone.json
+1d709551c63e35b329b9c85001338fbb0b165190 assets/aasb/models/item/ashen_stone.json
 528c15a13a06e77d975db8020e0f876195de5e98 assets/aasb/models/item/astrologer_pocketwatch.json
+7826a388cac3cd10f9feea1a5a35d62935986e79 assets/aasb/models/item/charm.json
 3b43b1f1d9bf51b7e366a2429722bb43a2611093 assets/aasb/models/item/complex_mass.json
 fb6657799f1f727478622eb53b0d430f7cd1bb6d assets/aasb/models/item/elixir_of_life.json
 02ff69f337c3c05f1feeb5b1ca1aeb676ff6d7ee assets/aasb/models/item/equipment/tool/herm/axe/off/0.json
@@ -107,6 +108,7 @@ e779c8c9c1b65970d50d2fffc1ef34da826cb398 assets/aasb/models/item/flask/aether_fl
 ba04b6af499bed0e000c931d4eb9d8bcff57ccd7 assets/aasb/models/item/flask/golden_flask/filled.json
 58c6ebcc33ab7de7c10e2caa0c316a71f6d015ae assets/aasb/models/item/flask/lead_flask/empty.json
 d5246f26c291c978b9020360d6a9b0a3a3587cab assets/aasb/models/item/flask/lead_flask/filled.json
+7826a388cac3cd10f9feea1a5a35d62935986e79 assets/aasb/models/item/glove.json
 2e3ff6e1da60f6f4798180b27d2026eb450b3d79 assets/aasb/models/item/golden_flask.json
 b87bfb5dde374f635aa0addc648266d257000109 assets/aasb/models/item/hermetic_armet.json
 fefa4bd5ae9eb4cae79b7746c9a9e3357c09e816 assets/aasb/models/item/hermetic_blade.json
@@ -129,12 +131,13 @@ d20bd1cccb5327efb0e019265bef164aa7034760 assets/aasb/models/item/materia_minor.j
 0e78a8f8527dfe7ab50b65166d76ad477e8fc409 assets/aasb/models/item/philosophers_stone.json
 2300441e62ba8b2a918e717e6fb9c6a684e1b253 assets/aasb/models/item/prophet_anklet.json
 d6827e4046604fbf0b2e1e97abf684f40a02d93d assets/aasb/models/item/quintessential_condensate.json
+7826a388cac3cd10f9feea1a5a35d62935986e79 assets/aasb/models/item/ring.json
 484c0f1132028cd22f3a1a666a3ba634c3c72359 assets/aasb/models/item/salt.json
 02241571ef81eb17fb9f852ea243cd389d56171e assets/aasb/models/item/seer_circlet.json
 668da66f411b7f921444f957cd928377dc261c8b assets/aasb/models/item/soot.json
 be7a6cf8bf5601339f6f262c17464ebbfe237dcf assets/aasb/models/item/sublit.json
 79b7a854094267dd05fd497206a63e82db0703b8 assets/aasb/models/item/waystone.json
-2c2849a652420f46eeafc92a756e73c814cc5543 assets/aasb/sounds.json
+a7a95516eaa3c3120b821cfc5728f561fb944ca2 assets/aasb/sounds.json
 75cb10a173e3163fdbf834c2bf30cec4ba1c56bc data/aasb/loot_tables/blocks/ashen_stone.json
 9dbdefdaacbac987428283f4b529e85ad87cf1a4 data/aasb/loot_tables/blocks/waystone.json
 67d63048ad615b71385a83e216ee27e5e740455a data/aasb/tags/blocks/hypersickle_can_cull.json

@@ -4,12 +4,11 @@ import com.quartzshard.aasb.AsAboveSoBelow;
 import com.quartzshard.aasb.api.item.IHermeticTool;
 import com.quartzshard.aasb.client.AASBKeys;
 import com.quartzshard.aasb.client.particle.CutParticle;
-import com.quartzshard.aasb.client.render.SentientArrowRenderer;
+import com.quartzshard.aasb.client.render.entity.*;
 import com.quartzshard.aasb.client.render.layer.AASBPlayerLayer;
 import com.quartzshard.aasb.common.item.flask.FlaskItem;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.particle.ParticleProvider;
@@ -20,9 +19,6 @@ import net.minecraft.core.particles.ParticleType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.PotionUtils;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -82,6 +78,8 @@ public class ClientInit {
 	public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
 		//Entities
 		event.registerEntityRenderer(ObjectInit.Entities.SENTIENT_ARROW.get(), context -> new SentientArrowRenderer(context));
+		event.registerEntityRenderer(ObjectInit.Entities.HORROR.get(), context -> new HorrorRenderer(context));
+		event.registerEntityRenderer(ObjectInit.Entities.MUSTANG.get(), context -> new MustangRenderer(context));
 	}
 	
 	

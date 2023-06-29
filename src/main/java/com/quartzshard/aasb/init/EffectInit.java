@@ -35,29 +35,35 @@ public class EffectInit {
 		private static final DeferredRegister<SoundEvent> REG = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, AsAboveSoBelow.MODID);
 		
 		public static final RegistryObject<SoundEvent>
-				WHISTLE = registerSound("whistle"),
+				SENTIENT_WHISPERS = snd("sentient.whispers"),
+						
+				TRANSMUTE_SHAPE_GENERIC = snd("transmute.generic"),
+				TRANSMUTE_SHAPE_WATER = snd("transmute.water"),
+				TRANSMUTE_SHAPE_EARTH = snd("transmute.earth"),
+				TRANSMUTE_SHAPE_FIRE = snd("transmute.fire"),
+				TRANSMUTE_SHAPE_AIR = snd("transmute.air"),
+				TRANSMUTE_SHAPE_ALIVE = snd("transmute.living"),
+		
+				WAY_WASTE = snd("way.waste"),
+				WAY_LEAK = snd("way.leak"),
+				WAY_EXPLODE = snd("way.explode"),
+				WAY_CHARGE = snd("way.charge"),
+				WAY_SLASH = snd("way.slash"),
 				
-				BARRIER_AMBIENT = registerSound("way.barrier.ambient"),
-				BARRIER_PROTECT = registerSound("way.barrier.protect"),
-				BARRIER_FAIL = registerSound("way.barrier.fail"),
-				BARRIER_IGNORED = registerSound("way.barrier.ignored"),
-		
-				WAY_WASTE = registerSound("way.waste"),
-				WAY_LEAK = registerSound("way.leak"),
-				WAY_EXPLODE = registerSound("way.explode"),
-				WAY_CHARGE = registerSound("way.charge"),
-				WAY_SLASH = registerSound("way.slash"),
-		
-				TRANSMUTE_SHAPE_GENERIC = registerSound("transmute.generic"),
-				TRANSMUTE_SHAPE_WATER = registerSound("transmute.water"),
-				TRANSMUTE_SHAPE_EARTH = registerSound("transmute.earth"),
-				TRANSMUTE_SHAPE_FIRE = registerSound("transmute.fire"),
-				TRANSMUTE_SHAPE_AIR = registerSound("transmute.air"),
-				TRANSMUTE_SHAPE_ALIVE = registerSound("transmute.living"),
+				BARRIER_AMBIENT = snd("way.barrier.ambient"),
+				BARRIER_PROTECT = snd("way.barrier.protect"),
+				BARRIER_FAIL = snd("way.barrier.fail"),
+				BARRIER_IGNORED = snd("way.barrier.ignored"),
 				
-				SENTIENT_WHISPERS = registerSound("sentient.whispers");
+				TRINKET_GLOVE = snd("trinket.glove"),
+				TRINKET_RING = snd("trinket.ring"),
+				TRINKET_CHARM = snd("trinket.charm"),
+
+				TARGETLOCK = snd("misc.targetlock"),
+				WHISTLE = snd("misc.whistle"),
+				MUSTANG = snd("misc.mustang");
 		
-		private static RegistryObject<SoundEvent> registerSound(String name) {
+		private static RegistryObject<SoundEvent> snd(String name) {
 			return REG.register(name, () -> new SoundEvent(AsAboveSoBelow.rl(name)));
 		}
 		

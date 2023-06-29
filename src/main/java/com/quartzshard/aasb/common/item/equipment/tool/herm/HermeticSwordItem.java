@@ -160,7 +160,7 @@ public class HermeticSwordItem extends SwordItem implements IHermeticTool {
 		
 		float stage = getChargePercent(stack);
 		startSlashing(stack, stage);
-		//cd.addCooldown(this, 1+(charge/10));
+		cd.addCooldown(this, 1+(charge/10));
 		return true;
 	}
 	

@@ -47,6 +47,10 @@ public class AASBItemModels extends ItemModelProvider {
 		flask(Items.FLASK_GOLD);
 		flask(Items.FLASK_AETHER);
 
+		placeholder(Items.CHARM);
+		placeholder(Items.RING);
+		placeholder(Items.GLOVE);
+
 		armor(Items.HERMETIC_HELMET, "item/equipment/armor/herm/");
 		armor(Items.HERMETIC_CHESTPLATE, "item/equipment/armor/herm/");
 		armor(Items.HERMETIC_LEGGINGS, "item/equipment/armor/herm/");

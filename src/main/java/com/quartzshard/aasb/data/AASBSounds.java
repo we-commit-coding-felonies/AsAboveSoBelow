@@ -22,9 +22,11 @@ public class AASBSounds extends SoundDefinitionsProvider {
 	@Override
 	public void registerSounds() {
 		multi(EffectInit.Sounds.WHISTLE,
-				"whistle1",
-				"whistle2",
-				"whistle3");
+				"misc/whistle1",
+				"misc/whistle2",
+				"misc/whistle3");
+		simple(EffectInit.Sounds.MUSTANG, "misc/mustang");
+		simple(EffectInit.Sounds.TARGETLOCK, "misc/targetlock");
 		
 		simple(EffectInit.Sounds.BARRIER_AMBIENT, new ResourceLocation("block/beacon/ambient"), 0.5);
 		simple(EffectInit.Sounds.BARRIER_PROTECT, "way/barrier/protect");
@@ -38,6 +40,22 @@ public class AASBSounds extends SoundDefinitionsProvider {
 		simple(EffectInit.Sounds.WAY_SLASH, "way/slash");
 		
 		simple(EffectInit.Sounds.SENTIENT_WHISPERS, "sentient/whispers");
+		
+		multi(EffectInit.Sounds.TRINKET_GLOVE,
+				"trinket/glove1",
+				"trinket/glove2",
+				"trinket/glove3",
+				"trinket/glove4");
+		multi(EffectInit.Sounds.TRINKET_RING,
+				"trinket/glove1",
+				"trinket/glove2",
+				"trinket/glove3",
+				"trinket/glove4");
+		multi(EffectInit.Sounds.TRINKET_CHARM,
+				"trinket/glove1",
+				"trinket/glove2",
+				"trinket/glove3",
+				"trinket/glove4");
 	}
 
 	private void simple(Supplier<SoundEvent> ro, String loc) {

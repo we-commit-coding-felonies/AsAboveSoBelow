@@ -12,7 +12,7 @@ public class RingItem extends AbilityTrinket {
 
 	@Override
 	public boolean onPressedFunc1(ItemStack stack, ServerPlayer player, ServerLevel level) {
-		if (canUse(stack, player)) {
+		if (canUse(stack, player, true)) {
 			return getRune(stack, true).utilityAbility(stack, player, level, BindState.PRESSED, isStrong(stack));
 		}
 		return false;
@@ -20,7 +20,7 @@ public class RingItem extends AbilityTrinket {
 	
 	@Override
 	public boolean onPressedFunc2(ItemStack stack, ServerPlayer player, ServerLevel level) {
-		if (canUse(stack, player)) {
+		if (canUse(stack, player, false)) {
 			return getRune(stack, false).utilityAbility(stack, player, level, BindState.PRESSED, isStrong(stack));
 		}
 		return false;
