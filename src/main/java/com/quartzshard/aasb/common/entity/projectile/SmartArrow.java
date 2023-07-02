@@ -2,6 +2,8 @@ package com.quartzshard.aasb.common.entity.projectile;
 
 import java.util.Comparator;
 import java.util.List;
+
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -27,6 +29,7 @@ import com.quartzshard.aasb.common.network.client.DrawParticleAABBPacket.Particl
 import com.quartzshard.aasb.common.network.client.DrawParticleLinePacket;
 import com.quartzshard.aasb.common.network.client.DrawParticleLinePacket.LineParticlePreset;
 import com.quartzshard.aasb.data.AASBTags.EntityTP;
+import com.quartzshard.aasb.init.EffectInit;
 import com.quartzshard.aasb.util.CalcHelper;
 import com.quartzshard.aasb.util.EntityHelper;
 
@@ -155,7 +158,7 @@ public class SmartArrow extends Arrow {
 	protected boolean isValidHomingTarget(LivingEntity entity) {
 		return canHitEntity(entity)
 				&& !entity.is(getOwner())
-				&& !entity.getType().is(EntityTP.PHILO_HOMING_ARROW_BLACKLIST)
+				&& !entity.getType().is(EntityTP.HOMING_ARROW_BLACKLIST)
 				&& !entity.isInvulnerable()
 				&& (!entity.isInvisible() || entity.isCurrentlyGlowing())
 				&& (level.clip(new ClipContext(this.getBoundingBox().getCenter(), entity.getBoundingBox().getCenter(), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this)).getType() == HitResult.Type.MISS)
@@ -176,7 +179,8 @@ public class SmartArrow extends Arrow {
 					AASBNet.toClient(new DrawParticleLinePacket(this.position(), targetPos, LineParticlePreset.ARROW_TARGET_LOCK), plr);
 				}
 			}
-			//level.playSound(null, this.blockPosition(), EffectInit.ARCHANGELS_REDIRECT.get(), this.getSoundSource(), 0.1f, 1);
+			level.playSound(null, this.blockPosition(), EffectInit.Sounds.TARGETLOCK.get(), this.getSoundSource(), 1f, 1);
+			level.playSound(null, new BlockPos(targetPos), EffectInit.Sounds.TARGETLOCK.get(), this.getSoundSource(), 1f, 0.5f);
 			changeTarget(targetPos);
 			changeAiState((byte) 1);
 		}

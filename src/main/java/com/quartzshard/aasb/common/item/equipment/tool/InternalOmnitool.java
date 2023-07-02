@@ -2,16 +2,25 @@ package com.quartzshard.aasb.common.item.equipment.tool;
 
 import com.quartzshard.aasb.AsAboveSoBelow;
 import com.quartzshard.aasb.api.item.IStaticSpeedBreaker;
+import com.quartzshard.aasb.api.item.bind.ICanHandleKeybind;
+import com.quartzshard.aasb.api.item.bind.ICanItemFunc1;
+import com.quartzshard.aasb.api.item.bind.ICanItemFunc2;
 import com.quartzshard.aasb.api.item.bind.ICanItemMode;
 import com.quartzshard.aasb.common.network.server.KeyPressPacket.BindState;
+import com.quartzshard.aasb.common.network.server.KeyPressPacket.PressContext;
+import com.quartzshard.aasb.common.network.server.KeyPressPacket.ServerBind;
 import com.quartzshard.aasb.init.AlchemyInit;
 import com.quartzshard.aasb.init.ObjectInit;
+import com.quartzshard.aasb.init.AlchemyInit.TrinketRunes;
 import com.quartzshard.aasb.util.NBTHelper;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DiggerItem;
@@ -26,7 +35,7 @@ import net.minecraft.world.level.block.state.BlockState;
  * used internally by the shovel areablast, but is also a nice dev / test item
  * @author solunareclipse1
  */
-public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker, ICanItemMode {
+public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker, ICanHandleKeybind {
 	public InternalOmnitool(float damage, float speed, Tier tier, TagKey<Block> breakableBlocks, Properties props) {
 		super(damage, speed, tier, breakableBlocks, props);
 	}
@@ -70,9 +79,8 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 	public boolean isCorrectToolForDrops(ItemStack stack, BlockState state) {
 		return isFoil(stack) || net.minecraftforge.common.TierSortingRegistry.isCorrectTierForDrops(AASBToolTier.HERMETIC, state);
 	}
-	
-	@Override
-	public boolean onPressedItemMode(ItemStack stack, ServerPlayer player, ServerLevel level) {
+
+	public boolean toggleInstamine(ItemStack stack) {
 		boolean wasInstamine = NBTHelper.Item.getBoolean(stack, "Instamine", false);
 		NBTHelper.Item.setBoolean(stack, "Instamine", !wasInstamine);
 		//if (wasInstamine)
@@ -85,6 +93,43 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 	@Override
 	public int blockBreakSpeedInTicks(ItemStack stack, BlockState state) {
 		return NBTHelper.Item.getBoolean(stack, "Instamine", false) ? 1 : 2;
+	}
+
+	/**
+	 * serverside code can be thrown in here to quickly test it
+	 */
+	@Override
+	public boolean handle(PressContext ctx) {
+		switch (ctx.bind()) {
+		case ITEMMODE:
+			ServerPlayer plr = ctx.player();
+			if (ctx.state() == BindState.PRESSED) {
+				if (plr.isShiftKeyDown()) {
+					plr.displayClientMessage(new TextComponent("GODMODE"), false);
+					plr.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, Integer.MAX_VALUE, 4));
+					plr.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, Integer.MAX_VALUE, 0));
+					plr.addEffect(new MobEffectInstance(MobEffects.HEAL, Integer.MAX_VALUE, 99));
+					plr.addEffect(new MobEffectInstance(MobEffects.SATURATION, Integer.MAX_VALUE, 99));
+				} else {
+					plr.displayClientMessage(new TextComponent("mortal mode"), false);
+					plr.removeEffect(MobEffects.DAMAGE_RESISTANCE);
+					plr.removeEffect(MobEffects.FIRE_RESISTANCE);
+					plr.removeEffect(MobEffects.HEAL);
+					plr.removeEffect(MobEffects.SATURATION);
+				}
+			}
+		case ITEMFUNC_1:
+			return ctx.state() == BindState.PRESSED
+			&& TrinketRunes.FIRE.get().combatAbility(ctx.stack(), ctx.player(), ctx.level(), BindState.PRESSED, true);
+		case ITEMFUNC_2:
+			return ctx.state() == BindState.PRESSED
+			&& TrinketRunes.ETHEREAL.get().combatAbility(ctx.stack(), ctx.player(), ctx.level(), BindState.PRESSED, true);
+		case EMPOWER:
+			return ctx.state() == BindState.PRESSED
+			&& toggleInstamine(ctx.stack());
+		default:
+			return false;
+		}
 	}
 
 }

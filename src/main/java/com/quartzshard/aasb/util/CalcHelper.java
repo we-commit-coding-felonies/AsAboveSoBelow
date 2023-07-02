@@ -25,7 +25,7 @@ public class CalcHelper {
 	}
 	
 	
-	// following 4 functions taken from EntityHomingArrow
+	// following 4 functions taken from projecte EntityHomingArrow
 	public static double clampAbs(double param, double maxMagnitude) {
 		if (Math.abs(param) > maxMagnitude) {
 			if (param < 0) {
@@ -46,6 +46,16 @@ public class CalcHelper {
 			vDot = 1.0;
 		}
 		return Math.acos(vDot);
+	}
+
+	/**
+	 * angleBetween, but outputs degrees (0-180) instead of radians (0-pi)
+	 * @param v1
+	 * @param v2
+	 * @return
+	 */
+	public static double angleBetweenDeg(Vec3 v1, Vec3 v2) {
+		return Math.toDegrees(angleBetween(v1, v2));
 	}
 
 	public static double wrap180Radian(double radian) {

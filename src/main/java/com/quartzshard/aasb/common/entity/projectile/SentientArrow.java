@@ -18,6 +18,7 @@ import com.quartzshard.aasb.common.network.client.DrawParticleLinePacket.LinePar
 import com.quartzshard.aasb.config.DebugCfg;
 import com.quartzshard.aasb.data.AASBTags.BlockTP;
 import com.quartzshard.aasb.data.AASBTags.EntityTP;
+import com.quartzshard.aasb.init.EffectInit;
 import com.quartzshard.aasb.init.ObjectInit;
 import com.quartzshard.aasb.util.EntityHelper;
 import com.quartzshard.aasb.util.LogHelper;
@@ -193,6 +194,7 @@ public class SentientArrow extends AbstractArrow {
 		BlockPos pos = hitRes.getBlockPos();
 		BlockState hit = level.getBlockState(hitRes.getBlockPos());
 		if (!hit.isAir()) {
+			// TODO re-enable when implemented
 			if (false && hit.is(BlockTP.ARROW_ANNIHILATE)) {
 				if (transmuteBlockIntoCovDust(pos)) {
 					//level.playSound(null, pos, EffectInit.ARCHANGELS_SENTIENT_HIT.get(), this.getSoundSource(), 1, 2);
@@ -781,6 +783,8 @@ public class SentientArrow extends AbstractArrow {
 					// if there were none with line of sight, just go with closest
 					chosenTarget = validTargets.get(0);
 				}
+				level.playSound(null, this.blockPosition(), EffectInit.Sounds.TARGETLOCK.get(), this.getSoundSource(), 1f, 1);
+				level.playSound(null, chosenTarget.blockPosition(), EffectInit.Sounds.TARGETLOCK.get(), this.getSoundSource(), 1f, 0.5f);
 				return chosenTarget;
 			}
 		}
@@ -845,7 +849,7 @@ public class SentientArrow extends AbstractArrow {
 		return entity != null
 				&& owner != null
 				&& canTheoreticallyHitEntity(entity)
-				&& !entity.getType().is(EntityTP.PHILO_HOMING_ARROW_BLACKLIST)
+				&& !entity.getType().is(EntityTP.HOMING_ARROW_BLACKLIST)
 				&& (!entity.isInvisible() || entity.isCurrentlyGlowing())
 				&& !entity.hasEffect(ObjectInit.MobEffects.TRANSMUTING.get())
 				&& !EntityHelper.isTamedByOrTrusts(entity, owner);

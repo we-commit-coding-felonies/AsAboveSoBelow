@@ -14,7 +14,8 @@ public class CharmItem extends AbilityTrinket {
 	
 	@Override
 	public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
-		if (entity instanceof ServerPlayer plr && level instanceof ServerLevel lvl) {
+		if ((selected || slot < 9)
+			&& entity instanceof ServerPlayer plr && level instanceof ServerLevel lvl) {
 			boolean strong = isStrong(stack);
 			if (canUse(stack, plr, true)) {
 				getRune(stack, true).passiveAbility(stack, plr, lvl, BindState.HELD, strong);

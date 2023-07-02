@@ -149,7 +149,7 @@ public class ArcaneRune extends TrinketRune {
 	 * @return if the entity was actually transformed
 	 */
 	public static boolean entityItemizer(LivingEntity entity, @Nullable Entity culprit, @Nullable Entity cause) {
-		if (!entity.getType().is(EntityTP.ITEMIZER_ENTITY_BLACKLIST)) {
+		if (!entity.getType().is(EntityTP.ITEMIZER_BLACKLIST)) {
 			if (entity instanceof Player player) {
 				// TODO: something a bit more interesting than this
 				if (player.getHealth() < player.getMaxHealth()/2 || !AmuletItem.isBarrierActive(player)) {

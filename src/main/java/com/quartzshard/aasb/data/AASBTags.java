@@ -122,18 +122,21 @@ public class AASBTags {
 	        super(generator, AsAboveSoBelow.MODID, helper);
 	    }
 
-		public static final TagKey<EntityType<?>> ITEMIZER_ENTITY_BLACKLIST = makeTag("itemizer_entity_blacklist");
-		public static final TagKey<EntityType<?>> PHILO_HOMING_ARROW_BLACKLIST = makeTag("philo_homing_arrow_blacklist");
+		public static final TagKey<EntityType<?>> ITEMIZER_BLACKLIST = makeTag("itemizer_entity_blacklist");
+		public static final TagKey<EntityType<?>> HOMING_ARROW_BLACKLIST = makeTag("philo_homing_arrow_blacklist");
+		public static final TagKey<EntityType<?>> CLAIRVOYANCE_BLACKLIST = makeTag("clairvoyance_blacklist");
 
 	    @Override
 	    protected void addTags() {
-	        tag(ITEMIZER_ENTITY_BLACKLIST)
-	    		.add(EntityType.ENDER_DRAGON)
-	        ;
+	        tag(ITEMIZER_BLACKLIST)
+	    		.add(EntityType.ENDER_DRAGON);
 	        
-	        tag(PHILO_HOMING_ARROW_BLACKLIST)
+	        tag(HOMING_ARROW_BLACKLIST)
 	    		.add(EntityType.ARMOR_STAND)
 				.add(EntityType.ENDERMAN);
+	        
+	        tag(CLAIRVOYANCE_BLACKLIST)
+	        	.add(EntityType.ARMOR_STAND);
 	    }
 	    
 	    private static TagKey<EntityType<?>> makeTag(String name) {
