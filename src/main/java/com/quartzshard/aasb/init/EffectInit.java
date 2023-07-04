@@ -4,11 +4,9 @@ import com.quartzshard.aasb.AsAboveSoBelow;
 
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -61,7 +59,8 @@ public class EffectInit {
 
 				TARGETLOCK = snd("misc.targetlock"),
 				WHISTLE = snd("misc.whistle"),
-				MUSTANG = snd("misc.mustang");
+				MUSTANG = snd("misc.mustang"),
+				TICK = snd("misc.tick");
 		
 		private static RegistryObject<SoundEvent> snd(String name) {
 			return REG.register(name, () -> new SoundEvent(AsAboveSoBelow.rl(name)));

@@ -13,7 +13,7 @@ import net.minecraft.client.ParticleStatus;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleEngine;
-import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleOptions;
 
@@ -43,6 +43,18 @@ public class ClientHelper {
 	}
 	
 	/**
+	 * DO NOT CALL THIS SERVERSIDE!!!!!
+	 * @return clients sound manager
+	 */
+	public static SoundManager getSoundManager() {
+		return mc().getSoundManager();
+	}
+	
+	public static ClientLevel level() {
+		return mc().level;
+	}
+	
+	/**
 	 * only use this if you have to <br>
 	 * functions similarly to level.addParticle, but it returns the partice it created
 	 * @return
@@ -64,9 +76,8 @@ public class ClientHelper {
 				} else {
 					return status == ParticleStatus.MINIMAL ? null : engine.createParticle(particle, x, y, z, vx, vy, vz);
 				}
-			} else {
-				return null;
 			}
+			return null;
 		} catch (Throwable crash) {
 			CrashReport report = CrashReport.forThrowable(crash, "Exception while adding particle");
 			CrashReportCategory category = report.addCategory("Particle being added");

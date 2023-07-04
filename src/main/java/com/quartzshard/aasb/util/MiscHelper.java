@@ -1,42 +1,21 @@
 package com.quartzshard.aasb.util;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Random;
-import java.util.function.Predicate;
 
-import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.jetbrains.annotations.Nullable;
 
 import com.quartzshard.aasb.common.damage.source.AASBDmgSrc;
-import com.quartzshard.aasb.common.item.LootBallItem;
-import com.quartzshard.aasb.common.network.AASBNet;
-import com.quartzshard.aasb.common.network.client.CutParticlePacket;
-import com.quartzshard.aasb.init.EffectInit;
 
-import net.minecraft.Util;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.Particle;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.util.Mth;
-import net.minecraft.world.Container;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.EntityDamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -54,7 +33,6 @@ import net.minecraft.world.entity.monster.ZombifiedPiglin;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.enchantment.FishingSpeedEnchantment;
@@ -62,28 +40,15 @@ import net.minecraft.world.item.enchantment.QuickChargeEnchantment;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.CocoaBlock;
 import net.minecraft.world.level.block.CropBlock;
-import net.minecraft.world.level.block.DoublePlantBlock;
-import net.minecraft.world.level.block.FlowerBlock;
 import net.minecraft.world.level.block.GrowingPlantBlock;
-import net.minecraft.world.level.block.HangingRootsBlock;
-import net.minecraft.world.level.block.LevelEvent;
-import net.minecraft.world.level.block.NetherSproutsBlock;
-import net.minecraft.world.level.block.NetherWartBlock;
-import net.minecraft.world.level.block.RootsBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-
-import net.minecraftforge.common.IForgeShearable;
-import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.ToolActions;
 
 /**
  * Some common functions that don't really fit in anywhere else

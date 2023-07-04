@@ -9,8 +9,6 @@ import com.quartzshard.aasb.api.item.IHermeticTool;
 import com.quartzshard.aasb.client.AASBKeys;
 import com.quartzshard.aasb.common.item.LootBallItem;
 import com.quartzshard.aasb.common.item.equipment.tool.AASBToolTier;
-import com.quartzshard.aasb.common.network.AASBNet;
-import com.quartzshard.aasb.common.network.client.CutParticlePacket;
 import com.quartzshard.aasb.data.AASBLang;
 import com.quartzshard.aasb.init.EffectInit;
 import com.quartzshard.aasb.init.ObjectInit;
@@ -36,12 +34,8 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemCooldowns;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.item.ShovelItem;
-import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.Item.Properties;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -49,10 +43,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
-
-import net.minecraftforge.common.Tags;
 
 public class HermeticShovelItem extends ShovelItem implements IHermeticTool {
 	public HermeticShovelItem(int damage, float speed, Properties props) {

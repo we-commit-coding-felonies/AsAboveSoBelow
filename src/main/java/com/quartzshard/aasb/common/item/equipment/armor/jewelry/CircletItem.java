@@ -98,7 +98,7 @@ public class CircletItem extends JewelryArmor implements ICanHeadMode {
 		}
 	}
 	
-	private boolean hatesSeer(LivingEntity ent, Player player) {
+	private static boolean hatesSeer(LivingEntity ent, Player player) {
 		if (ent.isAlive() && ent instanceof EnderMan man) {
 			LivingEntity target = man.getTarget();
 			if (!(player.isCreative() || player.isSpectator())

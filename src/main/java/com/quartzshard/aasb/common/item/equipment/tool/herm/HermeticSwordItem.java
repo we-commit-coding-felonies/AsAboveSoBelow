@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 import java.util.Random;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+
 import org.jetbrains.annotations.NotNull;
 
 import com.google.common.collect.Multimap;
@@ -18,9 +19,9 @@ import com.quartzshard.aasb.common.network.AASBNet;
 import com.quartzshard.aasb.common.network.client.CutParticlePacket;
 import com.quartzshard.aasb.data.AASBLang;
 import com.quartzshard.aasb.init.EffectInit;
-import com.quartzshard.aasb.util.EntityHelper;
 import com.quartzshard.aasb.util.BoxHelper;
 import com.quartzshard.aasb.util.ClientHelper;
+import com.quartzshard.aasb.util.EntityHelper;
 import com.quartzshard.aasb.util.NBTHelper;
 import com.quartzshard.aasb.util.PlayerHelper;
 
@@ -44,7 +45,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemCooldowns;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
-import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -222,8 +222,8 @@ public class HermeticSwordItem extends SwordItem implements IHermeticTool {
 				} else hit.put(victim, 1);
 			}
 			if (level instanceof ServerLevel lvl) {
-				double rot1 = (double)(-Mth.sin(culprit.getYRot() * ((float)Math.PI / 180f)));
-				double rot2 = (double)Mth.cos(culprit.getYRot() * ((float)Math.PI / 180f));
+				double rot1 = -Mth.sin(culprit.getYRot() * ((float)Math.PI / 180f));
+				double rot2 = Mth.cos(culprit.getYRot() * ((float)Math.PI / 180f));
 				Random rand = level.random;
 				double maxNudge = 0.35;
 				Vec3 offset = new Vec3(rand.nextDouble(-maxNudge, maxNudge),rand.nextDouble(-maxNudge, maxNudge),rand.nextDouble(-maxNudge, maxNudge));
@@ -330,8 +330,7 @@ public class HermeticSwordItem extends SwordItem implements IHermeticTool {
 	private static boolean canHit(LivingEntity victim) {
 		if (!victim.isSpectator() && victim.isAlive() && victim.isPickable()) {
 			return !EntityHelper.isInvincible(victim);
-		} else {
-			return false;
 		}
+		return false;
 	}
 }

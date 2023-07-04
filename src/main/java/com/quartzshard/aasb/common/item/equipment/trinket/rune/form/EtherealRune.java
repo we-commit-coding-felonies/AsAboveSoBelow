@@ -6,6 +6,7 @@ import com.quartzshard.aasb.common.entity.projectile.SentientArrow;
 import com.quartzshard.aasb.common.item.equipment.trinket.rune.TrinketRune;
 import com.quartzshard.aasb.common.network.AASBNet;
 import com.quartzshard.aasb.common.network.client.CreateLoopingSoundPacket;
+import com.quartzshard.aasb.common.network.client.CreateLoopingSoundPacket.LoopingSound;
 import com.quartzshard.aasb.common.network.client.DrawParticleLinePacket;
 import com.quartzshard.aasb.common.network.client.DrawParticleLinePacket.LineParticlePreset;
 import com.quartzshard.aasb.common.network.server.KeyPressPacket.BindState;
@@ -22,7 +23,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.projectile.AbstractArrow.Pickup;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -50,7 +50,7 @@ public class EtherealRune extends TrinketRune {
 						new ArrowOptions(1, 1, 0, (byte)0, false, Pickup.DISALLOWED)).get(0);
 				changeTrackedArrow(stack, arrow);
 				for (ServerPlayer plr : ((ServerLevel)player.level).players()) {
-					AASBNet.toClient(new CreateLoopingSoundPacket((byte)1, arrow.getId()), plr);
+					AASBNet.toClient(new CreateLoopingSoundPacket(LoopingSound.SENTIENT_WHISPERS, arrow.getId()), plr);
 				}
 				//EmcHelper.consumeAvaliableEmc(player, Archangel.HOMING.get());
 				PlayerHelper.coolDown(player, stack.getItem(), 15);
@@ -93,7 +93,8 @@ public class EtherealRune extends TrinketRune {
 		Entity tracked = level.getEntity(NBTHelper.Item.getInt(stack, TAG_ARROWTRACKER, -1));
 		if (tracked != null && tracked instanceof SentientArrow arrow) {
 			return arrow;
-		} else return null;
+		}
+		return null;
 	}
 	
 	public void changeTrackedArrow(ItemStack stack, SentientArrow arrow) {

@@ -3,20 +3,12 @@ package com.quartzshard.aasb.common.item.equipment.tool;
 import com.quartzshard.aasb.AsAboveSoBelow;
 import com.quartzshard.aasb.api.item.IStaticSpeedBreaker;
 import com.quartzshard.aasb.api.item.bind.ICanHandleKeybind;
-import com.quartzshard.aasb.api.item.bind.ICanItemFunc1;
-import com.quartzshard.aasb.api.item.bind.ICanItemFunc2;
-import com.quartzshard.aasb.api.item.bind.ICanItemMode;
 import com.quartzshard.aasb.common.network.server.KeyPressPacket.BindState;
 import com.quartzshard.aasb.common.network.server.KeyPressPacket.PressContext;
-import com.quartzshard.aasb.common.network.server.KeyPressPacket.ServerBind;
-import com.quartzshard.aasb.init.AlchemyInit;
-import com.quartzshard.aasb.init.ObjectInit;
 import com.quartzshard.aasb.init.AlchemyInit.TrinketRunes;
 import com.quartzshard.aasb.util.NBTHelper;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.TextComponent;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -87,7 +79,7 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 		//	AlchemyInit.TrinketRunes.FIRE.get().combatAbility(stack, player, level, BindState.PRESSED);
 		//else
 		//	AlchemyInit.TrinketRunes.WATER.get().combatAbility(stack, player, level, BindState.PRESSED);
-		return false;
+		return true;
 	}
 
 	@Override
@@ -104,7 +96,7 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 		case ITEMMODE:
 			ServerPlayer plr = ctx.player();
 			if (ctx.state() == BindState.PRESSED) {
-				if (plr.isShiftKeyDown()) {
+				if (!plr.isShiftKeyDown()) {
 					plr.displayClientMessage(new TextComponent("GODMODE"), false);
 					plr.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, Integer.MAX_VALUE, 4));
 					plr.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, Integer.MAX_VALUE, 0));
@@ -118,6 +110,7 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 					plr.removeEffect(MobEffects.SATURATION);
 				}
 			}
+			return true;
 		case ITEMFUNC_1:
 			return ctx.state() == BindState.PRESSED
 			&& TrinketRunes.FIRE.get().combatAbility(ctx.stack(), ctx.player(), ctx.level(), BindState.PRESSED, true);

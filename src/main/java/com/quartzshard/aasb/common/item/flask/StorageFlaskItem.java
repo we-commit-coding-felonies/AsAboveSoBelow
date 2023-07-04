@@ -1,35 +1,17 @@
 package com.quartzshard.aasb.common.item.flask;
 
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.List;
-import java.util.Locale;
-
-import org.jetbrains.annotations.Nullable;
 
 import com.google.common.base.Enums;
 import com.quartzshard.aasb.api.alchemy.aspects.AspectForm;
 import com.quartzshard.aasb.api.alchemy.aspects.AspectShape;
 import com.quartzshard.aasb.data.AASBLang;
-import com.quartzshard.aasb.init.AlchemyInit.FormTree;
 import com.quartzshard.aasb.util.CalcHelper;
-import com.quartzshard.aasb.util.ClientHelper;
-import com.quartzshard.aasb.util.ColorsHelper;
-import com.quartzshard.aasb.util.ColorsHelper.Color;
-import com.quartzshard.aasb.util.MiscHelper;
 import com.quartzshard.aasb.util.NBTHelper;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;

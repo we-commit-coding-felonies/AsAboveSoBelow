@@ -1,5 +1,8 @@
 package com.quartzshard.aasb.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -8,6 +11,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.phys.AABB;
 
 public class WorldHelper {
 	public static boolean isBlockLoaded(@Nullable BlockGetter world, @NotNull BlockPos pos) {
@@ -21,6 +25,7 @@ public class WorldHelper {
 		}
 		return true;
 	}
+	
 	@Nullable
 	public static BlockEntity getBlockEntity(@Nullable BlockGetter level, @NotNull BlockPos pos) {
 		if (!isBlockLoaded(level, pos)) {
@@ -28,5 +33,17 @@ public class WorldHelper {
 			return null;
 		}
 		return level.getBlockEntity(pos);
+	}
+
+
+	public static List<BlockEntity> allTEInBox(Level level, AABB box) {
+		List<BlockEntity> list = new ArrayList<>();
+		for (BlockPos pos : BoxHelper.allBlocksInBox(box)) {
+			BlockEntity te = getBlockEntity(level, pos);
+			if (te != null) {
+				list.add(te);
+			}
+		}
+		return list;
 	}
 }

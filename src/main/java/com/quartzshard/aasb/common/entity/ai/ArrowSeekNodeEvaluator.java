@@ -25,13 +25,13 @@ public class ArrowSeekNodeEvaluator extends NodeEvaluator {
 	public ArrowSeekNodeEvaluator() {
 	}
 
-	public void prepare(PathNavigationRegion pLevel, AbstractArrow arrow) {
-		this.level = pLevel;
+	public void prepare(PathNavigationRegion level, AbstractArrow arrow) {
+		this.level = level;
 		this.arrow = arrow;
 		this.nodes.clear();
-		this.entityWidth = Mth.floor(arrow.getBbWidth() + 1.0F);
-		this.entityHeight = Mth.floor(arrow.getBbHeight() + 1.0F);
-		this.entityDepth = Mth.floor(arrow.getBbWidth() + 1.0F);
+		this.entityWidth = Mth.floor(arrow.getBbWidth() + 1);
+		this.entityHeight = Mth.floor(arrow.getBbHeight() + 1);
+		this.entityDepth = Mth.floor(arrow.getBbWidth() + 1);
 	}
 
 	@Override
@@ -41,17 +41,18 @@ public class ArrowSeekNodeEvaluator extends NodeEvaluator {
 	}
 
 	@Override
-	public Target getGoal(double pX, double pY, double pZ) {
-		return new Target(super.getNode(Mth.floor(pX), Mth.floor(pY), Mth.floor(pZ)));
+	public Target getGoal(double x, double y, double z) {
+		return new Target(super.getNode(Mth.floor(x), Mth.floor(y), Mth.floor(z)));
 	}
 
+	@Override
 	@Nullable
-	protected Node getNode(int pX, int pY, int pZ) {
-		Node node = super.getNode(pX, pY, pZ);
+	protected Node getNode(int x, int y, int z) {
+		Node node = super.getNode(x, y, z);
 
-		BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos();
-		BlockPathTypes blockpathtypes = getBlockPathTypeRaw(this.level, blockpos$mutableblockpos.set(pX, pY, pZ));
-		if (blockpathtypes != BlockPathTypes.OPEN) {
+		BlockPos.MutableBlockPos mBlockPos = new BlockPos.MutableBlockPos();
+		BlockPathTypes blockPathTypes = getBlockPathTypeRaw(this.level, mBlockPos.set(x, y, z));
+		if (blockPathTypes != BlockPathTypes.OPEN) {
 			node.closed = true;
 		}
 		return node;
@@ -60,34 +61,34 @@ public class ArrowSeekNodeEvaluator extends NodeEvaluator {
 	@Override
 	public int getNeighbors(Node[] neighbours, Node thisNode) {
 		int i = 0;
-		Node node = this.getNode(thisNode.x, thisNode.y, thisNode.z + 1);
-		if (this.isOpen(node)) {
-			neighbours[i++] = node;
+		Node south = this.getNode(thisNode.x, thisNode.y, thisNode.z + 1);
+		if (ArrowSeekNodeEvaluator.isOpen(south)) {
+			neighbours[i++] = south;
 		}
 
-		Node node1 = this.getNode(thisNode.x - 1, thisNode.y, thisNode.z);
-		if (this.isOpen(node1)) {
-			neighbours[i++] = node1;
+		Node west = this.getNode(thisNode.x - 1, thisNode.y, thisNode.z);
+		if (ArrowSeekNodeEvaluator.isOpen(west)) {
+			neighbours[i++] = west;
 		}
 
-		Node node2 = this.getNode(thisNode.x + 1, thisNode.y, thisNode.z);
-		if (this.isOpen(node2)) {
-			neighbours[i++] = node2;
+		Node east = this.getNode(thisNode.x + 1, thisNode.y, thisNode.z);
+		if (ArrowSeekNodeEvaluator.isOpen(east)) {
+			neighbours[i++] = east;
 		}
 
-		Node node3 = this.getNode(thisNode.x, thisNode.y, thisNode.z - 1);
-		if (this.isOpen(node3)) {
-			neighbours[i++] = node3;
+		Node north = this.getNode(thisNode.x, thisNode.y, thisNode.z - 1);
+		if (ArrowSeekNodeEvaluator.isOpen(north)) {
+			neighbours[i++] = north;
 		}
 
-		Node node4 = this.getNode(thisNode.x, thisNode.y + 1, thisNode.z);
-		if (this.isOpen(node4)) {
-			neighbours[i++] = node4;
+		Node above = this.getNode(thisNode.x, thisNode.y + 1, thisNode.z);
+		if (ArrowSeekNodeEvaluator.isOpen(above)) {
+			neighbours[i++] = above;
 		}
 
-		Node node5 = this.getNode(thisNode.x, thisNode.y - 1, thisNode.z);
-		if (this.isOpen(node5)) {
-			neighbours[i++] = node5;
+		Node below = this.getNode(thisNode.x, thisNode.y - 1, thisNode.z);
+		if (ArrowSeekNodeEvaluator.isOpen(below)) {
+			neighbours[i++] = below;
 		}
 		// This code below does checking for non-cardinals, but needs work to stop
 		// corner clipping
@@ -195,27 +196,26 @@ public class ArrowSeekNodeEvaluator extends NodeEvaluator {
 		return i;
 	}
 
-	private boolean isOpen(@Nullable Node pNode) {
-		return pNode != null && !pNode.closed;
+	private static boolean isOpen(@Nullable Node node) {
+		return node != null && !node.closed;
 	}
 
-	public static BlockPathTypes getBlockPathTypeRaw(BlockGetter pLevel, BlockPos pPos) {
-		BlockState blockstate = pLevel.getBlockState(pPos);
-		if (blockstate.isAir() || blockstate.is(BlockTP.ARROW_NOCLIP)) {
+	public static BlockPathTypes getBlockPathTypeRaw(BlockGetter level, BlockPos pos) {
+		BlockState state = level.getBlockState(pos);
+		if (state.isAir() || state.is(BlockTP.ARROW_NOCLIP)) {
 			return BlockPathTypes.OPEN;
-		} else {
-			return BlockPathTypes.BLOCKED;
 		}
+		return BlockPathTypes.BLOCKED;
 	}
 
 	@Override
-	public BlockPathTypes getBlockPathType(BlockGetter pBlockaccess, int pX, int pY, int pZ, Mob pEntityliving,
-			int pXSize, int pYSize, int pZSize, boolean pCanBreakDoors, boolean pCanEnterDoors) {
+	public BlockPathTypes getBlockPathType(BlockGetter level, int x, int y, int z, Mob mob,
+			int xSize, int ySize, int zSize, boolean canBreakDoor, boolean canOpenDoor) {
 		return null;
 	}
 
 	@Override
-	public BlockPathTypes getBlockPathType(BlockGetter pLevel, int pX, int pY, int pZ) {
+	public BlockPathTypes getBlockPathType(BlockGetter level, int x, int y, int z) {
 		return null;
 	}
 }

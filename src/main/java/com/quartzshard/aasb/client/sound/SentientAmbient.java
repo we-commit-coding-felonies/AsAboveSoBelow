@@ -33,6 +33,7 @@ public class SentientAmbient extends AbstractTickableSoundInstance {
 		this.maxPitchChangeTime = maxPitchChangeTime;
 	}
 
+	@Override
 	public void tick() {
 		if (mustCease()) cease();
 		else {

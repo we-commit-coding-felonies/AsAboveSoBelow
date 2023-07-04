@@ -4,6 +4,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.quartzshard.aasb.api.item.ITrinket;
 import com.quartzshard.aasb.api.item.bind.ICanItemMode;
+import com.quartzshard.aasb.common.item.equipment.trinket.rune.RuneTicks;
 import com.quartzshard.aasb.common.item.equipment.trinket.rune.TrinketRune;
 import com.quartzshard.aasb.common.item.equipment.trinket.rune.special.EmpowermentRune;
 import com.quartzshard.aasb.common.network.server.KeyPressPacket.PressContext;
@@ -14,9 +15,12 @@ import com.quartzshard.aasb.util.PlayerHelper;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 public abstract class AbilityTrinket extends Item implements ITrinket, ICanItemMode {
 	public AbilityTrinket(Properties props) {
@@ -31,12 +35,11 @@ public abstract class AbilityTrinket extends Item implements ITrinket, ICanItemM
 		if (ITrinket.super.handle(ctx))
 			return true;
 		return ctx.bind() == ServerBind.ITEMMODE && randomizeRunes(ctx.player(), ctx.stack());
-		
 	}
 	private boolean randomizeRunes(ServerPlayer player, ItemStack stack) {
 		if (player.isShiftKeyDown()) {
 			clearRunes(stack);
-			setRune(stack, true, TrinketRunes.FIRE.get());
+			setRune(stack, true, TrinketRunes.ARCANE.get());
 			setRune(stack, false, TrinketRunes.EMPOWERMENT.get());
 		} else {
 			TrinketRune[] runes = TrinketRunes.getReg().getValues().toArray(TrinketRune[]::new);
@@ -52,6 +55,28 @@ public abstract class AbilityTrinket extends Item implements ITrinket, ICanItemM
 		return true;
 	}
 	
+	@Override
+	public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
+		if (entity instanceof ServerPlayer plr && level instanceof ServerLevel lvl) {
+			boolean strong = isStrong(stack);
+			if (canUse(stack, plr, true)) {
+				tryTickRune(getRune(stack, true), stack, plr, lvl, strong);
+			}
+			if (canUse(stack, plr, false)) {
+				tryTickRune(getRune(stack, false), stack, plr, lvl, strong);
+			}
+		}
+	}
+	
+	private <R extends TrinketRune> void tryTickRune(R rune, ItemStack stack, ServerPlayer player, ServerLevel level, boolean strong) {
+		RuneTicks tInfo = rune.getClass().getAnnotation(RuneTicks.class);
+		if (tInfo != null) {
+			tickRune(rune, tInfo, stack, player, level, strong);
+		}
+	}
+	
+	public abstract <R extends TrinketRune> void tickRune(R rune, RuneTicks tInfo, ItemStack stack, ServerPlayer player, ServerLevel level, boolean strong);
+	
 	public boolean canUse(ItemStack stack, ServerPlayer player) {
 		return !PlayerHelper.onCooldown(player, stack.getItem()) && hasAnyRune(stack);
 	}
@@ -62,7 +87,7 @@ public abstract class AbilityTrinket extends Item implements ITrinket, ICanItemM
 	
 	public boolean isStrong(ItemStack stack) {
 		for (int i = 0; i < 2; i++) {
-			if (getRune(stack, i == 0, TrinketRunes.EMPOWERMENT.get()) != null)
+			if (getRune(stack, i == 0, (EmpowermentRune)TrinketRunes.EMPOWERMENT.get()) != null)
 				return EmpowermentRune.hasBoost(stack);
 		}
 		return false;
@@ -103,7 +128,7 @@ public abstract class AbilityTrinket extends Item implements ITrinket, ICanItemM
 
 	@Nullable
 	@SuppressWarnings("unchecked")
-	public <R extends TrinketRune> boolean hasRune(ItemStack stack, R expected) {
+	public <R extends TrinketRune> boolean hasRune(ItemStack stack, @SuppressWarnings("unused") R expected) {
 		CompoundTag[] runeTags = {
 				NBTHelper.Item.getCompound(stack, TAG_RUNE_1, true),
 				NBTHelper.Item.getCompound(stack, TAG_RUNE_2, true)
@@ -148,7 +173,7 @@ public abstract class AbilityTrinket extends Item implements ITrinket, ICanItemM
 
 	@Nullable
 	@SuppressWarnings("unchecked")
-	public <R extends TrinketRune> R getRune(ItemStack stack, boolean main, R expected) {
+	public <R extends TrinketRune> R getRune(ItemStack stack, boolean main, @SuppressWarnings("unused") R expected) {
 		CompoundTag runeTag = NBTHelper.Item.getCompound(stack, main?TAG_RUNE_1:TAG_RUNE_2, true);
 		if (runeTag != null) {
 			String runeId = runeTag.getString("rl");
@@ -169,7 +194,7 @@ public abstract class AbilityTrinket extends Item implements ITrinket, ICanItemM
 
 	@Nullable
 	@SuppressWarnings("unchecked")
-	public <R extends TrinketRune> R getRune(ItemStack stack, R expected) {
+	public <R extends TrinketRune> R getRune(ItemStack stack, @SuppressWarnings("unused") R expected) {
 		CompoundTag[] runeTags = {
 				NBTHelper.Item.getCompound(stack, TAG_RUNE_1, true),
 				NBTHelper.Item.getCompound(stack, TAG_RUNE_2, true)

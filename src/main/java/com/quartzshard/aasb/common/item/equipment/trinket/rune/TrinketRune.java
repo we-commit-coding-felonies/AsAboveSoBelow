@@ -4,7 +4,6 @@ import org.jetbrains.annotations.Nullable;
 
 import com.quartzshard.aasb.common.network.server.KeyPressPacket.BindState;
 import com.quartzshard.aasb.init.AlchemyInit;
-import com.quartzshard.aasb.init.ObjectInit;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;

@@ -3,17 +3,13 @@ package com.quartzshard.aasb.common.network.client;
 import java.util.Random;
 import java.util.function.Supplier;
 
-import com.quartzshard.aasb.init.EffectInit;
 import com.quartzshard.aasb.util.ClientHelper;
 
-import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.ParticleStatus;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import net.minecraftforge.network.NetworkEvent;
@@ -21,9 +17,9 @@ import net.minecraftforge.network.NetworkEvent;
 /**
  * preset multi-particle-type effects
  */
-public record PresetParticlePacket(FXPreset preset, Vec3 pos) {
+public record PresetParticlePacket(ParticlePreset preset, Vec3 pos) {
 	
-	public enum FXPreset {
+	public enum ParticlePreset {
 		MUSTANG
 	}
 	
@@ -35,7 +31,7 @@ public record PresetParticlePacket(FXPreset preset, Vec3 pos) {
 	}
 
 	public static PresetParticlePacket dec(FriendlyByteBuf buffer) {
-		return new PresetParticlePacket(buffer.readEnum(FXPreset.class),
+		return new PresetParticlePacket(buffer.readEnum(ParticlePreset.class),
 				new Vec3(buffer.readDouble(),buffer.readDouble(),buffer.readDouble()));
 	}
 	

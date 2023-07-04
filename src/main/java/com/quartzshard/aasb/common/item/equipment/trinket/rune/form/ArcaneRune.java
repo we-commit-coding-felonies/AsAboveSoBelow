@@ -2,19 +2,35 @@ package com.quartzshard.aasb.common.item.equipment.trinket.rune.form;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.jetbrains.annotations.Nullable;
 
 import com.quartzshard.aasb.common.damage.source.AASBDmgSrc;
-import com.quartzshard.aasb.common.entity.projectile.SentientArrow;
 import com.quartzshard.aasb.common.item.equipment.armor.jewelry.AmuletItem;
+import com.quartzshard.aasb.common.item.equipment.trinket.RingItem;
+import com.quartzshard.aasb.common.item.equipment.trinket.rune.RuneTicks;
 import com.quartzshard.aasb.common.item.equipment.trinket.rune.TrinketRune;
+import com.quartzshard.aasb.common.network.AASBNet;
+import com.quartzshard.aasb.common.network.client.DrawParticleAABBPacket;
+import com.quartzshard.aasb.common.network.client.DrawParticleAABBPacket.AABBParticlePreset;
+import com.quartzshard.aasb.common.network.client.ModifyPlayerVelocityPacket;
+import com.quartzshard.aasb.common.network.client.ModifyPlayerVelocityPacket.VecOp;
 import com.quartzshard.aasb.common.network.server.KeyPressPacket.BindState;
+import com.quartzshard.aasb.data.AASBTags.BlockTP;
 import com.quartzshard.aasb.data.AASBTags.EntityTP;
+import com.quartzshard.aasb.data.AASBTags.TETP;
+import com.quartzshard.aasb.init.AlchemyInit.TrinketRunes;
+import com.quartzshard.aasb.init.EffectInit;
 import com.quartzshard.aasb.init.ObjectInit;
+import com.quartzshard.aasb.util.BoxHelper;
 import com.quartzshard.aasb.util.EntityHelper;
+import com.quartzshard.aasb.util.NBTHelper;
 import com.quartzshard.aasb.util.PlayerHelper;
+import com.quartzshard.aasb.util.WorldHelper;
 
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
@@ -22,25 +38,49 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.level.chunk.LevelChunk.BoundTickingBlockEntity;
+import net.minecraft.world.level.chunk.LevelChunk.RebindableTickingBlockEntityWrapper;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
+import net.minecraftforge.common.ForgeMod;
+import net.minecraftforge.common.IPlantable;
+
+@RuneTicks(utility = true)
 public class ArcaneRune extends TrinketRune {
 	/** splits things into categories so that multiple similar items dont clog up drops */
 	public static final Item[][] ITEMIZER_DEFAULTS = {
@@ -91,6 +131,8 @@ public class ArcaneRune extends TrinketRune {
 				Items.MUSIC_DISC_WARD
 			}
 	};
+	public static final UUID TIME_ACCEL_UUID = UUID.fromString("311f77f1-5573-431d-8340-06511e72d28f");
+	public static final String TAG_ACCELSTART = "TAStartTick";
 
 	@Override
 	public boolean combatAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong) {
@@ -120,10 +162,68 @@ public class ArcaneRune extends TrinketRune {
 		return false;
 	}
 
+	
+	/**
+	 * this is awful
+	 */
 	@Override
 	public boolean utilityAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong) {
 		// TODO: COST
-		// time accel
+		boolean active = isActive(stack); // if we are considered active (TAStartTick >= 0)
+		if (state == BindState.PRESSED) {
+			// toggle code
+			if (!shouldDoAccel(player)) {
+				// since there is nothing active, we enable ourself
+				enable(stack, level);
+				return true;
+			} else if (active) {
+				// another is already active, disable ourself
+				// dont need to check for anything else because
+				// no matter which hand is enabled (main, off, or both)
+				// turning off will mean the number enabled <= 1
+				disable(stack);
+				return true;
+			}
+		} else if (state == BindState.HELD) {
+			// tick acceleration code
+			boolean inOffhand = player.getItemBySlot(EquipmentSlot.OFFHAND) == stack; // flag for if we are in offhand slot
+			boolean isHeld = inOffhand || player.getItemInHand(InteractionHand.MAIN_HAND) == stack; // true if we are being held
+			if (isHeld) {
+				InteractionHand myHand = inOffhand ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND; // the hand we are being held in
+				InteractionHand otherHand = inOffhand ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND; // the other hand that we are *NOT* being held in
+				//boolean meValid = validHeldInHand(player, myHand);
+				boolean otherValid = validHeldInHand(player, otherHand);
+				if (!otherValid && validHeldInHand(player, myHand)) { // meValid && !otherValid
+					// we are the only valid, so we perform the accel
+					jojoReference(player, stack, strong ? 24 : 12, (int)accelTime(stack, level), 1200, strong ? 6 : 0, Long.MAX_VALUE);
+					return true;
+				} else if (!otherValid) {
+					// neither is valid, so we remove speed boost
+					endAccel(player, stack);
+				}
+			} else if (!shouldDoAccel(player)) {
+				endAccel(player, stack);
+			}
+			// fall back on just disabling ourself
+			disable(stack);
+			// old
+			/*boolean doing = meAccel || otherAccel;
+			if (otherAccel) {
+				// we are already accelerating with the other hand, so we stop to prevent stacking
+				stopAccel(stack);
+				resetTimeAccelSpeed(player);
+				return false;
+			} else if (!meAccel) {
+				// no currently held accel item, so we stop
+				if ()
+				stopAccel(stack);
+				resetTimeAccelSpeed(player);
+				boolean held = offhand || player.getItemInHand(InteractionHand.MAIN_HAND) == stack;
+			}
+			int time = (int)accelTime(stack, level);*/
+			//jojoReference(player, stack, strong ? 60 : 30, /*Integer.MAX_VALUE - */time, 1200, strong ? 24 : 0, Long.MAX_VALUE);
+			//return true;
+		}
 		return false;
 	}
 
@@ -134,6 +234,58 @@ public class ArcaneRune extends TrinketRune {
 		return false;
 	}
 	
+
+	public static boolean shouldDoAccel(Player player) {
+		return validHeldInHand(player, InteractionHand.MAIN_HAND)
+				|| validHeldInHand(player, InteractionHand.OFF_HAND);
+	}
+	
+	public static boolean validHeldInHand(Player player, InteractionHand hand) {
+		ItemStack stack = player.getItemInHand(hand);
+		if (!stack.isEmpty() && stack.getItem() instanceof RingItem ring) {
+			ArcaneRune rune = ring.getRune(stack, (ArcaneRune)TrinketRunes.ARCANE.get());
+			if (rune != null) {
+				long start = rune.getStartTime(stack);
+				return 0 <= start && start <= player.level.getGameTime();
+			}
+		}
+		return false;
+	}
+	
+	public long getStartTime(ItemStack stack) {
+		return NBTHelper.Item.getLong(stack, TAG_ACCELSTART, -1);
+	}
+	
+	public boolean isActive(ItemStack stack) {
+		return NBTHelper.Item.getLong(stack, TAG_ACCELSTART, -1) >= 0;
+	}
+	
+	public long accelTime(ItemStack stack, Level level) {
+		return level.getGameTime() - getStartTime(stack);
+	}
+	
+	public void enable(ItemStack stack, Level level) {
+		NBTHelper.Item.setLong(stack, TAG_ACCELSTART, level.getGameTime());
+	}
+	
+	public void endAccel(Player player, ItemStack stack) {
+		disable(stack);
+		resetTimeAccelSpeed(player);
+	}
+	
+	public void disable(ItemStack stack) {
+		NBTHelper.Item.setLong(stack, TAG_ACCELSTART, -1);
+	}
+	
+	/**
+	 * removes all time accel attribute modifiers from a player
+	 * @param player
+	 */
+	public void resetTimeAccelSpeed(Player player) {
+		for (Attribute atr : getTimeAccelAttributes()) {
+			player.getAttribute(atr).removeModifier(TIME_ACCEL_UUID);
+		}
+	}
 
 	public static boolean canItemize(Entity victim) {
 		return victim instanceof LivingEntity lEnt
@@ -242,5 +394,167 @@ public class ArcaneRune extends TrinketRune {
 			return true;
 		}
 		return false;
+	}
+	
+	private static boolean canBeSlowedBy(LivingEntity victim, Player culprit) {
+		return !(victim.is(culprit) || EntityHelper.isImmuneToGravityManipulation(victim));
+	}
+	
+
+	/**
+	 * speeds up time near a player. gets stronger the longer it is active <br>
+	 * should be called every tick while accelerating <br>
+	 * effects of accelerated time include: <p>
+	 * <li> movement / attack speed increase for player
+	 * <li> player gets reduced i-frames
+	 * <li> slowing of other nearby creatures (except players)
+	 * <li> block entity tick acceleration
+	 * <li> fast-forwarding of world time
+	 * 
+	 * @param player The player causing the acceleration
+	 * @param stack item that is performing the acceleration
+	 * @param potency A multiplier for the strength of the effects
+	 * @param tick How long the effect has been active, in ticks
+	 * @param max Number of ticks where the effect caps out (stops getting stronger)
+	 * @param size side length of the AOE box. if <= 0 will disable all AOE effects
+	 */
+	@SuppressWarnings("unchecked")
+	public void jojoReference(Player player, ItemStack stack, double potency, int tick, int max, int size, long plrEmc) {
+		// TODO: COST
+		Level level = player.level;
+		ProfilerFiller profiler = level.getProfiler();
+		profiler.push("AASBjojoReference"); // due to the nature of this function, it gets its own dedicated profiling section
+		
+		for (Attribute attribute : getTimeAccelAttributes()) {
+			player.getAttribute(attribute).removeModifier(TIME_ACCEL_UUID);
+		} // clearing old modifiers to make room for updated ones
+		double curPow = Math.min(1d, (double)tick/(double)max);
+		double selfSpeedMult = curPow * potency;// + (10d/3d-1d); // 10/3-1 cancels out the movespeed penalty when using an item
+		for (Attribute attribute : getTimeAccelAttributes()) {
+			player.getAttribute(attribute).addTransientModifier(new AttributeModifier(
+				TIME_ACCEL_UUID,
+				"aasb:time_acceleration",
+				selfSpeedMult,
+				Operation.MULTIPLY_TOTAL
+			));
+		}
+		if (player.invulnerableTime > 0) { // decreased iframes when accelerating
+			player.invulnerableTime = Math.max(0, player.invulnerableTime - (int)(10*(curPow)));
+		}
+		// sound interval approach 1 per tick
+		if (tick % (int)(20 - (19*curPow)) == 0) {
+			boolean highPitch = NBTHelper.Item.getBoolean(stack, "TickSoundPitch", false);
+			stack.setPopTime(3); // funky hotbar anim
+			level.playSound(null, player, EffectInit.Sounds.TICK.get(), SoundSource.PLAYERS, 1, highPitch ? 2f : 1);
+			NBTHelper.Item.setBoolean(stack, "TickSoundPitch", !highPitch); // TODO: stop this nbt sound crap
+		}
+		// aoe stuff
+		if (size > 0) {
+			double mobSlow = Math.min(potency, 1 - curPow);
+			Vec3 slowVec = new Vec3(mobSlow, mobSlow, mobSlow);
+			Vec3 cent = player.position();
+			if (player.isOnGround())
+				cent = cent.add(0, size/2, 0);
+			AABB aoe = AABB.ofSize(cent, size, size, size);
+			AASBNet.toClient(new DrawParticleAABBPacket(BoxHelper.getMin(aoe), BoxHelper.getMax(aoe), AABBParticlePreset.DEBUG), (ServerPlayer)player);
+			
+			for ( LivingEntity ent : level.getEntitiesOfClass(LivingEntity.class, aoe, entity -> canBeSlowedBy(entity, player)) ) {
+				Vec3 vel = ent.getDeltaMovement();
+				if (ent instanceof ServerPlayer plr) {
+					AASBNet.toClient(new ModifyPlayerVelocityPacket(slowVec, VecOp.MULTIPLY), plr);
+				}
+				ent.setDeltaMovement(vel.multiply(slowVec));
+			}
+
+			int extraTicks = (int)(selfSpeedMult/2d);//(int) (20 * (potency/30));// (ProjectEConfig.server.effects.timePedBonus.get() * (potency/30));
+			System.out.println(extraTicks);
+			
+			// world time acceleration
+			// TODO: make the sun/moon not teleport
+			if (level.getGameRules().getBoolean(GameRules.RULE_DAYLIGHT)) {
+				long time = level.getDayTime();
+				long newTime = time+extraTicks;
+				if (newTime > 0 && level instanceof ClientLevel lvl) {
+					lvl.setDayTime(newTime);
+				} else if (level instanceof ServerLevel lvl) {
+					lvl.setDayTime(newTime);
+				}
+			}
+			
+			if (!level.isClientSide()) {
+			// most of the stuff inside this if() is taken directly from ProjectE's TimeWatch.java
+				long toConsume = 0;
+				for (BlockEntity blockEntity : WorldHelper.allTEInBox(level, aoe)) {
+					if (toConsume > plrEmc) break;
+					else if (!blockEntity.isRemoved() && !TETP.NO_TICKACCEL_LOOKUP.contains(blockEntity.getType())) {
+						BlockPos pos = blockEntity.getBlockPos();
+						if (level.shouldTickBlocksAt(ChunkPos.asLong(pos))) {
+							LevelChunk chunk = level.getChunkAt(pos);
+							RebindableTickingBlockEntityWrapper tickingWrapper = chunk.tickersInLevel.get(pos);
+							if (tickingWrapper != null && !tickingWrapper.isRemoved()) {
+								if (tickingWrapper.ticker instanceof BoundTickingBlockEntity tickingBE) {
+									//In general this should always be the case, so we inline some of the logic
+									// to optimize the calls to try and make extra ticks as cheap as possible
+									if (chunk.isTicking(pos)) {
+										profiler.push(tickingWrapper::getType);
+										BlockState state = chunk.getBlockState(pos);
+										if (blockEntity.getType().isValid(state)) {
+											for (int i = 0; i < extraTicks/* && plrEmc >= WOFT.TICKACCEL.get()*/; i++) {
+												//toConsume += WOFT.TICKACCEL.get();
+												tickingBE.ticker.tick(level, pos, state, blockEntity);
+											}
+										}
+										profiler.pop();
+									}
+								} else {
+									//Fallback to just trying to make it tick extra
+									for (int i = 0; i < extraTicks/* && plrEmc >= WOFT.TICKACCEL.get()*/; i++) {
+										//toConsume += WOFT.TICKACCEL.get();
+										tickingWrapper.tick();
+									}
+								}
+							}
+						}
+					}
+				}
+				//plrEmc -= EmcHelper.consumeAvaliableEmc(player, toConsume);
+				toConsume = 0;
+				
+				// random ticks brr
+				for (BlockPos pos : BoxHelper.allBlocksInBox(aoe)) {
+					/*if (plrEmc < WOFT.TICKACCEL.get()) break;
+					else*/ if (WorldHelper.isBlockLoaded(level, pos)) {
+						BlockState state = level.getBlockState(pos);
+						Block block = state.getBlock();
+						if (state.isRandomlyTicking() && !state.is(BlockTP.NO_TICKACCEL)
+							&& !(block instanceof LiquidBlock) // Don't speed non-source fluid blocks - dupe issues
+							&& !(block instanceof BonemealableBlock) && !(block instanceof IPlantable)) {// All plants should be sped using Harvest Goddess
+							pos = pos.immutable();
+							for (int i = 0; i < extraTicks/* && plrEmc >= WOFT.TICKACCEL.get()*/; i++) {
+								//toConsume += WOFT.TICKACCEL.get();
+								state.randomTick((ServerLevel)level, pos, level.random);
+							}
+						}
+					}
+				}
+				//plrEmc -= EmcHelper.consumeAvaliableEmc(player, toConsume);
+			}
+		}
+		
+		profiler.pop();
+	}
+	
+	/**
+	 * Exists to make adding/removing attributes from time acceleration easy in the future <br>
+	 * Would just make it a static final array but SWIM_SPEED is registered after items
+	 * @return Attributes that TimeAccel modifies
+	 */
+	private static Attribute[] getTimeAccelAttributes() {
+		Attribute[] attribs = {
+				Attributes.ATTACK_SPEED,
+				Attributes.MOVEMENT_SPEED,
+				ForgeMod.SWIM_SPEED.get()
+		};
+		return attribs;
 	}
 }

@@ -123,13 +123,14 @@ public class AspectForm extends ForgeRegistryEntry<AspectForm> implements IAlche
 		this.children[this.children.length - 1] = adoptee;
 	}
 
-	//Little exception to notify addon devs of their bad behaviour with the form tree.
+	// Little exception to notify addon devs of their bad behaviour with the form tree.
 	class FormTreeException extends RuntimeException {
 		private static final long serialVersionUID = 1L;
 		String cause;
 		FormTreeException(String cause) {
 			this.cause = cause;
 		}
+		@Override
 		public String toString() {
 			return ("Tried to assign an invalid node in the form tree. Reason: " + this.cause + "\n        If you're develping an addon, this is on you. If you're a normal player, please report!");
 		}

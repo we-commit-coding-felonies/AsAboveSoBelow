@@ -2,7 +2,6 @@ package com.quartzshard.aasb.common.entity.projectile;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Stack;
 
 import org.jetbrains.annotations.NotNull;
@@ -31,22 +30,18 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -242,8 +237,8 @@ public class SentientArrow extends AbstractArrow {
 		Vec3 motion = getDeltaMovement();
 		double horizVel = motion.horizontalDistance();
 		if (!level.isClientSide && this.xRotO == 0.0F && this.yRotO == 0.0F) {
-			this.setXRot((float)(Mth.atan2(motion.y, horizVel) * (double)(180F / (float)Math.PI)));
-			this.setYRot((float)(Mth.atan2(motion.x, motion.z) * (double)(180F / (float)Math.PI)));
+			this.setXRot((float)(Mth.atan2(motion.y, horizVel) * (180F / (float)Math.PI)));
+			this.setYRot((float)(Mth.atan2(motion.x, motion.z) * (180F / (float)Math.PI)));
 			this.xRotO = this.getXRot();
 			this.yRotO = this.getYRot();
 		}
@@ -353,31 +348,31 @@ public class SentientArrow extends AbstractArrow {
 				}
 			}
 
-			double nextX = this.getX() + velX;
-			double nextY = this.getY() + velY;
-			double nextZ = this.getZ() + velZ;
+			double nextX = getX() + velX;
+			double nextY = getY() + velY;
+			double nextZ = getZ() + velZ;
 			//double horizVel = vel.horizontalDistance();
-			this.setYRot((float)(Mth.atan2(velX, velZ) * (double)(180F / (float)Math.PI)));
-			this.setXRot((float)(Mth.atan2(velY, horizVel) * (double)(180F / (float)Math.PI)));
-			this.setXRot(lerpRotation(this.xRotO, this.getXRot()));
-			this.setYRot(lerpRotation(this.yRotO, this.getYRot()));
-			float resistanceFactor = 0.99F;
+			setYRot((float)(Mth.atan2(velX, velZ) * (180d / (float)Math.PI)));
+			setXRot((float)(Mth.atan2(velY, horizVel) * (180d / (float)Math.PI)));
+			setXRot(lerpRotation(this.xRotO, this.getXRot()));
+			setYRot(lerpRotation(this.yRotO, this.getYRot()));
+			float resistanceFactor = 0.99f;
 			//float f1 = 0.05F;
 			if (this.isInWater()) {
 				for(int j = 0; j < 4; ++j) {
 					if (DebugCfg.LOGS.get()) LogHelper.debug("SentientArrow", "InWaterLoop");
 					//float f2 = 0.25F;
-					this.level.addParticle(ParticleTypes.BUBBLE, nextX - velX * 0.25D, nextY - velY * 0.25D, nextZ - velZ * 0.25D, velX, velY, velZ);
+					this.level.addParticle(ParticleTypes.BUBBLE, nextX - velX * 0.25, nextY - velY * 0.25, nextZ - velZ * 0.25, velX, velY, velZ);
 				}
 
 				resistanceFactor = this.getWaterInertia();
 			}
 			if (noClip) resistanceFactor = 1;
 
-			this.setDeltaMovement(motion.scale((double)resistanceFactor));
+			this.setDeltaMovement(motion.scale(resistanceFactor));
 			if (!this.isNoGravity() && !noClip) {
 				Vec3 vec34 = this.getDeltaMovement();
-				this.setDeltaMovement(vec34.x, vec34.y - (double)0.05F, vec34.z);
+				this.setDeltaMovement(vec34.x, vec34.y - 0.05, vec34.z);
 			}
 
 			this.setPos(nextX, nextY, nextZ);
@@ -607,12 +602,11 @@ public class SentientArrow extends AbstractArrow {
 					isReturningToOwner = false;
 					becomeInert();
 					return;
-				} else {
-					if (!attemptAutoRetarget()) {
-						isReturningToOwner = true;
-						target = owner();
-						continue;
-					}
+				}
+				if (!attemptAutoRetarget()) {
+					isReturningToOwner = true;
+					target = owner();
+					continue;
 				}
 			}
 			if (DebugCfg.ARROW_PATHFIND.get()) {
@@ -857,7 +851,8 @@ public class SentientArrow extends AbstractArrow {
 	protected boolean isValidHomingTarget(Entity entity) {
 		if (entity instanceof LivingEntity ent) {
 			return isValidHomingTarget(ent);
-		} else return false;
+		}
+		return false;
 	}
 	protected boolean isValidHomingTargetForAutomatic(LivingEntity entity) {
 		return isValidHomingTarget(entity) && !EntityHelper.isTamedOrTrusting(entity);

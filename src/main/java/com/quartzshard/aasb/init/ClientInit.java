@@ -4,11 +4,13 @@ import com.quartzshard.aasb.AsAboveSoBelow;
 import com.quartzshard.aasb.api.item.IHermeticTool;
 import com.quartzshard.aasb.client.AASBKeys;
 import com.quartzshard.aasb.client.particle.CutParticle;
-import com.quartzshard.aasb.client.render.entity.*;
+import com.quartzshard.aasb.client.render.entity.HorrorRenderer;
+import com.quartzshard.aasb.client.render.entity.MustangRenderer;
+import com.quartzshard.aasb.client.render.entity.SentientArrowRenderer;
 import com.quartzshard.aasb.client.render.layer.AASBPlayerLayer;
 import com.quartzshard.aasb.common.item.flask.FlaskItem;
+import com.quartzshard.aasb.util.ClientHelper;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.particle.ParticleProvider;
@@ -19,6 +21,7 @@ import net.minecraft.core.particles.ParticleType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -85,10 +88,10 @@ public class ClientInit {
 	
 
 	private static <T extends ParticleOptions> void provider(ParticleType<T> type, ParticleProvider<T> provider) {
-		Minecraft.getInstance().particleEngine.register(type, provider);
+		ClientHelper.mc().particleEngine.register(type, provider);
 	}
 	private static <T extends ParticleOptions> void spriteProvider(ParticleType<T> type, ParticleEngine.SpriteParticleRegistration<T> provider) {
-		Minecraft.getInstance().particleEngine.register(type, provider);
+		ClientHelper.mc().particleEngine.register(type, provider);
 	}
 
 	@SubscribeEvent

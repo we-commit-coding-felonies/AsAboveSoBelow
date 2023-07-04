@@ -18,6 +18,7 @@ public class BlockAgnosticDamageCalculator extends ExplosionDamageCalculator {
 		this.blockResist = blockResist;
 	}
 	
+	@Override
 	public Optional<Float> getBlockExplosionResistance(Explosion explosion, BlockGetter reader, BlockPos pos, BlockState state, FluidState fluid) {
 		if (blockResist < 0 || state.is(AASBTags.BlockTP.WAYBLAST_RESIST)) {
 			return super.getBlockExplosionResistance(explosion, reader, pos, state, fluid);
@@ -25,6 +26,7 @@ public class BlockAgnosticDamageCalculator extends ExplosionDamageCalculator {
 		return Optional.of(blockResist);
 	}
 	
+	@Override
 	public boolean shouldBlockExplode(Explosion explosion, BlockGetter reader, BlockPos pos, BlockState state, float power) {
 		return !state.is(AASBTags.BlockTP.WAYBLAST_IMMUNE);
 	}

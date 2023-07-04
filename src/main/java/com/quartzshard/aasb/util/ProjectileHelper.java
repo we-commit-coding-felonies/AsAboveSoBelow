@@ -82,7 +82,7 @@ public class ProjectileHelper {
 				break;
 			case HOMING:
 				if (true || ctx.shooter == null) {
-					LogHelper.warn("ProjectileHelper.ArrowType.make()", "UnsupportedNullShooter", "ArrowType " + this.name() + " is NYI");
+					LogHelper.warn("ProjectileHelper.ArrowType.make()", "ArrowNYI", "ArrowType " + this.name() + " is currently unimplemented.");
 					//LogHelper.warn("ProjectileHelper.ArrowType.make()", "UnsupportedNullShooter", "Attempted to create arrow of type "+this.name()+" with a null shooter, but that type does not support it. Falling back on a normal arrow.");
 					arrow = new Arrow(ctx.level, ctx.pos.x, ctx.pos.y, ctx.pos.z);
 					arrow.setBaseDamage(opts.damage);

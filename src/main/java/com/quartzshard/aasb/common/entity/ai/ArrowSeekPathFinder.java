@@ -24,16 +24,16 @@ import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.level.pathfinder.Target;
 
 public class ArrowSeekPathFinder {
-	private static final float FUDGING = 1.5F;
+	//private static final float FUDGING = 1.5F;
 	private final Node[] neighbors = new Node[32];
-	private final int maxVisitedNodes;
-	private final ArrowSeekNodeEvaluator ArrowSeekNodeEvaluator;
-	private static final boolean DEBUG = false;
-	private final BinaryHeap openSet = new BinaryHeap();
+	private final int maxNodes;
+	private final ArrowSeekNodeEvaluator nodeEval;
+	//private static final boolean DEBUG = false;
+	private final BinaryHeap nearbyNodes = new BinaryHeap();
 
-	public ArrowSeekPathFinder(ArrowSeekNodeEvaluator pArrowSeekNodeEvaluator, int pMaxVisitedNodes) {
-		this.ArrowSeekNodeEvaluator = pArrowSeekNodeEvaluator;
-		this.maxVisitedNodes = pMaxVisitedNodes;
+	public ArrowSeekPathFinder(ArrowSeekNodeEvaluator nodeEval, int maxNodes) {
+		this.nodeEval = nodeEval;
+		this.maxNodes = maxNodes;
 	}
 
 	/**
@@ -41,111 +41,111 @@ public class ArrowSeekPathFinder {
 	 * returns null if no path could be found within given accuracy
 	 */
 	@Nullable
-	public Path findPath(PathNavigationRegion pRegion, AbstractArrow arrow,Set<BlockPos> pTargetPositions, float pMaxRange, int pAccuracy,
-			float pSearchDepthMultiplier) {
-		this.openSet.clear();
-		this.ArrowSeekNodeEvaluator.prepare(pRegion, arrow);
-		Node node = this.ArrowSeekNodeEvaluator.getStart();
-		Map<Target, BlockPos> map = pTargetPositions.stream().collect(Collectors.toMap((p_77448_) -> {
-			return this.ArrowSeekNodeEvaluator.getGoal((double)p_77448_.getX(), (double)p_77448_.getY(), (double)p_77448_.getZ());
+	public Path findPath(PathNavigationRegion region, AbstractArrow arrow, Set<BlockPos> targetPosSet, float maxRange, int accuracy,
+			float searchDepthMult) {
+		this.nearbyNodes.clear();
+		this.nodeEval.prepare(region, arrow);
+		Node node = this.nodeEval.getStart();
+		Map<Target, BlockPos> map = targetPosSet.stream().collect(Collectors.toMap((pos) -> {
+			return this.nodeEval.getGoal(pos.getX(), pos.getY(), pos.getZ());
 		}, Function.identity()));
-		Path path = this.findPath(pRegion.getProfiler(), node, map, pMaxRange, pAccuracy, pSearchDepthMultiplier);
-		this.ArrowSeekNodeEvaluator.done();
+		Path path = this.findPath(region.getProfiler(), node, map, maxRange, accuracy, searchDepthMult);
+		this.nodeEval.done();
 		return path;
 	}
 
 	@Nullable
-	private Path findPath(ProfilerFiller pProfiler, Node pNode, Map<Target, BlockPos> pTargetPos, float pMaxRange,
-			int pAccuracy, float pSearchDepthMultiplier) {
-		pProfiler.push("find_path");
-		pProfiler.markForCharting(MetricCategory.PATH_FINDING);
-		Set<Target> set = pTargetPos.keySet();
-		pNode.g = 0.0F;
-		pNode.h = this.getBestH(pNode, set);
-		pNode.f = pNode.h;
-		this.openSet.clear();
-		this.openSet.insert(pNode);
+	private Path findPath(ProfilerFiller profiler, Node startNode, Map<Target, BlockPos> targetPosSet, float maxRange,
+			int accuracy, float searchDepthMult) {
+		profiler.push("find_path");
+		profiler.markForCharting(MetricCategory.PATH_FINDING);
+		Set<Target> targets = targetPosSet.keySet();
+		startNode.g = 0;
+		startNode.h = ArrowSeekPathFinder.getBestH(startNode, targets);
+		startNode.f = startNode.h;
+		this.nearbyNodes.clear();
+		this.nearbyNodes.insert(startNode);
 		int i = 0;
-		Set<Target> set2 = Sets.newHashSetWithExpectedSize(set.size());
-		int j = (int) ((float) this.maxVisitedNodes * pSearchDepthMultiplier);
+		Set<Target> newTargets = Sets.newHashSetWithExpectedSize(targets.size());
+		int j = (int) (this.maxNodes * searchDepthMult);
 
-		while (!this.openSet.isEmpty()) {
+		while (!this.nearbyNodes.isEmpty()) {
 			++i;
 			if (i >= j) {
 				break;
 			}
 
-			Node node = this.openSet.pop();
+			Node node = this.nearbyNodes.pop();
 			node.closed = true;
 
-			for (Target target : set) {
-				if (node.distanceManhattan(target) <= (float) pAccuracy) {
+			for (Target target : targets) {
+				if (node.distanceManhattan(target) <= accuracy) {
 					target.setReached();
-					set2.add(target);
+					newTargets.add(target);
 				}
 			}
 
-			if (!set2.isEmpty()) {
+			if (!newTargets.isEmpty()) {
 				break;
 			}
 
-			if (!(node.distanceTo(pNode) >= pMaxRange)) {
-				int k = this.ArrowSeekNodeEvaluator.getNeighbors(this.neighbors, node);
+			if (!(node.distanceTo(startNode) >= maxRange)) {
+				int k = this.nodeEval.getNeighbors(this.neighbors, node);
 
 				for (int l = 0; l < k; ++l) {
-					Node node1 = this.neighbors[l];
-					float f = node.distanceTo(node1);
-					node1.walkedDistance = node.walkedDistance + f;
-					float f1 = node.g + f + node1.costMalus;
-					if (node1.walkedDistance < pMaxRange && (!node1.inOpenSet() || f1 < node1.g)) {
-						node1.cameFrom = node;
-						node1.g = f1;
-						node1.h = this.getBestH(node1, set) * 1.5F;
-						if (node1.inOpenSet()) {
-							this.openSet.changeCost(node1, node1.g + node1.h);
+					Node adjNode = this.neighbors[l];
+					float distToAdj = node.distanceTo(adjNode);
+					adjNode.walkedDistance = node.walkedDistance + distToAdj;
+					float newTotalCost = node.g + distToAdj + adjNode.costMalus;
+					if (adjNode.walkedDistance < maxRange && (!adjNode.inOpenSet() || newTotalCost < adjNode.g)) {
+						adjNode.cameFrom = node;
+						adjNode.g = newTotalCost;
+						adjNode.h = ArrowSeekPathFinder.getBestH(adjNode, targets) * 1.5f;
+						if (adjNode.inOpenSet()) {
+							this.nearbyNodes.changeCost(adjNode, adjNode.g + adjNode.h);
 						} else {
-							node1.f = node1.g + node1.h;
-							this.openSet.insert(node1);
+							adjNode.f = adjNode.g + adjNode.h;
+							this.nearbyNodes.insert(adjNode);
 						}
 					}
 				}
 			}
 		}
 
-		Optional<Path> optional = !set2.isEmpty() ? set2.stream().map((p_77454_) -> {
-			return this.reconstructPath(p_77454_.getBestNode(), pTargetPos.get(p_77454_), true);
-		}).min(Comparator.comparingInt(Path::getNodeCount)) : set.stream().map((p_77451_) -> {
-			return this.reconstructPath(p_77451_.getBestNode(), pTargetPos.get(p_77451_), false);
+		Optional<Path> optPath = !newTargets.isEmpty() ? newTargets.stream().map((targ) -> {
+			return ArrowSeekPathFinder.reconstructPath(targ.getBestNode(), targetPosSet.get(targ), true);
+		}).min(Comparator.comparingInt(Path::getNodeCount)) : targets.stream().map((targ) -> {
+			return ArrowSeekPathFinder.reconstructPath(targ.getBestNode(), targetPosSet.get(targ), false);
 		}).min(Comparator.comparingDouble(Path::getDistToTarget).thenComparingInt(Path::getNodeCount));
-		pProfiler.pop();
-		return !optional.isPresent() ? null : optional.get();
+		profiler.pop();
+		return !optPath.isPresent() ? null : optPath.get();
 	}
 
-	private float getBestH(Node pNode, Set<Target> pTargets) {
-		float f = Float.MAX_VALUE;
+	private static float getBestH(Node pNode, Set<Target> pTargets) {
+		float estCost = Float.MAX_VALUE;
 
 		for (Target target : pTargets) {
-			float f1 = pNode.distanceTo(target);
-			target.updateBest(f1, pNode);
-			f = Math.min(f1, f);
+			float newEstCost = pNode.distanceTo(target);
+			target.updateBest(newEstCost, pNode);
+			estCost = Math.min(newEstCost, estCost);
 		}
 
-		return f;
+		return estCost;
 	}
 
 	/**
 	 * Converts a recursive path point structure into a path
 	 */
-	private Path reconstructPath(Node pPoint, BlockPos pTargetPos, boolean pReachesTarget) {
-		List<Node> list = Lists.newArrayList();
-		Node node = pPoint;
-		list.add(0, pPoint);
+	private static Path reconstructPath(Node startNode, BlockPos targetPos, boolean complete) {
+		List<Node> nodes = Lists.newArrayList();
+		Node node = startNode;
+		nodes.add(0, startNode);
 
 		while (node.cameFrom != null) {
 			node = node.cameFrom;
-			list.add(0, node);
+			nodes.add(0, node);
 		}
 
-		return new Path(list, pTargetPos, pReachesTarget);
+		return new Path(nodes, targetPos, complete);
 	}
 }

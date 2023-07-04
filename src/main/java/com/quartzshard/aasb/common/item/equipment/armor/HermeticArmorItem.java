@@ -16,7 +16,6 @@ import com.quartzshard.aasb.data.AASBLang;
 import com.quartzshard.aasb.init.EffectInit;
 import com.quartzshard.aasb.util.ColorsHelper;
 import com.quartzshard.aasb.util.EntityHelper;
-import com.quartzshard.aasb.util.LogHelper;
 import com.quartzshard.aasb.util.NBTHelper;
 
 import net.minecraft.ChatFormatting;

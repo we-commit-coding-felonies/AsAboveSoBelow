@@ -25,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.quartzshard.aasb.common.network.AASBNet;
 import com.quartzshard.aasb.common.network.client.DrawParticleAABBPacket;
-import com.quartzshard.aasb.common.network.client.DrawParticleAABBPacket.ParticlePreset;
+import com.quartzshard.aasb.common.network.client.DrawParticleAABBPacket.AABBParticlePreset;
 import com.quartzshard.aasb.common.network.client.DrawParticleLinePacket;
 import com.quartzshard.aasb.common.network.client.DrawParticleLinePacket.LineParticlePreset;
 import com.quartzshard.aasb.data.AASBTags.EntityTP;
@@ -252,7 +252,7 @@ public class SmartArrow extends Arrow {
 			if (plr.blockPosition().closerToCenterThan(this.position(), 64d)) {
 				Vec3 min = new Vec3(getBoundingBox().minX, getBoundingBox().minY, getBoundingBox().minZ),
 						max = new Vec3(getBoundingBox().maxX, getBoundingBox().maxY, getBoundingBox().maxZ);
-				AASBNet.toClient(new DrawParticleAABBPacket(min, max, ParticlePreset.SENTIENT_ARROW_TARGET_LOST), plr);
+				AASBNet.toClient(new DrawParticleAABBPacket(min, max, AABBParticlePreset.SENTIENT_ARROW_TARGET_LOST), plr);
 			}
 		}
 	}

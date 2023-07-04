@@ -2,7 +2,6 @@ package com.quartzshard.aasb.common.item.flask;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
@@ -10,7 +9,6 @@ import java.util.Random;
 import org.jetbrains.annotations.Nullable;
 
 import com.google.common.base.Enums;
-import com.quartzshard.aasb.AsAboveSoBelow;
 import com.quartzshard.aasb.api.alchemy.aspects.AspectForm;
 import com.quartzshard.aasb.api.alchemy.aspects.AspectShape;
 import com.quartzshard.aasb.data.AASBLang;
@@ -19,7 +17,6 @@ import com.quartzshard.aasb.util.CalcHelper;
 import com.quartzshard.aasb.util.ClientHelper;
 import com.quartzshard.aasb.util.ColorsHelper;
 import com.quartzshard.aasb.util.ColorsHelper.Color;
-import com.quartzshard.aasb.util.MiscHelper;
 import com.quartzshard.aasb.util.NBTHelper;
 
 import net.minecraft.ChatFormatting;
@@ -227,23 +224,21 @@ public class FlaskItem extends Item {
 				long time = ClientHelper.mc().level.getGameTime();
 				if (flask.isExpired(stack, time)) {
 					return ColorsHelper.randomGray(0x80);
-				} else {
-					// covalence colors if you have both universals
-					AspectShape shape = flask.getStoredShape(stack);
-					AspectForm form = flask.getStoredForm(stack);
-					if (shape == AspectShape.UNIVERSAL && form == FormTree.MATERIA.get()) {
-						return Mth.hsvToRgb(
-								ColorsHelper.loopFade(time, Math.min(6000, flask.lifetime/10), 0, Color.COVALENCE_GREEN.H/360f, Color.PHILOSOPHERS.H/360f),
-								Color.PHILOSOPHERS.S/100f,
-								Color.PHILOSOPHERS.V/100f);
-					}
-					
-					if (layer == 0) {
-						return form == null ? shape.color.I : form.getColor();
-					} else {
-						return shape == null ? form.getColor() : shape.color.I;
-					}
 				}
+				// covalence colors if you have both universals
+				AspectShape shape = flask.getStoredShape(stack);
+				AspectForm form = flask.getStoredForm(stack);
+				if (shape == AspectShape.UNIVERSAL && form == FormTree.MATERIA.get()) {
+					return Mth.hsvToRgb(
+							ColorsHelper.loopFade(time, Math.min(6000, flask.lifetime/10), 0, Color.COVALENCE_GREEN.H/360f, Color.PHILOSOPHERS.H/360f),
+							Color.PHILOSOPHERS.S/100f,
+							Color.PHILOSOPHERS.V/100f);
+				}
+				
+				if (layer == 0) {
+					return form == null ? shape.color.I : form.getColor();
+				}
+				return shape == null ? form.getColor() : shape.color.I;
 			}
 		}
 		return -1;

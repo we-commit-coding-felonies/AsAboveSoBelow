@@ -6,12 +6,9 @@ import java.util.function.Consumer;
 
 import com.google.common.collect.Multimap;
 import com.quartzshard.aasb.api.item.IHermeticTool;
-import com.quartzshard.aasb.api.item.IShapeRuneItem.ShapeRune;
 import com.quartzshard.aasb.client.AASBKeys;
 import com.quartzshard.aasb.common.item.LootBallItem;
 import com.quartzshard.aasb.common.item.equipment.tool.AASBToolTier;
-import com.quartzshard.aasb.common.network.AASBNet;
-import com.quartzshard.aasb.common.network.client.CutParticlePacket;
 import com.quartzshard.aasb.data.AASBLang;
 import com.quartzshard.aasb.data.AASBTags.BlockTP;
 import com.quartzshard.aasb.init.EffectInit;
@@ -25,13 +22,11 @@ import com.quartzshard.aasb.util.WorldHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -39,30 +34,22 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.ItemCooldowns;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.PickaxeItem;
-import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.Item.Properties;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FarmBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
-import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.ToolAction;
 import net.minecraftforge.common.ToolActions;
 
@@ -218,7 +205,7 @@ public class HermeticHoeItem extends HoeItem implements IHermeticTool {
 		return true;
 	}
 	
-	private Component opLang(byte mode) {
+	private static Component opLang(byte mode) {
 		switch (mode) {
 		default:
 		case 0:
@@ -230,7 +217,7 @@ public class HermeticHoeItem extends HoeItem implements IHermeticTool {
 		}
 	}
 	
-	private Component opLangLong(byte mode) {
+	private static Component opLangLong(byte mode) {
 		switch (mode) {
 		default:
 		case 0:

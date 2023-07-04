@@ -5,8 +5,6 @@ import com.quartzshard.aasb.common.network.client.*;
 import com.quartzshard.aasb.common.network.server.*;
 import com.quartzshard.aasb.util.ClientHelper;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -67,6 +65,11 @@ public class AASBNet {
 				.encoder(PresetParticlePacket::enc)
 				.decoder(PresetParticlePacket::dec)
 				.consumer(PresetParticlePacket::handle)
+				.add();
+		CHANNEL.messageBuilder(ModifyPlayerVelocityPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
+				.encoder(ModifyPlayerVelocityPacket::enc)
+				.decoder(ModifyPlayerVelocityPacket::dec)
+				.consumer(ModifyPlayerVelocityPacket::handle)
 				.add();
 	}
 	

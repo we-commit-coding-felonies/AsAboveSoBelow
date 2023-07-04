@@ -1,20 +1,20 @@
 package com.quartzshard.aasb.client.render.entity;
 
+import java.util.Random;
+import java.util.function.Supplier;
+
 import com.quartzshard.aasb.AsAboveSoBelow;
 import com.quartzshard.aasb.client.render.AASBRenderType;
 import com.quartzshard.aasb.common.entity.projectile.MustangProjectile;
+
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
-
-import java.util.Random;
-import java.util.function.Supplier;
 
 /**
  * somewhat based on botanias red string renderer
@@ -23,7 +23,6 @@ public class MustangRenderer extends EntityRenderer<MustangProjectile> {
 	public MustangRenderer(EntityRendererProvider.Context ctx) {
 		super(ctx);
 	}
-	private static int transparency = 10;
 
 	@Override
 	public ResourceLocation getTextureLocation(MustangProjectile proj) {
@@ -50,7 +49,7 @@ public class MustangRenderer extends EntityRenderer<MustangProjectile> {
 		Vec3 step = diff.normalize().scale(0.5);
 		int stepCount = (int)(diff.length()/step.length());
 		VertexConsumer buf = buffers.getBuffer(AASBRenderType.MUSTANG_LINES);
-		int color = proj.getColor() | ((int) (1 * 255) << 24);
+		int color = proj.getColor() | ((1 * 255) << 24);
 		int a = (color >> 24) & 0xFF;
 		int r = (color >> 16) & 0xFF;
 		int g = (color >> 8) & 0xFF;

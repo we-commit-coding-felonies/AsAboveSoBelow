@@ -1,5 +1,7 @@
 package com.quartzshard.aasb.common.item.equipment.trinket;
 
+import com.quartzshard.aasb.common.item.equipment.trinket.rune.RuneTicks;
+import com.quartzshard.aasb.common.item.equipment.trinket.rune.TrinketRune;
 import com.quartzshard.aasb.common.network.server.KeyPressPacket.BindState;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -10,20 +12,6 @@ import net.minecraft.world.level.Level;
 public class CharmItem extends AbilityTrinket {
 	public CharmItem(Properties props) {
 		super(props);
-	}
-	
-	@Override
-	public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
-		if ((selected || slot < 9)
-			&& entity instanceof ServerPlayer plr && level instanceof ServerLevel lvl) {
-			boolean strong = isStrong(stack);
-			if (canUse(stack, plr, true)) {
-				getRune(stack, true).passiveAbility(stack, plr, lvl, BindState.HELD, strong);
-			}
-			if (canUse(stack, plr, false)) {
-				getRune(stack, false).passiveAbility(stack, plr, lvl, BindState.HELD, strong);
-			}
-		}
 	}
 
 	@Override
@@ -40,5 +28,24 @@ public class CharmItem extends AbilityTrinket {
 			return getRune(stack, false).passiveAbility(stack, player, level, BindState.PRESSED, isStrong(stack));
 		}
 		return false;
+	}
+
+	@Override
+	public <R extends TrinketRune> void tickRune(R rune, RuneTicks tInfo, ItemStack stack, ServerPlayer player, ServerLevel level, boolean strong) {
+		// we handle passives differently because fuck you
+	}
+	
+	@Override
+	public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
+		if ((selected || slot < 9)
+			&& entity instanceof ServerPlayer plr && level instanceof ServerLevel lvl) {
+			boolean strong = isStrong(stack);
+			if (canUse(stack, plr, true)) {
+				getRune(stack, true).passiveAbility(stack, plr, lvl, BindState.HELD, strong);
+			}
+			if (canUse(stack, plr, false)) {
+				getRune(stack, false).passiveAbility(stack, plr, lvl, BindState.HELD, strong);
+			}
+		}
 	}
 }

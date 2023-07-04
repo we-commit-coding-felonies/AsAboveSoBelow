@@ -1,5 +1,7 @@
 package com.quartzshard.aasb.common.item.equipment.trinket;
 
+import com.quartzshard.aasb.common.item.equipment.trinket.rune.RuneTicks;
+import com.quartzshard.aasb.common.item.equipment.trinket.rune.TrinketRune;
 import com.quartzshard.aasb.common.network.server.KeyPressPacket.BindState;
 import com.quartzshard.aasb.init.EffectInit;
 
@@ -33,5 +35,11 @@ public class GloveItem extends AbilityTrinket {
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public <R extends TrinketRune> void tickRune(R rune, RuneTicks tInfo, ItemStack stack, ServerPlayer player, ServerLevel level, boolean strong) {
+		if (tInfo.combat())
+			rune.combatAbility(stack, player, level, BindState.HELD, strong);
 	}
 }

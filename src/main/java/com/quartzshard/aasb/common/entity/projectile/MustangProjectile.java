@@ -7,17 +7,15 @@ import com.quartzshard.aasb.common.damage.source.AASBDmgSrc;
 import com.quartzshard.aasb.common.entity.living.HorrorEntity;
 import com.quartzshard.aasb.common.network.AASBNet;
 import com.quartzshard.aasb.common.network.client.DrawParticleAABBPacket;
-import com.quartzshard.aasb.common.network.client.DrawParticleAABBPacket.ParticlePreset;
+import com.quartzshard.aasb.common.network.client.DrawParticleAABBPacket.AABBParticlePreset;
 import com.quartzshard.aasb.common.network.client.PresetParticlePacket;
-import com.quartzshard.aasb.common.network.client.PresetParticlePacket.FXPreset;
+import com.quartzshard.aasb.common.network.client.PresetParticlePacket.ParticlePreset;
 import com.quartzshard.aasb.config.DebugCfg;
 import com.quartzshard.aasb.init.EffectInit;
 import com.quartzshard.aasb.init.ObjectInit;
 import com.quartzshard.aasb.util.EntityHelper;
-import com.quartzshard.aasb.util.MiscHelper;
 import com.quartzshard.aasb.util.PlayerHelper;
 
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -209,7 +207,7 @@ public class MustangProjectile extends Projectile {
 		for (LivingEntity ent : level.getEntitiesOfClass(LivingEntity.class, box)) {
 			if (ent instanceof HorrorEntity) {
 				ent.hurt(AASBDmgSrc.mustang(culprit), ent.getMaxHealth()-3);
-				ent.setRemainingFireTicks(1200);
+				ent.setRemainingFireTicks(Integer.MAX_VALUE);
 			} else if (!ent.ignoreExplosion() && !(ent instanceof Blaze)) {
 				double distance = Math.sqrt(ent.distanceToSqr(cent)) / 8d;
 				if (distance <= 1.0D) {
@@ -311,7 +309,7 @@ public class MustangProjectile extends Projectile {
 				if (plr.blockPosition().closerToCenterThan(cent, 512d)) {
 					Vec3 minCorner = new Vec3(box.minX, box.minY, box.minZ);
 					Vec3 maxCorner = new Vec3(box.maxX, box.maxY, box.maxZ);
-					AASBNet.toClient(new DrawParticleAABBPacket(minCorner, maxCorner, ParticlePreset.DEBUG), plr);
+					AASBNet.toClient(new DrawParticleAABBPacket(minCorner, maxCorner, AABBParticlePreset.DEBUG), plr);
 				}
 			}
 			
@@ -327,7 +325,7 @@ public class MustangProjectile extends Projectile {
 		}
 		
 		// badass does immolation
-		AASBNet.toNearbyClients(new PresetParticlePacket(FXPreset.MUSTANG, new Vec3(cent.x, cent.y, cent.z)), level, cent, 256);
+		AASBNet.toNearbyClients(new PresetParticlePacket(ParticlePreset.MUSTANG, new Vec3(cent.x, cent.y, cent.z)), level, cent, 256);
 		
 		// steam from the steamed clams were having
 		while (!vaporized.empty() && !DebugCfg.HITBOX_SERVER.get()) {

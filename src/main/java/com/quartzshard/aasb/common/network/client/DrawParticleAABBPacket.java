@@ -3,9 +3,9 @@ package com.quartzshard.aasb.common.network.client;
 import java.util.function.Supplier;
 
 import com.quartzshard.aasb.util.BoxHelper;
+import com.quartzshard.aasb.util.ClientHelper;
 import com.quartzshard.aasb.util.LogHelper;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -17,29 +17,18 @@ import net.minecraft.world.phys.Vec3;
 
 import net.minecraftforge.network.NetworkEvent;
 
-public record DrawParticleAABBPacket(Vec3 cMin, Vec3 cMax, ParticlePreset preset) {
+public record DrawParticleAABBPacket(Vec3 cMin, Vec3 cMax, AABBParticlePreset preset) {
 	
-	public enum ParticlePreset {
-		INVALID(-1),
-		DEBUG(0),
-		DEBUG_FILL(1),
-		SENTIENT_ARROW_TARGET_LOST(2);
-		public final int id;
+	public enum AABBParticlePreset {
+		INVALID,
 		
-		private ParticlePreset(int id) {
-			this.id = id;
-		}
+		DEBUG,
+		DEBUG_FILL,
 		
-		public static ParticlePreset fromId(int id) {
-			switch (id) {
-			
-			case 0: return ParticlePreset.DEBUG;
-			case 1: return ParticlePreset.DEBUG_FILL;
-			case 2: return ParticlePreset.SENTIENT_ARROW_TARGET_LOST;
-			
-			default: return ParticlePreset.INVALID;
-			}
-		}
+		DEBUG_TICK,
+		DEBUG_TICK_FILL,
+		
+		SENTIENT_ARROW_TARGET_LOST;
 	}
 	
 	public void enc(FriendlyByteBuf buffer) {
@@ -51,14 +40,14 @@ public record DrawParticleAABBPacket(Vec3 cMin, Vec3 cMax, ParticlePreset preset
 		buffer.writeDouble(cMax.y); // max corner
 		buffer.writeDouble(cMax.z); //
 		
-		buffer.writeInt(preset.id); // particle preset
+		buffer.writeEnum(preset); // particle preset
 	}
 
 	public static DrawParticleAABBPacket dec(FriendlyByteBuf buffer) {
 		return new DrawParticleAABBPacket(
 				new Vec3(buffer.readDouble(), buffer.readDouble(), buffer.readDouble()), // min corner
 				new Vec3(buffer.readDouble(), buffer.readDouble(), buffer.readDouble()), // max corner
-				ParticlePreset.fromId(buffer.readInt()) // particle preset
+				buffer.readEnum(AABBParticlePreset.class) // particle preset
 		);
 	}
 	
@@ -66,7 +55,7 @@ public record DrawParticleAABBPacket(Vec3 cMin, Vec3 cMax, ParticlePreset preset
         NetworkEvent.Context ctx = sup.get();
         ctx.enqueueWork(() -> {
         	@SuppressWarnings("resource")
-			ClientLevel level = Minecraft.getInstance().level;
+			ClientLevel level = ClientHelper.mc().level;
         	AABB box = new AABB(cMin, cMax);
         	Vec3 cent = box.getCenter();
         	boolean infRange = false;
@@ -80,6 +69,13 @@ public record DrawParticleAABBPacket(Vec3 cMin, Vec3 cMax, ParticlePreset preset
         		particle = ParticleTypes.DRIPPING_LAVA;
         		infRange = true;
         		break;
+            	
+            case DEBUG_TICK_FILL: // debug fill (ticking)
+            	BoxHelper.drawAABBWithParticles(box, ParticleTypes.BUBBLE_POP, stepSize, level, true, true);
+            case DEBUG_TICK: // debug outline (ticking)
+            	particle = ParticleTypes.ELECTRIC_SPARK;
+            	infRange = true;
+            	break;
         		
         	case SENTIENT_ARROW_TARGET_LOST: // smart arrow lost target
         		stepSize = 1;
@@ -90,8 +86,10 @@ public record DrawParticleAABBPacket(Vec3 cMin, Vec3 cMax, ParticlePreset preset
 				LogHelper.warn("DrawParticleAABBPacket", "InvalidPreset", "AABB particles preset " + preset + " is undefined!");
         		level.playSound(null, cent.x, cent.y, cent.z, SoundEvents.ELDER_GUARDIAN_CURSE, SoundSource.MASTER, 100, 2);
         		level.addAlwaysVisibleParticle(ParticleTypes.ELDER_GUARDIAN, cent.x, cent.y, cent.z, 0, 0, 0);
+        		level.addAlwaysVisibleParticle(ParticleTypes.EXPLOSION, cent.x, cent.y, cent.z, 0, 0, 0);
         		BoxHelper.drawAABBWithParticles(box, ParticleTypes.DRAGON_BREATH, stepSize, level, true, true);
         		particle = ParticleTypes.CAMPFIRE_SIGNAL_SMOKE;
+        		infRange = true;
         		break;
         	}
         	BoxHelper.drawAABBWithParticles(box, particle, stepSize, level, false, infRange);

@@ -30,8 +30,11 @@ public class EmpowermentRune extends TrinketRune {
 
 	@Override
 	public boolean passiveAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong) {
-		setBoost(stack, !strong);
-		return true;
+		if (state == BindState.PRESSED) {
+			setBoost(stack, !strong);
+			return true;
+		}
+		return false;
 	}
 
 	public void setBoost(ItemStack stack, boolean boost) {
