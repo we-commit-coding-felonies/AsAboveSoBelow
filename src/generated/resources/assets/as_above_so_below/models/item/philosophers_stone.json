@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "as_above_so_below:item/philosophers_stone"
-  }
-}

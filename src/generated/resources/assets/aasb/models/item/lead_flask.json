@@ -1,0 +1,16 @@
+{
+  "overrides": [
+    {
+      "predicate": {
+        "aasb:flask_status": 0.0
+      },
+      "model": "aasb:item/flask/lead_flask/empty"
+    },
+    {
+      "predicate": {
+        "aasb:flask_status": 1.0
+      },
+      "model": "aasb:item/flask/lead_flask/filled"
+    }
+  ]
+}

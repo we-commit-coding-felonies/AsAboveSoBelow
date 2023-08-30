@@ -1,11 +1,12 @@
 {
   "required": true,
   "priority": 1100,
-  "package": "com.quartzshard.as_above_so_below.mixin",
+  "package": "com.quartzshard.aasb.mixin",
   "compatibilityLevel": "JAVA_16",
-  "mixins": [
+  "mixins": [],
+  "client": [
+  	"MinecraftMixin",
   ],
-  "client": [],
   "injectors": {
     "defaultRequire": 1
   },

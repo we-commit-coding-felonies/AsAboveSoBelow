@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "aasb:item/flask/liquid",
+    "layer1": "aasb:item/flask/liquid_mix",
+    "layer2": "aasb:item/flask/aether_flask_filled"
+  }
+}
