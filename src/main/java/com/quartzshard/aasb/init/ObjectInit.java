@@ -5,6 +5,7 @@ import com.quartzshard.aasb.common.block.*;
 import com.quartzshard.aasb.common.effect.*;
 import com.quartzshard.aasb.common.entity.living.*;
 import com.quartzshard.aasb.common.entity.projectile.*;
+import com.quartzshard.aasb.common.entity.tile.LabTE;
 import com.quartzshard.aasb.common.item.*;
 import com.quartzshard.aasb.common.item.equipment.armor.*;
 import com.quartzshard.aasb.common.item.equipment.armor.jewelry.*;
@@ -23,6 +24,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
 
@@ -42,11 +44,12 @@ public class ObjectInit {
 		Blocks.REG.register(bus);
 		Items.REG.register(bus);
 		Entities.REG.register(bus);
+		TileEntities.REG.register(bus);
 		MobEffects.REG.register(bus);
 	}
 	
 	public class Items {
-		public static final DeferredRegister<Item> REG = DeferredRegister.create(ForgeRegistries.ITEMS, AsAboveSoBelow.MODID);
+		private static final DeferredRegister<Item> REG = DeferredRegister.create(ForgeRegistries.ITEMS, AsAboveSoBelow.MODID);
 		//Common item properties
 		public static final Item.Properties PROPS_GENERIC = new Item.Properties().tab(ModInit.ITEM_GROUP);
 		public static final Item.Properties PROPS_UNSTACKABLE = new Item.Properties().tab(ModInit.ITEM_GROUP).stacksTo(1);
@@ -112,7 +115,8 @@ public class ObjectInit {
 
 				// BlockItems
 				ASH_STONE_BLOCKITEM = fromBlock(Blocks.ASH_STONE),
-				WAYSTONE_BLOCKITEM = fromBlock(Blocks.WAYSTONE);
+				WAYSTONE_BLOCKITEM = fromBlock(Blocks.WAYSTONE),
+				LAB_MULTIBLOCK_ITEM_INTERNAL = fromBlock(Blocks.LAB);
 		
 		
 		// constructs a new Item Properties using an existing base
@@ -142,8 +146,9 @@ public class ObjectInit {
 		public static final RegistryObject<Block> ASH_STONE = REG.register("ashen_stone", () -> new Block(BLOCK_PROPERTIES));
 		public static final RegistryObject<Block> WAYSTONE = REG.register("waystone", () -> new Block(BLOCK_PROPERTIES));
 		
-		
+
 		public static final RegistryObject<AirIceBlock> AIR_ICE = REG.register("air_ice", () -> new AirIceBlock(PROPS_TEMPBLOCK.friction(0.9f).randomTicks().sound(SoundType.GLASS).noOcclusion()));
+		public static final RegistryObject<LabMultiblock> LAB = REG.register("lab", () -> new LabMultiblock(BLOCK_PROPERTIES));
 		
 	}
 	
@@ -177,6 +182,13 @@ public class ObjectInit {
 				.fireImmune()
 				.noSummon().noSave()
 				.build("mustang"));
+	}
+	
+	// yes, i am using the old lingo, because old habits die hard and BlockEntity sounds stupid
+	public class TileEntities {
+		private static final DeferredRegister<BlockEntityType<?>> REG = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, AsAboveSoBelow.MODID);
+		
+		public static final RegistryObject<BlockEntityType<LabTE>> LAB_TE = REG.register("lab", () -> BlockEntityType.Builder.of(LabTE::new, Blocks.LAB.get()).build(null));
 	}
 	
 	public class MobEffects {
