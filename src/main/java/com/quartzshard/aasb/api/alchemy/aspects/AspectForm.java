@@ -151,5 +151,5 @@ public class AspectForm extends ForgeRegistryEntry<AspectForm> implements IAlche
 	@Override
 	public boolean violates(AspectForm to) {
 		return !this.flows(to) && !this.perpendicular(to);
-	}	
+	}
 }

@@ -371,19 +371,19 @@ public class LootBallItem extends Item {
 	public boolean canFitInsideContainerItems() {
 		return false;
 	}
-	public static CompoundTag tagFromStack(ItemStack stack, CompoundTag pCompoundTag) {
+	public static CompoundTag tagFromStack(ItemStack stack, CompoundTag tag) {
 		ResourceLocation resourcelocation = stack.getItem().getRegistryName();
-		pCompoundTag.putString("id", resourcelocation == null ? "minecraft:air" : resourcelocation.toString());
-		pCompoundTag.putInt("Count", stack.getCount());
+		tag.putString("id", resourcelocation == null ? "minecraft:air" : resourcelocation.toString());
+		tag.putInt("Count", stack.getCount());
 		if (stack.hasTag()) {
-			pCompoundTag.put("tag", stack.getTag().copy());
+			tag.put("tag", stack.getTag().copy());
 		}
 		/* TODO: save caps to loot balls instead of voiding them
 		CompoundTag cnbt = stack.serializeCaps();
 		if (cnbt != null && !cnbt.isEmpty()) {
 			pCompoundTag.put("ForgeCaps", cnbt);
 		} */
-		return pCompoundTag;
+		return tag;
 	}
 	public static ItemStack stackFromTag(CompoundTag tag) {
 		try {

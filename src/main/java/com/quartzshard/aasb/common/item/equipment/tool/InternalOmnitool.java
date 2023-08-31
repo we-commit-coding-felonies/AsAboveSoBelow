@@ -1,8 +1,13 @@
 package com.quartzshard.aasb.common.item.equipment.tool;
 
+import java.util.ArrayList;
+
 import com.quartzshard.aasb.AsAboveSoBelow;
+import com.quartzshard.aasb.api.alchemy.lab.LabFunctions;
+import com.quartzshard.aasb.api.alchemy.lab.LabRecipeData;
 import com.quartzshard.aasb.api.item.IStaticSpeedBreaker;
 import com.quartzshard.aasb.api.item.bind.ICanHandleKeybind;
+import com.quartzshard.aasb.common.item.flask.FlaskItem;
 import com.quartzshard.aasb.common.network.server.KeyPressPacket.BindState;
 import com.quartzshard.aasb.common.network.server.KeyPressPacket.PressContext;
 import com.quartzshard.aasb.init.AlchemyInit.TrinketRunes;
@@ -92,36 +97,62 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 	 */
 	@Override
 	public boolean handle(PressContext ctx) {
-		switch (ctx.bind()) {
-		case ITEMMODE:
-			ServerPlayer plr = ctx.player();
-			if (ctx.state() == BindState.PRESSED) {
-				if (!plr.isShiftKeyDown()) {
-					plr.displayClientMessage(new TextComponent("GODMODE"), false);
-					plr.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, Integer.MAX_VALUE, 4));
-					plr.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, Integer.MAX_VALUE, 0));
-					plr.addEffect(new MobEffectInstance(MobEffects.HEAL, Integer.MAX_VALUE, 99));
-					plr.addEffect(new MobEffectInstance(MobEffects.SATURATION, Integer.MAX_VALUE, 99));
-				} else {
-					plr.displayClientMessage(new TextComponent("mortal mode"), false);
-					plr.removeEffect(MobEffects.DAMAGE_RESISTANCE);
-					plr.removeEffect(MobEffects.FIRE_RESISTANCE);
-					plr.removeEffect(MobEffects.HEAL);
-					plr.removeEffect(MobEffects.SATURATION);
+		boolean debug = true;
+		if (debug) {
+			switch (ctx.bind()) {
+			case ITEMMODE:
+				return true;
+			case ITEMFUNC_1:
+				return true;
+			case ITEMFUNC_2:
+				return true;
+			case EMPOWER:
+				if (ctx.state() == BindState.PRESSED) {
+					ArrayList<ItemStack> items = new ArrayList<>();
+					items.add(ctx.player().getOffhandItem());
+					LabRecipeData in = new LabRecipeData(items, null, null, null, null);
+					LabRecipeData out = LabFunctions.shapeDistillation(in);
+					ItemStack stack = out.items.get(0);
+					FlaskItem flask = (FlaskItem) stack.getItem();
+					System.out.println(out.shapes.get(0).toTag());
+					ctx.player().drop(stack, false);
 				}
+				return true;
+			default:
+				return false;
 			}
-			return true;
-		case ITEMFUNC_1:
-			return ctx.state() == BindState.PRESSED
-			&& TrinketRunes.FIRE.get().combatAbility(ctx.stack(), ctx.player(), ctx.level(), BindState.PRESSED, true);
-		case ITEMFUNC_2:
-			return ctx.state() == BindState.PRESSED
-			&& TrinketRunes.ETHEREAL.get().combatAbility(ctx.stack(), ctx.player(), ctx.level(), BindState.PRESSED, true);
-		case EMPOWER:
-			return ctx.state() == BindState.PRESSED
-			&& toggleInstamine(ctx.stack());
-		default:
-			return false;
+		} else {
+			switch (ctx.bind()) {
+			case ITEMMODE:
+				ServerPlayer plr = ctx.player();
+				if (ctx.state() == BindState.PRESSED) {
+					if (!plr.isShiftKeyDown()) {
+						plr.displayClientMessage(new TextComponent("GODMODE"), false);
+						plr.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, Integer.MAX_VALUE, 4));
+						plr.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, Integer.MAX_VALUE, 0));
+						plr.addEffect(new MobEffectInstance(MobEffects.HEAL, Integer.MAX_VALUE, 99));
+						plr.addEffect(new MobEffectInstance(MobEffects.SATURATION, Integer.MAX_VALUE, 99));
+					} else {
+						plr.displayClientMessage(new TextComponent("mortal mode"), false);
+						plr.removeEffect(MobEffects.DAMAGE_RESISTANCE);
+						plr.removeEffect(MobEffects.FIRE_RESISTANCE);
+						plr.removeEffect(MobEffects.HEAL);
+						plr.removeEffect(MobEffects.SATURATION);
+					}
+				}
+				return true;
+			case ITEMFUNC_1:
+				return ctx.state() == BindState.PRESSED
+				&& TrinketRunes.FIRE.get().combatAbility(ctx.stack(), ctx.player(), ctx.level(), BindState.PRESSED, true);
+			case ITEMFUNC_2:
+				return ctx.state() == BindState.PRESSED
+				&& TrinketRunes.ETHEREAL.get().combatAbility(ctx.stack(), ctx.player(), ctx.level(), BindState.PRESSED, true);
+			case EMPOWER:
+				return ctx.state() == BindState.PRESSED
+				&& toggleInstamine(ctx.stack());
+			default:
+				return false;
+			}
 		}
 	}
 

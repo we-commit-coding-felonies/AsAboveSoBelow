@@ -1,4 +1,4 @@
-package com.quartzshard.aasb.common.block;
+package com.quartzshard.aasb.common.block.lab;
 
 import org.jetbrains.annotations.Nullable;
 

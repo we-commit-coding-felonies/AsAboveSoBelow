@@ -52,6 +52,7 @@ public enum AspectShape implements IAlchemicalFlow<AspectShape> {
 	 * @param to The Shape we're checking flow to.
 	 * @return 
 	 */
+	@Override
 	public boolean flows(AspectShape to) {
 		switch (this) {
 		case AIR:

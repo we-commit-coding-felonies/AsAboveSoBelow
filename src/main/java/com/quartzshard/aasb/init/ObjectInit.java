@@ -2,6 +2,7 @@ package com.quartzshard.aasb.init;
 
 import com.quartzshard.aasb.AsAboveSoBelow;
 import com.quartzshard.aasb.common.block.*;
+import com.quartzshard.aasb.common.block.lab.LabMultiblock;
 import com.quartzshard.aasb.common.effect.*;
 import com.quartzshard.aasb.common.entity.living.*;
 import com.quartzshard.aasb.common.entity.projectile.*;
