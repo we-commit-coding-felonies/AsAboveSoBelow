@@ -7,9 +7,14 @@ import org.jetbrains.annotations.Nullable;
 import com.quartzshard.aasb.api.alchemy.aspects.*;
 import com.quartzshard.aasb.api.alchemy.aspects.stack.*;
 import com.quartzshard.aasb.common.item.flask.*;
+import com.quartzshard.aasb.init.AlchemyInit.FormTree;
 import com.quartzshard.aasb.init.ObjectInit;
+import com.quartzshard.aasb.init.ObjectInit.Items;
 
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.material.Fluids;
+
+import net.minecraftforge.fluids.FluidStack;
 
 /**
  * functions related to the lab
@@ -118,6 +123,20 @@ public class LabFunctions {
 	}
 	
 	// Shape recipes
+	
+	/** extracts shape from an item */
+	@Nullable
+	public static LabRecipeData desiccation(LabRecipeData input) {
+		if (hasStacks(input.items)) {
+			AspectShape itemShape = AspectShape.FIRE; // TODO: implement once mapper is finished
+			ArrayList<ItemStack> itemsOut = new ArrayList<>();
+			itemsOut.add(new ItemStack(ObjectInit.Items.SALT.get()));
+			ArrayList<ShapeStack> shapesOut = new ArrayList<>();
+			shapesOut.add(new ShapeStack(itemShape));
+			return new LabRecipeData(itemsOut, null, null, shapesOut, null);
+		}
+		return null;
+	}
 
 	/** extracts the shape from a flask. lead & gold flasks are dirtied, but aetherglass is not */
 	@Nullable
@@ -252,6 +271,21 @@ public class LabFunctions {
 	
 	// Form recipes
 	
+	/** extracts shape from an item */
+	@Nullable
+	public static LabRecipeData evaporation(LabRecipeData input) {
+		if (hasStacks(input.items)) {
+			AspectForm itemForm = FormTree.JUPITER.get(); // TODO: implement once mapper is finished
+			ArrayList<ItemStack> itemsOut = new ArrayList<>();
+			itemsOut.add(new ItemStack(ObjectInit.Items.SOOT.get()));
+			ArrayList<FormStack> formsOut = new ArrayList<>();
+			formsOut.add(new FormStack(itemForm));
+			return new LabRecipeData(itemsOut, null, null, null, formsOut);
+		}
+		return null;
+	}
+
+	/** extracts form from a flask */
 	@Nullable
 	public static LabRecipeData formDistillation(LabRecipeData input) {
 		if (hasStacks(input.items) && !hasStacks(input.forms)) {
@@ -271,7 +305,194 @@ public class LabFunctions {
 		}
 		return null;
 	}
+
+	/** turns any non-leaf form into any leaf form */
+	@Nullable
+	public static LabRecipeData fixation(LabRecipeData input) {
+		if (hasStacks(input.forms) && hasStacks(input.items)) {
+			AspectForm inForm = input.forms.get(0).getForm();
+			if (inForm.getChildren().length > 0) {
+				ItemStack focus = input.items.get(0);
+				AspectForm focusForm = FormTree.MONSTER.get();
+				if (focusForm.getChildren().length <= 0) {
+					ArrayList<ItemStack> itemsOut = new ArrayList<>();
+					itemsOut.add(focus);
+					ArrayList<FormStack> formsOut = new ArrayList<>();
+					formsOut.add(new FormStack(focusForm));
+					return new LabRecipeData(itemsOut, null, null, null, formsOut);
+				}
+			}
+		}
+		return null;
+	}
+
+	/** turns a form into another with the same parent */
+	@Nullable
+	public static LabRecipeData amalgamation(LabRecipeData input) {
+		if (hasStacks(input.forms) && hasStacks(input.items)) {
+			AspectForm inForm = input.forms.get(0).getForm();
+			ItemStack focus = input.items.get(0);
+			AspectForm focusForm = FormTree.MONSTER.get();
+			if (inForm != focusForm) {
+				AspectForm inPar = inForm.getParent(),
+						focusPar = focusForm.getParent();
+				if (inPar != null && inPar == focusPar) {
+					ArrayList<ItemStack> itemsOut = new ArrayList<>();
+					itemsOut.add(focus);
+					ArrayList<FormStack> formsOut = new ArrayList<>();
+					formsOut.add(new FormStack(focusForm));
+					return new LabRecipeData(itemsOut, null, null, null, formsOut);
+				}
+			}
+		}
+		return null;
+	}
+
+	/** turns a form into its parent, at the cost of a universal */
+	@Nullable
+	public static LabRecipeData homogenization(LabRecipeData input) {
+		if (hasStacks(input.forms)) {
+			AspectForm inForm = input.forms.get(0).getForm(), inPar = inForm.getParent();
+			if (inPar != null) {
+				boolean canAfford = false;
+				boolean eatForm = false;
+				
+				boolean hasShapes = hasStacks(input.shapes);
+				boolean multiForms = input.forms.size() == 2;
+				if (hasShapes) {
+					canAfford = input.shapes.get(0).getShape() == AspectShape.UNIVERSAL;
+				}
+				if (!canAfford && multiForms) {
+					canAfford = input.forms.get(1).getForm().getParent() == null;
+					eatForm = canAfford;
+				}
+				
+				if (canAfford) {
+					ArrayList<FormStack> formsOut = new ArrayList<>();
+					ArrayList<ShapeStack> shapesOut = null;
+					formsOut.add(new FormStack(inPar));
+					if (eatForm && hasShapes) {
+						shapesOut = new ArrayList<>();
+						shapesOut.add(input.shapes.get(0));
+					} else if (!eatForm && multiForms) {
+						formsOut.add(input.forms.get(1));
+					}
+					return new LabRecipeData(null, null, null, shapesOut, formsOut);
+				}
+			}
+		}
+		return null;
+	}
 	
+	// Misc
 	
+	/** extracts shape & form from a gold flask */
+	@Nullable
+	public static LabRecipeData cohobation(LabRecipeData input) {
+		if ( hasStacks(input.items) && !(hasStacks(input.shapes) || hasStacks(input.forms)) ) {
+			ItemStack item = input.items.get(0);
+			if (item.is(Items.FLASK_GOLD.get()) && item.getItem() instanceof FlaskItem flask && flask.canExtract(item)) {
+				AspectShape shape = flask.getStoredShape(item);
+				AspectForm form = flask.getStoredForm(item);
+				if (shape != null && form != null) {
+					ItemStack badFlask = item.copy();
+					((FlaskItem)badFlask.getItem()).setContaminated(badFlask, true);
+					ArrayList<ItemStack> itemsOut = new ArrayList<>();
+					ArrayList<ShapeStack> shapesOut = new ArrayList<>();
+					ArrayList<FormStack> formsOut = new ArrayList<>();
+					itemsOut.add(badFlask);
+					shapesOut.add(new ShapeStack(shape));
+					formsOut.add(new FormStack(form));
+					return new LabRecipeData(itemsOut, null, null, shapesOut, formsOut);
+				}
+			}
+		}
+		return null;
+	}
+	
+	/** special transmutation */
+	@Nullable
+	public static LabRecipeData projection(LabRecipeData input) {
+		// TODO: implement
+		return null;
+	}
+	
+	/** fills flasks using alkahest <br><br>
+	 * 	NOTE: sets flasks expiration date to -1, which tells the lab to change it once it finishes the recipe <br>
+	 *  this is done because the lab function cannot know the world time, and thus cannot set an accurate expiration date
+	 */
+	@Nullable
+	public static LabRecipeData solution(LabRecipeData input) {
+		// TODO: currently uses water, implement alkahest
+		if (hasStacks(input.items) && hasStacks(input.fluids) && hasStacks(input.shapes) && hasStacks(input.forms)) {
+			FluidStack inFluid = input.fluids.get(0);
+			if (inFluid.getFluid().isSame(Fluids.WATER) && inFluid.getAmount() == 1000) {
+				ItemStack inItem = input.items.get(0);
+				ItemStack inItem2 = null;
+				boolean aether = false;
+				boolean invalid = false;
+				boolean multi = input.items.size() == 2;
+				if (multi) {
+					inItem2 = input.items.get(1);
+				}
+				if (inItem.getItem() instanceof StorageFlaskItem) {
+					if (multi && inItem2.getItem() instanceof StorageFlaskItem sf) {
+						boolean bad1 = sf.hasStored(inItem) || sf.isContaminated(inItem),
+								bad2 = sf.hasStored(inItem2) || sf.isContaminated(inItem2);
+						aether = !bad1 && !bad2;
+					}
+					invalid = !aether; // aetherglass must be put in 2 at a time
+				} else if (inItem.getItem() instanceof FlaskItem flask) {
+					invalid = !( flask.hasStored(inItem) || flask.isContaminated(inItem) );
+				}
+
+				// we did flask-checking earlier, so we can get right to output processing
+				if (!invalid) {
+					ArrayList<ItemStack> itemsOut = new ArrayList<>();
+					ItemStack f1, f2;
+					if (aether) {
+						StorageFlaskItem sFlask = ((StorageFlaskItem)inItem.getItem());
+						sFlask.setStored(inItem, input.shapes.get(0).getShape(), null, 0);
+						sFlask.setExpiry(inItem, -1);
+						itemsOut.add(inItem);
+						
+						sFlask.setStored(inItem2, null, input.forms.get(0).getForm(), 0);
+						sFlask.setExpiry(inItem2, -1);
+						itemsOut.add(inItem2);
+					} else {
+						FlaskItem flask = ((FlaskItem)inItem.getItem());
+						flask.setStored(inItem, input.shapes.get(0).getShape(), input.forms.get(0).getForm(), 0);
+						flask.setExpiry(inItem, -1);
+						itemsOut.add(inItem);
+						if (multi) {
+							// prevents voiding extra flasks
+							itemsOut.add(inItem2);
+						}
+					}
+					return new LabRecipeData(itemsOut, null, null, null, null);
+				}
+			}
+		}
+		return null;
+	}
+	
+	/** turns a way, a shape, and a form into 1 aether */
+	@Nullable
+	public static LabRecipeData digestion(LabRecipeData input) {
+		// TODO: this recipe should be sped up by higher way values. figure out a way to do this
+		if (hasStacks(input.ways) && hasStacks(input.shapes) && hasStacks(input.forms)) {
+			ArrayList<ItemStack> itemsOut = new ArrayList<>();
+			itemsOut.add(new ItemStack(Items.AETHER.get()));
+			return new LabRecipeData(itemsOut, null, null, null, null);
+		}
+		return null;
+	}
+	
+	/** clones an item using 2x its raw aspects */
+	@Nullable
+	public static LabRecipeData multiplication(LabRecipeData input) {
+		// TODO: implement, requires the mapper
+		return null;
+	}
 	
 }

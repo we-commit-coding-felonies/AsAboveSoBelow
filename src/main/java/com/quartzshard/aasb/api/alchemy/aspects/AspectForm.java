@@ -115,7 +115,7 @@ public class AspectForm extends ForgeRegistryEntry<AspectForm> implements IAlche
 		return this.distance;
 	}
 		
-	//Yes, this is much more code than ArrayList would need. No, I don't care.
+	// Yes, this is much more code than ArrayList would need. No, I don't care.
 	public void addChildNode(AspectForm adoptee) {
 		AspectForm prev[] = this.children;
 		this.children = new AspectForm[prev.length + 1];
@@ -130,9 +130,10 @@ public class AspectForm extends ForgeRegistryEntry<AspectForm> implements IAlche
 		FormTreeException(String cause) {
 			this.cause = cause;
 		}
+		
 		@Override
-		public String toString() {
-			return ("Tried to assign an invalid node in the form tree. Reason: " + this.cause + "\n        If you're develping an addon, this is on you. If you're a normal player, please report!");
+		public String getLocalizedMessage() {
+			return this.cause;
 		}
 	}
 	
