@@ -73,7 +73,7 @@ public class LabFunctions {
 		return null;
 	}
 
-	/** divides a waystack in half */
+	/** divides an even waystack in half */
 	@Nullable
 	public static LabRecipeData separation(LabRecipeData input) {
 		if (hasStacks(input.ways) && input.ways.get(0).getAmount() % 2 == 0) {
@@ -99,14 +99,14 @@ public class LabFunctions {
 			long focusWay = 11; // TODO: make this actually get the items way value, waiting on shard to finish the mapper
 			if (inWayVal > focusWay) {
 				long remainder = inWay.getAmount() % focusWay;
+				ArrayList<WayStack> waysOut = new ArrayList<>();
 				if (remainder != 0) {
 					// TODO: shenanigans
 					inWayVal -= remainder;
+					inWay.setAmount(remainder);
+					waysOut.add(inWay); // this entry in the list acts as a signal to perform shenanigans
 				}
 				long numOutWays = inWayVal / focusWay;
-				ArrayList<WayStack> waysOut = new ArrayList<>();
-				inWay.setAmount(remainder);
-				waysOut.add(inWay); // this entry in the list acts as a signal to perform shenanigans
 				for (int i = 0; i < numOutWays; i++)
 					waysOut.add(new WayStack(focusWay));
 				return new LabRecipeData(input.items, null, waysOut, null, null);
@@ -275,7 +275,7 @@ public class LabFunctions {
 	@Nullable
 	public static LabRecipeData evaporation(LabRecipeData input) {
 		if (hasStacks(input.items)) {
-			AspectForm itemForm = FormTree.JUPITER.get(); // TODO: implement once mapper is finished
+			AspectForm itemForm = FormTree.WITCHCRAFT.get(); // TODO: implement once mapper is finished
 			ArrayList<ItemStack> itemsOut = new ArrayList<>();
 			itemsOut.add(new ItemStack(ObjectInit.Items.SOOT.get()));
 			ArrayList<FormStack> formsOut = new ArrayList<>();
@@ -294,7 +294,11 @@ public class LabFunctions {
 				AspectForm form = flask.getStoredForm(item);
 				if (form != null) {
 					ItemStack badFlask = item.copy();
-					((FlaskItem)badFlask.getItem()).setContaminated(badFlask, true);
+					if (badFlask.getItem() instanceof StorageFlaskItem sf) {
+						sf.clearStored(badFlask);
+					} else {
+						flask.setContaminated(badFlask, true);
+					}
 					ArrayList<ItemStack> itemsOut = new ArrayList<>();
 					ArrayList<FormStack> formsOut = new ArrayList<>();
 					itemsOut.add(badFlask);
@@ -313,7 +317,7 @@ public class LabFunctions {
 			AspectForm inForm = input.forms.get(0).getForm();
 			if (inForm.getChildren().length > 0) {
 				ItemStack focus = input.items.get(0);
-				AspectForm focusForm = FormTree.MONSTER.get();
+				AspectForm focusForm = FormTree.MARS.get();
 				if (focusForm.getChildren().length <= 0) {
 					ArrayList<ItemStack> itemsOut = new ArrayList<>();
 					itemsOut.add(focus);
@@ -332,7 +336,7 @@ public class LabFunctions {
 		if (hasStacks(input.forms) && hasStacks(input.items)) {
 			AspectForm inForm = input.forms.get(0).getForm();
 			ItemStack focus = input.items.get(0);
-			AspectForm focusForm = FormTree.MONSTER.get();
+			AspectForm focusForm = FormTree.SUN.get();
 			if (inForm != focusForm) {
 				AspectForm inPar = inForm.getParent(),
 						focusPar = focusForm.getParent();
@@ -396,7 +400,8 @@ public class LabFunctions {
 				AspectForm form = flask.getStoredForm(item);
 				if (shape != null && form != null) {
 					ItemStack badFlask = item.copy();
-					((FlaskItem)badFlask.getItem()).setContaminated(badFlask, true);
+					flask.clearStored(badFlask);
+					//((FlaskItem)badFlask.getItem()).setContaminated(badFlask, true);
 					ArrayList<ItemStack> itemsOut = new ArrayList<>();
 					ArrayList<ShapeStack> shapesOut = new ArrayList<>();
 					ArrayList<FormStack> formsOut = new ArrayList<>();
@@ -443,7 +448,7 @@ public class LabFunctions {
 					}
 					invalid = !aether; // aetherglass must be put in 2 at a time
 				} else if (inItem.getItem() instanceof FlaskItem flask) {
-					invalid = !( flask.hasStored(inItem) || flask.isContaminated(inItem) );
+					invalid = flask.hasStored(inItem) || flask.isContaminated(inItem);
 				}
 
 				// we did flask-checking earlier, so we can get right to output processing
