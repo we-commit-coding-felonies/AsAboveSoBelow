@@ -21,4 +21,12 @@ public interface IAlchemicalFlow<T> {
 	 * @return if this violates flow
 	 */
 	public boolean violates(T to);
+	
+	/**
+	 * Returns a string representation of this aspect, used when saving to NBT
+	 * @return
+	 */
+	default String serialize() {
+		return toString();
+	}
 }

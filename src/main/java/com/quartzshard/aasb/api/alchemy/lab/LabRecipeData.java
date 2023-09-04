@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.jetbrains.annotations.Nullable;
 
-import com.quartzshard.aasb.api.alchemy.aspects.stack.*;
+import com.quartzshard.aasb.api.alchemy.aspects.stack.legacy.*;
 
 import net.minecraft.world.item.ItemStack;
 
@@ -19,11 +19,11 @@ public class LabRecipeData {
 	@Nullable
 	public final ArrayList<FluidStack> fluids;
 	@Nullable
-	public final ArrayList<WayStack> ways;
+	public final ArrayList<LegacyWayStack> ways;
 	@Nullable
-	public final ArrayList<ShapeStack> shapes;
+	public final ArrayList<LegacyShapeStack> shapes;
 	@Nullable
-	public final ArrayList<FormStack> forms;
+	public final ArrayList<LegacyFormStack> forms;
 	
 	/**
 	 * generics mean theres really no other way to do this, sorry
@@ -36,9 +36,9 @@ public class LabRecipeData {
 	public LabRecipeData(
 			@Nullable ArrayList<ItemStack> items,
 			@Nullable ArrayList<FluidStack> fluids,
-			@Nullable ArrayList<WayStack> ways,
-			@Nullable ArrayList<ShapeStack> shapes,
-			@Nullable ArrayList<FormStack> forms) {
+			@Nullable ArrayList<LegacyWayStack> ways,
+			@Nullable ArrayList<LegacyShapeStack> shapes,
+			@Nullable ArrayList<LegacyFormStack> forms) {
 		this.items = items;
 		this.fluids = fluids;
 		this.ways = ways;

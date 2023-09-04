@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import org.jetbrains.annotations.Nullable;
 
 import com.quartzshard.aasb.api.alchemy.aspects.*;
-import com.quartzshard.aasb.api.alchemy.aspects.stack.*;
+import com.quartzshard.aasb.api.alchemy.aspects.stack.legacy.*;
 import com.quartzshard.aasb.common.item.flask.*;
 import com.quartzshard.aasb.init.AlchemyInit.FormTree;
 import com.quartzshard.aasb.init.ObjectInit;
@@ -38,8 +38,8 @@ public class LabFunctions {
 			long itemWay = 11; // TODO: implement once mapper is finished
 			ArrayList<ItemStack> itemsOut = new ArrayList<>();
 			itemsOut.add(new ItemStack(ObjectInit.Items.SUBLIT.get()));
-			ArrayList<WayStack> waysOut = new ArrayList<>();
-			waysOut.add(new WayStack(itemWay));
+			ArrayList<LegacyWayStack> waysOut = new ArrayList<>();
+			waysOut.add(new LegacyWayStack(itemWay));
 			return new LabRecipeData(itemsOut, null, waysOut, null, null);
 		}
 		return null;
@@ -52,8 +52,8 @@ public class LabFunctions {
 			AspectWay a = new AspectWay(input.ways.get(0).getAmount()),
 					b = new AspectWay(input.ways.get(1).getAmount());
 			if (a.flows(b)) {
-				ArrayList<WayStack> waysOut = new ArrayList<>();
-				waysOut.add(new WayStack(a.getValue() + b.getValue()));
+				ArrayList<LegacyWayStack> waysOut = new ArrayList<>();
+				waysOut.add(new LegacyWayStack(a.getValue() + b.getValue()));
 				return new LabRecipeData(null, null, waysOut, null, null);
 			}
 		}
@@ -64,8 +64,8 @@ public class LabFunctions {
 	@Nullable
 	public static LabRecipeData stagnation(LabRecipeData input) {
 		if (hasStacks(input.ways) && input.ways.get(0).getAmount() > 3) {
-			ArrayList<WayStack> waysOut = new ArrayList<>();
-			WayStack modStack = input.ways.get(0);
+			ArrayList<LegacyWayStack> waysOut = new ArrayList<>();
+			LegacyWayStack modStack = input.ways.get(0);
 			modStack.setAmount(modStack.getAmount()-3);
 			waysOut.add(modStack);
 			return new LabRecipeData(null, null, waysOut, null, null);
@@ -77,11 +77,11 @@ public class LabFunctions {
 	@Nullable
 	public static LabRecipeData separation(LabRecipeData input) {
 		if (hasStacks(input.ways) && input.ways.get(0).getAmount() % 2 == 0) {
-			ArrayList<WayStack> waysOut = new ArrayList<>();
-			WayStack a = input.ways.get(0);
+			ArrayList<LegacyWayStack> waysOut = new ArrayList<>();
+			LegacyWayStack a = input.ways.get(0);
 			long newVal = a.getAmount()/2;
 			a.setAmount(newVal);
-			WayStack b = new WayStack(newVal);
+			LegacyWayStack b = new LegacyWayStack(newVal);
 			waysOut.add(a);
 			waysOut.add(b);
 			return new LabRecipeData(null, null, waysOut, null, null);
@@ -94,12 +94,12 @@ public class LabFunctions {
 	public static LabRecipeData filtration(LabRecipeData input) {
 		if (hasStacks(input.ways) && hasStacks(input.items)) {
 			ItemStack focusItem = input.items.get(0);
-			WayStack inWay = input.ways.get(0);
+			LegacyWayStack inWay = input.ways.get(0);
 			long inWayVal = inWay.getAmount();
 			long focusWay = 11; // TODO: make this actually get the items way value, waiting on shard to finish the mapper
 			if (inWayVal > focusWay) {
 				long remainder = inWay.getAmount() % focusWay;
-				ArrayList<WayStack> waysOut = new ArrayList<>();
+				ArrayList<LegacyWayStack> waysOut = new ArrayList<>();
 				if (remainder != 0) {
 					// TODO: shenanigans
 					inWayVal -= remainder;
@@ -108,7 +108,7 @@ public class LabFunctions {
 				}
 				long numOutWays = inWayVal / focusWay;
 				for (int i = 0; i < numOutWays; i++)
-					waysOut.add(new WayStack(focusWay));
+					waysOut.add(new LegacyWayStack(focusWay));
 				return new LabRecipeData(input.items, null, waysOut, null, null);
 			}
 		}
@@ -131,8 +131,8 @@ public class LabFunctions {
 			AspectShape itemShape = AspectShape.FIRE; // TODO: implement once mapper is finished
 			ArrayList<ItemStack> itemsOut = new ArrayList<>();
 			itemsOut.add(new ItemStack(ObjectInit.Items.SALT.get()));
-			ArrayList<ShapeStack> shapesOut = new ArrayList<>();
-			shapesOut.add(new ShapeStack(itemShape));
+			ArrayList<LegacyShapeStack> shapesOut = new ArrayList<>();
+			shapesOut.add(new LegacyShapeStack(itemShape));
 			return new LabRecipeData(itemsOut, null, null, shapesOut, null);
 		}
 		return null;
@@ -153,9 +153,9 @@ public class LabFunctions {
 						flask.setContaminated(badFlask, true);
 					}
 					ArrayList<ItemStack> itemsOut = new ArrayList<>();
-					ArrayList<ShapeStack> shapesOut = new ArrayList<>();
+					ArrayList<LegacyShapeStack> shapesOut = new ArrayList<>();
 					itemsOut.add(badFlask);
-					shapesOut.add(new ShapeStack(shape));
+					shapesOut.add(new LegacyShapeStack(shape));
 					return new LabRecipeData(itemsOut, null, null, shapesOut, null);
 				}
 			}
@@ -167,10 +167,10 @@ public class LabFunctions {
 	@Nullable
 	public static LabRecipeData oxidation(LabRecipeData input) {
 		if (hasStacks(input.shapes)) {
-			ShapeStack inShape = input.shapes.get(0);
+			LegacyShapeStack inShape = input.shapes.get(0);
 			if (inShape.isValid() && inShape.getShape() == AspectShape.AIR) {
-				ArrayList<ShapeStack> shapesOut = new ArrayList<>();
-				shapesOut.add(new ShapeStack(AspectShape.FIRE));
+				ArrayList<LegacyShapeStack> shapesOut = new ArrayList<>();
+				shapesOut.add(new LegacyShapeStack(AspectShape.FIRE));
 				return new LabRecipeData(null, null, null, shapesOut, null);
 			}
 		}
@@ -181,10 +181,10 @@ public class LabFunctions {
 	@Nullable
 	public static LabRecipeData congelation(LabRecipeData input) {
 		if (hasStacks(input.shapes)) {
-			ShapeStack inShape = input.shapes.get(0);
+			LegacyShapeStack inShape = input.shapes.get(0);
 			if (inShape.isValid() && inShape.getShape() == AspectShape.FIRE) {
-				ArrayList<ShapeStack> shapesOut = new ArrayList<>();
-				shapesOut.add(new ShapeStack(AspectShape.EARTH));
+				ArrayList<LegacyShapeStack> shapesOut = new ArrayList<>();
+				shapesOut.add(new LegacyShapeStack(AspectShape.EARTH));
 				return new LabRecipeData(null, null, null, shapesOut, null);
 			}
 		}
@@ -195,10 +195,10 @@ public class LabFunctions {
 	@Nullable
 	public static LabRecipeData ceration(LabRecipeData input) {
 		if (hasStacks(input.shapes)) {
-			ShapeStack inShape = input.shapes.get(0);
+			LegacyShapeStack inShape = input.shapes.get(0);
 			if (inShape.isValid() && inShape.getShape() == AspectShape.EARTH) {
-				ArrayList<ShapeStack> shapesOut = new ArrayList<>();
-				shapesOut.add(new ShapeStack(AspectShape.WATER));
+				ArrayList<LegacyShapeStack> shapesOut = new ArrayList<>();
+				shapesOut.add(new LegacyShapeStack(AspectShape.WATER));
 				return new LabRecipeData(null, null, null, shapesOut, null);
 			}
 		}
@@ -209,10 +209,10 @@ public class LabFunctions {
 	@Nullable
 	public static LabRecipeData dehydration(LabRecipeData input) {
 		if (hasStacks(input.shapes)) {
-			ShapeStack inShape = input.shapes.get(0);
+			LegacyShapeStack inShape = input.shapes.get(0);
 			if (inShape.isValid() && inShape.getShape() == AspectShape.WATER) {
-				ArrayList<ShapeStack> shapesOut = new ArrayList<>();
-				shapesOut.add(new ShapeStack(AspectShape.AIR));
+				ArrayList<LegacyShapeStack> shapesOut = new ArrayList<>();
+				shapesOut.add(new LegacyShapeStack(AspectShape.AIR));
 				return new LabRecipeData(null, null, null, shapesOut, null);
 			}
 		}
@@ -225,7 +225,7 @@ public class LabFunctions {
 		if (hasStacks(input.shapes) && input.shapes.size() == 4) {
 			boolean w,e,f,a;
 			w = e = f = a = false;
-			for (ShapeStack shape : input.shapes) {
+			for (LegacyShapeStack shape : input.shapes) {
 				switch (shape.getShape()) {
 				case WATER:
 					w = true;
@@ -244,8 +244,8 @@ public class LabFunctions {
 				}
 			}
 			if (w && e && f && a) {
-				ArrayList<ShapeStack> shapesOut = new ArrayList<>();
-				shapesOut.add(new ShapeStack(AspectShape.UNIVERSAL));
+				ArrayList<LegacyShapeStack> shapesOut = new ArrayList<>();
+				shapesOut.add(new LegacyShapeStack(AspectShape.UNIVERSAL));
 				return new LabRecipeData(null, null, null, shapesOut, null);
 			}
 		}
@@ -256,11 +256,11 @@ public class LabFunctions {
 	@Nullable
 	public static LabRecipeData condemnation(LabRecipeData input) {
 		if (hasStacks(input.shapes) && hasStacks(input.items)) {
-			ShapeStack inShape = input.shapes.get(0);
+			LegacyShapeStack inShape = input.shapes.get(0);
 			AspectShape focusShape = AspectShape.AIR; // TODO: implement this properly with the mapper
 			if (inShape.isValid() && inShape.getShape() == AspectShape.UNIVERSAL) {
-				ArrayList<ShapeStack> shapesOut = new ArrayList<>();
-				shapesOut.add(new ShapeStack(focusShape, 4));
+				ArrayList<LegacyShapeStack> shapesOut = new ArrayList<>();
+				shapesOut.add(new LegacyShapeStack(focusShape, 4));
 				ArrayList<ItemStack> itemsOut = new ArrayList<>();
 				itemsOut.add(input.items.get(0));
 				return new LabRecipeData(itemsOut, null, null, shapesOut, null);
@@ -278,8 +278,8 @@ public class LabFunctions {
 			AspectForm itemForm = FormTree.WITCHCRAFT.get(); // TODO: implement once mapper is finished
 			ArrayList<ItemStack> itemsOut = new ArrayList<>();
 			itemsOut.add(new ItemStack(ObjectInit.Items.SOOT.get()));
-			ArrayList<FormStack> formsOut = new ArrayList<>();
-			formsOut.add(new FormStack(itemForm));
+			ArrayList<LegacyFormStack> formsOut = new ArrayList<>();
+			formsOut.add(new LegacyFormStack(itemForm));
 			return new LabRecipeData(itemsOut, null, null, null, formsOut);
 		}
 		return null;
@@ -300,9 +300,9 @@ public class LabFunctions {
 						flask.setContaminated(badFlask, true);
 					}
 					ArrayList<ItemStack> itemsOut = new ArrayList<>();
-					ArrayList<FormStack> formsOut = new ArrayList<>();
+					ArrayList<LegacyFormStack> formsOut = new ArrayList<>();
 					itemsOut.add(badFlask);
-					formsOut.add(new FormStack(form));
+					formsOut.add(new LegacyFormStack(form));
 					return new LabRecipeData(itemsOut, null, null, null, formsOut);
 				}
 			}
@@ -321,8 +321,8 @@ public class LabFunctions {
 				if (focusForm.getChildren().length <= 0) {
 					ArrayList<ItemStack> itemsOut = new ArrayList<>();
 					itemsOut.add(focus);
-					ArrayList<FormStack> formsOut = new ArrayList<>();
-					formsOut.add(new FormStack(focusForm));
+					ArrayList<LegacyFormStack> formsOut = new ArrayList<>();
+					formsOut.add(new LegacyFormStack(focusForm));
 					return new LabRecipeData(itemsOut, null, null, null, formsOut);
 				}
 			}
@@ -343,8 +343,8 @@ public class LabFunctions {
 				if (inPar != null && inPar == focusPar) {
 					ArrayList<ItemStack> itemsOut = new ArrayList<>();
 					itemsOut.add(focus);
-					ArrayList<FormStack> formsOut = new ArrayList<>();
-					formsOut.add(new FormStack(focusForm));
+					ArrayList<LegacyFormStack> formsOut = new ArrayList<>();
+					formsOut.add(new LegacyFormStack(focusForm));
 					return new LabRecipeData(itemsOut, null, null, null, formsOut);
 				}
 			}
@@ -372,9 +372,9 @@ public class LabFunctions {
 				}
 				
 				if (canAfford) {
-					ArrayList<FormStack> formsOut = new ArrayList<>();
-					ArrayList<ShapeStack> shapesOut = null;
-					formsOut.add(new FormStack(inPar));
+					ArrayList<LegacyFormStack> formsOut = new ArrayList<>();
+					ArrayList<LegacyShapeStack> shapesOut = null;
+					formsOut.add(new LegacyFormStack(inPar));
 					if (eatForm && hasShapes) {
 						shapesOut = new ArrayList<>();
 						shapesOut.add(input.shapes.get(0));
@@ -403,11 +403,11 @@ public class LabFunctions {
 					flask.clearStored(badFlask);
 					//((FlaskItem)badFlask.getItem()).setContaminated(badFlask, true);
 					ArrayList<ItemStack> itemsOut = new ArrayList<>();
-					ArrayList<ShapeStack> shapesOut = new ArrayList<>();
-					ArrayList<FormStack> formsOut = new ArrayList<>();
+					ArrayList<LegacyShapeStack> shapesOut = new ArrayList<>();
+					ArrayList<LegacyFormStack> formsOut = new ArrayList<>();
 					itemsOut.add(badFlask);
-					shapesOut.add(new ShapeStack(shape));
-					formsOut.add(new FormStack(form));
+					shapesOut.add(new LegacyShapeStack(shape));
+					formsOut.add(new LegacyFormStack(form));
 					return new LabRecipeData(itemsOut, null, null, shapesOut, formsOut);
 				}
 			}

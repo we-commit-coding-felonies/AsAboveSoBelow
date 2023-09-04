@@ -7,9 +7,9 @@ import org.jetbrains.annotations.Nullable;
 
 import com.quartzshard.aasb.AsAboveSoBelow;
 import com.quartzshard.aasb.api.alchemy.aspects.AspectShape;
-import com.quartzshard.aasb.api.alchemy.aspects.stack.FormStack;
-import com.quartzshard.aasb.api.alchemy.aspects.stack.ShapeStack;
-import com.quartzshard.aasb.api.alchemy.aspects.stack.WayStack;
+import com.quartzshard.aasb.api.alchemy.aspects.stack.legacy.LegacyFormStack;
+import com.quartzshard.aasb.api.alchemy.aspects.stack.legacy.LegacyShapeStack;
+import com.quartzshard.aasb.api.alchemy.aspects.stack.legacy.LegacyWayStack;
 import com.quartzshard.aasb.api.alchemy.lab.LabFunctions;
 import com.quartzshard.aasb.api.alchemy.lab.LabRecipeData;
 import com.quartzshard.aasb.api.item.IStaticSpeedBreaker;
@@ -177,18 +177,18 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 			ctx.player().drop(stack, false);
 			break;
 		case ITEMFUNC_1:
-			ArrayList<WayStack> ways = new ArrayList<>();
-			ways.add(new WayStack(10));
-			ways.add(new WayStack(15));
+			ArrayList<LegacyWayStack> ways = new ArrayList<>();
+			ways.add(new LegacyWayStack(10));
+			ways.add(new LegacyWayStack(15));
 			LabRecipeData dat = LabFunctions.conjunction(new LabRecipeData(null,null,ways,null,null));
 			if (dat != null && dat.ways != null && dat.ways.size() == 1 && dat.ways.get(0) != null && dat.ways.get(0).getAmount() == 25) {
 				System.out.println("conjunction 10 + 15 = " + dat.ways.get(0).getAmount());
 			} else failed = true;
 			break;
 		case ITEMFUNC_2:
-			ArrayList<WayStack> waysf = new ArrayList<>();
-			waysf.add(new WayStack(40000));
-			waysf.add(new WayStack(150));
+			ArrayList<LegacyWayStack> waysf = new ArrayList<>();
+			waysf.add(new LegacyWayStack(40000));
+			waysf.add(new LegacyWayStack(150));
 			LabRecipeData datf = LabFunctions.conjunction(new LabRecipeData(null,null,waysf,null,null));
 			if ( datf == null ) {
 				System.out.println("conjunction 40k + 150 = " + datf);
@@ -223,9 +223,9 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 		private LabRecipeData lrd(
 			@Nullable ArrayList<ItemStack> items,
 			@Nullable ArrayList<FluidStack> fluids,
-			@Nullable ArrayList<WayStack> ways,
-			@Nullable ArrayList<ShapeStack> shapes,
-			@Nullable ArrayList<FormStack> forms) {
+			@Nullable ArrayList<LegacyWayStack> ways,
+			@Nullable ArrayList<LegacyShapeStack> shapes,
+			@Nullable ArrayList<LegacyFormStack> forms) {
 			return new LabRecipeData(items,fluids,ways,shapes,forms);
 		}
 		
@@ -263,7 +263,7 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 					if (dat != null && dat.items != null && dat.ways != null) {
 						System.out.println(dat.items);
 						System.out.print("waystacks: { ");
-						for (WayStack w : dat.ways) {
+						for (LegacyWayStack w : dat.ways) {
 							System.out.print(w.getAmount() + ", ");
 						}
 						System.out.println(" }");
@@ -288,9 +288,9 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 				
 				// valid
 				if (!failed) {
-					ArrayList<WayStack> ways = new ArrayList<>();
-					ways.add(new WayStack(10));
-					ways.add(new WayStack(15));
+					ArrayList<LegacyWayStack> ways = new ArrayList<>();
+					ways.add(new LegacyWayStack(10));
+					ways.add(new LegacyWayStack(15));
 					LabRecipeData dat = LabFunctions.conjunction(lrd(null,null,ways,null,null));
 					if (dat != null && dat.ways != null && dat.ways.size() == 1 && dat.ways.get(0) != null && dat.ways.get(0).getAmount() == 25) {
 						System.out.println("conjunction 10 + 15 = " + dat.ways.get(0).getAmount());
@@ -299,9 +299,9 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 				
 				// invalid
 				if (!failed) {
-					ArrayList<WayStack> ways = new ArrayList<>();
-					ways.add(new WayStack(10000));
-					ways.add(new WayStack(10));
+					ArrayList<LegacyWayStack> ways = new ArrayList<>();
+					ways.add(new LegacyWayStack(10000));
+					ways.add(new LegacyWayStack(10));
 					LabRecipeData dat = LabFunctions.conjunction(lrd(null,null,ways,null,null));
 					if ( dat == null ) {
 						System.out.println("conjunction 40k + 150 = " + dat);
@@ -310,9 +310,9 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 				
 				// lower bound
 				if (!failed) {
-					ArrayList<WayStack> ways = new ArrayList<>();
-					ways.add(new WayStack(64));
-					ways.add(new WayStack(32));
+					ArrayList<LegacyWayStack> ways = new ArrayList<>();
+					ways.add(new LegacyWayStack(64));
+					ways.add(new LegacyWayStack(32));
 					LabRecipeData dat = LabFunctions.conjunction(lrd(null,null,ways,null,null));
 					if (dat != null && dat.ways != null && dat.ways.size() == 1 && dat.ways.get(0) != null && dat.ways.get(0).getAmount() == 96) {
 						System.out.println("conjunction 64 + 32 = " + dat.ways.get(0).getAmount());
@@ -321,9 +321,9 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 				
 				// upper bound
 				if (!failed) {
-					ArrayList<WayStack> ways = new ArrayList<>();
-					ways.add(new WayStack(64));
-					ways.add(new WayStack(128));
+					ArrayList<LegacyWayStack> ways = new ArrayList<>();
+					ways.add(new LegacyWayStack(64));
+					ways.add(new LegacyWayStack(128));
 					LabRecipeData dat = LabFunctions.conjunction(lrd(null,null,ways,null,null));
 					if (dat != null && dat.ways != null && dat.ways.size() == 1 && dat.ways.get(0) != null && dat.ways.get(0).getAmount() == 192) {
 						System.out.println("conjunction 64 + 128 = " + dat.ways.get(0).getAmount());
@@ -337,14 +337,14 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 				
 				// valid
 				if (!failed) {
-					ArrayList<WayStack> ways = new ArrayList<>();
+					ArrayList<LegacyWayStack> ways = new ArrayList<>();
 					long i = AsAboveSoBelow.RAND.nextLong(4, 1000);
 					System.out.println(i);
-					ways.add(new WayStack(i));
+					ways.add(new LegacyWayStack(i));
 					LabRecipeData dat = LabFunctions.stagnation(lrd(null,null,ways,null,null));
 					if (dat != null && dat.ways != null && dat.ways.size() > 0 && dat.ways.get(0).getAmount() == i-3) {
 						System.out.print("waystacks: { ");
-						for (WayStack w : dat.ways) {
+						for (LegacyWayStack w : dat.ways) {
 							System.out.print(w.getAmount() + ", ");
 						}
 						System.out.println(" }");
@@ -355,10 +355,10 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 
 				// invalid
 				if (!failed) {
-					ArrayList<WayStack> ways = new ArrayList<>();
+					ArrayList<LegacyWayStack> ways = new ArrayList<>();
 					long i = AsAboveSoBelow.RAND.nextLong(0, 4);
 					System.out.println(i);
-					ways.add(new WayStack(i));
+					ways.add(new LegacyWayStack(i));
 					LabRecipeData dat = LabFunctions.stagnation(lrd(null,null,ways,null,null));
 					if (dat == null) {
 					} else {
@@ -373,14 +373,14 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 				
 				// valid
 				if (!failed) {
-					ArrayList<WayStack> ways = new ArrayList<>();
+					ArrayList<LegacyWayStack> ways = new ArrayList<>();
 					long i = 50;
 					System.out.println(i);
-					ways.add(new WayStack(i));
+					ways.add(new LegacyWayStack(i));
 					LabRecipeData dat = LabFunctions.separation(lrd(null,null,ways,null,null));
 					if (dat != null && dat.ways != null && dat.ways.size() == 2 && dat.ways.get(0).getAmount() == 25) {
 						System.out.print("waystacks: { ");
-						for (WayStack w : dat.ways) {
+						for (LegacyWayStack w : dat.ways) {
 							System.out.print(w.getAmount() + ", ");
 						}
 						System.out.println(" }");
@@ -391,10 +391,10 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 				
 				// invalid
 				if (!failed) {
-					ArrayList<WayStack> ways = new ArrayList<>();
+					ArrayList<LegacyWayStack> ways = new ArrayList<>();
 					long i = 49;
 					System.out.println(i);
-					ways.add(new WayStack(i));
+					ways.add(new LegacyWayStack(i));
 					LabRecipeData dat = LabFunctions.separation(lrd(null,null,ways,null,null));
 					if (dat == null) {
 					} else {
@@ -409,18 +409,18 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 				
 				// valid
 				if (!failed) {
-					ArrayList<WayStack> ways = new ArrayList<>();
+					ArrayList<LegacyWayStack> ways = new ArrayList<>();
 					long i = AsAboveSoBelow.RAND.nextLong(2,10);
 					long j = i*11;
 					System.out.println(i +" & "+ j);
-					ways.add(new WayStack(j));
+					ways.add(new LegacyWayStack(j));
 					ArrayList<ItemStack> items = new ArrayList<>();
 					items.add(new ItemStack(Items.STONE_PICKAXE));
 					LabRecipeData dat = LabFunctions.filtration(lrd(items,null,ways,null,null));
 					//System.out.println(dat.ways.get(0).getAmount());
 					if (dat != null && dat.items != null && dat.ways != null && dat.items.size() > 0 && dat.items.get(0).is(Items.STONE_PICKAXE) && dat.ways.size() == i && dat.ways.get(0).getAmount() == 11) {
 						System.out.print("waystacks: { ");
-						for (WayStack w : dat.ways) {
+						for (LegacyWayStack w : dat.ways) {
 							System.out.print(w.getAmount() + ", ");
 						}
 						System.out.println(" }");
@@ -431,19 +431,19 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 				
 				// shenanigans
 				if (!failed) {
-					ArrayList<WayStack> ways = new ArrayList<>();
+					ArrayList<LegacyWayStack> ways = new ArrayList<>();
 					long i = AsAboveSoBelow.RAND.nextLong(2,10);
 					long k = AsAboveSoBelow.RAND.nextLong(1,11);
 					long j = i*11 + k;
 					System.out.println(i +" & "+ j);
-					ways.add(new WayStack(j));
+					ways.add(new LegacyWayStack(j));
 					ArrayList<ItemStack> items = new ArrayList<>();
 					items.add(new ItemStack(Items.STONE_PICKAXE));
 					LabRecipeData dat = LabFunctions.filtration(lrd(items,null,ways,null,null));
 					//System.out.println(dat.ways.get(0).getAmount());
 					if (dat != null && dat.ways != null && dat.ways.size() == i+1 && dat.ways.get(0).getAmount() == k) {
 						System.out.print("waystacks: { ");
-						for (WayStack w : dat.ways) {
+						for (LegacyWayStack w : dat.ways) {
 							System.out.print(w.getAmount() + ", ");
 						}
 						System.out.println(" }");
@@ -454,10 +454,10 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 				
 				// invalid
 				if (!failed) {
-					ArrayList<WayStack> ways = new ArrayList<>();
+					ArrayList<LegacyWayStack> ways = new ArrayList<>();
 					long i = AsAboveSoBelow.RAND.nextLong(2,10);
 					System.out.println(i +" bad ");
-					ways.add(new WayStack(i));
+					ways.add(new LegacyWayStack(i));
 					ArrayList<ItemStack> items = new ArrayList<>();
 					items.add(new ItemStack(Items.STONE_PICKAXE));
 					LabRecipeData dat = LabFunctions.filtration(lrd(items,null,ways,null,null));
@@ -502,7 +502,7 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 					// fails if null, if items isnt null, or ways is null
 					if (dat != null && dat.items != null && dat.shapes != null && dat.items.size() > 0 && dat.items.get(0).is(ObjectInit.Items.SALT.get()) && dat.shapes.size() > 0 && dat.shapes.get(0).getShape() == AspectShape.FIRE) {
 						System.out.println(dat.items);
-						for (ShapeStack s : dat.shapes) {
+						for (LegacyShapeStack s : dat.shapes) {
 							System.out.print(s.getShape()+", ");
 						}
 						System.out.println();
@@ -535,7 +535,7 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 					LabRecipeData dat = LabFunctions.shapeDistillation(lrd(items,null,null,null,null));
 					if ( dat != null && dat.items != null && dat.items.size() > 0 && flask.isContaminated(dat.items.get(0)) && dat.shapes != null && dat.shapes.size() > 0 && dat.shapes.get(0).getShape() == AspectShape.WATER ) {
 						System.out.println(dat.items);
-						for (ShapeStack s : dat.shapes) {
+						for (LegacyShapeStack s : dat.shapes) {
 							System.out.print(s.getShape()+", ");
 						}
 						System.out.println();
@@ -569,7 +569,7 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 					LabRecipeData dat = LabFunctions.shapeDistillation(lrd(items,null,null,null,null));
 					if ( dat != null && dat.items != null && dat.items.size() > 0 && flask.isContaminated(dat.items.get(0)) && dat.shapes != null && dat.shapes.size() > 0 && dat.shapes.get(0).getShape() == AspectShape.EARTH ) {
 						System.out.println(dat.items);
-						for (ShapeStack s : dat.shapes) {
+						for (LegacyShapeStack s : dat.shapes) {
 							System.out.print(s.getShape()+", ");
 						}
 						System.out.println();
@@ -603,7 +603,7 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 					LabRecipeData dat = LabFunctions.shapeDistillation(lrd(items,null,null,null,null));
 					if ( dat != null && dat.items != null && dat.items.size() > 0 && !flask.isContaminated(dat.items.get(0)) && !flask.hasStored(dat.items.get(0)) && dat.shapes != null && dat.shapes.size() > 0 && dat.shapes.get(0).getShape() == AspectShape.UNIVERSAL ) {
 						System.out.println(dat.items);
-						for (ShapeStack s : dat.shapes) {
+						for (LegacyShapeStack s : dat.shapes) {
 							System.out.print(s.getShape()+", ");
 						}
 						System.out.println();
@@ -646,11 +646,11 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 				
 				// valid
 				if (!failed) {
-					ArrayList<ShapeStack> shapes = new ArrayList<>();
-					shapes.add(new ShapeStack(AspectShape.AIR));
+					ArrayList<LegacyShapeStack> shapes = new ArrayList<>();
+					shapes.add(new LegacyShapeStack(AspectShape.AIR));
 					LabRecipeData dat = LabFunctions.oxidation(lrd(null,null,null,shapes,null));
 					if (dat != null && dat.shapes != null && dat.shapes.size() > 0 && dat.shapes.get(0).getShape() == AspectShape.FIRE) {
-						for (ShapeStack s : dat.shapes) {
+						for (LegacyShapeStack s : dat.shapes) {
 							System.out.print(s.getShape()+", ");
 						}
 						System.out.println();
@@ -659,8 +659,8 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 				
 				// invalid
 				if (!failed) {
-					ArrayList<ShapeStack> shapes = new ArrayList<>();
-					shapes.add(new ShapeStack(AspectShape.FIRE));
+					ArrayList<LegacyShapeStack> shapes = new ArrayList<>();
+					shapes.add(new LegacyShapeStack(AspectShape.FIRE));
 					LabRecipeData dat = LabFunctions.oxidation(lrd(null,null,null,shapes,null));
 					if (dat == null) {
 					} else failed = true;
@@ -673,11 +673,11 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 				
 				// valid
 				if (!failed) {
-					ArrayList<ShapeStack> shapes = new ArrayList<>();
-					shapes.add(new ShapeStack(AspectShape.FIRE));
+					ArrayList<LegacyShapeStack> shapes = new ArrayList<>();
+					shapes.add(new LegacyShapeStack(AspectShape.FIRE));
 					LabRecipeData dat = LabFunctions.congelation(lrd(null,null,null,shapes,null));
 					if (dat != null && dat.shapes != null && dat.shapes.size() > 0 && dat.shapes.get(0).getShape() == AspectShape.EARTH) {
-						for (ShapeStack s : dat.shapes) {
+						for (LegacyShapeStack s : dat.shapes) {
 							System.out.print(s.getShape()+", ");
 						}
 						System.out.println();
@@ -686,8 +686,8 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 				
 				// invalid
 				if (!failed) {
-					ArrayList<ShapeStack> shapes = new ArrayList<>();
-					shapes.add(new ShapeStack(AspectShape.EARTH));
+					ArrayList<LegacyShapeStack> shapes = new ArrayList<>();
+					shapes.add(new LegacyShapeStack(AspectShape.EARTH));
 					LabRecipeData dat = LabFunctions.congelation(lrd(null,null,null,shapes,null));
 					if (dat == null) {
 					} else failed = true;
@@ -700,11 +700,11 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 				
 				// valid
 				if (!failed) {
-					ArrayList<ShapeStack> shapes = new ArrayList<>();
-					shapes.add(new ShapeStack(AspectShape.EARTH));
+					ArrayList<LegacyShapeStack> shapes = new ArrayList<>();
+					shapes.add(new LegacyShapeStack(AspectShape.EARTH));
 					LabRecipeData dat = LabFunctions.ceration(lrd(null,null,null,shapes,null));
 					if (dat != null && dat.shapes != null && dat.shapes.size() > 0 && dat.shapes.get(0).getShape() == AspectShape.WATER) {
-						for (ShapeStack s : dat.shapes) {
+						for (LegacyShapeStack s : dat.shapes) {
 							System.out.print(s.getShape()+", ");
 						}
 						System.out.println();
@@ -713,8 +713,8 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 				
 				// invalid
 				if (!failed) {
-					ArrayList<ShapeStack> shapes = new ArrayList<>();
-					shapes.add(new ShapeStack(AspectShape.WATER));
+					ArrayList<LegacyShapeStack> shapes = new ArrayList<>();
+					shapes.add(new LegacyShapeStack(AspectShape.WATER));
 					LabRecipeData dat = LabFunctions.ceration(lrd(null,null,null,shapes,null));
 					if (dat == null) {
 					} else failed = true;
@@ -727,11 +727,11 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 				
 				// valid
 				if (!failed) {
-					ArrayList<ShapeStack> shapes = new ArrayList<>();
-					shapes.add(new ShapeStack(AspectShape.WATER));
+					ArrayList<LegacyShapeStack> shapes = new ArrayList<>();
+					shapes.add(new LegacyShapeStack(AspectShape.WATER));
 					LabRecipeData dat = LabFunctions.dehydration(lrd(null,null,null,shapes,null));
 					if (dat != null && dat.shapes != null && dat.shapes.size() > 0 && dat.shapes.get(0).getShape() == AspectShape.AIR) {
-						for (ShapeStack s : dat.shapes) {
+						for (LegacyShapeStack s : dat.shapes) {
 							System.out.print(s.getShape()+", ");
 						}
 						System.out.println();
@@ -740,8 +740,8 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 				
 				// invalid
 				if (!failed) {
-					ArrayList<ShapeStack> shapes = new ArrayList<>();
-					shapes.add(new ShapeStack(AspectShape.AIR));
+					ArrayList<LegacyShapeStack> shapes = new ArrayList<>();
+					shapes.add(new LegacyShapeStack(AspectShape.AIR));
 					LabRecipeData dat = LabFunctions.dehydration(lrd(null,null,null,shapes,null));
 					if (dat == null) {
 					} else failed = true;
@@ -754,14 +754,14 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 				
 				// valid
 				if (!failed) {
-					ArrayList<ShapeStack> shapes = new ArrayList<>();
-					shapes.add(new ShapeStack(AspectShape.WATER));
-					shapes.add(new ShapeStack(AspectShape.EARTH));
-					shapes.add(new ShapeStack(AspectShape.FIRE));
-					shapes.add(new ShapeStack(AspectShape.AIR));
+					ArrayList<LegacyShapeStack> shapes = new ArrayList<>();
+					shapes.add(new LegacyShapeStack(AspectShape.WATER));
+					shapes.add(new LegacyShapeStack(AspectShape.EARTH));
+					shapes.add(new LegacyShapeStack(AspectShape.FIRE));
+					shapes.add(new LegacyShapeStack(AspectShape.AIR));
 					LabRecipeData dat = LabFunctions.exaltation(lrd(null,null,null,shapes,null));
 					if (dat != null && dat.shapes != null && dat.shapes.size() > 0 && dat.shapes.get(0).getShape() == AspectShape.UNIVERSAL) {
-						for (ShapeStack s : dat.shapes) {
+						for (LegacyShapeStack s : dat.shapes) {
 							System.out.print(s.getShape()+", ");
 						}
 						System.out.println();
@@ -770,14 +770,14 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 				
 				// valid 2
 				if (!failed) {
-					ArrayList<ShapeStack> shapes = new ArrayList<>();
-					shapes.add(new ShapeStack(AspectShape.AIR));
-					shapes.add(new ShapeStack(AspectShape.EARTH));
-					shapes.add(new ShapeStack(AspectShape.WATER));
-					shapes.add(new ShapeStack(AspectShape.FIRE));
+					ArrayList<LegacyShapeStack> shapes = new ArrayList<>();
+					shapes.add(new LegacyShapeStack(AspectShape.AIR));
+					shapes.add(new LegacyShapeStack(AspectShape.EARTH));
+					shapes.add(new LegacyShapeStack(AspectShape.WATER));
+					shapes.add(new LegacyShapeStack(AspectShape.FIRE));
 					LabRecipeData dat = LabFunctions.exaltation(lrd(null,null,null,shapes,null));
 					if (dat != null && dat.shapes != null && dat.shapes.size() > 0 && dat.shapes.get(0).getShape() == AspectShape.UNIVERSAL) {
-						for (ShapeStack s : dat.shapes) {
+						for (LegacyShapeStack s : dat.shapes) {
 							System.out.print(s.getShape()+", ");
 						}
 						System.out.println();
@@ -786,11 +786,11 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 				
 				// invalid
 				if (!failed) {
-					ArrayList<ShapeStack> shapes = new ArrayList<>();
-					shapes.add(new ShapeStack(AspectShape.AIR));
-					shapes.add(new ShapeStack(AspectShape.WATER));
-					shapes.add(new ShapeStack(AspectShape.WATER));
-					shapes.add(new ShapeStack(AspectShape.EARTH));
+					ArrayList<LegacyShapeStack> shapes = new ArrayList<>();
+					shapes.add(new LegacyShapeStack(AspectShape.AIR));
+					shapes.add(new LegacyShapeStack(AspectShape.WATER));
+					shapes.add(new LegacyShapeStack(AspectShape.WATER));
+					shapes.add(new LegacyShapeStack(AspectShape.EARTH));
 					LabRecipeData dat = LabFunctions.exaltation(lrd(null,null,null,shapes,null));
 					if (dat == null) {
 					} else failed = true;
@@ -805,12 +805,12 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 				if (!failed) {
 					ArrayList<ItemStack> items = new ArrayList<>();
 					items.add(new ItemStack(Items.FEATHER));
-					ArrayList<ShapeStack> shapes = new ArrayList<>();
-					shapes.add(new ShapeStack(AspectShape.UNIVERSAL));
+					ArrayList<LegacyShapeStack> shapes = new ArrayList<>();
+					shapes.add(new LegacyShapeStack(AspectShape.UNIVERSAL));
 					LabRecipeData dat = LabFunctions.condemnation(lrd(items,null,null,shapes,null));
 					if (dat != null && dat.shapes != null && dat.shapes.size() > 0 && dat.shapes.get(0).getShape() == AspectShape.AIR && dat.shapes.get(0).getAmount() == 4 && dat.items != null && dat.items.size() > 0 && dat.items.get(0).is(Items.FEATHER)) {
 						System.out.println(dat.items);
-						for (ShapeStack s : dat.shapes) {
+						for (LegacyShapeStack s : dat.shapes) {
 							System.out.print(s.getShape()+" "+ s.getAmount() +", ");
 						}
 						System.out.println();
@@ -820,8 +820,8 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 				// invalid
 				if (!failed) {
 					ArrayList<ItemStack> items = new ArrayList<>();
-					ArrayList<ShapeStack> shapes = new ArrayList<>();
-					shapes.add(new ShapeStack(AspectShape.UNIVERSAL));
+					ArrayList<LegacyShapeStack> shapes = new ArrayList<>();
+					shapes.add(new LegacyShapeStack(AspectShape.UNIVERSAL));
 					LabRecipeData dat = LabFunctions.condemnation(lrd(items,null,null,shapes,null));
 					if (dat == null) {
 					} else failed = true;
@@ -851,7 +851,7 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 					// fails if null, if items isnt null, or ways is null
 					if (dat != null && dat.items != null && dat.forms != null && dat.items.size() > 0 && dat.items.get(0).is(ObjectInit.Items.SOOT.get()) && dat.forms.size() > 0 && dat.forms.get(0).getForm() == FormTree.WITCHCRAFT.get()) {
 						System.out.println(dat.items);
-						for (FormStack s : dat.forms) {
+						for (LegacyFormStack s : dat.forms) {
 							System.out.print(s.getForm().getName()+", ");
 						}
 						System.out.println();
@@ -884,7 +884,7 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 					LabRecipeData dat = LabFunctions.formDistillation(lrd(items,null,null,null,null));
 					if ( dat != null && dat.items != null && dat.items.size() > 0 && flask.isContaminated(dat.items.get(0)) && dat.forms != null && dat.forms.size() > 0 && dat.forms.get(0).getForm() == FormTree.ANIMAL.get() ) {
 						System.out.println(dat.items);
-						for (FormStack s : dat.forms) {
+						for (LegacyFormStack s : dat.forms) {
 							System.out.print(s.getForm().getName()+", ");
 						}
 						System.out.println();
@@ -918,7 +918,7 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 					LabRecipeData dat = LabFunctions.formDistillation(lrd(items,null,null,null,null));
 					if ( dat != null && dat.items != null && dat.items.size() > 0 && flask.isContaminated(dat.items.get(0)) && dat.forms != null && dat.forms.size() > 0 && dat.forms.get(0).getForm() == FormTree.SUN.get() ) {
 						System.out.println(dat.items);
-						for (FormStack s : dat.forms) {
+						for (LegacyFormStack s : dat.forms) {
 							System.out.print(s.getForm().getName()+", ");
 						}
 						System.out.println();
@@ -952,7 +952,7 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 					LabRecipeData dat = LabFunctions.formDistillation(lrd(items,null,null,null,null));
 					if ( dat != null && dat.items != null && dat.items.size() > 0 && !flask.isContaminated(dat.items.get(0)) && !flask.hasStored(dat.items.get(0)) && dat.forms != null && dat.forms.size() > 0 && dat.forms.get(0).getForm() == FormTree.ETHEREAL.get() ) {
 						System.out.println(dat.items);
-						for (FormStack s : dat.forms) {
+						for (LegacyFormStack s : dat.forms) {
 							System.out.print(s.getForm().getName()+", ");
 						}
 						System.out.println();
@@ -997,12 +997,12 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 				if (!failed) {
 					ArrayList<ItemStack> items = new ArrayList<>();
 					items.add(new ItemStack(Items.IRON_BLOCK));
-					ArrayList<FormStack> forms = new ArrayList<>();
-					forms.add(new FormStack(FormTree.PLANT.get()));
+					ArrayList<LegacyFormStack> forms = new ArrayList<>();
+					forms.add(new LegacyFormStack(FormTree.PLANT.get()));
 					LabRecipeData dat = LabFunctions.fixation(lrd(items,null,null,null,forms));
 					if (dat != null && dat.items != null && dat.items.size() > 0 && dat.items.get(0).is(Items.IRON_BLOCK) && dat.forms != null && dat.forms.size() > 0 && dat.forms.get(0).getForm() == FormTree.MARS.get()) {
 						System.out.println(dat.items);
-						for (FormStack s : dat.forms) {
+						for (LegacyFormStack s : dat.forms) {
 							System.out.print(s.getForm().getName()+", ");
 						}
 						System.out.println();
@@ -1013,8 +1013,8 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 				if (!failed) {
 					ArrayList<ItemStack> items = new ArrayList<>();
 					items.add(new ItemStack(Items.IRON_BLOCK));
-					ArrayList<FormStack> forms = new ArrayList<>();
-					forms.add(new FormStack(FormTree.DULL.get()));
+					ArrayList<LegacyFormStack> forms = new ArrayList<>();
+					forms.add(new LegacyFormStack(FormTree.DULL.get()));
 					LabRecipeData dat = LabFunctions.fixation(lrd(items,null,null,null,forms));
 					if (dat == null) {
 					} else failed = true;
@@ -1029,12 +1029,12 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 				if (!failed) {
 					ArrayList<ItemStack> items = new ArrayList<>();
 					items.add(new ItemStack(Items.GOLD_BLOCK));
-					ArrayList<FormStack> forms = new ArrayList<>();
-					forms.add(new FormStack(FormTree.MARS.get()));
+					ArrayList<LegacyFormStack> forms = new ArrayList<>();
+					forms.add(new LegacyFormStack(FormTree.MARS.get()));
 					LabRecipeData dat = LabFunctions.amalgamation(lrd(items,null,null,null,forms));
 					if (dat != null && dat.items != null && dat.items.size() > 0 && dat.items.get(0).is(Items.GOLD_BLOCK) && dat.forms != null && dat.forms.size() > 0 && dat.forms.get(0).getForm() == FormTree.SUN.get()) {
 						System.out.println(dat.items);
-						for (FormStack s : dat.forms) {
+						for (LegacyFormStack s : dat.forms) {
 							System.out.print(s.getForm().getName()+", ");
 						}
 						System.out.println();
@@ -1045,8 +1045,8 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 				if (!failed) {
 					ArrayList<ItemStack> items = new ArrayList<>();
 					items.add(new ItemStack(Items.GOLD_BLOCK));
-					ArrayList<FormStack> forms = new ArrayList<>();
-					forms.add(new FormStack(FormTree.MATERIA.get()));
+					ArrayList<LegacyFormStack> forms = new ArrayList<>();
+					forms.add(new LegacyFormStack(FormTree.MATERIA.get()));
 					LabRecipeData dat = LabFunctions.amalgamation(lrd(items,null,null,null,forms));
 					if (dat == null) {
 					} else failed = true;
@@ -1059,13 +1059,13 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 				
 				// valid with shape
 				if (!failed) {
-					ArrayList<ShapeStack> shapes = new ArrayList<>();
-					shapes.add(new ShapeStack(AspectShape.UNIVERSAL));
-					ArrayList<FormStack> forms = new ArrayList<>();
-					forms.add(new FormStack(FormTree.PLANT.get()));
+					ArrayList<LegacyShapeStack> shapes = new ArrayList<>();
+					shapes.add(new LegacyShapeStack(AspectShape.UNIVERSAL));
+					ArrayList<LegacyFormStack> forms = new ArrayList<>();
+					forms.add(new LegacyFormStack(FormTree.PLANT.get()));
 					LabRecipeData dat = LabFunctions.homogenization(lrd(null,null,null,shapes,forms));
 					if (dat != null && dat.forms != null && dat.forms.size() > 0 && dat.forms.get(0).getForm() == FormTree.ALIVE.get() && dat.shapes == null) {
-						for (FormStack s : dat.forms) {
+						for (LegacyFormStack s : dat.forms) {
 							System.out.print(s.getForm().getName()+", ");
 						}
 						System.out.println();
@@ -1074,12 +1074,12 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 				
 				// valid with form
 				if (!failed) {
-					ArrayList<FormStack> forms = new ArrayList<>();
-					forms.add(new FormStack(FormTree.IMMORTAL.get()));
-					forms.add(new FormStack(FormTree.MATERIA.get()));
+					ArrayList<LegacyFormStack> forms = new ArrayList<>();
+					forms.add(new LegacyFormStack(FormTree.IMMORTAL.get()));
+					forms.add(new LegacyFormStack(FormTree.MATERIA.get()));
 					LabRecipeData dat = LabFunctions.homogenization(lrd(null,null,null,null,forms));
 					if (dat != null && dat.forms != null && dat.forms.size() == 1 && dat.forms.get(0).getForm() == FormTree.ORGANIC.get()) {
-						for (FormStack s : dat.forms) {
+						for (LegacyFormStack s : dat.forms) {
 							System.out.print(s.getForm().getName()+", ");
 						}
 						System.out.println();
@@ -1088,14 +1088,14 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 				
 				// valid with BOTH
 				if (!failed) {
-					ArrayList<ShapeStack> shapes = new ArrayList<>();
-					shapes.add(new ShapeStack(AspectShape.UNIVERSAL));
-					ArrayList<FormStack> forms = new ArrayList<>();
-					forms.add(new FormStack(FormTree.SOIL.get()));
-					forms.add(new FormStack(FormTree.MATERIA.get()));
+					ArrayList<LegacyShapeStack> shapes = new ArrayList<>();
+					shapes.add(new LegacyShapeStack(AspectShape.UNIVERSAL));
+					ArrayList<LegacyFormStack> forms = new ArrayList<>();
+					forms.add(new LegacyFormStack(FormTree.SOIL.get()));
+					forms.add(new LegacyFormStack(FormTree.MATERIA.get()));
 					LabRecipeData dat = LabFunctions.homogenization(lrd(null,null,null,shapes,forms));
 					if (dat != null && dat.forms != null && dat.forms.size() == 2 && dat.forms.get(0).getForm() == FormTree.TERRAIN.get() && dat.shapes == null) {
-						for (FormStack s : dat.forms) {
+						for (LegacyFormStack s : dat.forms) {
 							System.out.print(s.getForm().getName()+", ");
 						}
 						System.out.println();
@@ -1104,10 +1104,10 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 				
 				// invalid no catalyst
 				if (!failed) {
-					ArrayList<ShapeStack> shapes = new ArrayList<>();
+					ArrayList<LegacyShapeStack> shapes = new ArrayList<>();
 					//shapes.add(new ShapeStack(AspectShape.UNIVERSAL));
-					ArrayList<FormStack> forms = new ArrayList<>();
-					forms.add(new FormStack(FormTree.SOIL.get()));
+					ArrayList<LegacyFormStack> forms = new ArrayList<>();
+					forms.add(new LegacyFormStack(FormTree.SOIL.get()));
 					//forms.add(new FormStack(FormTree.MATERIA.get()));
 					LabRecipeData dat = LabFunctions.homogenization(lrd(null,null,null,null,forms));
 					if (dat == null) {
@@ -1118,9 +1118,9 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 				if (!failed) {
 					//ArrayList<ShapeStack> shapes = new ArrayList<>();
 					//shapes.add(new ShapeStack(AspectShape.UNIVERSAL));
-					ArrayList<FormStack> forms = new ArrayList<>();
-					forms.add(new FormStack(FormTree.MATERIA.get()));
-					forms.add(new FormStack(FormTree.MONSTER.get()));
+					ArrayList<LegacyFormStack> forms = new ArrayList<>();
+					forms.add(new LegacyFormStack(FormTree.MATERIA.get()));
+					forms.add(new LegacyFormStack(FormTree.MONSTER.get()));
 					LabRecipeData dat = LabFunctions.homogenization(lrd(null,null,null,null,forms));
 					if (dat == null) {
 					} else failed = true;
@@ -1128,10 +1128,10 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 				
 				// invalid no parent
 				if (!failed) {
-					ArrayList<ShapeStack> shapes = new ArrayList<>();
-					shapes.add(new ShapeStack(AspectShape.UNIVERSAL));
-					ArrayList<FormStack> forms = new ArrayList<>();
-					forms.add(new FormStack(FormTree.MATERIA.get()));
+					ArrayList<LegacyShapeStack> shapes = new ArrayList<>();
+					shapes.add(new LegacyShapeStack(AspectShape.UNIVERSAL));
+					ArrayList<LegacyFormStack> forms = new ArrayList<>();
+					forms.add(new LegacyFormStack(FormTree.MATERIA.get()));
 					LabRecipeData dat = LabFunctions.homogenization(lrd(null,null,null,shapes,forms));
 					if (dat == null) {
 					} else failed = true;
@@ -1163,11 +1163,11 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 					LabRecipeData dat = LabFunctions.cohobation(lrd(items,null,null,null,null));
 					if ( dat != null && dat.items != null && dat.items.size() > 0 && !flask.isContaminated(dat.items.get(0)) && dat.forms != null && dat.shapes != null && dat.forms.size() > 0 && dat.shapes.size() > 0 && dat.forms.get(0).getForm() == FormTree.SUN.get() && dat.shapes.get(0).getShape() == AspectShape.EARTH ) {
 						System.out.println(dat.items);
-						for (FormStack s : dat.forms) {
+						for (LegacyFormStack s : dat.forms) {
 							System.out.print(s.getForm().getName()+", ");
 						}
 						System.out.println();
-						for (ShapeStack s : dat.shapes) {
+						for (LegacyShapeStack s : dat.shapes) {
 							System.out.print(s.getShape().name()+", ");
 						}
 						System.out.println();
@@ -1209,10 +1209,10 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 					items.add(new ItemStack(ObjectInit.Items.FLASK_LEAD.get()));
 					ArrayList<FluidStack> fluids = new ArrayList<>();
 					fluids.add(new FluidStack(Fluids.WATER, 1000));
-					ArrayList<ShapeStack> shapes = new ArrayList<>();
-					shapes.add(new ShapeStack(AspectShape.UNIVERSAL));
-					ArrayList<FormStack> forms = new ArrayList<>();
-					forms.add(new FormStack(FormTree.MATERIA.get()));
+					ArrayList<LegacyShapeStack> shapes = new ArrayList<>();
+					shapes.add(new LegacyShapeStack(AspectShape.UNIVERSAL));
+					ArrayList<LegacyFormStack> forms = new ArrayList<>();
+					forms.add(new LegacyFormStack(FormTree.MATERIA.get()));
 					LabRecipeData dat = LabFunctions.solution(lrd(items,fluids,null,shapes,forms));
 					if ( dat != null && dat.fluids == null
 							&& dat.items != null && dat.items.size() == 1 && dat.items.get(0).is(ObjectInit.Items.FLASK_LEAD.get())
@@ -1230,10 +1230,10 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 					items.add(new ItemStack(ObjectInit.Items.FLASK_AETHER.get()));
 					ArrayList<FluidStack> fluids = new ArrayList<>();
 					fluids.add(new FluidStack(Fluids.WATER, 1000));
-					ArrayList<ShapeStack> shapes = new ArrayList<>();
-					shapes.add(new ShapeStack(AspectShape.UNIVERSAL));
-					ArrayList<FormStack> forms = new ArrayList<>();
-					forms.add(new FormStack(FormTree.MATERIA.get()));
+					ArrayList<LegacyShapeStack> shapes = new ArrayList<>();
+					shapes.add(new LegacyShapeStack(AspectShape.UNIVERSAL));
+					ArrayList<LegacyFormStack> forms = new ArrayList<>();
+					forms.add(new LegacyFormStack(FormTree.MATERIA.get()));
 					LabRecipeData dat = LabFunctions.solution(lrd(items,fluids,null,shapes,forms));
 					if ( dat != null && dat.fluids == null
 							&& dat.items != null && dat.items.size() == 2 && dat.items.get(0).is(ObjectInit.Items.FLASK_AETHER.get()) && dat.items.get(1).is(ObjectInit.Items.FLASK_AETHER.get())
@@ -1259,10 +1259,10 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 					//items.add(new ItemStack(ObjectInit.Items.FLASK_AETHER.get()));
 					ArrayList<FluidStack> fluids = new ArrayList<>();
 					fluids.add(new FluidStack(Fluids.WATER, 1000));
-					ArrayList<ShapeStack> shapes = new ArrayList<>();
-					shapes.add(new ShapeStack(AspectShape.UNIVERSAL));
-					ArrayList<FormStack> forms = new ArrayList<>();
-					forms.add(new FormStack(FormTree.MATERIA.get()));
+					ArrayList<LegacyShapeStack> shapes = new ArrayList<>();
+					shapes.add(new LegacyShapeStack(AspectShape.UNIVERSAL));
+					ArrayList<LegacyFormStack> forms = new ArrayList<>();
+					forms.add(new LegacyFormStack(FormTree.MATERIA.get()));
 					LabRecipeData dat = LabFunctions.solution(lrd(items,fluids,null,shapes,forms));
 					if ( dat != null && dat.items != null && dat.items.size() == 2
 							&& dat.items.get(0).is(ObjectInit.Items.FLASK_GOLD.get()) && flask.hasStored(dat.items.get(0))
@@ -1283,10 +1283,10 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 					items.add(new ItemStack(ObjectInit.Items.FLASK_LEAD.get()));
 					ArrayList<FluidStack> fluids = new ArrayList<>();
 					fluids.add(new FluidStack(Fluids.WATER, 800));
-					ArrayList<ShapeStack> shapes = new ArrayList<>();
-					shapes.add(new ShapeStack(AspectShape.UNIVERSAL));
-					ArrayList<FormStack> forms = new ArrayList<>();
-					forms.add(new FormStack(FormTree.MATERIA.get()));
+					ArrayList<LegacyShapeStack> shapes = new ArrayList<>();
+					shapes.add(new LegacyShapeStack(AspectShape.UNIVERSAL));
+					ArrayList<LegacyFormStack> forms = new ArrayList<>();
+					forms.add(new LegacyFormStack(FormTree.MATERIA.get()));
 					LabRecipeData dat = LabFunctions.solution(lrd(items,fluids,null,shapes,forms));
 					if ( dat == null) {
 					} else failed = true;
@@ -1299,10 +1299,10 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 					//items.add(new ItemStack(ObjectInit.Items.FLASK_AETHER.get()));
 					ArrayList<FluidStack> fluids = new ArrayList<>();
 					fluids.add(new FluidStack(Fluids.WATER, 1000));
-					ArrayList<ShapeStack> shapes = new ArrayList<>();
-					shapes.add(new ShapeStack(AspectShape.UNIVERSAL));
-					ArrayList<FormStack> forms = new ArrayList<>();
-					forms.add(new FormStack(FormTree.MATERIA.get()));
+					ArrayList<LegacyShapeStack> shapes = new ArrayList<>();
+					shapes.add(new LegacyShapeStack(AspectShape.UNIVERSAL));
+					ArrayList<LegacyFormStack> forms = new ArrayList<>();
+					forms.add(new LegacyFormStack(FormTree.MATERIA.get()));
 					LabRecipeData dat = LabFunctions.solution(lrd(items,fluids,null,shapes,forms));
 					if ( dat == null) {
 					} else failed = true;
@@ -1317,8 +1317,8 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 					fluids.add(new FluidStack(Fluids.WATER, 1000));
 					//ArrayList<ShapeStack> shapes = new ArrayList<>();
 					//shapes.add(new ShapeStack(AspectShape.UNIVERSAL));
-					ArrayList<FormStack> forms = new ArrayList<>();
-					forms.add(new FormStack(FormTree.MATERIA.get()));
+					ArrayList<LegacyFormStack> forms = new ArrayList<>();
+					forms.add(new LegacyFormStack(FormTree.MATERIA.get()));
 					LabRecipeData dat = LabFunctions.solution(lrd(items,fluids,null,null,forms));
 					if ( dat == null) {
 					} else failed = true;
@@ -1333,10 +1333,10 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 					//items.add(new ItemStack(ObjectInit.Items.FLASK_AETHER.get()));
 					ArrayList<FluidStack> fluids = new ArrayList<>();
 					fluids.add(new FluidStack(Fluids.WATER, 1000));
-					ArrayList<ShapeStack> shapes = new ArrayList<>();
-					shapes.add(new ShapeStack(AspectShape.UNIVERSAL));
-					ArrayList<FormStack> forms = new ArrayList<>();
-					forms.add(new FormStack(FormTree.MATERIA.get()));
+					ArrayList<LegacyShapeStack> shapes = new ArrayList<>();
+					shapes.add(new LegacyShapeStack(AspectShape.UNIVERSAL));
+					ArrayList<LegacyFormStack> forms = new ArrayList<>();
+					forms.add(new LegacyFormStack(FormTree.MATERIA.get()));
 					LabRecipeData dat = LabFunctions.solution(lrd(items,fluids,null,shapes,forms));
 					if ( dat == null) {
 					} else failed = true;
@@ -1349,12 +1349,12 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 				
 				// valid
 				if (!failed) {
-					ArrayList<WayStack> ways = new ArrayList<>();
-					ways.add(new WayStack(50));
-					ArrayList<ShapeStack> shapes = new ArrayList<>();
-					shapes.add(new ShapeStack(AspectShape.UNIVERSAL));
-					ArrayList<FormStack> forms = new ArrayList<>();
-					forms.add(new FormStack(FormTree.SOIL.get()));
+					ArrayList<LegacyWayStack> ways = new ArrayList<>();
+					ways.add(new LegacyWayStack(50));
+					ArrayList<LegacyShapeStack> shapes = new ArrayList<>();
+					shapes.add(new LegacyShapeStack(AspectShape.UNIVERSAL));
+					ArrayList<LegacyFormStack> forms = new ArrayList<>();
+					forms.add(new LegacyFormStack(FormTree.SOIL.get()));
 					LabRecipeData dat = LabFunctions.digestion(lrd(null,null,ways,shapes,forms));
 					if (dat != null && dat.items != null && dat.items.size() == 1 && dat.items.get(0).is(ObjectInit.Items.AETHER.get())
 							&& dat.forms == null && dat.shapes == null && dat.ways == null) {
@@ -1364,12 +1364,12 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 				
 				// invalid
 				if (!failed) {
-					ArrayList<WayStack> ways = new ArrayList<>();
-					ways.add(new WayStack(50));
-					ArrayList<ShapeStack> shapes = new ArrayList<>();
-					shapes.add(new ShapeStack(AspectShape.UNIVERSAL));
-					ArrayList<FormStack> forms = new ArrayList<>();
-					forms.add(new FormStack(FormTree.SOIL.get()));
+					ArrayList<LegacyWayStack> ways = new ArrayList<>();
+					ways.add(new LegacyWayStack(50));
+					ArrayList<LegacyShapeStack> shapes = new ArrayList<>();
+					shapes.add(new LegacyShapeStack(AspectShape.UNIVERSAL));
+					ArrayList<LegacyFormStack> forms = new ArrayList<>();
+					forms.add(new LegacyFormStack(FormTree.SOIL.get()));
 					LabRecipeData dat = LabFunctions.digestion(lrd(null,null,ways,null,forms));
 					if (dat == null) {
 					} else failed = true;

@@ -1,4 +1,4 @@
-package com.quartzshard.aasb.api.alchemy.aspects.stack;
+package com.quartzshard.aasb.api.alchemy.aspects.stack.legacy;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -7,18 +7,18 @@ import com.quartzshard.aasb.util.LogHelper;
 
 import net.minecraft.nbt.CompoundTag;
 
-public class ShapeStack {
+public class LegacyShapeStack {
 	public static final String TYPE_KEY = "aspect_type";
 	public static final String AMOUNT_KEY = "amount";
 	public static final String TYPE = "shape";
 	private final AspectShape shape;
 	private long amount;
 
-	public ShapeStack(AspectShape shape, long amount) {
+	public LegacyShapeStack(AspectShape shape, long amount) {
 		this.shape = shape;
 		this.amount = amount;
 	}
-	public ShapeStack(AspectShape shape) {
+	public LegacyShapeStack(AspectShape shape) {
 		this(shape, 1);
 	}
 	
@@ -51,7 +51,7 @@ public class ShapeStack {
 	}
 	
 	@Nullable
-	public static ShapeStack fromTag(CompoundTag tag) {
+	public static LegacyShapeStack fromTag(CompoundTag tag) {
 		if (tag.getString(TYPE_KEY) == TYPE) {
 			String shapeVal = tag.getString(TYPE);
 			AspectShape shape = null;
@@ -63,7 +63,7 @@ public class ShapeStack {
 			}
 			long amount = tag.getLong(AMOUNT_KEY);
 			if (validate(shape, amount))
-				return new ShapeStack(shape, amount);
+				return new LegacyShapeStack(shape, amount);
 		}
 		return null;
 	}

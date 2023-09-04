@@ -3,10 +3,11 @@ package com.quartzshard.aasb.init;
 import com.quartzshard.aasb.AsAboveSoBelow;
 import com.quartzshard.aasb.common.block.*;
 import com.quartzshard.aasb.common.block.lab.LabMultiblock;
+import com.quartzshard.aasb.common.block.lab.te.modifiers.OxidationTE;
+import com.quartzshard.aasb.common.block.lab.te.starters.DistillationTE;
 import com.quartzshard.aasb.common.effect.*;
 import com.quartzshard.aasb.common.entity.living.*;
 import com.quartzshard.aasb.common.entity.projectile.*;
-import com.quartzshard.aasb.common.entity.tile.LabTE;
 import com.quartzshard.aasb.common.item.*;
 import com.quartzshard.aasb.common.item.equipment.armor.*;
 import com.quartzshard.aasb.common.item.equipment.armor.jewelry.*;
@@ -117,7 +118,8 @@ public class ObjectInit {
 				// BlockItems
 				ASH_STONE_BLOCKITEM = fromBlock(Blocks.ASH_STONE),
 				WAYSTONE_BLOCKITEM = fromBlock(Blocks.WAYSTONE),
-				LAB_MULTIBLOCK_ITEM_INTERNAL = fromBlock(Blocks.LAB);
+				LAB_MULTIBLOCK_ITEM_INTERNAL = fromBlock(Blocks.LAB),
+				TEMPOX = fromBlock(Blocks.DISTILLERY);
 		
 		
 		// constructs a new Item Properties using an existing base
@@ -149,7 +151,8 @@ public class ObjectInit {
 		
 
 		public static final RegistryObject<AirIceBlock> AIR_ICE = REG.register("air_ice", () -> new AirIceBlock(PROPS_TEMPBLOCK.friction(0.9f).randomTicks().sound(SoundType.GLASS).noOcclusion()));
-		public static final RegistryObject<LabMultiblock> LAB = REG.register("lab", () -> new LabMultiblock(BLOCK_PROPERTIES));
+		public static final RegistryObject<LabMultiblock> LAB = REG.register("lab", () -> new LabMultiblock(BLOCK_PROPERTIES, false));
+		public static final RegistryObject<LabMultiblock> DISTILLERY = REG.register("ox", () -> new LabMultiblock(BLOCK_PROPERTIES, true));
 		
 	}
 	
@@ -189,7 +192,11 @@ public class ObjectInit {
 	public class TileEntities {
 		private static final DeferredRegister<BlockEntityType<?>> REG = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, AsAboveSoBelow.MODID);
 		
-		public static final RegistryObject<BlockEntityType<LabTE>> LAB_TE = REG.register("lab", () -> BlockEntityType.Builder.of(LabTE::new, Blocks.LAB.get()).build(null));
+		//public static final RegistryObject<BlockEntityType<LabTE>> LAB_TE = REG.register("lab", () -> BlockEntityType.Builder.of(LabTE::new, Blocks.LAB.get()).build(null)),
+		public static final RegistryObject<BlockEntityType<DistillationTE>> DISTILLATION =
+				REG.register("distillation", () -> BlockEntityType.Builder.of(DistillationTE::new, Blocks.LAB.get()).build(null));
+		public static final RegistryObject<BlockEntityType<OxidationTE>> SOLUTION =
+				REG.register("oxte", () -> BlockEntityType.Builder.of(OxidationTE::new, Blocks.DISTILLERY.get()).build(null));
 	}
 	
 	public class MobEffects {

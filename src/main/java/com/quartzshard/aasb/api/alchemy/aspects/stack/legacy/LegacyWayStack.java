@@ -1,4 +1,4 @@
-package com.quartzshard.aasb.api.alchemy.aspects.stack;
+package com.quartzshard.aasb.api.alchemy.aspects.stack.legacy;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -6,15 +6,15 @@ import com.quartzshard.aasb.api.alchemy.aspects.*;
 
 import net.minecraft.nbt.CompoundTag;
 
-public class WayStack {
+public class LegacyWayStack {
 	public static final String TYPE_KEY = "aspect_type";
 	public static final String TYPE = "way";
 	public static final String AMOUNT_KEY = "amount";
 	private long amount;
-	public WayStack(long amount) {
+	public LegacyWayStack(long amount) {
 		this.amount = amount;
 	}
-	public WayStack(AspectWay aspect) {
+	public LegacyWayStack(AspectWay aspect) {
 		this.amount = aspect.getValue();
 	}
 	
@@ -37,11 +37,11 @@ public class WayStack {
 	}
 	
 	@Nullable
-	public static WayStack fromTag(CompoundTag tag) {
+	public static LegacyWayStack fromTag(CompoundTag tag) {
 		if (tag.getString(TYPE_KEY) == TYPE) {
 			long amount = tag.getLong(AMOUNT_KEY);
 			if (validate(amount))
-				return new WayStack(amount);
+				return new LegacyWayStack(amount);
 		}
 		return null;
 	}

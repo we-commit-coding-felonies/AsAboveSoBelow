@@ -1,5 +1,7 @@
 package com.quartzshard.aasb.api.alchemy.aspects;
 
+import org.jetbrains.annotations.Nullable;
+
 import com.quartzshard.aasb.AsAboveSoBelow;
 import com.quartzshard.aasb.api.alchemy.IAlchemicalFlow;
 import com.quartzshard.aasb.data.AASBLang;
@@ -88,5 +90,25 @@ public enum AspectShape implements IAlchemicalFlow<AspectShape> {
 	@Override
 	public boolean violates(AspectShape to) {
 		return !this.flows(to) && !this.perpendicular(to);
+	}
+
+	@Override
+	public String toString() {
+		return this.name().toLowerCase();
+	}
+	
+	/**
+	 * Returns null if deserialization fails
+	 * @param dat
+	 * @return 
+	 */
+	@Nullable
+	public static AspectShape deserialize(String dat) {
+		if (dat != null) {
+			try {
+				return AspectShape.valueOf(dat.toUpperCase());
+			} catch (IllegalArgumentException e) {}
+		}
+		return null;
 	}
 } 

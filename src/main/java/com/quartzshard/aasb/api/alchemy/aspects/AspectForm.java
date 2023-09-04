@@ -2,10 +2,13 @@ package com.quartzshard.aasb.api.alchemy.aspects;
 
 import java.util.Arrays;
 
+import org.jetbrains.annotations.Nullable;
+
 import com.quartzshard.aasb.AsAboveSoBelow;
 import com.quartzshard.aasb.api.alchemy.IAlchemicalFlow;
 import com.quartzshard.aasb.common.item.equipment.trinket.rune.TrinketRune;
 import com.quartzshard.aasb.data.AASBLang;
+import com.quartzshard.aasb.init.AlchemyInit.FormTree;
 import com.quartzshard.aasb.util.LogHelper;
 
 import net.minecraft.network.chat.Component;
@@ -152,5 +155,23 @@ public class AspectForm extends ForgeRegistryEntry<AspectForm> implements IAlche
 	@Override
 	public boolean violates(AspectForm to) {
 		return !this.flows(to) && !this.perpendicular(to);
+	}
+
+	@Override
+	public String toString() {
+		return getName().toString();
+	}
+	
+	/**
+	 * Returns null if deserialization fails
+	 * @param dat
+	 * @return 
+	 */
+	@Nullable
+	public static AspectForm deserialize(String dat) {
+		if (dat != null) {
+			return FormTree.get(ResourceLocation.tryParse(dat));
+		}
+		return null;
 	}
 }

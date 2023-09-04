@@ -1,5 +1,7 @@
 package com.quartzshard.aasb.api.alchemy.aspects;
 
+import org.jetbrains.annotations.Nullable;
+
 import com.quartzshard.aasb.api.alchemy.IAlchemicalFlow;
 
 public class AspectWay implements IAlchemicalFlow<AspectWay> {
@@ -33,6 +35,26 @@ public class AspectWay implements IAlchemicalFlow<AspectWay> {
 	@Override
 	public boolean violates(AspectWay to) {
 		return !this.flows(to);
+	}
+
+	@Override
+	public String toString() {
+		return "way." + value;
+	}
+	
+	/**
+	 * Returns null if deserialization fails
+	 * @param dat
+	 * @return 
+	 */
+	@Nullable
+	public static AspectWay deserialize(String dat) {
+		if (dat != null && dat != "" && dat.startsWith("way.")) {
+			try {
+				return new AspectWay(Long.parseLong(dat.replace("way.", "")));
+			} catch (NumberFormatException e) {}
+		}
+		return null;
 	}
 
 }

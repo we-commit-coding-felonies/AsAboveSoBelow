@@ -1,4 +1,4 @@
-package com.quartzshard.aasb.api.alchemy.aspects.stack;
+package com.quartzshard.aasb.api.alchemy.aspects.stack.legacy;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -8,18 +8,18 @@ import com.quartzshard.aasb.init.AlchemyInit.FormTree;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 
-public class FormStack {
+public class LegacyFormStack {
 	public static final String TYPE_KEY = "aspect_type";
 	public static final String AMOUNT_KEY = "amount";
 	public static final String TYPE = "form";
 	private final AspectForm form;
 	private long amount;
 
-	public FormStack(AspectForm form, long amount) {
+	public LegacyFormStack(AspectForm form, long amount) {
 		this.form = form;
 		this.amount = amount;
 	}
-	public FormStack(AspectForm form) {
+	public LegacyFormStack(AspectForm form) {
 		this(form, 1);
 	}
 	
@@ -52,12 +52,12 @@ public class FormStack {
 	}
 	
 	@Nullable
-	public static FormStack fromTag(CompoundTag tag) {
+	public static LegacyFormStack fromTag(CompoundTag tag) {
 		if (tag.getString(TYPE_KEY) == TYPE) {
 			AspectForm form = FormTree.get(ResourceLocation.tryParse(tag.getString(TYPE)));
 			long amount = tag.getLong(AMOUNT_KEY);
 			if (validate(form, amount))
-				return new FormStack(form, amount);
+				return new LegacyFormStack(form, amount);
 		}
 		return null;
 	}
