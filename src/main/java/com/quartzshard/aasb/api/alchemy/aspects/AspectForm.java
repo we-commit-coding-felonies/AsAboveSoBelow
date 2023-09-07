@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.quartzshard.aasb.AsAboveSoBelow;
 import com.quartzshard.aasb.api.alchemy.IAlchemicalFlow;
+import com.quartzshard.aasb.api.capability.aspect.IAspectHandler.AspectType;
 import com.quartzshard.aasb.common.item.equipment.trinket.rune.TrinketRune;
 import com.quartzshard.aasb.data.AASBLang;
 import com.quartzshard.aasb.init.AlchemyInit.FormTree;
@@ -173,5 +174,10 @@ public class AspectForm extends ForgeRegistryEntry<AspectForm> implements IAlche
 			return FormTree.get(ResourceLocation.tryParse(dat));
 		}
 		return null;
+	}
+
+	@Override
+	public AspectType type() {
+		return AspectType.FORM;
 	}
 }

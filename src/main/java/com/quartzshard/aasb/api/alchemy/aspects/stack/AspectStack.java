@@ -3,7 +3,7 @@ package com.quartzshard.aasb.api.alchemy.aspects.stack;
 import org.jetbrains.annotations.Nullable;
 
 import com.quartzshard.aasb.api.alchemy.IAlchemicalFlow;
-import com.quartzshard.aasb.api.alchemy.aspects.AspectEmpty;
+import com.quartzshard.aasb.api.capability.aspect.IAspectHandler.AspectType;
 import com.quartzshard.aasb.util.LogHelper;
 import com.quartzshard.aasb.util.NBTHelper;
 
@@ -17,25 +17,24 @@ import net.minecraft.nbt.ListTag;
 public abstract class AspectStack<A extends IAlchemicalFlow<A>> {
 	public static final String ASPECT_KEY = "aspect";
 	public static final String AMOUNT_KEY = "amount";
-	public static final AspectStack<AspectEmpty> EMPTY = new EmptyAspectStack();
 	
 	public final String TYPE_KEY;
 	protected A aspect;
-	protected long amount;
+	protected int amount;
 	
-	public AspectStack(String typeKey, A aspect, long amount) {
+	public AspectStack(String typeKey, A aspect, int amount) {
 		TYPE_KEY = typeKey;
 		this.aspect = aspect;
 		this.amount = amount;
 	}
-
-	public boolean isEmpty() {
-		return amount <= 0 || isEmptyAspect();
-	}
-	private boolean isEmptyAspect() {
-		return aspect == null
-				|| aspect instanceof AspectEmpty;
-	}
+	
+	/**
+	 * Checks if this stack is empty
+	 * @apiNote This function will also run a check on the static EMPTY stack
+	 * to make sure that it is still empty, and has not been tampered with.
+	 * @return
+	 */
+	public abstract boolean isEmpty();
 	
 	@Nullable
 	public A getAspect() {
@@ -49,13 +48,48 @@ public abstract class AspectStack<A extends IAlchemicalFlow<A>> {
 	 */
 	public abstract boolean setAspect(A aspect);
 	
-	public long getAmount() {
+	public AspectType getType() {
+		if (aspect == null)
+			return AspectType.EMPTY;
+		return aspect.type();
+	}
+	
+	public int getAmount() {
 		return amount;
 	}
 	
-	public void setAmount(long amount) {
+	public void setAmount(int amount) {
 		this.amount = amount;
 	}
+
+	public void grow(int by) {
+		this.amount += by;
+	}
+	
+	public void shrink(int by) {
+		this.amount -= by;
+	}
+	
+	public abstract <S extends AspectStack<A>> S dupe();
+	public <S extends AspectStack<A>> boolean sameAs(S other) {
+		if (this.isEmpty() && other.isEmpty()) {
+			return true;
+		}
+		return this.amount == other.amount
+				&& this.aspect.serialize().equals(other.aspect.serialize());
+	}
+	public <S extends AspectStack<A>> void become(S other) {
+		if (this.isEmpty()) {
+			LogHelper.warn("AspectStack.become()", "EmptyBecoming", "An empty AspectStack tried to become a different stack, supressing...");
+			return; // prevents morons like myself from changing the static emptystacks on accident
+		}
+		this.aspect = other.aspect;
+		this.amount = other.amount;
+		if (!this.sameAs(other)) {
+			LogHelper.warn("AspectStack.become()", "ImperfectCopy", "An AspectStack tried to become another, but failed the sameAs() check!");
+		}
+	}
+	public abstract void clear();
 	
 	/**
 	 * Serializes this AspectStack as an NBT tag <br>
@@ -73,6 +107,7 @@ public abstract class AspectStack<A extends IAlchemicalFlow<A>> {
 		return null;
 	}
 	
+	@Deprecated
 	/**
 	 * Puts this AspectStack into the given ListTag
 	 * @return
@@ -86,7 +121,8 @@ public abstract class AspectStack<A extends IAlchemicalFlow<A>> {
 		}
 		return list;
 	}
-	
+
+	@Deprecated
 	/**
 	 * Puts this AspectStack into the proper list in the given CompoundTag <br>
 	 * if the list doesnt exist, it will create it automatically

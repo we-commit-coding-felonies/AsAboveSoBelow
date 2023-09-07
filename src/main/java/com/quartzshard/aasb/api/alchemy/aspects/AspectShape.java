@@ -4,6 +4,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.quartzshard.aasb.AsAboveSoBelow;
 import com.quartzshard.aasb.api.alchemy.IAlchemicalFlow;
+import com.quartzshard.aasb.api.capability.aspect.IAspectHandler.AspectType;
 import com.quartzshard.aasb.data.AASBLang;
 import com.quartzshard.aasb.util.ColorsHelper.Color;
 import com.quartzshard.aasb.util.LogHelper;
@@ -110,5 +111,10 @@ public enum AspectShape implements IAlchemicalFlow<AspectShape> {
 			} catch (IllegalArgumentException e) {}
 		}
 		return null;
+	}
+
+	@Override
+	public AspectType type() {
+		return AspectType.SHAPE;
 	}
 } 

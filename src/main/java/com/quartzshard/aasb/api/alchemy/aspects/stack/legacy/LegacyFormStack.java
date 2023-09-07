@@ -8,6 +8,7 @@ import com.quartzshard.aasb.init.AlchemyInit.FormTree;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 
+@Deprecated
 public class LegacyFormStack {
 	public static final String TYPE_KEY = "aspect_type";
 	public static final String AMOUNT_KEY = "amount";

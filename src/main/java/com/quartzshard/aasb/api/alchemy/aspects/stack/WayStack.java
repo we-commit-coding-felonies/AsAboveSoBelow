@@ -1,14 +1,11 @@
 package com.quartzshard.aasb.api.alchemy.aspects.stack;
 
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.quartzshard.aasb.api.alchemy.aspects.AspectWay;
-import com.quartzshard.aasb.util.NBTHelper;
+import com.quartzshard.aasb.util.LogHelper;
 
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
 
 /**
  * @implNote Value is different from Amount, and specific to WayStacks <br>
@@ -19,14 +16,32 @@ import net.minecraft.nbt.Tag;
  */
 public class WayStack extends AspectStack<AspectWay> {
 	public static final String TYPE_KEY = "way";
-	public WayStack(AspectWay aspect, long amount) {
+	public static final WayStack EMPTY = new WayStack(null, 0);
+	public WayStack(AspectWay aspect, int amount) {
 		super(TYPE_KEY, aspect, amount);
 	}
-	public WayStack(long value, long amount) {
+	public WayStack(long value, int amount) {
 		this(new AspectWay(value), amount);
 	}
 	public WayStack(long value) {
 		this(value, 1);
+	}
+
+	@Override
+	public WayStack dupe() {
+		return new WayStack(new AspectWay(aspect.getValue()), this.getAmount());
+	}
+
+	@Override
+	public boolean isEmpty() {
+		if (EMPTY == null || EMPTY.aspect != null || EMPTY.getAmount() != 0) {
+			LogHelper.error("WayStack.isEmpty()", "EmptyIsNotEmpty", "CATASTROPHIC: Something has changed the static EMPTY WayStack to not be empty! THIS IS EXTREMELY BAD AND SHOULD NEVER HAPPEN! THE GAME WILL NOW CRASH!");
+			LogHelper.LOGGER.error("The static EMPTY WayStack (henceforth referred to as just EMPTY) is directly linked to every single empty slot in every single thing that can store WayStacks.");
+			LogHelper.LOGGER.error("Changing EMPTY to something else causes all of said empty WayStack slots to be changed as well, wreaking havok everywhere and causing unpredictable behavior.");
+			LogHelper.LOGGER.error("Because of the extreme severity of this issue, and the enormous butterfly effect it can have on things, THE GAME WILL NOW CRASH.");
+			throw new Error("EMPTY is not empty: If you are running with addons, please report this crash to the addon developer(s). If you are running normal AASB, PLEASE REPORT THIS CRASH ASAP!");
+		}
+		return this == EMPTY || amount <= 0 || aspect == null || aspect.getValue() <= 0;
 	}
 
 
@@ -78,49 +93,15 @@ public class WayStack extends AspectStack<AspectWay> {
 	public static WayStack deserialize(CompoundTag aspectTag) {
 		String dat = aspectTag.getString(ASPECT_KEY);
 		AspectWay aspect = AspectWay.deserialize(dat);
-		long amount = aspectTag.getLong(AMOUNT_KEY);
+		int amount = aspectTag.getInt(AMOUNT_KEY);
 		if (aspect != null && amount > 0) {
 			return new WayStack(aspect, amount);
 		}
 		return null;
 	}
 	
-	/**
-	 * Reads all valid stacks from the given list and puts them in an array <br>
-	 * Returns null if there were no valid stacks
-	 * @param list
-	 * @return
-	 */
-	@Nullable
-	public static WayStack[] readFromList(@NotNull ListTag list) {
-		WayStack[] ways = new WayStack[list.size()];
-		int i = 0;
-		for (Tag t : list) {
-			if (t.getType() == CompoundTag.TYPE) {
-				CompoundTag aspectTag = (CompoundTag)t;
-				WayStack wayStack = WayStack.deserialize(aspectTag);
-				if (wayStack != null) {
-					ways[i] = wayStack;
-					i++;
-				}
-			}
-		}
-		return i > 0 ? ways : null;
-	}
-	
-	/**
-	 * Attempts to find and read a list of stacks from the given tag <br>
-	 * null means there was no valid stacks found
-	 * @param tag
-	 * @return
-	 */
-	@Nullable
-	public static WayStack[] readFromTag(CompoundTag tag) {
-		if (tag != null) {
-			ListTag list = NBTHelper.Tags.getCompoundList(tag, TYPE_KEY, true);
-			if (list != null)
-				return readFromList(list);
-		}
-		return null;
+	@Override
+	public void clear() {
+		this.become(EMPTY);
 	}
 }

@@ -19,6 +19,10 @@ public class NBTHelper {
 			return tag != null && !tag.isEmpty() && tag.contains(key);
 		}
 
+
+		public static byte getByte(CompoundTag tag, String key, byte defaultExpected) {
+			return verifyExistance(tag, key) ? tag.getByte(key) : defaultExpected;
+		}
 		/**
 		 * If nullifyOnFail is true it'll return null if it doesn't find any
 		 * compounds, otherwise it'll return a new one.

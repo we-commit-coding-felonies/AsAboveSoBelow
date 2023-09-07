@@ -6,6 +6,7 @@ import com.quartzshard.aasb.api.alchemy.aspects.*;
 
 import net.minecraft.nbt.CompoundTag;
 
+@Deprecated
 public class LegacyWayStack {
 	public static final String TYPE_KEY = "aspect_type";
 	public static final String TYPE = "way";

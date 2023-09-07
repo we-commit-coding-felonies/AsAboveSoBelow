@@ -7,6 +7,7 @@ import com.quartzshard.aasb.util.LogHelper;
 
 import net.minecraft.nbt.CompoundTag;
 
+@Deprecated
 public class LegacyShapeStack {
 	public static final String TYPE_KEY = "aspect_type";
 	public static final String AMOUNT_KEY = "amount";

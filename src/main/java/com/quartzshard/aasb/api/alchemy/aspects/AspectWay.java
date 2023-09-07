@@ -3,6 +3,7 @@ package com.quartzshard.aasb.api.alchemy.aspects;
 import org.jetbrains.annotations.Nullable;
 
 import com.quartzshard.aasb.api.alchemy.IAlchemicalFlow;
+import com.quartzshard.aasb.api.capability.aspect.IAspectHandler.AspectType;
 
 public class AspectWay implements IAlchemicalFlow<AspectWay> {
 	private final long value;
@@ -55,6 +56,11 @@ public class AspectWay implements IAlchemicalFlow<AspectWay> {
 			} catch (NumberFormatException e) {}
 		}
 		return null;
+	}
+
+	@Override
+	public AspectType type() {
+		return AspectType.WAY;
 	}
 
 }
