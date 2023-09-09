@@ -669,7 +669,6 @@ public class SentientArrow extends AbstractArrow {
 	 * @param blockPos
 	 * @return if was successfull
 	 */
-	@Nullable
 	private boolean transmuteBlockIntoCovDust(BlockPos blockPos) {
 		// TODO: possibly reimplement 
 		return false;
@@ -860,8 +859,7 @@ public class SentientArrow extends AbstractArrow {
 	
 	protected boolean shouldContinueHomingTowards(Entity entity) {
 		if (entity instanceof LivingEntity ent) {
-			return ent != null
-					&& canHitEntity(entity)
+			return canHitEntity(entity)
 					&& (!ent.isInvisible() || ent.isCurrentlyGlowing())
 					&& !ent.hasEffect(ObjectInit.MobEffects.TRANSMUTING.get());
 		}

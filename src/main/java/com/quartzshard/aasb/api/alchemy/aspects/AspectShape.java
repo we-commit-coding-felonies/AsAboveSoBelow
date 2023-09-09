@@ -55,6 +55,7 @@ public enum AspectShape implements IAlchemicalFlow<AspectShape> {
 	 * @param to The Shape we're checking flow to.
 	 * @return 
 	 */
+	@SuppressWarnings("incomplete-switch")
 	@Override
 	public boolean flows(AspectShape to) {
 		switch (this) {

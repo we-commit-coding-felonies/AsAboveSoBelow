@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.quartzshard.aasb.AsAboveSoBelow;
 import com.quartzshard.aasb.api.item.IBurnoutItem;
@@ -66,7 +67,7 @@ public class HermeticArmorItem extends AlchArmor implements IBurnoutItem, IShape
 	}
 	
 	@Override
-	public void appendHoverText(ItemStack stack, Level level, List<Component> tips, TooltipFlag flags) {
+	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tips, TooltipFlag flags) {
 		super.appendHoverText(stack, level, tips, flags);
 		tips.add(new TextComponent(" "));
 		tips.add(new TranslatableComponent(AASBLang.TIP_HERM_ARMOR_FLAVOR).withStyle(ChatFormatting.UNDERLINE)); // Flavor
@@ -195,7 +196,8 @@ public class HermeticArmorItem extends AlchArmor implements IBurnoutItem, IShape
 	public static class HermeticArmorMaterial implements ArmorMaterial {
 		public static final HermeticArmorMaterial MAT = new HermeticArmorMaterial();
 		@Override
-		public int getDefenseForSlot(@NotNull EquipmentSlot slot) {
+		public int getDefenseForSlot(@Nullable EquipmentSlot slot) {
+			if (slot == null) return 0;
 			switch(slot) {
 			case HEAD:
 				return 5;
@@ -210,7 +212,7 @@ public class HermeticArmorItem extends AlchArmor implements IBurnoutItem, IShape
 			}
 		}
 		@Override
-		public int getDurabilityForSlot(@NotNull EquipmentSlot slot) {return Integer.MAX_VALUE;}
+		public int getDurabilityForSlot(@Nullable EquipmentSlot slot) {return Integer.MAX_VALUE;}
 		@Override
 		public int getEnchantmentValue() {return 0;}
 		@NotNull

@@ -240,8 +240,8 @@ public class PlayerHelper {
 	}
 	
 	public static void doSweepAttackParticle(Player culprit, ServerLevel level) {
-		double rot1 = (double)(-Mth.sin(culprit.getYRot() * ((float)Math.PI / 180f)));
-		double rot2 = (double)Mth.cos(culprit.getYRot() * ((float)Math.PI / 180f));
+		double rot1 = (-Mth.sin(culprit.getYRot() * ((float)Math.PI / 180f)));
+		double rot2 = Mth.cos(culprit.getYRot() * ((float)Math.PI / 180f));
 		level.sendParticles(ParticleTypes.SWEEP_ATTACK, culprit.getX()+rot1, culprit.getY(0.5), culprit.getZ()+rot2, 1, 0, 0, 0, 0);
 	}
 

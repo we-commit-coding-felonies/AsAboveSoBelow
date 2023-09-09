@@ -40,10 +40,12 @@ public class HorrorRenderer extends AbstractZombieRenderer<HorrorEntity, HorrorM
 		return true;
 	}
 
+	@Override
 	protected int getSkyLightLevel(HorrorEntity ent, BlockPos pos) {
 		return ent.getRandom().nextInt(16);
 	}
 	
+	@Override
 	protected int getBlockLightLevel(HorrorEntity ent, BlockPos pos) {
 		return ent.getRandom().nextInt(16);
 	}

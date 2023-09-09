@@ -24,6 +24,7 @@ public class TagHelper {
 	
 	public record LazyTagLookup<T extends IForgeRegistryEntry<T>>(TagKey<T> key, Lazy<ITag<T>> lazyTag) {
 
+		@SuppressWarnings("null")
 		public static <T extends IForgeRegistryEntry<T>> LazyTagLookup<T> create(IForgeRegistry<T> registry, TagKey<T> key) {
 			return new LazyTagLookup<>(key, Lazy.of(() -> manager(registry).getTag(key)));
 		}

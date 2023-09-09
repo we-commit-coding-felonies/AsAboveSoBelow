@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import org.jetbrains.annotations.Nullable;
+
 import com.google.common.collect.Multimap;
 import com.quartzshard.aasb.api.item.IHermeticTool;
 import com.quartzshard.aasb.client.AASBKeys;
@@ -49,7 +51,7 @@ public class HermeticPickaxeItem extends PickaxeItem implements IHermeticTool {
 	}
 	
 	@Override
-	public void appendHoverText(ItemStack stack, Level level, List<Component> tips, TooltipFlag flags) {
+	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tips, TooltipFlag flags) {
 		super.appendHoverText(stack, level, tips, flags);
 		
 		int runesVal = getRunesVal(stack);

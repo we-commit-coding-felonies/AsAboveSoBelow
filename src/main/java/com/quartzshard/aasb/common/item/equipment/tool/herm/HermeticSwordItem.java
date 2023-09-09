@@ -9,6 +9,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.google.common.collect.Multimap;
 import com.quartzshard.aasb.api.item.IHermeticTool;
@@ -101,7 +102,7 @@ public class HermeticSwordItem extends SwordItem implements IHermeticTool {
 	private static final String TAG_SLASHING = "slash_power";
 	
 	@Override
-	public void appendHoverText(ItemStack stack, Level level, List<Component> tips, TooltipFlag flags) {
+	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tips, TooltipFlag flags) {
 		super.appendHoverText(stack, level, tips, flags);
 		
 		int runesVal = getRunesVal(stack);

@@ -3,9 +3,8 @@ package com.quartzshard.aasb.api.capability.item;
 import java.util.List;
 import java.util.function.Supplier;
 
-import javax.annotation.Nullable;
-
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -52,6 +51,8 @@ public class ItemCapabilityProvider implements ICapabilitySerializable<CompoundT
 	public <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction side) {
 		for (ItemCapability<?> cap : capabilities) {
 			if (capability == cap.getCapability()) {
+				LazyOptional<T> cc = cap.getLazyCapability().cast();
+				if (cc != null)
 				return cap.getLazyCapability().cast();
 			}
 		}

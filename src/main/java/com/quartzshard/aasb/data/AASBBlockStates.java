@@ -4,6 +4,8 @@ import com.quartzshard.aasb.AsAboveSoBelow;
 import com.quartzshard.aasb.common.block.AirIceBlock;
 import com.quartzshard.aasb.init.ObjectInit;
 
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.models.model.ModelLocationUtils;
 import net.minecraft.world.level.block.Block;
@@ -54,7 +56,7 @@ public class AASBBlockStates extends BlockStateProvider {
 
 
 	@Override
-	public String getName() {
+	public @NotNull String getName() {
 		return AsAboveSoBelow.DISPLAYNAME + " | Block States";
 	}
 

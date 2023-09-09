@@ -34,10 +34,12 @@ public class HorrorEntity extends Husk {
 		return false;
 	}
 
+	@Override
 	protected boolean shouldDespawnInPeaceful() {
 		return false;
 	}
 
+	@Override
 	protected boolean convertsInWater() {
 		return false;
 	}

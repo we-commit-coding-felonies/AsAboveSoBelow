@@ -83,7 +83,7 @@ public class AASBSounds extends SoundDefinitionsProvider {
 		add(ro, def.subtitle(subFor(ro)));
 	}
 	
-	private String subFor(Supplier<SoundEvent> ro) {
+	private static String subFor(Supplier<SoundEvent> ro) {
 		return "subtitles." + ro.get().getLocation().toString().replace(':', '.').replace('/', '.');
 	}
 	

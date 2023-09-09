@@ -33,28 +33,28 @@ public class LabFunctions {
 	
 	/** extracts way from an item */
 	@Nullable
-	public static LabRecipeData sublimation(LabRecipeData input) {
+	public static LegacyLabRecipeData sublimation(LegacyLabRecipeData input) {
 		if (hasStacks(input.items)) {
 			long itemWay = 11; // TODO: implement once mapper is finished
 			ArrayList<ItemStack> itemsOut = new ArrayList<>();
 			itemsOut.add(new ItemStack(ObjectInit.Items.SUBLIT.get()));
 			ArrayList<LegacyWayStack> waysOut = new ArrayList<>();
 			waysOut.add(new LegacyWayStack(itemWay));
-			return new LabRecipeData(itemsOut, null, waysOut, null, null);
+			return new LegacyLabRecipeData(itemsOut, null, waysOut, null, null);
 		}
 		return null;
 	}
 	
 	/** combines 2 ways that are within flow distance */
 	@Nullable
-	public static LabRecipeData conjunction(LabRecipeData input) {
+	public static LegacyLabRecipeData conjunction(LegacyLabRecipeData input) {
 		if (hasStacks(input.ways) && input.ways.size() == 2) {
 			AspectWay a = new AspectWay(input.ways.get(0).getAmount()),
 					b = new AspectWay(input.ways.get(1).getAmount());
 			if (a.flows(b)) {
 				ArrayList<LegacyWayStack> waysOut = new ArrayList<>();
 				waysOut.add(new LegacyWayStack(a.getValue() + b.getValue()));
-				return new LabRecipeData(null, null, waysOut, null, null);
+				return new LegacyLabRecipeData(null, null, waysOut, null, null);
 			}
 		}
 		return null;
@@ -62,20 +62,20 @@ public class LabFunctions {
 	
 	/** removes exactly 3 way from the inputs total */
 	@Nullable
-	public static LabRecipeData stagnation(LabRecipeData input) {
+	public static LegacyLabRecipeData stagnation(LegacyLabRecipeData input) {
 		if (hasStacks(input.ways) && input.ways.get(0).getAmount() > 3) {
 			ArrayList<LegacyWayStack> waysOut = new ArrayList<>();
 			LegacyWayStack modStack = input.ways.get(0);
 			modStack.setAmount(modStack.getAmount()-3);
 			waysOut.add(modStack);
-			return new LabRecipeData(null, null, waysOut, null, null);
+			return new LegacyLabRecipeData(null, null, waysOut, null, null);
 		}
 		return null;
 	}
 
 	/** divides an even waystack in half */
 	@Nullable
-	public static LabRecipeData separation(LabRecipeData input) {
+	public static LegacyLabRecipeData separation(LegacyLabRecipeData input) {
 		if (hasStacks(input.ways) && input.ways.get(0).getAmount() % 2 == 0) {
 			ArrayList<LegacyWayStack> waysOut = new ArrayList<>();
 			LegacyWayStack a = input.ways.get(0);
@@ -84,14 +84,14 @@ public class LabFunctions {
 			LegacyWayStack b = new LegacyWayStack(newVal);
 			waysOut.add(a);
 			waysOut.add(b);
-			return new LabRecipeData(null, null, waysOut, null, null);
+			return new LegacyLabRecipeData(null, null, waysOut, null, null);
 		}
 		return null;
 	}
 
 	/** divides a waystack into an arbitrary number of smaller waystacks, each the same size as the focus's way value. voids remainder */
 	@Nullable
-	public static LabRecipeData filtration(LabRecipeData input) {
+	public static LegacyLabRecipeData filtration(LegacyLabRecipeData input) {
 		if (hasStacks(input.ways) && hasStacks(input.items)) {
 			ItemStack focusItem = input.items.get(0);
 			LegacyWayStack inWay = input.ways.get(0);
@@ -109,7 +109,7 @@ public class LabFunctions {
 				long numOutWays = inWayVal / focusWay;
 				for (int i = 0; i < numOutWays; i++)
 					waysOut.add(new LegacyWayStack(focusWay));
-				return new LabRecipeData(input.items, null, waysOut, null, null);
+				return new LegacyLabRecipeData(input.items, null, waysOut, null, null);
 			}
 		}
 		return null;
@@ -117,7 +117,7 @@ public class LabFunctions {
 	
 	/** stores an entire waystack into a klein star. if the klein star cant hold it all, excess is voided */
 	@Nullable
-	public static LabRecipeData condensation(LabRecipeData input) {
+	public static LegacyLabRecipeData condensation(LegacyLabRecipeData input) {
 		// TODO: implement klein stars, and also this function
 		return null;
 	}
@@ -126,21 +126,21 @@ public class LabFunctions {
 	
 	/** extracts shape from an item */
 	@Nullable
-	public static LabRecipeData desiccation(LabRecipeData input) {
+	public static LegacyLabRecipeData desiccation(LegacyLabRecipeData input) {
 		if (hasStacks(input.items)) {
 			AspectShape itemShape = AspectShape.FIRE; // TODO: implement once mapper is finished
 			ArrayList<ItemStack> itemsOut = new ArrayList<>();
 			itemsOut.add(new ItemStack(ObjectInit.Items.SALT.get()));
 			ArrayList<LegacyShapeStack> shapesOut = new ArrayList<>();
 			shapesOut.add(new LegacyShapeStack(itemShape));
-			return new LabRecipeData(itemsOut, null, null, shapesOut, null);
+			return new LegacyLabRecipeData(itemsOut, null, null, shapesOut, null);
 		}
 		return null;
 	}
 
 	/** extracts the shape from a flask. lead & gold flasks are dirtied, but aetherglass is not */
 	@Nullable
-	public static LabRecipeData shapeDistillation(LabRecipeData input) {
+	public static LegacyLabRecipeData shapeDistillation(LegacyLabRecipeData input) {
 		if (hasStacks(input.items)) {
 			ItemStack item = input.items.get(0);
 			if (item.getItem() instanceof FlaskItem flask && flask.hasStoredShape(item) && flask.canExtract(item)) {
@@ -156,7 +156,7 @@ public class LabFunctions {
 					ArrayList<LegacyShapeStack> shapesOut = new ArrayList<>();
 					itemsOut.add(badFlask);
 					shapesOut.add(new LegacyShapeStack(shape));
-					return new LabRecipeData(itemsOut, null, null, shapesOut, null);
+					return new LegacyLabRecipeData(itemsOut, null, null, shapesOut, null);
 				}
 			}
 		}
@@ -165,13 +165,13 @@ public class LabFunctions {
 
 	/** turns air into fire */
 	@Nullable
-	public static LabRecipeData oxidation(LabRecipeData input) {
+	public static LegacyLabRecipeData oxidation(LegacyLabRecipeData input) {
 		if (hasStacks(input.shapes)) {
 			LegacyShapeStack inShape = input.shapes.get(0);
 			if (inShape.isValid() && inShape.getShape() == AspectShape.AIR) {
 				ArrayList<LegacyShapeStack> shapesOut = new ArrayList<>();
 				shapesOut.add(new LegacyShapeStack(AspectShape.FIRE));
-				return new LabRecipeData(null, null, null, shapesOut, null);
+				return new LegacyLabRecipeData(null, null, null, shapesOut, null);
 			}
 		}
 		return null;
@@ -179,13 +179,13 @@ public class LabFunctions {
 
 	/** turns fire into earth */
 	@Nullable
-	public static LabRecipeData congelation(LabRecipeData input) {
+	public static LegacyLabRecipeData congelation(LegacyLabRecipeData input) {
 		if (hasStacks(input.shapes)) {
 			LegacyShapeStack inShape = input.shapes.get(0);
 			if (inShape.isValid() && inShape.getShape() == AspectShape.FIRE) {
 				ArrayList<LegacyShapeStack> shapesOut = new ArrayList<>();
 				shapesOut.add(new LegacyShapeStack(AspectShape.EARTH));
-				return new LabRecipeData(null, null, null, shapesOut, null);
+				return new LegacyLabRecipeData(null, null, null, shapesOut, null);
 			}
 		}
 		return null;
@@ -193,13 +193,13 @@ public class LabFunctions {
 
 	/** turns earth into water */
 	@Nullable
-	public static LabRecipeData ceration(LabRecipeData input) {
+	public static LegacyLabRecipeData ceration(LegacyLabRecipeData input) {
 		if (hasStacks(input.shapes)) {
 			LegacyShapeStack inShape = input.shapes.get(0);
 			if (inShape.isValid() && inShape.getShape() == AspectShape.EARTH) {
 				ArrayList<LegacyShapeStack> shapesOut = new ArrayList<>();
 				shapesOut.add(new LegacyShapeStack(AspectShape.WATER));
-				return new LabRecipeData(null, null, null, shapesOut, null);
+				return new LegacyLabRecipeData(null, null, null, shapesOut, null);
 			}
 		}
 		return null;
@@ -207,13 +207,13 @@ public class LabFunctions {
 	
 	/** turns water into air */
 	@Nullable
-	public static LabRecipeData dehydration(LabRecipeData input) {
+	public static LegacyLabRecipeData dehydration(LegacyLabRecipeData input) {
 		if (hasStacks(input.shapes)) {
 			LegacyShapeStack inShape = input.shapes.get(0);
 			if (inShape.isValid() && inShape.getShape() == AspectShape.WATER) {
 				ArrayList<LegacyShapeStack> shapesOut = new ArrayList<>();
 				shapesOut.add(new LegacyShapeStack(AspectShape.AIR));
-				return new LabRecipeData(null, null, null, shapesOut, null);
+				return new LegacyLabRecipeData(null, null, null, shapesOut, null);
 			}
 		}
 		return null;
@@ -221,7 +221,7 @@ public class LabFunctions {
 	
 	/** turns 1 of each of the 4 normal shapes into 1 quintessence shape */
 	@Nullable
-	public static LabRecipeData exaltation(LabRecipeData input) {
+	public static LegacyLabRecipeData exaltation(LegacyLabRecipeData input) {
 		if (hasStacks(input.shapes) && input.shapes.size() == 4) {
 			boolean w,e,f,a;
 			w = e = f = a = false;
@@ -246,7 +246,7 @@ public class LabFunctions {
 			if (w && e && f && a) {
 				ArrayList<LegacyShapeStack> shapesOut = new ArrayList<>();
 				shapesOut.add(new LegacyShapeStack(AspectShape.UNIVERSAL));
-				return new LabRecipeData(null, null, null, shapesOut, null);
+				return new LegacyLabRecipeData(null, null, null, shapesOut, null);
 			}
 		}
 		return null;
@@ -254,7 +254,7 @@ public class LabFunctions {
 	
 	/** takes 1 quintessence and turns it into 4 of any single basic shape, as decided by the focus */
 	@Nullable
-	public static LabRecipeData condemnation(LabRecipeData input) {
+	public static LegacyLabRecipeData condemnation(LegacyLabRecipeData input) {
 		if (hasStacks(input.shapes) && hasStacks(input.items)) {
 			LegacyShapeStack inShape = input.shapes.get(0);
 			AspectShape focusShape = AspectShape.AIR; // TODO: implement this properly with the mapper
@@ -263,7 +263,7 @@ public class LabFunctions {
 				shapesOut.add(new LegacyShapeStack(focusShape, 4));
 				ArrayList<ItemStack> itemsOut = new ArrayList<>();
 				itemsOut.add(input.items.get(0));
-				return new LabRecipeData(itemsOut, null, null, shapesOut, null);
+				return new LegacyLabRecipeData(itemsOut, null, null, shapesOut, null);
 			}
 		}
 		return null;
@@ -273,21 +273,21 @@ public class LabFunctions {
 	
 	/** extracts shape from an item */
 	@Nullable
-	public static LabRecipeData evaporation(LabRecipeData input) {
+	public static LegacyLabRecipeData evaporation(LegacyLabRecipeData input) {
 		if (hasStacks(input.items)) {
 			AspectForm itemForm = FormTree.WITCHCRAFT.get(); // TODO: implement once mapper is finished
 			ArrayList<ItemStack> itemsOut = new ArrayList<>();
 			itemsOut.add(new ItemStack(ObjectInit.Items.SOOT.get()));
 			ArrayList<LegacyFormStack> formsOut = new ArrayList<>();
 			formsOut.add(new LegacyFormStack(itemForm));
-			return new LabRecipeData(itemsOut, null, null, null, formsOut);
+			return new LegacyLabRecipeData(itemsOut, null, null, null, formsOut);
 		}
 		return null;
 	}
 
 	/** extracts form from a flask */
 	@Nullable
-	public static LabRecipeData formDistillation(LabRecipeData input) {
+	public static LegacyLabRecipeData formDistillation(LegacyLabRecipeData input) {
 		if (hasStacks(input.items) && !hasStacks(input.forms)) {
 			ItemStack item = input.items.get(0);
 			if (item.getItem() instanceof FlaskItem flask && flask.hasStoredForm(item) && flask.canExtract(item)) {
@@ -303,7 +303,7 @@ public class LabFunctions {
 					ArrayList<LegacyFormStack> formsOut = new ArrayList<>();
 					itemsOut.add(badFlask);
 					formsOut.add(new LegacyFormStack(form));
-					return new LabRecipeData(itemsOut, null, null, null, formsOut);
+					return new LegacyLabRecipeData(itemsOut, null, null, null, formsOut);
 				}
 			}
 		}
@@ -312,7 +312,7 @@ public class LabFunctions {
 
 	/** turns any non-leaf form into any leaf form */
 	@Nullable
-	public static LabRecipeData fixation(LabRecipeData input) {
+	public static LegacyLabRecipeData fixation(LegacyLabRecipeData input) {
 		if (hasStacks(input.forms) && hasStacks(input.items)) {
 			AspectForm inForm = input.forms.get(0).getForm();
 			if (inForm.getChildren().length > 0) {
@@ -323,7 +323,7 @@ public class LabFunctions {
 					itemsOut.add(focus);
 					ArrayList<LegacyFormStack> formsOut = new ArrayList<>();
 					formsOut.add(new LegacyFormStack(focusForm));
-					return new LabRecipeData(itemsOut, null, null, null, formsOut);
+					return new LegacyLabRecipeData(itemsOut, null, null, null, formsOut);
 				}
 			}
 		}
@@ -332,7 +332,7 @@ public class LabFunctions {
 
 	/** turns a form into another with the same parent */
 	@Nullable
-	public static LabRecipeData amalgamation(LabRecipeData input) {
+	public static LegacyLabRecipeData amalgamation(LegacyLabRecipeData input) {
 		if (hasStacks(input.forms) && hasStacks(input.items)) {
 			AspectForm inForm = input.forms.get(0).getForm();
 			ItemStack focus = input.items.get(0);
@@ -345,7 +345,7 @@ public class LabFunctions {
 					itemsOut.add(focus);
 					ArrayList<LegacyFormStack> formsOut = new ArrayList<>();
 					formsOut.add(new LegacyFormStack(focusForm));
-					return new LabRecipeData(itemsOut, null, null, null, formsOut);
+					return new LegacyLabRecipeData(itemsOut, null, null, null, formsOut);
 				}
 			}
 		}
@@ -354,7 +354,7 @@ public class LabFunctions {
 
 	/** turns a form into its parent, at the cost of a universal */
 	@Nullable
-	public static LabRecipeData homogenization(LabRecipeData input) {
+	public static LegacyLabRecipeData homogenization(LegacyLabRecipeData input) {
 		if (hasStacks(input.forms)) {
 			AspectForm inForm = input.forms.get(0).getForm(), inPar = inForm.getParent();
 			if (inPar != null) {
@@ -381,7 +381,7 @@ public class LabFunctions {
 					} else if (!eatForm && multiForms) {
 						formsOut.add(input.forms.get(1));
 					}
-					return new LabRecipeData(null, null, null, shapesOut, formsOut);
+					return new LegacyLabRecipeData(null, null, null, shapesOut, formsOut);
 				}
 			}
 		}
@@ -392,7 +392,7 @@ public class LabFunctions {
 	
 	/** extracts shape & form from a gold flask */
 	@Nullable
-	public static LabRecipeData cohobation(LabRecipeData input) {
+	public static LegacyLabRecipeData cohobation(LegacyLabRecipeData input) {
 		if ( hasStacks(input.items) && !(hasStacks(input.shapes) || hasStacks(input.forms)) ) {
 			ItemStack item = input.items.get(0);
 			if (item.is(Items.FLASK_GOLD.get()) && item.getItem() instanceof FlaskItem flask && flask.canExtract(item)) {
@@ -408,7 +408,7 @@ public class LabFunctions {
 					itemsOut.add(badFlask);
 					shapesOut.add(new LegacyShapeStack(shape));
 					formsOut.add(new LegacyFormStack(form));
-					return new LabRecipeData(itemsOut, null, null, shapesOut, formsOut);
+					return new LegacyLabRecipeData(itemsOut, null, null, shapesOut, formsOut);
 				}
 			}
 		}
@@ -417,7 +417,7 @@ public class LabFunctions {
 	
 	/** special transmutation */
 	@Nullable
-	public static LabRecipeData projection(LabRecipeData input) {
+	public static LegacyLabRecipeData projection(LegacyLabRecipeData input) {
 		// TODO: implement
 		return null;
 	}
@@ -427,7 +427,7 @@ public class LabFunctions {
 	 *  this is done because the lab function cannot know the world time, and thus cannot set an accurate expiration date
 	 */
 	@Nullable
-	public static LabRecipeData solution(LabRecipeData input) {
+	public static LegacyLabRecipeData solution(LegacyLabRecipeData input) {
 		// TODO: currently uses water, implement alkahest
 		if (hasStacks(input.items) && hasStacks(input.fluids) && hasStacks(input.shapes) && hasStacks(input.forms)) {
 			FluidStack inFluid = input.fluids.get(0);
@@ -474,7 +474,7 @@ public class LabFunctions {
 							itemsOut.add(inItem2);
 						}
 					}
-					return new LabRecipeData(itemsOut, null, null, null, null);
+					return new LegacyLabRecipeData(itemsOut, null, null, null, null);
 				}
 			}
 		}
@@ -483,19 +483,19 @@ public class LabFunctions {
 	
 	/** turns a way, a shape, and a form into 1 aether */
 	@Nullable
-	public static LabRecipeData digestion(LabRecipeData input) {
+	public static LegacyLabRecipeData digestion(LegacyLabRecipeData input) {
 		// TODO: this recipe should be sped up by higher way values. figure out a way to do this
 		if (hasStacks(input.ways) && hasStacks(input.shapes) && hasStacks(input.forms)) {
 			ArrayList<ItemStack> itemsOut = new ArrayList<>();
 			itemsOut.add(new ItemStack(Items.AETHER.get()));
-			return new LabRecipeData(itemsOut, null, null, null, null);
+			return new LegacyLabRecipeData(itemsOut, null, null, null, null);
 		}
 		return null;
 	}
 	
 	/** clones an item using 2x its raw aspects */
 	@Nullable
-	public static LabRecipeData multiplication(LabRecipeData input) {
+	public static LegacyLabRecipeData multiplication(LegacyLabRecipeData input) {
 		// TODO: implement, requires the mapper
 		return null;
 	}

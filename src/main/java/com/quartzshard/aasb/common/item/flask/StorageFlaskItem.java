@@ -2,6 +2,8 @@ package com.quartzshard.aasb.common.item.flask;
 
 import java.util.List;
 
+import org.jetbrains.annotations.Nullable;
+
 import com.google.common.base.Enums;
 import com.quartzshard.aasb.api.alchemy.aspects.AspectForm;
 import com.quartzshard.aasb.api.alchemy.aspects.AspectShape;
@@ -22,7 +24,7 @@ public class StorageFlaskItem extends FlaskItem {
 	}
 	
 	@Override
-	public void appendHoverText(ItemStack stack, Level level, List<Component> tips, TooltipFlag flags) {
+	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tips, TooltipFlag flags) {
 		if (hasStored(stack)) {
 			AspectShape shape = getStoredShape(stack);
 			AspectForm form = getStoredForm(stack);

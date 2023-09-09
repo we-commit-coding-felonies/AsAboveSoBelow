@@ -83,7 +83,7 @@ public class PocketwatchItem extends JewelryArmor implements ICanLegsMode {
 		}
 	}
 	
-	private void fastDescend(Player player, Level level) {
+	private static void fastDescend(Player player, Level level) {
 		if (level.isClientSide) {
 			Vec3 vel = player.getDeltaMovement();
 			if (!player.isOnGround() && vel.y() > -8) {

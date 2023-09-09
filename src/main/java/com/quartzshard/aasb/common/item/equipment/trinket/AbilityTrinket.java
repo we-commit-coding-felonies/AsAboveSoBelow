@@ -69,10 +69,9 @@ public abstract class AbilityTrinket extends Item implements ITrinket, ICanItemM
 	}
 	
 	private <R extends TrinketRune> void tryTickRune(R rune, ItemStack stack, ServerPlayer player, ServerLevel level, boolean strong) {
+		@SuppressWarnings("null")
 		RuneTicks tInfo = rune.getClass().getAnnotation(RuneTicks.class);
-		if (tInfo != null) {
-			tickRune(rune, tInfo, stack, player, level, strong);
-		}
+		tickRune(rune, tInfo, stack, player, level, strong);
 	}
 	
 	public abstract <R extends TrinketRune> void tickRune(R rune, RuneTicks tInfo, ItemStack stack, ServerPlayer player, ServerLevel level, boolean strong);
@@ -126,7 +125,6 @@ public abstract class AbilityTrinket extends Item implements ITrinket, ICanItemM
 		return false;
 	}
 
-	@Nullable
 	@SuppressWarnings("unchecked")
 	public <R extends TrinketRune> boolean hasRune(ItemStack stack, @SuppressWarnings("unused") R expected) {
 		CompoundTag[] runeTags = {

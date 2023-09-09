@@ -87,14 +87,14 @@ public class AmuletItem extends JewelryArmor implements IAlchemicalBarrier {
 		}
 	}
 	
-	private boolean tryHeal(Player player) {
+	private static boolean tryHeal(Player player) {
 		if (player.getHealth() < player.getMaxHealth()) {
 			player.heal(1);
 			return true;
 		}
 		return false;
 	}
-	private boolean tryFeed(Player player) {
+	private static boolean tryFeed(Player player) {
 		if (player.getFoodData().needsFood()) {
 			player.getFoodData().eat(1, 10);
 			return true;
@@ -160,11 +160,13 @@ public class AmuletItem extends JewelryArmor implements IAlchemicalBarrier {
 		return mult;
 	}
 	
+	@Override
 	public long calcShieldingCost(Player player, float damage, DamageSource source, ItemStack stack) {
 		// ( dmg * mod ) ^ exp = emc
 		return (long) Math.max(64, Math.pow(damage*getCostMultiplierForSource(source), 2));
 	}
 	
+	@Override
 	public float calcAffordableDamage(Player player, float damage, DamageSource source, ItemStack stack, long emcHeld) {
 		// ( emc^(1/exp) ) / mod = dmg
 		return (float) (Math.pow(emcHeld, 1/64)/getCostMultiplierForSource(source));

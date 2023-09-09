@@ -34,6 +34,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
+// TODO make flasks able to hold only 1 aspect when they are contaminated for distillation extraction
 public class FlaskItem extends Item {
 	public FlaskItem(int lifetime, Properties props) {
 		super(props);
@@ -51,7 +52,7 @@ public class FlaskItem extends Item {
 		TAG_DIRTY = "IsDirty";
 	
 	@Override
-	public void appendHoverText(ItemStack stack, Level level, List<Component> tips, TooltipFlag flags) {
+	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tips, TooltipFlag flags) {
 		if (hasStored(stack)) {
 			AspectShape shape = getStoredShape(stack);
 			AspectForm form = getStoredForm(stack);
@@ -125,6 +126,7 @@ public class FlaskItem extends Item {
 	@Override
 	public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
 		if (!level.isClientSide && !isContaminated(stack) && isExpired(stack, level.getGameTime())) {
+			System.out.println("stinky");
 			setContaminated(stack, true);
 		}
 	}
@@ -209,7 +211,8 @@ public class FlaskItem extends Item {
 	}
 	
 	public boolean isExpired(ItemStack stack, long currentTime) {
-		return isContaminated(stack) || getExpiry(stack) < currentTime;
+		long expDate = getExpiry(stack);
+		return expDate < currentTime && expDate != -1 || isContaminated(stack);
 	}
 	
 	/**

@@ -4,6 +4,7 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.glfw.GLFW;
 
 import com.quartzshard.aasb.AsAboveSoBelow;
@@ -72,7 +73,7 @@ public class AASBKeys {
 		}
 	}
 	
-	private static Map<Bind, Boolean> keyTracker = new EnumMap<>(Bind.class);
+	private static Map<@NotNull Bind, Boolean> keyTracker = new EnumMap<>(Bind.class);
 	public static void register() {
 		for (Bind bind : Bind.values()) {
 			ClientRegistry.registerKeyBinding(bind.getKey());

@@ -17,6 +17,7 @@ public class HorrorModel extends ZombieModel<HorrorEntity> {
 	/**
 	 * Sets this entity's model rotation angles
 	 */
+	@Override
 	public void setupAnim(HorrorEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		int r = 3;
 		Supplier<Integer> rint = () -> entity.getRandom().nextInt(-r,r+1);

@@ -136,12 +136,13 @@ public class ColorsHelper {
 	 * @param v2 Value for Color 2
 	 * @return RGB value as an integer
 	 */
+	@Deprecated
 	public static int gradientBarColor(float percent, float h1, float s1, float v1, float h2, float s2, float v2) {
 		boolean hInv, sInv, vInv;
 		if (Math.max(h1, h2) == h1) hInv = true; else hInv = false;
 		if (Math.max(s1, s2) == s1) sInv = true; else sInv = false;
 		if (Math.max(v1, v2) == v1) vInv = true; else vInv = false;
-		return Mth.hsvToRgb(Math.max(0.3911F, (float) (1.0F - percent) / 1.65125495376F), 1.0f, 0.824f);
+		return Mth.hsvToRgb(Math.max(0.3911F, (1.0F - percent) / 1.65125495376F), 1.0f, 0.824f);
 	}
 	
 	/**
@@ -163,6 +164,7 @@ public class ColorsHelper {
 	 * 
 	 * @return RGB value as an integer
 	 */
+	@Deprecated
 	public static int fadingColorInt(long timer, int cycle, int offset, float h1, float s1, float v1, float h2, float s2, float v2) {
 		
 		boolean hInv, sInv, vInv;

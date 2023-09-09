@@ -8,6 +8,7 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.mutable.MutableBoolean;
+import org.jetbrains.annotations.Nullable;
 
 import com.quartzshard.aasb.AsAboveSoBelow;
 import com.quartzshard.aasb.init.ObjectInit;
@@ -141,7 +142,7 @@ public class LootBallItem extends Item {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
+	public void appendHoverText(ItemStack stack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
 		pTooltipComponents.add(new TextComponent(String.format("%s/%s", storedItemCount(stack), MAX_ITEMS)).withStyle(ChatFormatting.GRAY));
 	}
 

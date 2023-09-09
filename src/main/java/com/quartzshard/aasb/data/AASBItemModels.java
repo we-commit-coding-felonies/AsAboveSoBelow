@@ -6,6 +6,8 @@ import com.quartzshard.aasb.common.item.flask.FlaskItem;
 import com.quartzshard.aasb.init.ClientInit;
 import com.quartzshard.aasb.init.ObjectInit.Items;
 
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ArmorItem;
@@ -177,7 +179,7 @@ public class AASBItemModels extends ItemModelProvider {
 
 
 	@Override
-	public String getName() {
+	public @NotNull String getName() {
 		return AsAboveSoBelow.DISPLAYNAME + " | Item Models";
 	}
 }

@@ -67,7 +67,7 @@ public class ClientHelper {
 		//LevelRenderer lr = mc.levelRenderer;
 		try {
 			Camera camera = mc.gameRenderer.getMainCamera();
-			if (mc != null && camera.isInitialized() && engine != null) {
+			if (camera.isInitialized() && engine != null) {
 				ParticleStatus status = calculateParticleLevel(level, decreased);
 				if (alwaysRender) {
 					return engine.createParticle(particle, x, y, z, vx, vy, vz);

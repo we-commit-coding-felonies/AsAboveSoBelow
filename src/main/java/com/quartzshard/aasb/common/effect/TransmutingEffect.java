@@ -67,13 +67,13 @@ public class TransmutingEffect extends MobEffect {
 	public void applyEffectTick(LivingEntity entity, int amplifier) {
 		entity.invulnerableTime = 0;
 		MobEffectInstance effect = entity.getEffect(ObjectInit.MobEffects.TRANSMUTING.get());
-		if (entity.isAlive() && isDurationEffectTick(effect.getDuration(), amplifier)) {
+		if (effect != null && entity.isAlive() && isDurationEffectTick(effect.getDuration(), amplifier)) {
 			if (amplifier > 0) {
 				//entity.addEffect(new MobEffectInstance(EFFECTS_OF_DOOM[3]));
 				entity.hurt( AASBDmgSrc.TRANSMUTATION_POTION, Math.max(1, entity.getHealth()/2f) );
 				
 				// does stuff when effect runs out
-				if (effect != null && effect.getDuration() <= 2) {
+				if (effect.getDuration() <= 2) {
 					if (entity.getRandom().nextInt(15+amplifier) == 0) {
 						// unlucky, effect gets stronger lol
 						entity.addEffect(new MobEffectInstance(ObjectInit.MobEffects.TRANSMUTING.get(), 6+amplifier, amplifier + 1));
