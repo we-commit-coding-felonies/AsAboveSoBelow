@@ -88,7 +88,9 @@ public class FormChamber implements IAspectChamber<AspectForm, FormStack>, IHand
 
 	@Override
 	public int insert(FormStack query, AspectAction action) {
+		System.out.println("hm?");
 		if (canFit(query)) {
+			System.out.println("fits");
 			int q = query.getAmount();
 			int add = q <= spaceLeft() ? q : spaceLeft();
 			if (action.execute() && add > 0) {
@@ -96,6 +98,17 @@ public class FormChamber implements IAspectChamber<AspectForm, FormStack>, IHand
 				onChanged();
 			}
 			return q - add;
+		} else if (stack.isEmpty()) {
+			int amount = query.getAmount(); 
+			if (amount <= capacity) {
+				if (action.execute())
+					stack = query;
+				return 0;
+			} else {
+				if (action.execute())
+					stack = new FormStack(query.getAspect(), capacity);
+				return amount - capacity;
+			}
 		}
 		return query.getAmount();
 	}

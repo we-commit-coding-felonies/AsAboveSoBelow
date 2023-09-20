@@ -48,7 +48,6 @@ public class AsAboveSoBelow {
 		AlchemyInit.init(modbus);
 		EffectInit.init(modbus);
 		ConfigInit.init(); // Uses different bus, ¯\_(ツ)_/¯
-
 		modbus.addListener(ModInit::init);
 		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> modbus.addListener(ClientInit::init));
 

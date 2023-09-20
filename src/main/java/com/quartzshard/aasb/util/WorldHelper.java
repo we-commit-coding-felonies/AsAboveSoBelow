@@ -9,12 +9,15 @@ import static net.minecraft.core.Direction.WEST;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.UnaryOperator;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Direction.Axis;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
@@ -54,6 +57,11 @@ public class WorldHelper {
 		}
 		return list;
 	}
+
+	public static Direction getHorizontalFacing(Entity entity) {
+		Direction[] dirs = Direction.orderedByNearest(entity);
+		return dirs[0].getAxis().isVertical() ? dirs[1] : dirs[0];
+	}
 	
 	/**
 	 * Relative side. Helps with defining sidedness of blocks that can be rotated <br>
@@ -64,19 +72,17 @@ public class WorldHelper {
 	 * The TOP and BOTTOM values are only here for ease of use
 	 */
 	public enum Side {
-		TOP(UP,UP,UP,UP),BOTTOM(DOWN,DOWN,DOWN,DOWN),
+		TOP(abs -> {return Direction.UP;}),
+		BOTTOM(abs -> {return Direction.DOWN;}),
 		
-		BACK(NORTH, SOUTH, EAST, WEST), // Relative north
-		FRONT(SOUTH, NORTH, WEST, EAST), // Relative south
-		RIGHT(EAST, WEST, SOUTH, NORTH), // Relative east
-		LEFT(WEST, EAST, NORTH, SOUTH); // Relative west
+		BACK(abs -> {return abs;}), // Relative north
+		RIGHT(abs -> {return abs.getClockWise();}), // Relative east
+		FRONT(abs -> {return abs.getOpposite();}), // Relative south
+		LEFT(abs -> {return abs.getCounterClockWise();}); // Relative west
 		
-		private final Direction n,s,e,w;
-		private Side(Direction n, Direction s, Direction e, Direction w) {
-			this.n=n;
-			this.s=s;
-			this.e=e;
-			this.w=w;
+		private final UnaryOperator<Direction> rot;
+		private Side(UnaryOperator<Direction> rot) {
+			this.rot = rot;
 		}
 		
 		/**
@@ -86,15 +92,7 @@ public class WorldHelper {
 		 * @return The corresponding Direction
 		 */
 		public Direction abs(Direction facing) {
-			switch (facing) {
-			case NORTH: return n;
-			case SOUTH: return s;
-			case EAST: return e;
-			case WEST: return w;
-			
-			default: // we cant handle up & down facings so we just return it back
-				return facing;
-			}
+			return rot.apply(facing);
 		}
 		
 		/**
@@ -104,62 +102,45 @@ public class WorldHelper {
 		 * @return The corresponding Direction
 		 */
 		public static Side rel(Direction abs, Direction facing) {
-			switch (facing) {
-			case NORTH: return n(abs);
-			case SOUTH: return s(abs);
-			case EAST: return e(abs);
-			case WEST: return w(abs);
-			
-			default: return v(abs);
-			}
+			Direction relDir;
+			if (abs.getAxis() != Axis.Y) {
+				switch (facing) {
+				default:
+				case NORTH:
+					relDir = abs;
+					break;
+				case EAST:
+					relDir = abs.getCounterClockWise();
+					break;
+				case SOUTH:
+					relDir = abs.getOpposite();
+					break;
+				case WEST:
+					relDir = abs.getClockWise();
+					break;
+				}
+			} else relDir = abs;
+			return localEquivalent(relDir);
 		}
 		
-		private static Side n(Direction abs) {
-			switch (abs) {
+		/**
+		 * Gets the "local equivalent" of the given Direction. <br>
+		 * This doesn't take facing into account, assuming the default facing of north.
+		 * <p>
+		 * Uses for this are niche, so you probably want to use rel() instead.
+		 * @param relDir
+		 * @return Local equivalent of the given relative direction
+		 */
+		public static Side localEquivalent(Direction relDir) {
+			switch (relDir) {
 			case NORTH: return BACK;
-			case SOUTH: return FRONT;
 			case EAST: return RIGHT;
+			case SOUTH: return FRONT;
 			case WEST: return LEFT;
-			default: throw new IllegalArgumentException("Side.n() called with vertical direction " + abs.getName().toUpperCase());
-			}
-		}
-		
-		private static Side s(Direction abs) {
-			switch (abs) {
-			case NORTH: return FRONT;
-			case SOUTH: return BACK;
-			case EAST: return LEFT;
-			case WEST: return RIGHT;
-			default: throw new IllegalArgumentException("Side.s() called with vertical direction " + abs.getName().toUpperCase());
-			}
-		}
-		
-		private static Side e(Direction abs) {
-			switch (abs) {
-			case NORTH: return LEFT;
-			case SOUTH: return RIGHT;
-			case EAST: return FRONT;
-			case WEST: return BACK;
-			default: throw new IllegalArgumentException("Side.e() called with vertical direction " + abs.getName().toUpperCase());
-			}
-		}
-		
-		private static Side w(Direction abs) {
-			switch (abs) {
-			case NORTH: return RIGHT;
-			case SOUTH: return LEFT;
-			case EAST: return BACK;
-			case WEST: return FRONT;
-			default: throw new IllegalArgumentException("Side.w() called with vertical direction " + abs.getName().toUpperCase());
-			}
-		}
-		
-		private static Side v(Direction abs) {
-			switch (abs) {
 			case UP: return TOP;
 			case DOWN: return BOTTOM;
-			default: throw new IllegalArgumentException("Side.v() called with a non-vertical direction " + abs.getName().toUpperCase());
 			}
+			throw new IllegalArgumentException("Unknown direction: "+ relDir);
 		}
 	}
 }

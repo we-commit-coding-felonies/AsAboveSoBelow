@@ -1,11 +1,15 @@
 package com.quartzshard.aasb.init;
 
 import com.quartzshard.aasb.AsAboveSoBelow;
+import com.quartzshard.aasb.api.alchemy.lab.LabProcess;
 import com.quartzshard.aasb.common.block.*;
 import com.quartzshard.aasb.common.block.lab.DebugLabMultiblock;
+import com.quartzshard.aasb.common.block.lab.LabBlock;
 import com.quartzshard.aasb.common.block.lab.LabMultiblock;
-import com.quartzshard.aasb.common.block.lab.te.LabDebugRecieveTE;
-import com.quartzshard.aasb.common.block.lab.te.LabDebugSendTE;
+import com.quartzshard.aasb.common.block.lab.te.debug.LabDebugEndTE;
+import com.quartzshard.aasb.common.block.lab.te.debug.LabDebugStartTE;
+import com.quartzshard.aasb.common.block.lab.te.debug.capability.LabDebugCapabilityRecieveTE;
+import com.quartzshard.aasb.common.block.lab.te.debug.capability.LabDebugCapabilitySendTE;
 import com.quartzshard.aasb.common.effect.*;
 import com.quartzshard.aasb.common.entity.living.*;
 import com.quartzshard.aasb.common.entity.projectile.*;
@@ -120,7 +124,9 @@ public class ObjectInit {
 				ASH_STONE_BLOCKITEM = fromBlock(Blocks.ASH_STONE),
 				WAYSTONE_BLOCKITEM = fromBlock(Blocks.WAYSTONE),
 				DEBUG_LAB_SENDER_BLOCKITEM = fromBlock(Blocks.DEBUG_LAB_SENDER),
-				DEBUG_LAB_RECIEVER_BLOCKITEM = fromBlock(Blocks.DEBUG_LAB_RECIEVER);
+				DEBUG_LAB_RECIEVER_BLOCKITEM = fromBlock(Blocks.DEBUG_LAB_RECIEVER),
+				DEBUG_LAB_START_BLOCKITEM = fromBlock(Blocks.DEBUG_LAB_START),
+				DEBUG_LAB_END_BLOCKITEM = fromBlock(Blocks.DEBUG_LAB_END);
 		
 		
 		// constructs a new Item Properties using an existing base
@@ -154,6 +160,8 @@ public class ObjectInit {
 		public static final RegistryObject<AirIceBlock> AIR_ICE = REG.register("air_ice", () -> new AirIceBlock(PROPS_TEMPBLOCK.friction(0.9f).randomTicks().sound(SoundType.GLASS).noOcclusion()));
 		public static final RegistryObject<DebugLabMultiblock> DEBUG_LAB_SENDER = REG.register("debug_lab_sender", () -> new DebugLabMultiblock(BLOCK_PROPERTIES, true));
 		public static final RegistryObject<DebugLabMultiblock> DEBUG_LAB_RECIEVER = REG.register("debug_lab_reciever", () -> new DebugLabMultiblock(BLOCK_PROPERTIES, false));
+		public static final RegistryObject<LabBlock> DEBUG_LAB_START = REG.register("debug_lab_start", () -> new LabBlock(LabProcess.DISTILLATION, BLOCK_PROPERTIES));
+		public static final RegistryObject<LabBlock> DEBUG_LAB_END = REG.register("debug_lab_end", () -> new LabBlock(LabProcess.SOLUTION, BLOCK_PROPERTIES));
 		
 	}
 	
@@ -194,10 +202,14 @@ public class ObjectInit {
 		private static final DeferredRegister<BlockEntityType<?>> REG = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, AsAboveSoBelow.MODID);
 		
 		//public static final RegistryObject<BlockEntityType<LabTE>> LAB_TE = REG.register("lab", () -> BlockEntityType.Builder.of(LabTE::new, Blocks.LAB.get()).build(null)),
-		public static final RegistryObject<BlockEntityType<LabDebugSendTE>> DEBUG_LAB_SENDER_TE =
-				REG.register("debug_lab_sender_te", () -> BlockEntityType.Builder.of(LabDebugSendTE::new, Blocks.DEBUG_LAB_SENDER.get()).build(null));
-		public static final RegistryObject<BlockEntityType<LabDebugRecieveTE>> DEBUG_LAB_RECIEVER_TE =
-				REG.register("debug_lab_reciever_te", () -> BlockEntityType.Builder.of(LabDebugRecieveTE::new, Blocks.DEBUG_LAB_RECIEVER.get()).build(null));
+		public static final RegistryObject<BlockEntityType<LabDebugCapabilitySendTE>> DEBUG_LAB_CAPABILITY_SENDER_TE =
+				REG.register("debug_lab_sender_te", () -> BlockEntityType.Builder.of(LabDebugCapabilitySendTE::new, Blocks.DEBUG_LAB_SENDER.get()).build(null));
+		public static final RegistryObject<BlockEntityType<LabDebugCapabilityRecieveTE>> DEBUG_LAB_CAPABILITY_RECIEVER_TE =
+				REG.register("debug_lab_reciever_te", () -> BlockEntityType.Builder.of(LabDebugCapabilityRecieveTE::new, Blocks.DEBUG_LAB_RECIEVER.get()).build(null));
+		public static final RegistryObject<BlockEntityType<LabDebugStartTE>> DEBUG_LAB_START_TE =
+				REG.register("debug_lab_start_te", () -> BlockEntityType.Builder.of(LabDebugStartTE::new, Blocks.DEBUG_LAB_START.get()).build(null));
+		public static final RegistryObject<BlockEntityType<LabDebugEndTE>> DEBUG_LAB_END_TE =
+				REG.register("debug_lab_end_te", () -> BlockEntityType.Builder.of(LabDebugEndTE::new, Blocks.DEBUG_LAB_END.get()).build(null));
 	}
 	
 	public class MobEffects {

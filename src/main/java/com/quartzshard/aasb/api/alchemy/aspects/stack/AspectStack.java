@@ -71,6 +71,7 @@ public abstract class AspectStack<A extends IAlchemicalFlow<A>> {
 	}
 	
 	public abstract <S extends AspectStack<A>> S dupe();
+	
 	public <S extends AspectStack<A>> boolean sameAs(S other) {
 		if (this.isEmpty() && other.isEmpty()) {
 			return true;
@@ -78,6 +79,7 @@ public abstract class AspectStack<A extends IAlchemicalFlow<A>> {
 		return this.amount == other.amount
 				&& this.aspect.serialize().equals(other.aspect.serialize());
 	}
+	
 	public <S extends AspectStack<A>> void become(S other) {
 		if (this.isEmpty()) {
 			LogHelper.warn("AspectStack.become()", "EmptyBecoming", "An empty AspectStack tried to become a different stack, supressing...");
@@ -89,6 +91,7 @@ public abstract class AspectStack<A extends IAlchemicalFlow<A>> {
 			LogHelper.warn("AspectStack.become()", "ImperfectCopy", "An AspectStack tried to become another, but failed the sameAs() check!");
 		}
 	}
+	
 	public abstract void clear();
 	
 	/**

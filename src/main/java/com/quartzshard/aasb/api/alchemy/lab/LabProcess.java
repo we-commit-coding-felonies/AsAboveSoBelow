@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.NonNullList;
+import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -34,9 +35,9 @@ import com.quartzshard.aasb.init.AlchemyInit.FormTree;
 import com.quartzshard.aasb.init.ObjectInit;
 import com.quartzshard.aasb.init.ObjectInit.Items;
 
-public enum LabProcess {
+public enum LabProcess implements StringRepresentable {
 	// item, fluid, way, shape, form
-	EVAPORATION(/* true, false, false, false, false, */ (input) -> {
+	EVAPORATION((input) -> {
 		if (hasItemStacks(input.items)) {
 			
 			@SuppressWarnings("null")
@@ -349,22 +350,23 @@ public enum LabProcess {
 	 * It uses the way input as a flag for which mode to use: shape if == null, form if != null <br>
 	 * This does not apply to Aetherglass flasks for obvious reasons
 	 */
-	// item, fluid, way, shape, form
-	DISTILLATION(/* true, false, false, false, true, */ (input) -> {
+	DISTILLATION((input) -> {
 		if (hasItemStacks(input.items)) {
 			ItemStack item = input.items.get(0);
 			if (item.getItem() instanceof StorageFlaskItem sFlask && sFlask.canExtract(item)) {
 				AspectForm form = sFlask.getStoredForm(item);
 				LabRecipeData out = null;
 				NonNullList<ItemStack> itemsOut = il(1);
-				itemsOut.add(new ItemStack(Items.FLASK_AETHER.get()));
+				itemsOut.set(0, new ItemStack(Items.FLASK_AETHER.get()));
 				if (form != null) {
 					NonNullList<FormStack> formsOut = fl(1);
+					formsOut.set(0, new FormStack(form));
 					return new LabRecipeData(itemsOut, null, null, null, formsOut);
 				}
 				AspectShape shape = sFlask.getStoredShape(item);
 				if (shape != null) {
 					NonNullList<ShapeStack> shapesOut = sl(1);
+					shapesOut.set(0, new ShapeStack(shape));
 					return new LabRecipeData(itemsOut, null, null, shapesOut, null);
 				}
 			} else if (item.getItem() instanceof FlaskItem flask && flask.canExtract(item)) {
@@ -375,8 +377,8 @@ public enum LabProcess {
 						flask.setContaminated(badFlask, true);
 						NonNullList<ItemStack> itemsOut = il(1);
 						NonNullList<ShapeStack> shapesOut = sl(1);
-						itemsOut.add(badFlask);
-						shapesOut.add(new ShapeStack(shape));
+						itemsOut.set(0, badFlask);
+						shapesOut.set(0, new ShapeStack(shape));
 						return new LabRecipeData(itemsOut, null, null, shapesOut, null);
 					}
 				} else if (input.ways != null) {
@@ -386,8 +388,8 @@ public enum LabProcess {
 						flask.setContaminated(badFlask, true);
 						NonNullList<ItemStack> itemsOut = il(1);
 						NonNullList<FormStack> formsOut = fl(1);
-						itemsOut.add(badFlask);
-						formsOut.add(new FormStack(form));
+						itemsOut.set(0, badFlask);
+						formsOut.set(0, new FormStack(form));
 						return new LabRecipeData(itemsOut, null, null, null, formsOut);
 					}
 				}
@@ -456,14 +458,14 @@ public enum LabProcess {
 					if (aether) {
 						StorageFlaskItem sFlask = ((StorageFlaskItem)inItem.getItem());
 						sFlask.setStored(f1, input.shapes.get(0).getAspect(), null, currentTime);
-						itemsOut.add(f1);
+						itemsOut.set(0, f1);
 						
 						sFlask.setStored(f2, null, input.forms.get(0).getAspect(), currentTime);
-						itemsOut.add(f2);
+						itemsOut.set(1, f2);
 					} else {
 						FlaskItem flask = ((FlaskItem)inItem.getItem());
 						flask.setStored(f1, input.shapes.get(0).getAspect(), input.forms.get(0).getAspect(), currentTime);
-						itemsOut.add(f1);
+						itemsOut.set(0, f1);
 					}
 					return new LabRecipeData(itemsOut, null, null, null, null);
 				}
@@ -505,5 +507,14 @@ public enum LabProcess {
 	public LabRecipeData on(@NotNull LabRecipeData input) {
 		LabRecipeData output = func.apply(input);
 		return output;
+	}
+	
+	public LabFunction getFunc() {
+		return func;
+	}
+
+	@Override
+	public String getSerializedName() {
+		return this.toString().toLowerCase();
 	}
 }

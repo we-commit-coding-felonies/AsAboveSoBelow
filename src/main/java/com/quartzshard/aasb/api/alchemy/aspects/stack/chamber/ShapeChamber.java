@@ -23,7 +23,6 @@ public class ShapeChamber implements IAspectChamber<AspectShape, ShapeStack>, IH
 	
 	/**
 	 * @param capacity the maximum stack size of this chamber
-	 * @param maxShape the highest Shape *value* for a stack in this chamber
 	 * @param test a simple test function for validating incoming ShapeStacks
 	 */
 	public ShapeChamber(int capacity, Predicate<AspectShape> test) {
@@ -34,7 +33,6 @@ public class ShapeChamber implements IAspectChamber<AspectShape, ShapeStack>, IH
 	/**
 	 * no validation test (always valid)
 	 * @param capacity the maximum stack size of this chamber
-	 * @param maxShape the highest Shape *value* for a stack in this chamber
 	 */
 	public ShapeChamber(int capacity) {
 		this(capacity, (s) -> true);
@@ -100,10 +98,12 @@ public class ShapeChamber implements IAspectChamber<AspectShape, ShapeStack>, IH
 		} else if (stack.isEmpty()) {
 			int amount = query.getAmount(); 
 			if (amount <= capacity) {
-				stack = query;
+				if (action.execute())
+					stack = query;
 				return 0;
 			} else {
-				stack = new ShapeStack(query.getAspect(), capacity);
+				if (action.execute())
+					stack = new ShapeStack(query.getAspect(), capacity);
 				return amount - capacity;
 			}
 		}

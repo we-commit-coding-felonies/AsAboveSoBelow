@@ -1,4 +1,4 @@
-package com.quartzshard.aasb.common.block.lab.te;
+package com.quartzshard.aasb.common.block.lab.te.debug.capability;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -20,10 +20,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 
-public class LabDebugRecieveTE extends BlockEntity {
+public class LabDebugCapabilityRecieveTE extends BlockEntity {
 
-	public LabDebugRecieveTE(BlockPos pPos, BlockState pBlockState) {
-		super(ObjectInit.TileEntities.DEBUG_LAB_RECIEVER_TE.get(), pPos, pBlockState);
+	public LabDebugCapabilityRecieveTE(BlockPos pPos, BlockState pBlockState) {
+		super(ObjectInit.TileEntities.DEBUG_LAB_CAPABILITY_RECIEVER_TE.get(), pPos, pBlockState);
 	}
 
 	private final ShapeChamber shapeInv = new ShapeChamber(10) {

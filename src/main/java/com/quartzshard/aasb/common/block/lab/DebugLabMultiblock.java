@@ -9,8 +9,8 @@ import com.quartzshard.aasb.api.alchemy.aspects.AspectShape;
 import com.quartzshard.aasb.api.alchemy.aspects.stack.ShapeStack;
 import com.quartzshard.aasb.api.alchemy.aspects.stack.chamber.IAspectChamber.AspectAction;
 import com.quartzshard.aasb.api.capability.AASBCapabilities;
-import com.quartzshard.aasb.common.block.lab.te.LabDebugRecieveTE;
-import com.quartzshard.aasb.common.block.lab.te.LabDebugSendTE;
+import com.quartzshard.aasb.common.block.lab.te.debug.capability.LabDebugCapabilityRecieveTE;
+import com.quartzshard.aasb.common.block.lab.te.debug.capability.LabDebugCapabilitySendTE;
 import com.quartzshard.aasb.common.item.flask.FlaskItem;
 import com.quartzshard.aasb.common.item.flask.StorageFlaskItem;
 
@@ -42,7 +42,7 @@ public class DebugLabMultiblock extends Block implements EntityBlock {
         if (!level.isClientSide) {
         	ItemStack held = player.getItemInHand(hand);
         	if (held.getItem() instanceof StorageFlaskItem flask) {
-        		if (level.getBlockEntity(pos) instanceof LabDebugSendTE te) {
+        		if (level.getBlockEntity(pos) instanceof LabDebugCapabilitySendTE te) {
         			if (flask.hasStored(held) && flask.hasStoredShape(held)) {
         				AspectShape as = flask.getStoredShape(held);
         				if (as != null) {
@@ -58,7 +58,7 @@ public class DebugLabMultiblock extends Block implements EntityBlock {
                 			});
         				}
         			}
-        		} else if (level.getBlockEntity(pos) instanceof LabDebugRecieveTE te) {
+        		} else if (level.getBlockEntity(pos) instanceof LabDebugCapabilityRecieveTE te) {
         			if (!flask.hasStored(held)) {
             			te.getCapability(AASBCapabilities.SHAPE_HANDLER).ifPresent((h) -> {
             				if (h instanceof ShapeChamber sc) {
@@ -73,19 +73,19 @@ public class DebugLabMultiblock extends Block implements EntityBlock {
         	} else  {
         		CompoundTag t = new CompoundTag();
         		Consumer<ShapeStack> f = (s) -> t.put("StoredShape", s.serialize());
-        		if (level.getBlockEntity(pos) instanceof LabDebugRecieveTE te) {
+        		if (level.getBlockEntity(pos) instanceof LabDebugCapabilityRecieveTE te) {
         			te.getCapability(AASBCapabilities.SHAPE_HANDLER).ifPresent((h) -> {
         				if (h instanceof ShapeChamber sc) {
-        					ShapeStack s = sc.extract(1, AspectAction.SIMULATE);
+        					ShapeStack s = sc.extract(10000, AspectAction.SIMULATE);
         					if (!s.isEmpty()) {
         						f.accept(s);
         					}
         				}
         			});
-        		} else if (level.getBlockEntity(pos) instanceof LabDebugSendTE te) {
+        		} else if (level.getBlockEntity(pos) instanceof LabDebugCapabilitySendTE te) {
         			te.getCapability(AASBCapabilities.SHAPE_HANDLER).ifPresent((h) -> {
         				if (h instanceof ShapeChamber sc) {
-        					ShapeStack s = sc.extract(1, AspectAction.SIMULATE);
+        					ShapeStack s = sc.extract(10000, AspectAction.SIMULATE);
         					if (!s.isEmpty()) {
         						f.accept(s);
         					}
@@ -102,8 +102,8 @@ public class DebugLabMultiblock extends Block implements EntityBlock {
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
 		System.out.println("created isSender: " + is_sender);
 		if (is_sender)
-			return new LabDebugSendTE(pos, state);
-		else return new LabDebugRecieveTE(pos, state);
+			return new LabDebugCapabilitySendTE(pos, state);
+		else return new LabDebugCapabilityRecieveTE(pos, state);
 	}
 
     @Nullable
@@ -113,7 +113,7 @@ public class DebugLabMultiblock extends Block implements EntityBlock {
             return null;
         }
         return (lvl, pos, bState, te) -> {
-            if (te instanceof LabDebugSendTE lab) {
+            if (te instanceof LabDebugCapabilitySendTE lab) {
                 lab.tickServer();
             }
         };
