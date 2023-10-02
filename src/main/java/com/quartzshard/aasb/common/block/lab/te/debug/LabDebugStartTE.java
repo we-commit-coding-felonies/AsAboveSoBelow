@@ -39,8 +39,8 @@ import com.quartzshard.aasb.init.ObjectInit;
 import com.quartzshard.aasb.util.LogHelper;
 import com.quartzshard.aasb.util.WorldHelper.Side;
 
-public class LabDebugStartTE extends LabTE {
-	
+public class LabDebugStartTE {//extends LabTE {
+	/*
 	public LabDebugStartTE(BlockPos pos, BlockState state) {
 		super(ObjectInit.TileEntities.DEBUG_LAB_START_TE.get(), pos, state, 100, LabProcess.DISTILLATION.getFunc());
 	}
@@ -251,5 +251,5 @@ public class LabDebugStartTE extends LabTE {
 		info.put("Form.O", formOut.getContents().serialize()+"");
 		return info;
 	}
-
+*/
 }

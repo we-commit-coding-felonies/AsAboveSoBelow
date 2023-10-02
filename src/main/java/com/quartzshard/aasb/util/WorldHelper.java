@@ -101,7 +101,7 @@ public class WorldHelper {
 		 * @param facing The direction that BACK corresponds to (the "local north")
 		 * @return The corresponding Direction
 		 */
-		public static Side rel(Direction abs, Direction facing) {
+		public static Side rel(@NotNull Direction abs, Direction facing) {
 			Direction relDir;
 			if (abs.getAxis() != Axis.Y) {
 				switch (facing) {

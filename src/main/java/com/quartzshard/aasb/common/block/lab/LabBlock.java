@@ -33,6 +33,8 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
+import net.minecraftforge.registries.RegistryObject;
+
 import com.quartzshard.aasb.api.alchemy.aspects.AspectShape;
 import com.quartzshard.aasb.api.alchemy.aspects.stack.ShapeStack;
 import com.quartzshard.aasb.api.alchemy.aspects.stack.chamber.ShapeChamber;
@@ -49,24 +51,19 @@ import com.quartzshard.aasb.common.item.flask.StorageFlaskItem;
 import com.quartzshard.aasb.common.network.AASBNet;
 import com.quartzshard.aasb.common.network.client.DrawParticleAABBPacket;
 import com.quartzshard.aasb.common.network.client.DrawParticleAABBPacket.AABBParticlePreset;
+import com.quartzshard.aasb.init.ObjectInit.TileEntities;
 import com.quartzshard.aasb.util.WorldHelper;
 
 public class LabBlock extends HorizontalDirectionalBlock implements EntityBlock {
 
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING; // Cardinal corresponding to the back face
-	public static final BooleanProperty LIT = BlockStateProperties.LIT; // Used by fuel-consuming lab blocks in a similar way to the furnace
-	public static final EnumProperty<LabState> STATE = EnumProperty.create("lab_state", LabState.class); // Used for visual feedback for the lab recipe
-	public static final EnumProperty<LabProcess> PROCESS = EnumProperty.create("lab_process", LabProcess.class); // Used to determine recipe & for visual feedback
 	public LabBlock(LabProcess process, Properties props) {
-		this(process, false, props);
-	}
-	public LabBlock(LabProcess process, boolean usesFuel, Properties props) {
 		super(props);
 		this.process = process;
-		this.usesFuel = usesFuel;
+		//this.usesFuel = usesFuel;
 	}
 	private final LabProcess process;
-	public final boolean usesFuel;
+	//public final boolean usesFuel;
 	
 	
 	@Override
@@ -95,9 +92,8 @@ public class LabBlock extends HorizontalDirectionalBlock implements EntityBlock 
 
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-		System.out.println("creation");
-		// AbstractFurnaceBlockEntity
-		return process == LabProcess.DISTILLATION ? new LabDebugStartTE(pos, state) : new LabDebugEndTE(pos, state);
+		BlockEntityType<? extends LabTE> teType = TileEntities./*Labs.*/get(process).get();
+		return teType.create(pos, state);
 	}
 
 	@Nullable
@@ -116,21 +112,13 @@ public class LabBlock extends HorizontalDirectionalBlock implements EntityBlock 
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext ctx) {
 		BlockState state = this.defaultBlockState()
-				.setValue(PROCESS, process)
-				.setValue(BlockStateProperties.HORIZONTAL_FACING, WorldHelper.getHorizontalFacing(ctx.getPlayer()))
-				.setValue(STATE, LabState.IDLE);
-		if (usesFuel)
-			state.setValue(BlockStateProperties.LIT, false);
+				.setValue(BlockStateProperties.HORIZONTAL_FACING, WorldHelper.getHorizontalFacing(ctx.getPlayer()));
 		return state;
 	}
 
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-		builder.add(PROCESS);
 		builder.add(BlockStateProperties.HORIZONTAL_FACING);
-		builder.add(STATE);
-		if (usesFuel)
-			builder.add(BlockStateProperties.LIT);
 	}
 
 }

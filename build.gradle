@@ -163,6 +163,7 @@ dependencies {
 mixin {
     // MixinGradle Settings
     add sourceSets.main, 'aasb.refmap.json'
+    config 'aasb.mixins.json'
 }
 
 jar {

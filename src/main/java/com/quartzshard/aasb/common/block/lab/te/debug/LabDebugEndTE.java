@@ -42,8 +42,8 @@ import com.quartzshard.aasb.init.ObjectInit;
 import com.quartzshard.aasb.util.LogHelper;
 import com.quartzshard.aasb.util.WorldHelper.Side;
 
-public class LabDebugEndTE extends LabTE {
-	
+public class LabDebugEndTE {// extends LabTE {
+	/*
 	public LabDebugEndTE(BlockPos pos, BlockState state) {
 		super(ObjectInit.TileEntities.DEBUG_LAB_END_TE.get(), pos, state, 100, LabProcess.SOLUTION.getFunc());
 	}
@@ -231,5 +231,5 @@ public class LabDebugEndTE extends LabTE {
 		info.put("Shape.I", shapeIn.getContents().serialize()+"");
 		info.put("Form.I", formIn.getContents().serialize()+"");
 		return info;
-	}
+	}*/
 }

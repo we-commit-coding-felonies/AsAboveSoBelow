@@ -30,8 +30,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 
-public class DebugLabMultiblock extends Block implements EntityBlock {
-	final boolean is_sender;
+public class DebugLabMultiblock {//extends Block implements EntityBlock {
+	/*final boolean is_sender;
 	public DebugLabMultiblock(Properties props, boolean isSender) {
 		super(props);
 		is_sender = isSender;
@@ -118,5 +118,5 @@ public class DebugLabMultiblock extends Block implements EntityBlock {
             }
         };
     }
-
+*/
 }

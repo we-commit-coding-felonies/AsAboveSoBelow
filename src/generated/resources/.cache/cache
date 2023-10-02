@@ -1,7 +1,7 @@
 46aa1185d2510aaa598e95339b4487a006d81681 assets/aasb/blockstates/air_ice.json
 fc12cfc701a1610fe3f48eab3ca0e685f6b62b1b assets/aasb/blockstates/ashen_stone.json
 46b22d842e095dcefdf141d7a2c9043d76518cdb assets/aasb/blockstates/waystone.json
-bc9b773df1c4fe91b697e2ba4f68724433a6ae5f assets/aasb/lang/en_us.json
+420b59dc5ba946a07731882f482f6a8efd4e7ea2 assets/aasb/lang/en_us.json
 dd41a480f319a553d9c076b54d27d5bdc4a8449b assets/aasb/models/block/ashen_stone.json
 03efe873d02349ec07428272c764cbb6be093e20 assets/aasb/models/block/waystone.json
 7e33081136857e10528f14f47119a099727f6245 assets/aasb/models/item/aether.json
@@ -135,7 +135,7 @@ d6827e4046604fbf0b2e1e97abf684f40a02d93d assets/aasb/models/item/quintessential_
 484c0f1132028cd22f3a1a666a3ba634c3c72359 assets/aasb/models/item/salt.json
 02241571ef81eb17fb9f852ea243cd389d56171e assets/aasb/models/item/seer_circlet.json
 668da66f411b7f921444f957cd928377dc261c8b assets/aasb/models/item/soot.json
-be7a6cf8bf5601339f6f262c17464ebbfe237dcf assets/aasb/models/item/sublit.json
+fadd3b9598d1b0ab3f4ec1e0c0722b0ebd75352c assets/aasb/models/item/sput.json
 79b7a854094267dd05fd497206a63e82db0703b8 assets/aasb/models/item/waystone.json
 a7a95516eaa3c3120b821cfc5728f561fb944ca2 assets/aasb/sounds.json
 75cb10a173e3163fdbf834c2bf30cec4ba1c56bc data/aasb/loot_tables/blocks/ashen_stone.json
@@ -144,6 +144,7 @@ a7a95516eaa3c3120b821cfc5728f561fb944ca2 assets/aasb/sounds.json
 3c24b5653ca04c7bda9e3339601107cba99e5185 data/aasb/tags/blocks/sentient_arrow_annihilate.json
 01d2a4aaa42e25df971fe4b7251c1bd46efc986c data/aasb/tags/blocks/sentient_arrow_noclip.json
 135095d8981ce58dc4ba140238d5b20941ebe99b data/aasb/tags/blocks/wayblast_resist.json
+21c04f6cd6e89c9cf05b51f5e26047c9e98de974 data/aasb/tags/entity_types/clairvoyance_blacklist.json
 574999be8d31a93aed334963dca50a78c5f9b9a4 data/aasb/tags/entity_types/itemizer_entity_blacklist.json
 701896ebbc48c5c26a078cb9cad1dc1282a01ed0 data/aasb/tags/entity_types/philo_homing_arrow_blacklist.json
 85ee38ed0c666d4623f9b715a8146e0624330627 data/minecraft/tags/blocks/ice.json

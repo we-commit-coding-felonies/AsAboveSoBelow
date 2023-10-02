@@ -54,10 +54,10 @@ public enum LabProcess implements StringRepresentable {
 				for (Entry<Enchantment,Integer> e : enchants.entrySet())
 					junk.enchant(e.getKey(), e.getValue());
 			}
-			itemsOut.add(junk);
+			itemsOut.set(0, junk);
 			
 			NonNullList<FormStack> formsOut = fl(1);
-			formsOut.add(new FormStack(itemAspect));
+			formsOut.set(0, new FormStack(itemAspect));
 			return new LabRecipeData(itemsOut, null, null, null, formsOut);
 		}
 		return null;
@@ -72,7 +72,7 @@ public enum LabProcess implements StringRepresentable {
 				AspectForm focusForm = FormTree.MARS.get(); // TODO mapper
 				if (focusForm.getChildren().length == 0) {
 					NonNullList<FormStack> formsOut = fl(1);
-					formsOut.add(new FormStack(focusForm));
+					formsOut.set(0, new FormStack(focusForm));
 					return new LabRecipeData(input.items, null, null, null, formsOut);
 				}
 			}
@@ -91,7 +91,7 @@ public enum LabProcess implements StringRepresentable {
 						focusPar = focusForm.getParent();
 				if (inPar != null && inPar == focusPar) {
 					NonNullList<FormStack> formsOut = fl(1);
-					formsOut.add(new FormStack(focusForm));
+					formsOut.set(0, new FormStack(focusForm));
 					return new LabRecipeData(input.items, null, null, null, formsOut);
 				}
 			}
@@ -106,7 +106,7 @@ public enum LabProcess implements StringRepresentable {
 			AspectForm inPar = inForm == null ? null : inForm.getParent();
 			if (inPar != null && input.forms.get(1).getAspect() == FormTree.MATERIA.get()) {
 				NonNullList<FormStack> formsOut = fl(1);
-				formsOut.add(new FormStack(inPar));
+				formsOut.set(0, new FormStack(inPar));
 				return new LabRecipeData(null, null, null, null, formsOut);
 			}
 		}
@@ -133,10 +133,10 @@ public enum LabProcess implements StringRepresentable {
 				for (Entry<Enchantment,Integer> e : enchants.entrySet())
 					junk.enchant(e.getKey(), e.getValue());
 			}
-			itemsOut.add(junk);
+			itemsOut.set(0, junk);
 			
 			NonNullList<ShapeStack> aspectsOut = sl(1);
-			aspectsOut.add(new ShapeStack(itemAspect));
+			aspectsOut.set(0, new ShapeStack(itemAspect));
 			return new LabRecipeData(itemsOut, null, null, aspectsOut, null);
 		}
 		return null;
@@ -148,7 +148,7 @@ public enum LabProcess implements StringRepresentable {
 			ShapeStack inShape = input.shapes.get(0);
 			if (inShape.getAspect() == AspectShape.AIR) {
 				NonNullList<ShapeStack> shapesOut = sl(1);
-				shapesOut.add(new ShapeStack(AspectShape.FIRE));
+				shapesOut.set(0, new ShapeStack(AspectShape.FIRE));
 				return new LabRecipeData(null, null, null, shapesOut, null);
 			}
 		}
@@ -161,7 +161,7 @@ public enum LabProcess implements StringRepresentable {
 			ShapeStack inShape = input.shapes.get(0);
 			if (inShape.getAspect() == AspectShape.FIRE) {
 				NonNullList<ShapeStack> shapesOut = sl(1);
-				shapesOut.add(new ShapeStack(AspectShape.EARTH));
+				shapesOut.set(0, new ShapeStack(AspectShape.EARTH));
 				return new LabRecipeData(null, null, null, shapesOut, null);
 			}
 		}
@@ -174,7 +174,7 @@ public enum LabProcess implements StringRepresentable {
 			ShapeStack inShape = input.shapes.get(0);
 			if (inShape.getAspect() == AspectShape.EARTH) {
 				NonNullList<ShapeStack> shapesOut = sl(1);
-				shapesOut.add(new ShapeStack(AspectShape.WATER));
+				shapesOut.set(0, new ShapeStack(AspectShape.WATER));
 				return new LabRecipeData(null, null, null, shapesOut, null);
 			}
 		}
@@ -187,7 +187,7 @@ public enum LabProcess implements StringRepresentable {
 			ShapeStack inShape = input.shapes.get(0);
 			if (inShape.getAspect() == AspectShape.WATER) {
 				NonNullList<ShapeStack> shapesOut = sl(1);
-				shapesOut.add(new ShapeStack(AspectShape.AIR));
+				shapesOut.set(0, new ShapeStack(AspectShape.AIR));
 				return new LabRecipeData(null, null, null, shapesOut, null);
 			}
 		}
@@ -219,7 +219,7 @@ public enum LabProcess implements StringRepresentable {
 			}
 			if (w && e && f && a) {
 				NonNullList<ShapeStack> shapesOut = sl(1);
-				shapesOut.add(new ShapeStack(AspectShape.UNIVERSAL));
+				shapesOut.set(0, new ShapeStack(AspectShape.UNIVERSAL));
 				return new LabRecipeData(null, null, null, shapesOut, null);
 			}
 		}
@@ -233,7 +233,7 @@ public enum LabProcess implements StringRepresentable {
 			AspectShape focusShape = AspectShape.AIR; // TODO mapper!!!!!
 			if (inShape.getAspect() == AspectShape.UNIVERSAL) {
 				NonNullList<ShapeStack> shapesOut = sl(1);
-				shapesOut.add(new ShapeStack(AspectShape.AIR, 4));
+				shapesOut.set(0, new ShapeStack(AspectShape.AIR, 4));
 				return new LabRecipeData(input.items, null, null, shapesOut, null);
 			}
 		}
@@ -260,10 +260,10 @@ public enum LabProcess implements StringRepresentable {
 				for (Entry<Enchantment,Integer> e : enchants.entrySet())
 					junk.enchant(e.getKey(), e.getValue());
 			}
-			itemsOut.add(junk);
+			itemsOut.set(0, junk);
 			
 			NonNullList<WayStack> aspectsOut = wl(1);
-			aspectsOut.add(new WayStack(itemAspect));
+			aspectsOut.set(0, new WayStack(itemAspect));
 			return new LabRecipeData(itemsOut, null, aspectsOut, null, null);
 		}
 		return null;
@@ -276,7 +276,7 @@ public enum LabProcess implements StringRepresentable {
 					b = input.ways.get(1).getAspect();
 			if (a != null && b != null && a.flows(b)) {
 				NonNullList<WayStack> aspectsOut = wl(1);
-				aspectsOut.add(new WayStack(a.getValue() + b.getValue()));
+				aspectsOut.set(0, new WayStack(a.getValue() + b.getValue()));
 				return new LabRecipeData(null, null, aspectsOut, null, null);
 			}
 		}
@@ -289,7 +289,7 @@ public enum LabProcess implements StringRepresentable {
 			WayStack s = input.ways.get(0);
 			s.setValue(s.getValue()-3);
 			NonNullList<WayStack> aspectsOut = wl(1);
-			aspectsOut.add(s);
+			aspectsOut.set(0, s);
 			return new LabRecipeData(null, null, aspectsOut, null, null);
 		}
 		return null;
@@ -300,8 +300,8 @@ public enum LabProcess implements StringRepresentable {
 		if (hasAspectStacks(input.ways) && input.ways.get(0).getValue() % 2 == 0) {
 			WayStack way = new WayStack(input.ways.get(0).getValue()/2);
 			NonNullList<WayStack> aspectsOut = wl(2);
-			aspectsOut.add(way);
-			aspectsOut.add(way.dupe());
+			aspectsOut.set(0, way);
+			aspectsOut.set(1, way.dupe());
 			return new LabRecipeData(null, null, aspectsOut, null, null);
 		}
 		return null;
@@ -316,15 +316,15 @@ public enum LabProcess implements StringRepresentable {
 			long focusWay = 11; // TODO: make this actually get the items way value, waiting on shard to finish the mapper
 			if (inWayVal > focusWay) {
 				long remainder = inWayVal % focusWay;
-				NonNullList<WayStack> waysOut = wl(1);
+				NonNullList<WayStack> waysOut = wl(remainder != 0 ? 2 : 1);
 				if (remainder != 0) {
 					// TODO: shenanigans
 					inWayVal -= remainder;
 					inWay.setValue(remainder);
-					waysOut.add(inWay); // this entry in the list acts as a signal to perform shenanigans
+					waysOut.set(1, inWay); // this entry in the list acts as a signal to perform shenanigans
 				}
 				long outVal = inWayVal / focusWay;
-				waysOut.add(new WayStack(outVal, (int)focusWay));
+				waysOut.set(0, new WayStack(outVal, (int)focusWay));
 				return new LabRecipeData(input.items, null, waysOut, null, null);
 			}
 		}
@@ -412,9 +412,9 @@ public enum LabProcess implements StringRepresentable {
 					NonNullList<ItemStack> itemsOut = il(1);
 					NonNullList<ShapeStack> shapesOut = sl(1);
 					NonNullList<FormStack> formsOut = fl(1);
-					itemsOut.add(badFlask);
-					shapesOut.add(new ShapeStack(shape));
-					formsOut.add(new FormStack(form));
+					itemsOut.set(0, badFlask);
+					shapesOut.set(0, new ShapeStack(shape));
+					formsOut.set(0, new FormStack(form));
 					return new LabRecipeData(itemsOut, null, null, shapesOut, formsOut);
 				}
 			}
@@ -479,7 +479,7 @@ public enum LabProcess implements StringRepresentable {
 		// TODO: this recipe should be sped up by higher way values. figure out a way to do this
 		if (hasAspectStacks(input.ways) && hasAspectStacks(input.shapes) && hasAspectStacks(input.forms)) {
 			NonNullList<ItemStack> itemsOut = il(1);
-			itemsOut.add(new ItemStack(Items.AETHER.get()));
+			itemsOut.set(0, new ItemStack(Items.AETHER.get()));
 			return new LabRecipeData(itemsOut, null, null, null, null);
 		}
 		return null;

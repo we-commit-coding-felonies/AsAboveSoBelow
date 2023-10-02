@@ -14,6 +14,11 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
 
 public class NBTHelper {
+	public class TagKeys {
+		public static final String
+			MULTIINV = "Inventories";
+	}
+	
 	public class Tags {
 		public static boolean verifyExistance(CompoundTag tag, String key) {
 			return tag != null && !tag.isEmpty() && tag.contains(key);

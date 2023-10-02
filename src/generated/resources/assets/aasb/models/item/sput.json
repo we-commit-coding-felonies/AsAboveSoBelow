@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "aasb:item/sublit"
+    "layer0": "aasb:item/sput"
   }
 }

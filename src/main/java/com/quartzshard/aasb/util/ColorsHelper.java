@@ -33,6 +33,9 @@ public class ColorsHelper {
 		MID_PURPLE(128,0,128, 300,100,50, 0x800080),
 		MID_MAGENTA(128,0,64, 330,100,50, 0x800040),
 		MID_GRAY(128,128,128, 0,0,50, 0x808080),
+
+		WHITE(255,255,255, 0,0,100, 0xffffff),
+		BLACK(0,0,0, 0,0,0, 0x000000),
 		
 		BROWN(115,80,46, 30,60,45, 0x73502e),
 		
@@ -257,11 +260,11 @@ public class ColorsHelper {
 			 * decAmount = (diff * halfFade) / swap		// the amount we should decrement
 			 * output = upper - decAmount				// do the decrement operation
 			 */
-			val = upper - ((diff * (fade - swap)) / swap);
+			val = upper - ((diff * (fade - ((float)swap))) / ((float)swap));
 		else
 			// see above, this is the same except were going up instead of down
 			// dont need to subtract swap because were in the lower half of the timer
-			val = lower + ((diff * fade) / swap);
+			val = lower + ((diff * fade) / ((float)swap));
 		if (val < 0) {
 			// if val is negative, something has gone wrong
         	LinkedHashMap<String,String> info = new LinkedHashMap<String,String>();

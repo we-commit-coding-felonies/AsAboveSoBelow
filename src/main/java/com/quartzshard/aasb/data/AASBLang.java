@@ -244,7 +244,7 @@ public class AASBLang {
 			add(ObjectInit.Items.ASH.get(), "Ash");
 			add(ObjectInit.Items.SOOT.get(), "Soot");
 			add(ObjectInit.Items.SALT.get(), "Salt");
-			add(ObjectInit.Items.SUBLIT.get(), "Sublit");
+			add(ObjectInit.Items.SPUT.get(), "Sput");
 			add(ObjectInit.Items.AETHER.get(), "Aether");
 			add(ObjectInit.Items.QUINTESSENCE.get(), "Quintessential Condensate");
 			add(ObjectInit.Items.MATERIA_1.get(), "Materia Infirma");

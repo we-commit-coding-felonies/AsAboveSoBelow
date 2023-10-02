@@ -37,7 +37,7 @@ public class LabFunctions {
 		if (hasStacks(input.items)) {
 			long itemWay = 11; // TODO: implement once mapper is finished
 			ArrayList<ItemStack> itemsOut = new ArrayList<>();
-			itemsOut.add(new ItemStack(ObjectInit.Items.SUBLIT.get()));
+			itemsOut.add(new ItemStack(ObjectInit.Items.SPUT.get()));
 			ArrayList<LegacyWayStack> waysOut = new ArrayList<>();
 			waysOut.add(new LegacyWayStack(itemWay));
 			return new LegacyLabRecipeData(itemsOut, null, waysOut, null, null);

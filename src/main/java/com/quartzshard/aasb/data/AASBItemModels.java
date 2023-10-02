@@ -30,7 +30,7 @@ public class AASBItemModels extends ItemModelProvider {
 		basic(Items.ASH);
 		basic(Items.SOOT);
 		basic(Items.SALT);
-		basic(Items.SUBLIT);
+		basic(Items.SPUT);
 		basic(Items.AETHER);
 		basic(Items.QUINTESSENCE);
 		

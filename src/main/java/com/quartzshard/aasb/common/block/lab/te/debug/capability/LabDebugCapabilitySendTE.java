@@ -20,8 +20,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 
-public class LabDebugCapabilitySendTE extends BlockEntity {
-
+public class LabDebugCapabilitySendTE {//extends BlockEntity {
+/*
 	public LabDebugCapabilitySendTE(BlockPos pPos, BlockState pBlockState) {
 		super(ObjectInit.TileEntities.DEBUG_LAB_CAPABILITY_SENDER_TE.get(), pPos, pBlockState);
 	}
@@ -97,5 +97,5 @@ public class LabDebugCapabilitySendTE extends BlockEntity {
 			return xShapeInv.cast();
 		}
 		return super.getCapability(cap, side);
-	}
+	}*/
 }

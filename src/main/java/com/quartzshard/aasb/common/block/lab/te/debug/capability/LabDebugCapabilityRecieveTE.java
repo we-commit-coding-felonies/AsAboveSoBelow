@@ -20,8 +20,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 
-public class LabDebugCapabilityRecieveTE extends BlockEntity {
-
+public class LabDebugCapabilityRecieveTE {//extends BlockEntity {
+/*
 	public LabDebugCapabilityRecieveTE(BlockPos pPos, BlockState pBlockState) {
 		super(ObjectInit.TileEntities.DEBUG_LAB_CAPABILITY_RECIEVER_TE.get(), pPos, pBlockState);
 	}
@@ -72,7 +72,7 @@ public class LabDebugCapabilityRecieveTE extends BlockEntity {
 				}
 			}
 		}
-	}*/
+	}*//*
 
 	@Override
 	public void load(CompoundTag tag) {
@@ -98,4 +98,5 @@ public class LabDebugCapabilityRecieveTE extends BlockEntity {
 		}
 		return super.getCapability(cap, side);
 	}
+	*/
 }

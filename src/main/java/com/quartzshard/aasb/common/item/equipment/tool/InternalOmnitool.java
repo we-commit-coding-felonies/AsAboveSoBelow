@@ -120,7 +120,7 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 	 */
 	@Override
 	public boolean handle(PressContext ctx) {
-		boolean debug = true && !FMLEnvironment.production;
+		boolean debug = false && !FMLEnvironment.production;
 		if (debug) {
 			// debug & test code
 			if (ctx.state() == BindState.PRESSED) {
