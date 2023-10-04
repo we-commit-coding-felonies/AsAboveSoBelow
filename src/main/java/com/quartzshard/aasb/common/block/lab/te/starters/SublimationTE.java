@@ -41,7 +41,6 @@ public class SublimationTE extends AspectExtractorTE {
 			setChanged();
 		}
 	};
-	private final LazyOptional<IHandleWay> xWayOut = LazyOptional.of(() -> wayOut);
 
 	@Override
 	protected boolean tryPushWay(IHandleWay target, Direction dir) {

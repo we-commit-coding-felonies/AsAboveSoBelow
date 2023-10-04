@@ -11,19 +11,19 @@ public class EarthRune extends TrinketRune {
 
 	@Override
 	public boolean combatAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong) {
-		System.out.println("WATER combat");
+		System.out.println("EARTH combat");
 		return false;
 	}
 
 	@Override
 	public boolean utilityAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong) {
-		System.out.println("WATER utility");
+		System.out.println("EARTH utility");
 		return false;
 	}
 
 	@Override
 	public boolean passiveAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong) {
-		System.out.println("WATER passive");
+		System.out.println("EARTH passive");
 		return false;
 	}
 

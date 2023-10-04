@@ -431,7 +431,7 @@ public enum LabProcess implements StringRepresentable {
 		if (hasItemStacks(input.items) && hasFluidStacks(input.fluids) && hasAspectStacks(input.ways) && hasAspectStacks(input.shapes) && hasAspectStacks(input.forms)) {
 			long currentTime = input.ways.get(0).getValue();
 			FluidStack inFluid = input.fluids.get(0);
-			if (inFluid.getFluid().isSame(Fluids.WATER) && inFluid.getAmount() == 1000) {
+			if (inFluid.getFluid().isSame(Fluids.WATER) && inFluid.getAmount() == 1618) {
 				ItemStack inItem = input.items.get(0);
 				ItemStack inItem2 = null;
 				boolean aether = false;

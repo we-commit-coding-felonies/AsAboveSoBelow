@@ -58,6 +58,7 @@ public class ExaltationTE extends LabTE {
 	private final MultiShapeChamber shapesIn = new MultiShapeChamber(10, 4, (q) -> q != AspectShape.UNIVERSAL) {
 		@Override
 		public void onChanged() {
+			System.out.println("die");
 			setChangedInput();
 		}
 		
@@ -70,6 +71,18 @@ public class ExaltationTE extends LabTE {
 					Integer mappedSlot = SIDE_SLOT_MAP.get(side);
 					if (mappedSlot != null) { // sanity check. probably not needed, but doesnt hurt
 						int slot = mappedSlot.intValue();
+						int mainLeft = this.insert(stack, AspectAction.SIMULATE, slot);
+						if (mainLeft == 0) {
+							this.insert(stack, AspectAction.EXECUTE, slot);
+							return 0;
+						}
+						int extraLeft = this.insert(stack, AspectAction.SIMULATE, 0);
+						if (extraLeft == 0) {
+							this.insert(stack, AspectAction.EXECUTE, 0);
+							return 0;
+						}
+						return stack.getAmount();/*
+						System.out.println(slot);
 						if (canMaybeFitInSlot(stack, slot)) {
 							int rem = this.insert(stack, AspectAction.EXECUTE, slot);
 							if (rem != inAmt)
@@ -85,11 +98,12 @@ public class ExaltationTE extends LabTE {
 						//	while not making it impossible for more casual / less experienced players to progress.
 						// Almost certainly requires flasks as part of the solution, giving them an interesting use and showing their possibilities
 						// TODO: test Exaltation extensively to make sure all of this theoretical design actually works as intended
+						System.out.println(0);
 						if (canMaybeFitInSlot(stack, 0)) {
 							int rem = this.insert(stack, AspectAction.EXECUTE, 0);
 							if (rem != inAmt)
 								return rem;
-						}
+						}*/
 					}
 						
 				}
@@ -129,6 +143,7 @@ public class ExaltationTE extends LabTE {
 	protected void consumeInputs(LabRecipeData toConsume) {
 		if (LabRecipeData.hasAspectStacks(toConsume.shapes)) {
 			for (int i = 0; i < shapesIn.getChamberCount(); i++) {
+				System.out.println("eatin shapes");
 				shapesIn.extract(1, AspectAction.EXECUTE, i);
 			}
 		}
@@ -179,6 +194,7 @@ public class ExaltationTE extends LabTE {
 	@Override
 	protected LinkedHashMap<String, String> getDebugInfoSpecific(LinkedHashMap<String, String> info) {
 		// TODO Auto-generated method stub
+		info.put(TK_MSHAPESIN, ""+shapesIn.serialize());
 		return info;
 	}
 
@@ -214,8 +230,10 @@ public class ExaltationTE extends LabTE {
 		
 		if (!shapesIn.isEmpty()) {
 			CompoundTag toWrite = shapesIn.serialize();
-			if (toWrite != null && !dat.isEmpty())
+			System.out.println(toWrite);
+			if (toWrite != null && !toWrite.isEmpty()) {
 				invDat.put(TK_MSHAPESIN, toWrite);
+			}
 		}
 		if (!shapeOut.isEmpty()) {
 			CompoundTag toWrite = shapeOut.serialize();

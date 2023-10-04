@@ -260,7 +260,6 @@ public abstract class LabTE extends BlockEntity {
 		for (PushType type : PushType.values()) {
 			Direction[] pushDirs = getPushingDirs(type);
 			for (Direction dir : pushDirs) {
-				//System.out.println(type.name() +" "+ dir.name());
 				Capability<?> cap = type.getCap();
 				if (cap != null) {
 					BlockEntity target = level.getBlockEntity(worldPosition.relative(dir));
@@ -336,9 +335,7 @@ public abstract class LabTE extends BlockEntity {
 		Direction[] dirs = new Direction[sides.length];
 		Direction facing = getFacing();
 		for (int i = 0; i < sides.length; i++) {
-			//System.out.println(type.name() +" "+ sides[i].name());
 			dirs[i] = sides[i].abs(facing);
-			//System.out.println(type.name() +" "+ dirs[i].name());
 		}
 		return dirs;
 	}

@@ -98,12 +98,16 @@ public class ShapeChamber implements IAspectChamber<AspectShape, ShapeStack>, IH
 		} else if (stack.isEmpty()) {
 			int amount = query.getAmount(); 
 			if (amount <= capacity) {
-				if (action.execute())
+				if (action.execute()) {
 					stack = query;
+					onChanged();
+				}
 				return 0;
 			} else {
-				if (action.execute())
+				if (action.execute()) {
 					stack = new ShapeStack(query.getAspect(), capacity);
+					onChanged();
+				}
 				return amount - capacity;
 			}
 		}

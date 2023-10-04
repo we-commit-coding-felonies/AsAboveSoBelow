@@ -126,7 +126,6 @@ public class FlaskItem extends Item {
 	@Override
 	public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
 		if (!level.isClientSide && !isContaminated(stack) && isExpired(stack, level.getGameTime())) {
-			System.out.println("stinky");
 			setContaminated(stack, true);
 		}
 	}

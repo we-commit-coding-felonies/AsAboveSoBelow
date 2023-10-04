@@ -39,7 +39,6 @@ public class EvaporationTE extends AspectExtractorTE {
 			setChanged();
 		}
 	};
-	private final LazyOptional<IHandleForm> xFormOut = LazyOptional.of(() -> formOut);
 
 	@Override
 	protected boolean tryPushWay(IHandleWay target, Direction dir) {

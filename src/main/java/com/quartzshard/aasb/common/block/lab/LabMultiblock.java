@@ -29,7 +29,6 @@ public class LabMultiblock extends Block implements EntityBlock {
 
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-		System.out.println("creation");
 		return null;
 	}
 

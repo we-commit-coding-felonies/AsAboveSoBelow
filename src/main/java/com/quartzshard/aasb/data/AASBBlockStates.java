@@ -2,6 +2,7 @@ package com.quartzshard.aasb.data;
 
 import com.quartzshard.aasb.AsAboveSoBelow;
 import com.quartzshard.aasb.common.block.AirIceBlock;
+import com.quartzshard.aasb.common.block.lab.LabBlock;
 import com.quartzshard.aasb.init.ObjectInit;
 
 import org.jetbrains.annotations.NotNull;
@@ -25,13 +26,20 @@ public class AASBBlockStates extends BlockStateProvider {
     protected void registerStatesAndModels() {
 		simpleBlock(ObjectInit.Blocks.ASH_STONE.get());
 		simpleBlock(ObjectInit.Blocks.WAYSTONE.get());
-		
+
 		getVariantBuilder(ObjectInit.Blocks.AIR_ICE.get())
 			.partialState().with(AirIceBlock.AGE, 0).addModels(modelOf(Blocks.FROSTED_ICE, "_0"))
 			.partialState().with(AirIceBlock.AGE, 1).addModels(modelOf(Blocks.FROSTED_ICE, "_1"))
 			.partialState().with(AirIceBlock.AGE, 2).addModels(modelOf(Blocks.FROSTED_ICE, "_2"))
 			.partialState().with(AirIceBlock.AGE, 3).addModels(modelOf(Blocks.FROSTED_ICE, "_3"))
 		;
+		
+		/*getVariantBuilder(ObjectInit.Blocks.DISTILLATION.get())
+			.partialState().with(LabBlock.FACING, 0).addModels(modelOf(Blocks.FROSTED_ICE, "_0"))
+			.partialState().with(AirIceBlock.AGE, 1).addModels(modelOf(Blocks.FROSTED_ICE, "_1"))
+			.partialState().with(AirIceBlock.AGE, 2).addModels(modelOf(Blocks.FROSTED_ICE, "_2"))
+			.partialState().with(AirIceBlock.AGE, 3).addModels(modelOf(Blocks.FROSTED_ICE, "_3"))
+		;*/
     }
     
 

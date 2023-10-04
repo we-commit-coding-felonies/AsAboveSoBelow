@@ -467,7 +467,7 @@ public class ArcaneRune extends TrinketRune {
 			}
 
 			int extraTicks = (int)(selfSpeedMult/2d);//(int) (20 * (potency/30));// (ProjectEConfig.server.effects.timePedBonus.get() * (potency/30));
-			System.out.println(extraTicks);
+			//System.out.println(extraTicks);
 			
 			// world time acceleration
 			// TODO: make the sun/moon not teleport

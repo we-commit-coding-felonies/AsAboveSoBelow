@@ -174,11 +174,13 @@ public class MultiShapeChamber implements IAspectChamber<AspectShape, ShapeStack
 			if (amount <= capacity) {
 				if (action.execute()) {
 					storedShapes.set(slot, query.dupe());
+					onChanged();
 				}
 				return 0;
 			} else {
 				if (action.execute()) {
 					storedShapes.set(slot, new ShapeStack(query.getAspect(), capacity));
+					onChanged();
 				}
 				return amount - capacity;
 			}
@@ -250,7 +252,7 @@ public class MultiShapeChamber implements IAspectChamber<AspectShape, ShapeStack
 			if (action.execute() && taken > 0) {
 				int left = have - taken;
 				if (left <= 0) {
-					forceClear();
+					forceClearSlot(slot);
 				} else {
 					stack.shrink(taken);
 					onChanged();
@@ -278,7 +280,7 @@ public class MultiShapeChamber implements IAspectChamber<AspectShape, ShapeStack
 	public void forceClearSlot(int slot) {
 		ShapeStack stack = storedShapes.get(slot);
 		if (stack != ShapeStack.EMPTY) {
-			stack = ShapeStack.EMPTY;
+			storedShapes.set(slot, ShapeStack.EMPTY);
 			onChanged();
 		}
 	}
