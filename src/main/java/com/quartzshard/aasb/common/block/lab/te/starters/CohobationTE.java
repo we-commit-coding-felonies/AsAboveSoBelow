@@ -52,9 +52,9 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 import static com.quartzshard.aasb.api.alchemy.lab.LabProcess.*;
 import static com.quartzshard.aasb.init.ObjectInit.TileEntities./*Labs.*/*;
 
-public class DistillationTE extends LabTE implements IAnimatable {
+public class CohobationTE extends LabTE implements IAnimatable {
 
-	public DistillationTE(BlockPos pos, BlockState state) {
+	public CohobationTE(BlockPos pos, BlockState state) {
 		super(DISTILLATION_TE.get(), pos, state, 500, DISTILLATION);
 	}
 
@@ -323,9 +323,9 @@ public class DistillationTE extends LabTE implements IAnimatable {
 		data.addAnimationController(new AnimationController<>(this, "io-back", 0, this::ioBack));
 	}
 
-	private PlayState ioDown(AnimationEvent<DistillationTE> event) {
-		AnimationController<DistillationTE> ctrl = event.getController();
-		DistillationTE te = event.getAnimatable();
+	private PlayState ioDown(AnimationEvent<CohobationTE> event) {
+		AnimationController<CohobationTE> ctrl = event.getController();
+		CohobationTE te = event.getAnimatable();
 		Level level = te.getLevel();
 		if (level != null) {
 			Direction dir = Direction.DOWN;
@@ -349,9 +349,9 @@ public class DistillationTE extends LabTE implements IAnimatable {
 		// probably wont ever be, but just in case
 	}
 	
-	private PlayState ioBack(AnimationEvent<DistillationTE> event) {
-		AnimationController<DistillationTE> ctrl = event.getController();
-		DistillationTE te = event.getAnimatable();
+	private PlayState ioBack(AnimationEvent<CohobationTE> event) {
+		AnimationController<CohobationTE> ctrl = event.getController();
+		CohobationTE te = event.getAnimatable();
 		Level level = te.getLevel();
 		if (level != null) {
 			Direction dir = Side.BACK.abs(te.getFacing());

@@ -7,6 +7,7 @@ import com.quartzshard.aasb.client.particle.CutParticle;
 import com.quartzshard.aasb.client.render.entity.HorrorRenderer;
 import com.quartzshard.aasb.client.render.entity.MustangRenderer;
 import com.quartzshard.aasb.client.render.entity.SentientArrowRenderer;
+import com.quartzshard.aasb.client.render.entity.tile.DistillationRetortRenderer;
 import com.quartzshard.aasb.client.render.layer.AASBPlayerLayer;
 import com.quartzshard.aasb.common.item.flask.FlaskItem;
 import com.quartzshard.aasb.util.ClientHelper;
@@ -83,6 +84,7 @@ public class ClientInit {
 		event.registerEntityRenderer(ObjectInit.Entities.SENTIENT_ARROW.get(), context -> new SentientArrowRenderer(context));
 		event.registerEntityRenderer(ObjectInit.Entities.HORROR.get(), context -> new HorrorRenderer(context));
 		event.registerEntityRenderer(ObjectInit.Entities.MUSTANG.get(), context -> new MustangRenderer(context));
+		event.registerBlockEntityRenderer(ObjectInit.TileEntities.DISTILLATION_TE.get(), DistillationRetortRenderer::new);
 	}
 	
 	

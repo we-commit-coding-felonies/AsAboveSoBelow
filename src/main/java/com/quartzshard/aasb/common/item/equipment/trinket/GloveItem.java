@@ -39,7 +39,7 @@ public class GloveItem extends AbilityTrinket {
 
 	@Override
 	public <R extends TrinketRune> void tickRune(R rune, RuneTicks tInfo, ItemStack stack, ServerPlayer player, ServerLevel level, boolean strong) {
-		if (tInfo.combat())
+		if (tInfo != null && tInfo.combat())
 			rune.combatAbility(stack, player, level, BindState.HELD, strong);
 	}
 }

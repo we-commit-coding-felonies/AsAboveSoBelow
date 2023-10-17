@@ -2,10 +2,12 @@ package com.quartzshard.aasb.common.item.equipment.tool;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.jetbrains.annotations.Nullable;
 
 import com.quartzshard.aasb.AsAboveSoBelow;
+import com.quartzshard.aasb.api.alchemy.PhilosophersStone;
 import com.quartzshard.aasb.api.alchemy.aspects.AspectShape;
 import com.quartzshard.aasb.api.alchemy.aspects.stack.legacy.LegacyFormStack;
 import com.quartzshard.aasb.api.alchemy.aspects.stack.legacy.LegacyShapeStack;
@@ -31,6 +33,7 @@ import com.quartzshard.aasb.util.NBTHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -38,6 +41,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DiggerItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Tier;
@@ -154,6 +158,10 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 			return ctx.state() == BindState.PRESSED
 			&& TrinketRunes.ETHEREAL.get().combatAbility(ctx.stack(), ctx.player(), ctx.level(), BindState.PRESSED, true);
 		case EMPOWER:
+			System.out.println((int)(ctx.player().getUUID().getMostSignificantBits()>>32));
+			System.out.println((int)ctx.player().getUUID().getMostSignificantBits());
+			System.out.println((int)(ctx.player().getUUID().getLeastSignificantBits()>>32));
+			System.out.println((int)ctx.player().getUUID().getLeastSignificantBits());
 			return ctx.state() == BindState.PRESSED
 			&& toggleInstamine(ctx.stack());
 		default:
@@ -195,6 +203,7 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 			} else failed = true;
 			break;
 		case EMPOWER:
+			t.testItemLister();
 			failed = t.testLabFuncs();
 			break;
 		default:
@@ -241,6 +250,14 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 			
 			return failed;
 		}
+		
+		boolean testItemLister() {
+			for (Entry<ResourceLocation,Item> entry : PhilosophersStone.getAllItems().entrySet()) {
+				ctx.player().displayClientMessage(new TextComponent(entry.getKey().toString()), false);
+			}
+			return true; // no fail state?
+		}
+		
 		class LabWayTests {
 			boolean testAll() {
 				return testSublimation()

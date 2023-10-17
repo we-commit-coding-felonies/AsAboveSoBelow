@@ -25,6 +25,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -75,7 +76,10 @@ public class LabBlock extends HorizontalDirectionalBlock implements EntityBlock 
 	private final LabProcess process;
 	//public final boolean usesFuel;
 	
-	
+	@Override
+	public RenderShape getRenderShape(BlockState state) {
+		return process == LabProcess.DISTILLATION ? RenderShape.ENTITYBLOCK_ANIMATED : RenderShape.MODEL;
+	}
 	@Override
 	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult trace) {
 		if (!level.isClientSide) {

@@ -17,6 +17,7 @@ public class SentientAmbient extends AbstractTickableSoundInstance {
 	private float step = 0;
 	private float nextPitch = 1;
 	private int maxPitchChangeTime = 0;
+	private int ceaseTimer = 0;
 
 	public SentientAmbient(Entity entity) {
 		super(EffectInit.Sounds.SENTIENT_WHISPERS.get(), SoundSource.NEUTRAL);
@@ -72,7 +73,10 @@ public class SentientAmbient extends AbstractTickableSoundInstance {
 	}
 	
 	protected boolean mustCease() {
-		return entity.isRemoved()
-				|| (entity instanceof SentientArrow arrow && arrow.isInert());
+		if (entity instanceof SentientArrow arrow && arrow.isInert()) {
+			if (arrow.isInert()) ceaseTimer++;
+			else ceaseTimer = 0;
+		}
+		return entity.isRemoved() || ceaseTimer > 6;
 	}
 }

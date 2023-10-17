@@ -86,10 +86,10 @@ public class ObjectInit {
 
 		public static final RegistryObject<Item>
 				// Stackable items / materials
-				ASH = REG.register("ash", () -> new Item(PROPS_GENERIC)),
-				SOOT = REG.register("soot", () -> new Item(PROPS_GENERIC)),
-				SALT = REG.register("salt", () -> new Item(PROPS_GENERIC)),
-				SPUT = REG.register("sput", () -> new Item(PROPS_GENERIC)),
+				ASH = basic("ash"),
+				SOOT = basic("soot"),
+				SALT = basic("salt"),
+				SPUT = basic("sput"),
 				AETHER = REG.register("aether", () -> new Item(makeProps(AASBRarity.SPECIAL.get(), 64, false))),
 				MATERIA_1 = REG.register("materia_infirma", () -> new Item(PROPS_GENERIC_T1)),
 				MATERIA_2 = REG.register("materia_minor", () -> new Item(PROPS_GENERIC_T2)),
@@ -97,6 +97,13 @@ public class ObjectInit {
 				MATERIA_4 = REG.register("materia_major", () -> new Item(PROPS_GENERIC_T4)),
 				MATERIA_5 = REG.register("materia_prima", () -> new Item(PROPS_GENERIC_T5)),
 				QUINTESSENCE = REG.register("quintessential_condensate", () -> new Item(PROPS_GENERIC_T4)),
+				LEAD_INGOT = basic("lead_ingot"),
+				TIN_INGOT = basic("tin_ingot"),
+				SILVER_INGOT = basic("silver_ingot"),
+				BRONZE_INGOT = basic("bronze_ingot"),
+				BRASS_INGOT = basic("brass_ingot"),
+				MERCURY = basic("hydrargyrum"),
+				
 			
 				// Unstackable items
 				PHILOSOPHERS_STONE = REG.register("philosophers_stone", () -> new Item(makeProps(AASBRarity.SPECIAL.get(), 1, true))),
@@ -162,6 +169,10 @@ public class ObjectInit {
 				props.fireResistant();
 			}
 			return props;
+		}
+		
+		public static RegistryObject<Item> basic(String name) {
+			return REG.register(name, () -> new Item(PROPS_GENERIC));
 		}
 		
 		// Conveniance function: Take a RegistryObject<Block> and make a corresponding RegistryObject<Item> from it

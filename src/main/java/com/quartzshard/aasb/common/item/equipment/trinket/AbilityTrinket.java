@@ -39,7 +39,7 @@ public abstract class AbilityTrinket extends Item implements ITrinket, ICanItemM
 	private boolean randomizeRunes(ServerPlayer player, ItemStack stack) {
 		if (player.isShiftKeyDown()) {
 			clearRunes(stack);
-			setRune(stack, true, TrinketRunes.ARCANE.get());
+			setRune(stack, true, TrinketRunes.FIRE.get());
 			setRune(stack, false, TrinketRunes.EMPOWERMENT.get());
 		} else {
 			TrinketRune[] runes = TrinketRunes.getReg().getValues().toArray(TrinketRune[]::new);
