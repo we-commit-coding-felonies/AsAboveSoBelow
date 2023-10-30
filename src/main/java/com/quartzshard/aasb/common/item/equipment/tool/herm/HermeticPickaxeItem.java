@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import org.jetbrains.annotations.Nullable;
+
 import com.google.common.collect.Multimap;
 import com.quartzshard.aasb.api.item.IHermeticTool;
 import com.quartzshard.aasb.client.AASBKeys;
@@ -34,15 +36,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemCooldowns;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.PickaxeItem;
-import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.Item.Properties;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
 import net.minecraftforge.common.Tags;
@@ -53,7 +51,7 @@ public class HermeticPickaxeItem extends PickaxeItem implements IHermeticTool {
 	}
 	
 	@Override
-	public void appendHoverText(ItemStack stack, Level level, List<Component> tips, TooltipFlag flags) {
+	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tips, TooltipFlag flags) {
 		super.appendHoverText(stack, level, tips, flags);
 		
 		int runesVal = getRunesVal(stack);
@@ -172,7 +170,7 @@ public class HermeticPickaxeItem extends PickaxeItem implements IHermeticTool {
 	public static boolean proximine(Player player, AABB area, ServerLevel level, ItemStack stack) {
 		boolean didDo = false;
 		List<ItemStack> drops = new ArrayList<>();
-		ItemStack fortunePick = stack.copy();
+		//ItemStack fortunePick = stack.copy();
 		//fortunePick.enchant(Enchantments.BLOCK_FORTUNE, 1);
 		for (BlockPos pos : BoxHelper.allBlocksInBox(area)) {
 			if (level.isEmptyBlock(pos)) continue;
@@ -186,7 +184,7 @@ public class HermeticPickaxeItem extends PickaxeItem implements IHermeticTool {
 				int oresMined = 0;
 				if (PlayerHelper.hasBreakPermission((ServerPlayer) player, pos)) {
 					oresMined++;
-					drops.addAll(Block.getDrops(state, (ServerLevel) level, pos, WorldHelper.getBlockEntity(level, pos), player, stack));
+					drops.addAll(Block.getDrops(state, level, pos, WorldHelper.getBlockEntity(level, pos), player, stack));
 					level.removeBlock(pos, false);
 					AASBNet.toNearbyClients(new CutParticlePacket(8, AABB.unitCubeFromLowerCorner(Vec3.atLowerCornerOf(pos))), level, Vec3.atCenterOf(pos), 64);
 				}

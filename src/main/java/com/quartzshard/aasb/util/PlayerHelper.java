@@ -14,8 +14,13 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.BlockSnapshot;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
 public class PlayerHelper {
@@ -235,8 +240,8 @@ public class PlayerHelper {
 	}
 	
 	public static void doSweepAttackParticle(Player culprit, ServerLevel level) {
-		double rot1 = (double)(-Mth.sin(culprit.getYRot() * ((float)Math.PI / 180f)));
-		double rot2 = (double)Mth.cos(culprit.getYRot() * ((float)Math.PI / 180f));
+		double rot1 = (-Mth.sin(culprit.getYRot() * ((float)Math.PI / 180f)));
+		double rot2 = Mth.cos(culprit.getYRot() * ((float)Math.PI / 180f));
 		level.sendParticles(ParticleTypes.SWEEP_ATTACK, culprit.getX()+rot1, culprit.getY(0.5), culprit.getZ()+rot2, 1, 0, 0, 0, 0);
 	}
 
@@ -257,5 +262,28 @@ public class PlayerHelper {
 	
 	public static boolean onCooldown(Player player, Item item) {
 		return player.getCooldowns().isOnCooldown(item);
+	}
+
+	/**
+	 * Tries placing a block and fires an event for it.
+	 * https://github.com/sinkillerj/ProjectE/blob/mc1.18.x/src/main/java/moze_intel/projecte/utils/PlayerHelper.java#L52
+	 * @return Whether the block was successfully placed
+	 */
+	public static boolean checkedPlaceBlock(ServerPlayer player, BlockPos pos, BlockState state) {
+		if (!hasEditPermission(player, pos)) {
+			return false;
+		}
+		Level level = player.getCommandSenderWorld();
+		BlockSnapshot before = BlockSnapshot.create(level.dimension(), level, pos);
+		level.setBlockAndUpdate(pos, state);
+		BlockEvent.EntityPlaceEvent evt = new BlockEvent.EntityPlaceEvent(before, Blocks.AIR.defaultBlockState(), player);
+		MinecraftForge.EVENT_BUS.post(evt);
+		if (evt.isCanceled()) {
+			level.restoringBlockSnapshots = true;
+			before.restore(true, false);
+			level.restoringBlockSnapshots = false;
+			return false;
+		}
+		return true;
 	}
 }

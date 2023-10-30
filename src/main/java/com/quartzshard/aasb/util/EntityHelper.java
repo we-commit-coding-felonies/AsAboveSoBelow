@@ -42,7 +42,7 @@ public class EntityHelper {
 		for (int i = 0; i < 64; ++i) {
 			if (shouldTry) {
 				double tryX = ent.getX() + (rand.nextDouble() - 0.5) * 64d;
-				double tryY = ent.getY() + (double)(rand.nextInt(64) - 32);
+				double tryY = ent.getY() + (rand.nextInt(64) - 32);
 				double tryZ = ent.getZ() + (rand.nextDouble() - 0.5D) * 64.0D;
 				if (true) {
 					BlockPos.MutableBlockPos mbPos = new BlockPos.MutableBlockPos(tryX, tryY, tryZ);
@@ -89,7 +89,7 @@ public class EntityHelper {
 	public static boolean isInvincible(Entity entity) {
 		boolean invincible = entity.isInvulnerable();
 		if (!invincible && entity instanceof Player plr) {
-			invincible = plr.isCreative();
+			invincible = plr.isCreative() || plr.isSpectator();
 		}
 		return invincible;
 	}
@@ -103,7 +103,7 @@ public class EntityHelper {
 	}
 	
 	public static boolean isImmuneToGravityManipulation(Entity entity) {
-		return (entity instanceof Player player && player.getItemBySlot(EquipmentSlot.LEGS).is(ObjectInit.Items.MINIUM_STONE.get())) || isInvincible(entity);
+		return (entity instanceof Player player && player.getItemBySlot(EquipmentSlot.LEGS).is(ObjectInit.Items.POCKETWATCH.get())) || isInvincible(entity);
 	}
 	
 	/**

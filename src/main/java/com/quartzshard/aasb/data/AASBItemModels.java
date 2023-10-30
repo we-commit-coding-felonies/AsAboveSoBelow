@@ -2,9 +2,11 @@ package com.quartzshard.aasb.data;
 
 import com.quartzshard.aasb.AsAboveSoBelow;
 import com.quartzshard.aasb.api.item.IHermeticTool;
+import com.quartzshard.aasb.common.item.flask.FlaskItem;
 import com.quartzshard.aasb.init.ClientInit;
-import com.quartzshard.aasb.init.ObjectInit;
 import com.quartzshard.aasb.init.ObjectInit.Items;
+
+import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
@@ -28,7 +30,7 @@ public class AASBItemModels extends ItemModelProvider {
 		basic(Items.ASH);
 		basic(Items.SOOT);
 		basic(Items.SALT);
-		basic(Items.SUBLIT);
+		basic(Items.SPUT);
 		basic(Items.AETHER);
 		basic(Items.QUINTESSENCE);
 		
@@ -46,6 +48,10 @@ public class AASBItemModels extends ItemModelProvider {
 		flask(Items.FLASK_LEAD);
 		flask(Items.FLASK_GOLD);
 		flask(Items.FLASK_AETHER);
+
+		placeholder(Items.CHARM);
+		placeholder(Items.RING);
+		placeholder(Items.GLOVE);
 
 		armor(Items.HERMETIC_HELMET, "item/equipment/armor/herm/");
 		armor(Items.HERMETIC_CHESTPLATE, "item/equipment/armor/herm/");
@@ -66,6 +72,7 @@ public class AASBItemModels extends ItemModelProvider {
 		
 		
     	// BlockItems
+		block(Items.ASH_STONE_BLOCKITEM, "block/ashen_stone");
 		block(Items.WAYSTONE_BLOCKITEM, "block/waystone");
     }
     
@@ -94,35 +101,33 @@ public class AASBItemModels extends ItemModelProvider {
 		basic(ro, "item/materia/"+tier);
 	}
 	
-	private void flask(RegistryObject<? extends Item> ro) {
-		String name = ro.getId().getPath();
-		withExistingParent(name, mcLoc("item/generated"))
-			.texture("layer0", modLoc("item/flask/liquid"))
-			.texture("layer1", modLoc("item/flask/liquid_mix"))
-			.texture("layer2", modLoc("item/flask/"+name+"_filled"));
-	}
+	//private void flaskOld(RegistryObject<? extends Item> ro) {
+	//	String name = ro.getId().getPath();
+	//	withExistingParent(name, mcLoc("item/generated"))
+	//		.texture("layer0", modLoc("item/flask/liquid"))
+	//		.texture("layer1", modLoc("item/flask/liquid_mix"))
+	//		.texture("layer2", modLoc("item/flask/"+name+"_filled"));
+	//}
 	
-	private ItemModelBuilder flask2(RegistryObject<? extends Item> reg) {
-		ItemModelBuilder builder = getBuilder(reg.getId().getPath());
-		if (!(reg.get() instanceof IHermeticTool item)) throw new IllegalArgumentException(reg + " is not a hermetic tool");
-		for (int i = 0; i < 13; i++) {
-			if (!item.validateRunes(i)) continue;
-			String name = folder+"off/"+i;
-			builder.override()
-			.predicate(ClientInit.SHAPE_RUNE, i)
-			.predicate(ClientInit.EMPOWER_CHARGE, 0)
-			.model(withExistingParent(name, "item/handheld")
-					.texture("layer0", modLoc(name)))
-			.end();
-			
-			name = folder+"on/"+i;
-			builder.override()
-			.predicate(ClientInit.SHAPE_RUNE, i)
-			.predicate(ClientInit.EMPOWER_CHARGE, 1)
-			.model(withExistingParent(name, "item/handheld")
-					.texture("layer0", modLoc(name)))
-			.end();
-		}
+	private ItemModelBuilder flask(RegistryObject<? extends Item> ro) {
+		String folder = "item/flask/";
+		String name = ro.getId().getPath();
+		ItemModelBuilder builder = getBuilder(name);
+		if (!(ro.get() instanceof FlaskItem item))
+			throw new IllegalArgumentException(ro + " is not a flask");
+		builder.override()
+		.predicate(ClientInit.FLASK_STATUS, 0)
+		.model(withExistingParent(folder+name+"/empty", "item/generated")
+				.texture("layer0", modLoc(folder+name)))
+		.end();
+
+		builder.override()
+		.predicate(ClientInit.FLASK_STATUS, 1)
+		.model(withExistingParent(folder+name+"/filled", "item/generated")
+				.texture("layer0", modLoc("item/flask/liquid"))
+				.texture("layer1", modLoc("item/flask/liquid_mix"))
+				.texture("layer2", modLoc(folder+name+"_filled")))
+		.end();
 		return builder;
 	}
 
@@ -174,7 +179,7 @@ public class AASBItemModels extends ItemModelProvider {
 
 
 	@Override
-	public String getName() {
+	public @NotNull String getName() {
 		return AsAboveSoBelow.DISPLAYNAME + " | Item Models";
 	}
 }

@@ -76,9 +76,10 @@ public abstract class AlchArmor extends ArmorItem implements IDamageReducer {
 	 * @param stack the stack 
 	 * @return
 	 */
+	@Override
 	public float getDr(ItemStack stack, DamageSource source) {
 		if (sourceCanBeReduced(source)) {
-			return (float) (getDrForSource(source));
+			return getDrForSource(source);
 		}
 		return 0;
 	}
@@ -115,7 +116,7 @@ public abstract class AlchArmor extends ArmorItem implements IDamageReducer {
 	}
 	
 	@Override
-	public boolean isEnchantable(@NotNull ItemStack stack) {return false;}
+	public boolean isEnchantable(@Nullable ItemStack stack) {return false;}
 	@Override
 	public boolean isBookEnchantable(ItemStack stack, ItemStack book) {return false;}
 	@Override

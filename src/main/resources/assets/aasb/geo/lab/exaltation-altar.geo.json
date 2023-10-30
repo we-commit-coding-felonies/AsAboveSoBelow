@@ -1,0 +1,298 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.exaltation-altar",
+				"texture_width": 64,
+				"texture_height": 64,
+				"visible_bounds_width": 2,
+				"visible_bounds_height": 2.5,
+				"visible_bounds_offset": [0, 0.75, 0]
+			},
+			"bones": [
+				{
+					"name": "bb_main",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{
+							"origin": [-7, 5, -7],
+							"size": [14, 3, 14],
+							"inflate": 0.001,
+							"uv": {
+								"north": {"uv": [0, 61], "uv_size": [14, 3]},
+								"east": {"uv": [42, 61], "uv_size": [14, 3]},
+								"south": {"uv": [28, 61], "uv_size": [14, 3]},
+								"west": {"uv": [14, 61], "uv_size": [14, 3]},
+								"up": {"uv": [50, 47], "uv_size": [14, 14]}
+							}
+						}
+					]
+				},
+				{
+					"name": "candles",
+					"pivot": [0, 0, 0]
+				},
+				{
+					"name": "water",
+					"parent": "candles",
+					"pivot": [8, 0, -8],
+					"cubes": [
+						{
+							"origin": [3, 8, -5],
+							"size": [2, 1, 2],
+							"uv": {
+								"north": {"uv": [56, 63], "uv_size": [2, 1]},
+								"east": {"uv": [56, 63], "uv_size": [2, 1]},
+								"south": {"uv": [56, 63], "uv_size": [2, 1]},
+								"west": {"uv": [56, 63], "uv_size": [2, 1]},
+								"up": {"uv": [58, 63], "uv_size": [-2, -2]}
+							}
+						},
+						{
+							"origin": [3.5, 8.5, -4],
+							"size": [1, 1, 0],
+							"pivot": [4, 8, -4],
+							"rotation": [0, -45, 0],
+							"uv": {
+								"north": {"uv": [49, 60], "uv_size": [1, 1]},
+								"south": {"uv": [49, 60], "uv_size": [1, 1]}
+							}
+						},
+						{
+							"origin": [3.5, 8.5, -4],
+							"size": [1, 1, 0],
+							"pivot": [4, 8, -4],
+							"rotation": [0, 45, 0],
+							"uv": {
+								"north": {"uv": [49, 60], "uv_size": [1, 1]},
+								"south": {"uv": [49, 60], "uv_size": [1, 1]}
+							}
+						}
+					]
+				},
+				{
+					"name": "earth",
+					"parent": "candles",
+					"pivot": [-8, 0, 0],
+					"cubes": [
+						{
+							"origin": [-5, 8, -5],
+							"size": [2, 1, 2],
+							"uv": {
+								"north": {"uv": [58, 63], "uv_size": [2, 1]},
+								"east": {"uv": [58, 63], "uv_size": [2, 1]},
+								"south": {"uv": [58, 63], "uv_size": [2, 1]},
+								"west": {"uv": [58, 63], "uv_size": [2, 1]},
+								"up": {"uv": [60, 63], "uv_size": [-2, -2]}
+							}
+						},
+						{
+							"origin": [-4.5, 8.5, -4],
+							"size": [1, 1, 0],
+							"pivot": [-4, 9, -4],
+							"rotation": [0, -45, 0],
+							"uv": {
+								"north": {"uv": [49, 60], "uv_size": [1, 1]},
+								"south": {"uv": [49, 60], "uv_size": [1, 1]}
+							}
+						},
+						{
+							"origin": [-4.5, 8.5, -4],
+							"size": [1, 1, 0],
+							"pivot": [-4, 9, -4],
+							"rotation": [0, 45, 0],
+							"uv": {
+								"north": {"uv": [49, 60], "uv_size": [1, 1]},
+								"south": {"uv": [49, 60], "uv_size": [1, 1]}
+							}
+						}
+					]
+				},
+				{
+					"name": "fire",
+					"parent": "candles",
+					"pivot": [0, 0, 8],
+					"cubes": [
+						{
+							"origin": [3, 8, 3],
+							"size": [2, 1, 2],
+							"uv": {
+								"north": {"uv": [60, 63], "uv_size": [2, 1]},
+								"east": {"uv": [60, 63], "uv_size": [2, 1]},
+								"south": {"uv": [60, 63], "uv_size": [2, 1]},
+								"west": {"uv": [60, 63], "uv_size": [2, 1]},
+								"up": {"uv": [62, 63], "uv_size": [-2, -2]}
+							}
+						},
+						{
+							"origin": [3.5, 8.5, 4],
+							"size": [1, 1, 0],
+							"pivot": [4, 9, 4],
+							"rotation": [0, -45, 0],
+							"uv": {
+								"north": {"uv": [49, 60], "uv_size": [1, 1]},
+								"south": {"uv": [49, 60], "uv_size": [1, 1]}
+							}
+						},
+						{
+							"origin": [3.5, 8.5, 4],
+							"size": [1, 1, 0],
+							"pivot": [4, 9, 4],
+							"rotation": [0, 45, 0],
+							"uv": {
+								"north": {"uv": [49, 60], "uv_size": [1, 1]},
+								"south": {"uv": [49, 60], "uv_size": [1, 1]}
+							}
+						}
+					]
+				},
+				{
+					"name": "air",
+					"parent": "candles",
+					"pivot": [-8, 0, 8],
+					"cubes": [
+						{
+							"origin": [-5, 8, 3],
+							"size": [2, 1, 2],
+							"uv": {
+								"north": {"uv": [62, 63], "uv_size": [2, 1]},
+								"east": {"uv": [62, 63], "uv_size": [2, 1]},
+								"south": {"uv": [62, 63], "uv_size": [2, 1]},
+								"west": {"uv": [62, 63], "uv_size": [2, 1]},
+								"up": {"uv": [64, 63], "uv_size": [-2, -2]}
+							}
+						},
+						{
+							"origin": [-4.5, 8.5, 4],
+							"size": [1, 1, 0],
+							"pivot": [-4, 9, 4],
+							"rotation": [0, -45, 0],
+							"uv": {
+								"north": {"uv": [49, 60], "uv_size": [1, 1]},
+								"south": {"uv": [49, 60], "uv_size": [1, 1]}
+							}
+						},
+						{
+							"origin": [-4.5, 8.5, 4],
+							"size": [1, 1, 0],
+							"pivot": [-4, 9, 4],
+							"rotation": [0, 45, 0],
+							"uv": {
+								"north": {"uv": [49, 60], "uv_size": [1, 1]},
+								"south": {"uv": [49, 60], "uv_size": [1, 1]}
+							}
+						}
+					]
+				},
+				{
+					"name": "table",
+					"pivot": [0, 0, 0]
+				},
+				{
+					"name": "body",
+					"parent": "table",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{"origin": [-4, 2, -4], "size": [8, 4, 8], "uv": [0, 0]},
+						{"origin": [-6, 0, -6], "size": [2, 6, 2], "uv": [0, 0]},
+						{"origin": [4, 0, -6], "size": [2, 6, 2], "uv": [0, 0]},
+						{"origin": [-6, 0, 4], "size": [2, 6, 2], "uv": [0, 0]},
+						{"origin": [4, 0, 4], "size": [2, 6, 2], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "surface",
+					"parent": "table",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{
+							"origin": [-7, 6, -7],
+							"size": [14, 2, 14],
+							"uv": {
+								"north": {"uv": [22, 14], "uv_size": [14, 2]},
+								"east": {"uv": [8, 14], "uv_size": [14, 2]},
+								"south": {"uv": [50, 14], "uv_size": [14, 2]},
+								"west": {"uv": [36, 14], "uv_size": [14, 2]},
+								"up": {"uv": [36, 0], "uv_size": [14, 14]},
+								"down": {"uv": [50, 14], "uv_size": [14, -14]}
+							}
+						}
+					]
+				},
+				{
+					"name": "holes",
+					"parent": "table",
+					"pivot": [0, 0, 0]
+				},
+				{
+					"name": "hole_e",
+					"parent": "holes",
+					"pivot": [-4, 0, 4],
+					"cubes": [
+						{
+							"origin": [-4.5, 2.5, -1.5],
+							"size": [1, 3, 3],
+							"uv": {
+								"north": {"uv": [6, 21], "uv_size": [1, 3]},
+								"east": {"uv": [6, 18], "uv_size": [3, 3]},
+								"south": {"uv": [6, 21], "uv_size": [1, 3]},
+								"up": {"uv": [6, 21], "uv_size": [1, 3]},
+								"down": {"uv": [6, 24], "uv_size": [1, -3]}
+							}
+						}
+					]
+				},
+				{
+					"name": "hole_s",
+					"parent": "holes",
+					"pivot": [0, 0, 8],
+					"cubes": [
+						{
+							"origin": [-1.5, 2.5, 3.5],
+							"size": [3, 3, 1],
+							"uv": {
+								"east": {"uv": [6, 21], "uv_size": [1, 3]},
+								"south": {"uv": [3, 21], "uv_size": [3, 3]},
+								"west": {"uv": [6, 21], "uv_size": [1, 3]},
+								"up": {"uv": [6, 21], "uv_size": [3, 1]},
+								"down": {"uv": [6, 22], "uv_size": [3, -1]}
+							}
+						}
+					]
+				},
+				{
+					"name": "hole_w",
+					"parent": "holes",
+					"pivot": [8, 0, 0],
+					"cubes": [
+						{
+							"origin": [3.5, 2.5, -1.5],
+							"size": [1, 3, 3],
+							"uv": {
+								"north": {"uv": [6, 21], "uv_size": [1, 3]},
+								"south": {"uv": [6, 21], "uv_size": [1, 3]},
+								"west": {"uv": [0, 18], "uv_size": [3, 3]},
+								"up": {"uv": [6, 21], "uv_size": [1, 3]},
+								"down": {"uv": [6, 24], "uv_size": [1, -3]}
+							}
+						}
+					]
+				},
+				{
+					"name": "pipes",
+					"parent": "table",
+					"pivot": [0, 0, 0]
+				},
+				{
+					"name": "pipe_n",
+					"parent": "pipes",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{"origin": [-1, 3, -5], "size": [2, 2, 8], "uv": [1, 16]}
+					]
+				}
+			]
+		}
+	]
+}

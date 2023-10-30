@@ -1,7 +1,10 @@
 package com.quartzshard.aasb.api.alchemy.aspects;
 
+import org.jetbrains.annotations.Nullable;
+
 import com.quartzshard.aasb.AsAboveSoBelow;
 import com.quartzshard.aasb.api.alchemy.IAlchemicalFlow;
+import com.quartzshard.aasb.api.capability.aspect.IAspectHandler.AspectType;
 import com.quartzshard.aasb.data.AASBLang;
 import com.quartzshard.aasb.util.ColorsHelper.Color;
 import com.quartzshard.aasb.util.LogHelper;
@@ -52,6 +55,8 @@ public enum AspectShape implements IAlchemicalFlow<AspectShape> {
 	 * @param to The Shape we're checking flow to.
 	 * @return 
 	 */
+	@SuppressWarnings("incomplete-switch")
+	@Override
 	public boolean flows(AspectShape to) {
 		switch (this) {
 		case AIR:
@@ -87,5 +92,30 @@ public enum AspectShape implements IAlchemicalFlow<AspectShape> {
 	@Override
 	public boolean violates(AspectShape to) {
 		return !this.flows(to) && !this.perpendicular(to);
+	}
+
+	@Override
+	public String toString() {
+		return this.name().toLowerCase();
+	}
+	
+	/**
+	 * Returns null if deserialization fails
+	 * @param dat
+	 * @return 
+	 */
+	@Nullable
+	public static AspectShape deserialize(String dat) {
+		if (dat != null) {
+			try {
+				return AspectShape.valueOf(dat.toUpperCase());
+			} catch (IllegalArgumentException e) {}
+		}
+		return null;
+	}
+
+	@Override
+	public AspectType type() {
+		return AspectType.SHAPE;
 	}
 } 

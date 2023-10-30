@@ -2,10 +2,8 @@ package com.quartzshard.aasb.util;
 
 import java.util.LinkedHashMap;
 
-import com.quartzshard.aasb.util.ColorsHelper.Color;
-
+import com.quartzshard.aasb.AsAboveSoBelow;
 import net.minecraft.util.Mth;
-import net.minecraft.world.item.ItemStack;
 
 /**
  * Contains functions for calculating & working with RGB / HSV values <br>
@@ -26,12 +24,18 @@ public class ColorsHelper {
 	 */
 	public enum Color {
 		MID_RED(128,0,0, 0,100,50, 0x800000),
+		MID_ORANGE(128,64,0, 30,100,50, 0x804000),
 		MID_YELLOW(128,128,0, 60,100,50, 0x808000),
 		MID_GREEN(0,128,0, 120,100,50, 0x008000),
+		MID_TURQUOISE(0,128,64, 150,100,50, 0x008040),
 		MID_TEAL(0,128,128, 180,100,50, 0x008080),
 		MID_BLUE(0,0,128, 240,100,50, 0x000080),
 		MID_PURPLE(128,0,128, 300,100,50, 0x800080),
+		MID_MAGENTA(128,0,64, 330,100,50, 0x800040),
 		MID_GRAY(128,128,128, 0,0,50, 0x808080),
+
+		WHITE(255,255,255, 0,0,100, 0xffffff),
+		BLACK(0,0,0, 0,0,0, 0x000000),
 		
 		BROWN(115,80,46, 30,60,45, 0x73502e),
 		
@@ -52,6 +56,34 @@ public class ColorsHelper {
 			V = v;
 			I = i;
 		}
+	}
+	
+	// shard is dumb
+	
+	/**
+	 * @return random shade of gray, expressed as an integer
+	 */
+	public static int randomGray() {
+		return randomGray(0xff);
+	}
+	
+	/**
+	 * @param max brightest gray allowed, 0xff is white
+	 * @return random shade of gray, expressed as an integer
+	 */
+	public static int randomGray(int max) {
+		return randomGray(0x00, max);
+	}
+	
+	/**
+	 * @param min darkest gray allowed, 0x00 is black
+	 * @param max brightest gray allowed, 0xff is white
+	 * @return random shade of gray, expressed as an integer
+	 */
+	public static int randomGray(int min, int max) {
+		int shade = AsAboveSoBelow.RAND.nextInt(min, max+1);
+		int color = (shade*0x10000) | (shade*0x100) | shade;
+		return color;
 	}
 	
 	/**
@@ -107,12 +139,13 @@ public class ColorsHelper {
 	 * @param v2 Value for Color 2
 	 * @return RGB value as an integer
 	 */
+	@Deprecated
 	public static int gradientBarColor(float percent, float h1, float s1, float v1, float h2, float s2, float v2) {
 		boolean hInv, sInv, vInv;
 		if (Math.max(h1, h2) == h1) hInv = true; else hInv = false;
 		if (Math.max(s1, s2) == s1) sInv = true; else sInv = false;
 		if (Math.max(v1, v2) == v1) vInv = true; else vInv = false;
-		return Mth.hsvToRgb(Math.max(0.3911F, (float) (1.0F - percent) / 1.65125495376F), 1.0f, 0.824f);
+		return Mth.hsvToRgb(Math.max(0.3911F, (1.0F - percent) / 1.65125495376F), 1.0f, 0.824f);
 	}
 	
 	/**
@@ -134,6 +167,7 @@ public class ColorsHelper {
 	 * 
 	 * @return RGB value as an integer
 	 */
+	@Deprecated
 	public static int fadingColorInt(long timer, int cycle, int offset, float h1, float s1, float v1, float h2, float s2, float v2) {
 		
 		boolean hInv, sInv, vInv;
@@ -226,11 +260,11 @@ public class ColorsHelper {
 			 * decAmount = (diff * halfFade) / swap		// the amount we should decrement
 			 * output = upper - decAmount				// do the decrement operation
 			 */
-			val = upper - ((diff * (fade - swap)) / swap);
+			val = upper - ((diff * (fade - ((float)swap))) / ((float)swap));
 		else
 			// see above, this is the same except were going up instead of down
 			// dont need to subtract swap because were in the lower half of the timer
-			val = lower + ((diff * fade) / swap);
+			val = lower + ((diff * fade) / ((float)swap));
 		if (val < 0) {
 			// if val is negative, something has gone wrong
         	LinkedHashMap<String,String> info = new LinkedHashMap<String,String>();

@@ -2,10 +2,14 @@ package com.quartzshard.aasb.api.alchemy.aspects;
 
 import java.util.Arrays;
 
+import org.jetbrains.annotations.Nullable;
+
 import com.quartzshard.aasb.AsAboveSoBelow;
 import com.quartzshard.aasb.api.alchemy.IAlchemicalFlow;
+import com.quartzshard.aasb.api.capability.aspect.IAspectHandler.AspectType;
 import com.quartzshard.aasb.common.item.equipment.trinket.rune.TrinketRune;
 import com.quartzshard.aasb.data.AASBLang;
+import com.quartzshard.aasb.init.AlchemyInit.FormTree;
 import com.quartzshard.aasb.util.LogHelper;
 
 import net.minecraft.network.chat.Component;
@@ -115,7 +119,7 @@ public class AspectForm extends ForgeRegistryEntry<AspectForm> implements IAlche
 		return this.distance;
 	}
 		
-	//Yes, this is much more code than ArrayList would need. No, I don't care.
+	// Yes, this is much more code than ArrayList would need. No, I don't care.
 	public void addChildNode(AspectForm adoptee) {
 		AspectForm prev[] = this.children;
 		this.children = new AspectForm[prev.length + 1];
@@ -123,15 +127,17 @@ public class AspectForm extends ForgeRegistryEntry<AspectForm> implements IAlche
 		this.children[this.children.length - 1] = adoptee;
 	}
 
-	//Little exception to notify addon devs of their bad behaviour with the form tree.
+	// Little exception to notify addon devs of their bad behaviour with the form tree.
 	class FormTreeException extends RuntimeException {
 		private static final long serialVersionUID = 1L;
 		String cause;
 		FormTreeException(String cause) {
 			this.cause = cause;
 		}
-		public String toString() {
-			return ("Tried to assign an invalid node in the form tree. Reason: " + this.cause + "\n        If you're develping an addon, this is on you. If you're a normal player, please report!");
+		
+		@Override
+		public String getLocalizedMessage() {
+			return this.cause;
 		}
 	}
 	
@@ -150,5 +156,28 @@ public class AspectForm extends ForgeRegistryEntry<AspectForm> implements IAlche
 	@Override
 	public boolean violates(AspectForm to) {
 		return !this.flows(to) && !this.perpendicular(to);
-	}	
+	}
+
+	@Override
+	public String toString() {
+		return getName().toString();
+	}
+	
+	/**
+	 * Returns null if deserialization fails
+	 * @param dat
+	 * @return 
+	 */
+	@Nullable
+	public static AspectForm deserialize(String dat) {
+		if (dat != null) {
+			return FormTree.get(ResourceLocation.tryParse(dat));
+		}
+		return null;
+	}
+
+	@Override
+	public AspectType type() {
+		return AspectType.FORM;
+	}
 }

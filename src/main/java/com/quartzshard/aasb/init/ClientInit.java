@@ -4,11 +4,14 @@ import com.quartzshard.aasb.AsAboveSoBelow;
 import com.quartzshard.aasb.api.item.IHermeticTool;
 import com.quartzshard.aasb.client.AASBKeys;
 import com.quartzshard.aasb.client.particle.CutParticle;
+import com.quartzshard.aasb.client.render.entity.HorrorRenderer;
+import com.quartzshard.aasb.client.render.entity.MustangRenderer;
+import com.quartzshard.aasb.client.render.entity.SentientArrowRenderer;
+import com.quartzshard.aasb.client.render.entity.tile.DistillationRetortRenderer;
 import com.quartzshard.aasb.client.render.layer.AASBPlayerLayer;
 import com.quartzshard.aasb.common.item.flask.FlaskItem;
+import com.quartzshard.aasb.util.ClientHelper;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.particle.ParticleProvider;
@@ -19,8 +22,6 @@ import net.minecraft.core.particles.ParticleType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.PotionUtils;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ColorHandlerEvent;
@@ -77,11 +78,22 @@ public class ClientInit {
 		provider(EffectInit.Particles.CUT_PARTICLE.get(), new CutParticle.Provider());
 	}
 
+	@SubscribeEvent
+	public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
+		//Entities
+		event.registerEntityRenderer(ObjectInit.Entities.SENTIENT_ARROW.get(), context -> new SentientArrowRenderer(context));
+		event.registerEntityRenderer(ObjectInit.Entities.HORROR.get(), context -> new HorrorRenderer(context));
+		event.registerEntityRenderer(ObjectInit.Entities.MUSTANG.get(), context -> new MustangRenderer(context));
+		event.registerBlockEntityRenderer(ObjectInit.TileEntities.DISTILLATION_TE.get(), DistillationRetortRenderer::new);
+	}
+	
+	
+
 	private static <T extends ParticleOptions> void provider(ParticleType<T> type, ParticleProvider<T> provider) {
-		Minecraft.getInstance().particleEngine.register(type, provider);
+		ClientHelper.mc().particleEngine.register(type, provider);
 	}
 	private static <T extends ParticleOptions> void spriteProvider(ParticleType<T> type, ParticleEngine.SpriteParticleRegistration<T> provider) {
-		Minecraft.getInstance().particleEngine.register(type, provider);
+		ClientHelper.mc().particleEngine.register(type, provider);
 	}
 
 	@SubscribeEvent
@@ -96,17 +108,7 @@ public class ClientInit {
 
 	@SubscribeEvent
 	public static void addTints(final ColorHandlerEvent.Item event) {
-		event.getItemColors().register((stack, layer) -> {
-			/*switch (layer) {
-			case 0:
-				return 0xff0000;
-			case 1:
-				return 0x0000ff;
-			default:
-				return -1;
-			}*/
-			return layer > 1 ? -1 : layer > 0 ? AsAboveSoBelow.RAND.nextInt(0xffffff+1) : -1;
-		}, ObjectInit.Items.FLASK_LEAD.get(), ObjectInit.Items.FLASK_GOLD.get(), ObjectInit.Items.FLASK_AETHER.get());
+		event.getItemColors().register(FlaskItem::getLiquidColor, ObjectInit.Items.FLASK_LEAD.get(), ObjectInit.Items.FLASK_GOLD.get(), ObjectInit.Items.FLASK_AETHER.get());
 	}
 
 

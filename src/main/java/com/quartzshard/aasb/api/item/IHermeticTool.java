@@ -69,7 +69,7 @@ public interface IHermeticTool extends IShapeRuneItem, IStaticSpeedBreaker, ICan
 	}
 	
 	default int chargeBarWidth(ItemStack stack) {
-		return Math.round((float)getCharge(stack) * 13f / (float)getMaxCharge(stack));
+		return Math.round(getCharge(stack) * 13f / getMaxCharge(stack));
 	}
 	default int chargeBarColor(ItemStack stack) {
 		return ColorsHelper.covalenceGradient(this.getChargePercent(stack));

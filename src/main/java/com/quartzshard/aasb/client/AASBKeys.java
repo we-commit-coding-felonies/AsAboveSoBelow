@@ -4,6 +4,7 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.glfw.GLFW;
 
 import com.quartzshard.aasb.AsAboveSoBelow;
@@ -18,7 +19,6 @@ import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -73,7 +73,7 @@ public class AASBKeys {
 		}
 	}
 	
-	private static Map<Bind, Boolean> keyTracker = new EnumMap<>(Bind.class);
+	private static Map<@NotNull Bind, Boolean> keyTracker = new EnumMap<>(Bind.class);
 	public static void register() {
 		for (Bind bind : Bind.values()) {
 			ClientRegistry.registerKeyBinding(bind.getKey());

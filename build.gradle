@@ -131,38 +131,31 @@ repositories {
         name = 'tterrag maven'
         url = 'https://maven.tterrag.com/'
     }
+    maven {
+        name = 'GeckoLib maven'
+        url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' 
+    }
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.18.2-40.2.4'
+    minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
-    //implementation fg.deobf("curse.maven:projecte-226410:${projecte_version}-api")
-    
-    //implementation fg.deobf("vazkii.botania:Botania:${mc_version}-${botania_version}")
-    //runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${mc_version}-${patchouli_version}")
-    
-    implementation fg.deobf("top.theillusivec4.curios:curios-forge:${mc_version}-${curios_version}")
-
+	// JEI
     compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
     implementation fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
     
-    //implementation fg.deobf("curse.maven:avaritia-261348:${avaritia_version}")
-    //implementation fg.deobf("curse.maven:codechickenlib-242818:${codechickenlib_version_cf}")
+    // For some trinkets
+    implementation fg.deobf("top.theillusivec4.curios:curios-forge:${mc_version}-${curios_version}")
     
-    //implementation fg.deobf("com.simibubi.create:create-${mc_version}:${create_version}:slim") { transitive = false }
-    //implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge-${mc_version}:${flywheel_version}")
-    //implementation fg.deobf("com.tterrag.registrate:Registrate:MC${mc_version}-${registrate_version}")
-    
-    //implementation fg.deobf("mekanism:Mekanism:${mc_version}-${mekanism_version}")
-    //implementation fg.deobf("mekanism:Mekanism:${mc_version}-${mekanism_version}:generators")
-    
-	//implementation fg.deobf("curse.maven:bloodmagic-224791:${bloodmagic_version}")
+    // For lab models
+    implementation fg.deobf("software.bernie.geckolib:geckolib-forge-1.18:${geckolib_version}")
 }
 
 mixin {
     // MixinGradle Settings
     add sourceSets.main, 'aasb.refmap.json'
+    config 'aasb.mixins.json'
 }
 
 jar {

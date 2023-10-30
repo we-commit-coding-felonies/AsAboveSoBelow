@@ -73,6 +73,7 @@ public class CutParticle extends Particle {
 		return;
 	}
 
+	@Override
 	public void tick() {
 		xo = x;
 		yo = y;
@@ -82,6 +83,7 @@ public class CutParticle extends Particle {
 		}
 	}
 
+	@Override
 	public ParticleRenderType getRenderType() {
 		return ParticleRenderType.CUSTOM;
 	}

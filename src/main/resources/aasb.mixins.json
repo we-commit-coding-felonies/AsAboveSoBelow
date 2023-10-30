@@ -3,9 +3,11 @@
   "priority": 1100,
   "package": "com.quartzshard.aasb.mixin",
   "compatibilityLevel": "JAVA_16",
-  "mixins": [
+  "refmap": "aasb.refmap.json",
+  "mixins": [],
+  "client": [
+  	"MinecraftMixin",
   ],
-  "client": [],
   "injectors": {
     "defaultRequire": 1
   },

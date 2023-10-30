@@ -55,7 +55,7 @@ public class AnkletItem extends JewelryArmor implements ICanFeetMode {
 		}
 	}
 	
-	private void attemptSlowFall(Player player, Level level) {
+	private static void attemptSlowFall(Player player, Level level) {
 		Vec3 vel = player.getDeltaMovement();
 		if (vel.y <= 0) {
 			Vec3 newVel = vel.multiply(1, 0.9, 1);
@@ -73,7 +73,7 @@ public class AnkletItem extends JewelryArmor implements ICanFeetMode {
 		}
 	}
 	
-	private boolean attemptLiquidWalk(Player player, boolean speed) {
+	private static boolean attemptLiquidWalk(Player player, boolean speed) {
 		boolean didDo = false;
 		Level level = player.level;
 		boolean fly = player.getAbilities().flying || player.isFallFlying();
@@ -147,7 +147,7 @@ public class AnkletItem extends JewelryArmor implements ICanFeetMode {
 		return didDo;
 	}
 	
-	private void jesusFX(Player player, Level level, BlockPos underPos, BlockState liquidUnder, boolean speed, Random r) {
+	private static void jesusFX(Player player, Level level, BlockPos underPos, BlockState liquidUnder, boolean speed, Random r) {
 		double bbw = player.getBbWidth();
 		boolean water = liquidUnder.is(Blocks.WATER);
 		boolean lava = liquidUnder.is(Blocks.LAVA);

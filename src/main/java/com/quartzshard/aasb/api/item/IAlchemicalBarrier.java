@@ -1,6 +1,5 @@
 package com.quartzshard.aasb.api.item;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 import com.quartzshard.aasb.init.EffectInit;
@@ -109,14 +108,13 @@ public interface IAlchemicalBarrier {
 					player.level.playSound(null, player, EffectInit.Sounds.BARRIER_FAIL.get(), SoundSource.PLAYERS, 1.5F, 1.0F);
 				}
 				return true;
-			} else {
-				if (emcHeld <= 0) return false;
-				float canAfford = calcAffordableDamage(player, damage, source, stack, emcHeld);
-				//EmcHelper.consumeAvaliableEmc(player, emcHeld);
-				player.hurt(source, damage - canAfford);
-				player.level.playSound(null, player, EffectInit.Sounds.BARRIER_FAIL.get(), SoundSource.PLAYERS, 1.5F, 1.0F);
-				return true;
 			}
+			if (emcHeld <= 0) return false;
+			float canAfford = calcAffordableDamage(player, damage, source, stack, emcHeld);
+			//EmcHelper.consumeAvaliableEmc(player, emcHeld);
+			player.hurt(source, damage - canAfford);
+			player.level.playSound(null, player, EffectInit.Sounds.BARRIER_FAIL.get(), SoundSource.PLAYERS, 1.5F, 1.0F);
+			return true;
 		}
 		return false;
 	}

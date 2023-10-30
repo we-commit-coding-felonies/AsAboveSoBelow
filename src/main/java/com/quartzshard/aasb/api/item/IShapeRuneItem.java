@@ -20,10 +20,10 @@ import net.minecraft.world.item.ItemStack;
 public interface IShapeRuneItem {
 	static final String TAG_RUNES = "shape_runes";
 	public enum ShapeRune {
-		WATER(AASBLang.ASPECT_SHAPE_WATER, ChatFormatting.DARK_AQUA, 8),
-		EARTH(AASBLang.ASPECT_SHAPE_EARTH, ChatFormatting.DARK_GREEN, 4),
-		FIRE(AASBLang.ASPECT_SHAPE_FIRE, ChatFormatting.DARK_RED, 2),
-		AIR(AASBLang.ASPECT_SHAPE_AIR, ChatFormatting.GOLD, 1),
+		WATER(AASBLang.SHAPE_WATER, ChatFormatting.DARK_AQUA, 8),
+		EARTH(AASBLang.SHAPE_EARTH, ChatFormatting.DARK_GREEN, 4),
+		FIRE(AASBLang.SHAPE_FIRE, ChatFormatting.DARK_RED, 2),
+		AIR(AASBLang.SHAPE_AIR, ChatFormatting.GOLD, 1),
 		NONE("None, this is a bug, please report it!", ChatFormatting.RESET, 0);
 		
 		public final byte digit;

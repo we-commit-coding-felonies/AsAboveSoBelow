@@ -5,8 +5,6 @@ import com.quartzshard.aasb.common.network.client.*;
 import com.quartzshard.aasb.common.network.server.*;
 import com.quartzshard.aasb.util.ClientHelper;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -48,6 +46,31 @@ public class AASBNet {
 				.decoder(CutParticlePacket::dec)
 				.consumer(CutParticlePacket::handle)
 				.add();
+		CHANNEL.messageBuilder(CreateLoopingSoundPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
+				.encoder(CreateLoopingSoundPacket::enc)
+				.decoder(CreateLoopingSoundPacket::dec)
+				.consumer(CreateLoopingSoundPacket::handle)
+				.add();
+		CHANNEL.messageBuilder(DrawParticleAABBPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
+				.encoder(DrawParticleAABBPacket::enc)
+				.decoder(DrawParticleAABBPacket::dec)
+				.consumer(DrawParticleAABBPacket::handle)
+				.add();
+		CHANNEL.messageBuilder(DrawParticleLinePacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
+				.encoder(DrawParticleLinePacket::enc)
+				.decoder(DrawParticleLinePacket::dec)
+				.consumer(DrawParticleLinePacket::handle)
+				.add();
+		CHANNEL.messageBuilder(PresetParticlePacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
+				.encoder(PresetParticlePacket::enc)
+				.decoder(PresetParticlePacket::dec)
+				.consumer(PresetParticlePacket::handle)
+				.add();
+		CHANNEL.messageBuilder(ModifyPlayerVelocityPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
+				.encoder(ModifyPlayerVelocityPacket::enc)
+				.decoder(ModifyPlayerVelocityPacket::dec)
+				.consumer(ModifyPlayerVelocityPacket::handle)
+				.add();
 	}
 	
 	public static <PKT> void toServer(PKT packet) {
@@ -71,6 +94,23 @@ public class AASBNet {
 	public static <PKT> void toNearbyClients(PKT message, ServerLevel level, Vec3 sendPos, double sendRange) {
 		for (ServerPlayer player : level.players()) {
 			if (player.position().closerThan(sendPos, sendRange)) {
+				toClient(message, player);
+			}
+		}
+	}
+
+	/**
+	 * sends a packet to clients within a certain distance of a point <br>
+	 * this version lets you specify a "sender", who will always recieve the packet
+	 * @param <PKT>
+	 * @param level
+	 * @param sendPos the point with which to do the distance check
+	 * @param sendRange max distace, in blocks
+	 * @param message
+	 */
+	public static <PKT> void toNearbyClients(PKT message, ServerPlayer sender, ServerLevel level, Vec3 sendPos, double sendRange) {
+		for (ServerPlayer player : level.players()) {
+			if (player.is(sender) || player.position().closerThan(sendPos, sendRange)) {
 				toClient(message, player);
 			}
 		}

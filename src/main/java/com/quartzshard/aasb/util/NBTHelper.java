@@ -14,6 +14,36 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
 
 public class NBTHelper {
+	public class TagKeys {
+		public static final String
+			MULTIINV = "Inventories";
+	}
+	
+	public class Tags {
+		public static boolean verifyExistance(CompoundTag tag, String key) {
+			return tag != null && !tag.isEmpty() && tag.contains(key);
+		}
+
+
+		public static byte getByte(CompoundTag tag, String key, byte defaultExpected) {
+			return verifyExistance(tag, key) ? tag.getByte(key) : defaultExpected;
+		}
+		/**
+		 * If nullifyOnFail is true it'll return null if it doesn't find any
+		 * compounds, otherwise it'll return a new one.
+		 **/
+		public static CompoundTag getCompound(CompoundTag tag, String key, boolean nullifyOnFail) {
+			return verifyExistance(tag, key) ? tag.getCompound(key) : nullifyOnFail ? null : new CompoundTag();
+		}
+
+		public static ListTag getList(CompoundTag tag, String key, int objtype, boolean nullifyOnFail) {
+			return verifyExistance(tag, key) ? tag.getList(key, objtype) : nullifyOnFail ? null : new ListTag();
+		}
+
+		public static ListTag getCompoundList(CompoundTag tag, String key, boolean nullifyOnFail) {
+			return getList(tag, key, Tag.TAG_COMPOUND, nullifyOnFail);
+		}
+	}
 	// https://github.com/VazkiiMods/Botania/blob/1.18.x/Xplat/src/main/java/vazkii/botania/common/helper/ItemNBTHelper.java
 	public class Item {
 		private static final int[] EMPTY_INT_ARRAY = new int[0];
