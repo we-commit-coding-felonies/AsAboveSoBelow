@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 import org.jetbrains.annotations.Nullable;
 
 import com.quartzshard.aasb.AsAboveSoBelow;
+import com.quartzshard.aasb.api.alchemy.ItemData;
 import com.quartzshard.aasb.api.alchemy.PhilosophersStone;
 import com.quartzshard.aasb.api.alchemy.aspects.AspectShape;
 import com.quartzshard.aasb.api.alchemy.aspects.stack.legacy.LegacyFormStack;
@@ -252,7 +253,7 @@ public class InternalOmnitool extends DiggerItem implements IStaticSpeedBreaker,
 		}
 		
 		boolean testItemLister() {
-			for (Entry<ResourceLocation,Item> entry : PhilosophersStone.getAllItems().entrySet()) {
+			for (Entry<ResourceLocation,ItemData> entry : PhilosophersStone.getAllItems().entrySet()) {
 				ctx.player().displayClientMessage(new TextComponent(entry.getKey().toString()), false);
 			}
 			return true; // no fail state?

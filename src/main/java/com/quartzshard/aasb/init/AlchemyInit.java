@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 import org.jetbrains.annotations.Nullable;
 
 import com.quartzshard.aasb.AsAboveSoBelow;
+import com.quartzshard.aasb.api.alchemy.PhilosophersStone;
 import com.quartzshard.aasb.api.alchemy.aspects.AspectForm;
 import com.quartzshard.aasb.common.item.equipment.trinket.rune.*;
 import com.quartzshard.aasb.common.item.equipment.trinket.rune.form.*;

@@ -2,6 +2,7 @@ package com.quartzshard.aasb;
 
 import java.util.Random;
 
+import com.quartzshard.aasb.api.alchemy.PhilosophersStone;
 import com.quartzshard.aasb.init.AlchemyInit;
 import com.quartzshard.aasb.init.ClientInit;
 import com.quartzshard.aasb.init.ConfigInit;
@@ -11,8 +12,10 @@ import com.quartzshard.aasb.init.ObjectInit;
 import com.quartzshard.aasb.util.LogHelper;
 
 import net.minecraft.resources.ResourceLocation;
-
+import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
@@ -50,10 +53,14 @@ public class AsAboveSoBelow {
 		ConfigInit.init(); // Uses different bus, ¯\_(ツ)_/¯
 		modbus.addListener(ModInit::init);
 		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> modbus.addListener(ClientInit::init));
+		MinecraftForge.EVENT_BUS.addListener(this::reloadListener);
 
 		//MinecraftForge.EVENT_BUS.register(this);
 	}
 	
+	private void reloadListener(AddReloadListenerEvent event) {
+		event.addListener((ResourceManagerReloadListener) manager -> PhilosophersStone.getAllRecipes(event.getServerResources()));
+	}
 	public static ResourceLocation rl(String rl) {
 		return new ResourceLocation(MODID, rl);
 	}
