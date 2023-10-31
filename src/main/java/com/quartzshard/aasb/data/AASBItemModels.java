@@ -21,7 +21,7 @@ import net.minecraftforge.registries.RegistryObject;
 public class AASBItemModels extends ItemModelProvider {
 
     public AASBItemModels(DataGenerator gen, ExistingFileHelper helper) {
-        super(gen, AsAboveSoBelow.MODID, helper);   
+        super(gen, AsAboveSoBelow.MODID, helper);
     }
 
     @Override

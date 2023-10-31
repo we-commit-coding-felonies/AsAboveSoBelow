@@ -27,12 +27,18 @@ public class ItemData {
 	
 	@NotNull
 	private final Item item;
+	private final int count;
 	@Nullable
 	private final CompoundTag nbt;
+
+	private ItemData(@NotNull ItemLike item, int count, @Nullable CompoundTag nbt) {
+		this.item = item.asItem();
+		this.count = count;
+		this.nbt = nbt != null && nbt.isEmpty() ? null : nbt;
+	}
 	
 	private ItemData(@NotNull ItemLike item, @Nullable CompoundTag nbt) {
-		this.item = item.asItem();
-		this.nbt = nbt != null && nbt.isEmpty() ? null : nbt;
+		this(item, 1, nbt);
 	}
 	
 	/**
@@ -42,12 +48,20 @@ public class ItemData {
 		return new ItemData(item, nbt);
 	}
 	
+	public static ItemData fromItem(@NotNull ItemLike item, int count, @Nullable CompoundTag nbt) {
+		return new ItemData(item, count, nbt);
+	}
+	
 	public static ItemData fromItem(@NotNull ItemLike item) {
 		return new ItemData(item, null);
 	}
-	
+
 	public static ItemData fromStack(@NotNull ItemStack stack) {
 		return fromItem(stack.getItem(), stack.getTag());
+	}
+	
+	public static ItemData fromStackWithCount(@NotNull ItemStack stack) {
+		return fromItem(stack.getItem(), stack.getCount(), stack.getTag());
 	}
 	/**
 	 * @return The {@link Item} stored in this {@link ItemData}.
@@ -56,6 +70,11 @@ public class ItemData {
 	public Item getItem() {
 		return item;
 	}
+	
+	public int getCount() {
+		return count;
+	}
+	
 	/**
 	 * @return The {@link CompoundTag} stored in this {@link ItemData}, or null if there is no nbt data stored.
 	 *
@@ -120,9 +139,14 @@ public class ItemData {
 
 	@Override
 	public String toString() {
-		if (nbt != null) {
-			return item.getRegistryName() + " " + nbt;
+		String str = "";
+		if (count != 1) {
+			str += count+"*";
 		}
-		return item.getRegistryName().toString();
+		str += item.getRegistryName().toString();
+		if (nbt != null) {
+			str += nbt.toString();
+		}
+		return str;
 	}
 }

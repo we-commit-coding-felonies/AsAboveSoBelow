@@ -2,6 +2,8 @@ package com.quartzshard.aasb;
 
 import java.util.Random;
 
+import org.jetbrains.annotations.Nullable;
+
 import com.quartzshard.aasb.api.alchemy.PhilosophersStone;
 import com.quartzshard.aasb.init.AlchemyInit;
 import com.quartzshard.aasb.init.ClientInit;
@@ -12,10 +14,13 @@ import com.quartzshard.aasb.init.ObjectInit;
 import com.quartzshard.aasb.util.LogHelper;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.ReloadableServerResources;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddReloadListenerEvent;
+import net.minecraftforge.event.TagsUpdatedEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
@@ -41,6 +46,9 @@ public class AsAboveSoBelow {
 			"Water, Earth, Fire, Air, Water, Earth, Fire, Air, Water, Earth...",
 			"Skipping funny message, please wait..."
 	};
+	
+	@Nullable
+	private ServerResourceCache cache;
 
 	public AsAboveSoBelow() {
 		
@@ -53,15 +61,36 @@ public class AsAboveSoBelow {
 		ConfigInit.init(); // Uses different bus, ¯\_(ツ)_/¯
 		modbus.addListener(ModInit::init);
 		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> modbus.addListener(ClientInit::init));
-		MinecraftForge.EVENT_BUS.addListener(this::reloadListener);
+		MinecraftForge.EVENT_BUS.addListener(this::onAddReloadListeners);
+		MinecraftForge.EVENT_BUS.addListener(this::onTagsUpdated);
 
 		//MinecraftForge.EVENT_BUS.register(this);
 	}
 	
-	private void reloadListener(AddReloadListenerEvent event) {
-		event.addListener((ResourceManagerReloadListener) manager -> PhilosophersStone.getAllRecipes(event.getServerResources()));
+	private void onAddReloadListeners(AddReloadListenerEvent event) {
+		//PhilosophersStone.getAllRecipes(event.getServerResources())
+		event.addListener((ResourceManagerReloadListener) manager -> cache = new ServerResourceCache(event.getServerResources(), manager));
 	}
+	
+	private void onTagsUpdated(TagsUpdatedEvent event) {
+		if (cache != null) {
+			long start = System.currentTimeMillis();
+			try {
+				PhilosophersStone.getAllRecipes(cache.resources());
+				LogHelper.info("AsAboveSoBelow.tagsUpdated()", "MapperDone", "Alchemy mapping completed! (" + (System.currentTimeMillis() - start) + "ms)");
+			} catch (Throwable t) {
+				LogHelper.error("AsAboveSoBelow.tagsUpdated()", "MapperFailure", "Failed to finish alchemy mapping! (" + (System.currentTimeMillis() - start) +"ms)");
+			}
+			cache = null;
+		}
+	}
+	
+	
 	public static ResourceLocation rl(String rl) {
 		return new ResourceLocation(MODID, rl);
+	}
+	
+	private record ServerResourceCache(ReloadableServerResources resources, ResourceManager manager) {
+		
 	}
 }

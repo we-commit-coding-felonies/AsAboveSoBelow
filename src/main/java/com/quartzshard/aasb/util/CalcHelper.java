@@ -1,11 +1,76 @@
 package com.quartzshard.aasb.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.world.phys.Vec3;
 
 /**
  * generic math functions
  */
 public class CalcHelper {
+	
+	/**
+	 * transposes a list <br>
+	 * "borrowed" from https://stackoverflow.com/a/2942044
+	 * @param <T>
+	 * @param table
+	 * @return
+	 */
+	public static <T> List<List<T>> transpose(List<List<T>> table) {
+		List<List<T>> ret = new ArrayList<List<T>>();
+		final int N = table.get(0).size();
+		for (int i = 0; i < N; i++) {
+			List<T> col = new ArrayList<T>();
+			for (List<T> row : table) {
+				col.add(row.get(i));
+			}
+			ret.add(col);
+		}
+		return ret;
+	}
+
+	public static <T> List<List<T>> getAllCombos(List<List<T>> inSets, List<T> compSet, List<List<T>> sets) {
+		if (sets.size() == 1) {
+			// only 1 input list means we dont do anything
+			return sets;
+		}
+		return actuallyGetAllCombos(inSets, compSet, sets);
+	}
+	
+	private static <T> List<List<T>> actuallyGetAllCombos(List<List<T>> inSets, List<T> compSet, List<List<T>> sets) {
+		// Mutable list for output
+		List<List<T>> outSets = new ArrayList<>();
+
+		// Initial case
+		if (inSets.size() == 0) {
+			// Pop of the first set, rotate it 90 degrees, compare to second set
+			List<List<T>> toTranspose = new ArrayList<>();
+			toTranspose.add(sets.remove(0));
+			return actuallyGetAllCombos(
+				transpose( toTranspose ),
+				sets.remove(0),
+				sets
+			);
+		}
+
+		// combinations...
+		for (T elem : compSet) {
+			for (List<T> row : inSets) {
+				List<T> newRow = new ArrayList<>(row);
+				newRow.add(0, elem);
+				outSets.add(newRow);
+			}
+		}
+
+		// Base case. We're done here.
+		if (sets.size() <= 0) {
+			return outSets;
+		}
+
+		// Recurse. Give the output as the new in, pop the next set out for comparison
+		return actuallyGetAllCombos(outSets, sets.remove(0), sets);
+	}
 	
 	/**
 	 * Converts the given amount of ticks to Hours, Minutes, Seconds, Milliseconds

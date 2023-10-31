@@ -11,6 +11,7 @@ import java.util.Set;
 
 import com.quartzshard.aasb.util.LogHelper;
 
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -35,22 +36,24 @@ public class PhilosophersStone {
 	public static Map<ResourceLocation,ItemData> getAllItems() {
 		Map<ResourceLocation,ItemData> allItems = new HashMap<>();
 		for (Map.Entry<ResourceKey<Item>,Item> ri : ForgeRegistries.ITEMS.getEntries()) {
+			LogHelper.debug("getAllItems()", "ItemGot", ri.getKey().location()+"");
 			allItems.put(ri.getKey().location(), ItemData.fromItem(ri.getValue()));
 		}
 		return allItems;
 	}
 	
-	public static Map<ResourceLocation, RecipeData> getAllRecipes(ReloadableServerResources resources) {
-		Map<ResourceLocation, RecipeData> allRecipes = new HashMap<>();
+	public static Map<ResourceLocation, NonNullList<RecipeData>> getAllRecipes(ReloadableServerResources resources) {
+		Map<ResourceLocation, NonNullList<RecipeData>> allRecipes = new HashMap<>();
 		for (RecipeType<?> recipeType : Registry.RECIPE_TYPE) {
-			@SuppressWarnings({ "rawtypes", "unchecked" })
 			List<? extends Recipe<?>> recipes = resources.getRecipeManager().getAllRecipesFor((RecipeType) recipeType);
-			for (Recipe<?> ri : recipes ) {
-				LogHelper.info("getAllRecipes()","recipeGettening",ri.getId().toString());
-				allRecipes.put(ri.getId(), RecipeData.fromRecipe(ri));
+			for (Recipe<?> recipe : recipes) {
+				LogHelper.debug("getAllRecipes()", "RecipeGot", recipe.getId().toString());
+				allRecipes.put(recipe.getId(), RecipeData.fromRecipe(recipe));
 			}
 		}
 		
 		return allRecipes;
 	}
+	
+	
 }
