@@ -10,6 +10,7 @@ import com.quartzshard.aasb.util.CalcHelper;
 import com.quartzshard.aasb.util.LogHelper;
 
 import net.minecraft.core.NonNullList;
+import net.minecraft.util.Tuple;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
@@ -17,16 +18,16 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 
 public class RecipeData {
 	public NonNullList<ItemData> inputs;
-	public ItemData output;
+	public Tuple<ItemData,Integer> output;
 	
-	public RecipeData(NonNullList<ItemData> inputs, ItemData output) {
+	public RecipeData(NonNullList<ItemData> inputs, Tuple<ItemData,Integer> output) {
 		this.inputs = inputs;
 		this.output = output;
 	}
 	
 	@Nullable
 	public static NonNullList<RecipeData> fromRecipe(Recipe<?> recipe) {
-		ItemData output = ItemData.fromStackWithCount(recipe.getResultItem());
+		Tuple<ItemData,Integer> output = new Tuple<>(ItemData.fromStack(recipe.getResultItem()), recipe.getResultItem().getCount());
 		List<List<ItemStack>> input = new ArrayList<>();
 		int
 			numIngredients = recipe.getIngredients().size(),
