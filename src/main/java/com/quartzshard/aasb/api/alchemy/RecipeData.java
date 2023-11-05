@@ -17,10 +17,10 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 
 public class RecipeData {
-	public NonNullList<ItemData> inputs;
+	public NonNullList<Ingredient> inputs;
 	public Tuple<ItemData,Integer> output;
 	
-	public RecipeData(NonNullList<ItemData> inputs, Tuple<ItemData,Integer> output) {
+	public RecipeData(NonNullList<Ingredient> inputs, Tuple<ItemData,Integer> output) {
 		this.inputs = inputs;
 		this.output = output;
 	}
@@ -28,11 +28,15 @@ public class RecipeData {
 	@Nullable
 	public static NonNullList<RecipeData> fromRecipe(Recipe<?> recipe) {
 		Tuple<ItemData,Integer> output = new Tuple<>(ItemData.fromStack(recipe.getResultItem()), recipe.getResultItem().getCount());
-		List<List<ItemStack>> input = new ArrayList<>();
+		NonNullList<Ingredient> input;
 		int
 			numIngredients = recipe.getIngredients().size(),
 			totalCombos = 1;
+		List<Ingredient> ings = new ArrayList<>();
 		for (Ingredient ing : recipe.getIngredients()) if (!ing.isEmpty()) {
+			ings.add(ing); // makes a pseudocopy of the ingredients list with anything empty taken out
+			
+			/* old code for exhaustive expansion, kept for reference in case its needed later
 			totalCombos *= ing.getItems().length;
 			List<ItemStack> ingVals = new ArrayList<>(ing.getItems().length);
 			boolean didDo = false;
@@ -41,12 +45,15 @@ public class RecipeData {
 				didDo = true;
 			}
 			if (didDo) input.add(ingVals);
+			*/
 		}
-		if (!input.isEmpty()) {
+		if (!ings.isEmpty()) {
+			input = NonNullList.of(Ingredient.EMPTY, ings.toArray(new Ingredient[0]));
 			NonNullList<RecipeData> recipes = NonNullList.createWithCapacity(totalCombos);
+			/* old code for exhaustive expansion, kept for reference in case its needed later
 			for (List<ItemStack> combo : CalcHelper.getAllCombos(new ArrayList<>(), new ArrayList<>(), input))
 				if (!combo.isEmpty()) {
-					NonNullList<ItemData> inputData = NonNullList.create();
+					NonNullList<Ingredient> inputData = NonNullList.create();
 					for (ItemStack stack : combo) {
 						inputData.add(ItemData.fromStack(stack));
 					}
@@ -55,6 +62,7 @@ public class RecipeData {
 					//LogHelper.LOGGER.debug(rDat.toString());
 					recipes.add(new RecipeData(inputData, output));
 				}
+			*/
 			if (!recipes.isEmpty())
 				return recipes;
 		}
@@ -65,11 +73,14 @@ public class RecipeData {
 	public String toString() {
 		String str = "[";
 		boolean first = true;
-		for (ItemData data : inputs) {
+		for (Ingredient ing : inputs) {
 			if (!first)
 				str += ", ";
 			first = false;
-			str += data.toString();
+			ItemStack[] stacks = ing.getItems();
+			if (stacks.length == 1) {
+				str += ItemData.fromStack(stacks[0]).toString();
+			} else str += ing.toString();
 		}
 		return str+"] -> " + output.toString();
 	}
