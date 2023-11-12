@@ -1,10 +1,14 @@
 package com.quartzshard.aasb;
 
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 
 import org.jetbrains.annotations.Nullable;
 
+import com.quartzshard.aasb.api.alchemy.ItemData;
 import com.quartzshard.aasb.api.alchemy.PhilosophersStone;
+import com.quartzshard.aasb.api.alchemy.RecipeData;
 import com.quartzshard.aasb.init.AlchemyInit;
 import com.quartzshard.aasb.init.ClientInit;
 import com.quartzshard.aasb.init.ConfigInit;
@@ -17,6 +21,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.ReloadableServerResources;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
+import net.minecraft.world.item.Items;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddReloadListenerEvent;
@@ -76,10 +82,21 @@ public class AsAboveSoBelow {
 		if (cache != null) {
 			long start = System.currentTimeMillis();
 			try {
-				PhilosophersStone.getAllRecipes(cache.resources());
+				Map<ResourceLocation, RecipeData> allRecipes = PhilosophersStone.getAllRecipes(cache.resources());
+				/*
+				Map<ResourceLocation, RecipeData> searchResults = PhilosophersStone.searchRecipesFor(ItemData.fromItem(Items.DEBUG_STICK), allRecipes);
+				
+				String resultStr = "";
+				if (searchResults != null) for (Entry<ResourceLocation,RecipeData> dat : searchResults.entrySet()) {
+					resultStr += dat.getKey().toString() + ", ";
+				}
+				LogHelper.debug("AsAboveSoBelow.tagsUpdated()", "SearchResults", resultStr);
+				*/
 				LogHelper.info("AsAboveSoBelow.tagsUpdated()", "MapperDone", "Alchemy mapping completed! (" + (System.currentTimeMillis() - start) + "ms)");
 			} catch (Throwable t) {
 				LogHelper.error("AsAboveSoBelow.tagsUpdated()", "MapperFailure", "Failed to finish alchemy mapping! (" + (System.currentTimeMillis() - start) +"ms)");
+				System.out.println(t.getLocalizedMessage());
+				t.printStackTrace();
 			}
 			cache = null;
 		}
