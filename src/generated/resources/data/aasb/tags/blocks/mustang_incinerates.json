@@ -1,0 +1,29 @@
+{
+  "remove": [
+    "minecraft:warped_fence",
+    "minecraft:warped_fence_gate",
+    "minecraft:warped_hanging_sign",
+    "minecraft:warped_sign",
+    "minecraft:crimson_fence",
+    "minecraft:crimson_fence_gate",
+    "minecraft:crimson_hanging_sign",
+    "minecraft:crimson_sign"
+  ],
+  "values": [
+    "#minecraft:logs_that_burn",
+    "#minecraft:leaves",
+    "#forge:barrels/wooden",
+    "#forge:chests/wooden",
+    "#forge:fences/wooden",
+    "#forge:fence_gates/wooden",
+    "#minecraft:bamboo_blocks",
+    "#minecraft:wool",
+    "#minecraft:wool_carpets",
+    "minecraft:coal_block",
+    "minecraft:fern",
+    "minecraft:large_fern",
+    "minecraft:grass",
+    "minecraft:tall_grass",
+    "#minecraft:flowers"
+  ]
+}

@@ -24,13 +24,12 @@ import net.minecraftforge.registries.ForgeRegistries;
  * @apiNote {@link ItemData} and the data it stores is Immutable
  */
 public class ItemData {
-	
-	@NotNull
+
 	private final Item item;
 	@Nullable
 	private final CompoundTag nbt;
 
-	private ItemData(@NotNull ItemLike item, @Nullable CompoundTag nbt) {
+	private ItemData(ItemLike item, @Nullable CompoundTag nbt) {
 		this.item = item.asItem();
 		this.nbt = nbt != null && nbt.isEmpty() ? null : nbt;
 	}
@@ -38,15 +37,15 @@ public class ItemData {
 	/**
 	 * Creates an {@link ItemData} object from a given {@link Item} with an optional {@link CompoundTag} attached.
 	 */
-	public static ItemData fromItem(@NotNull ItemLike item, @Nullable CompoundTag nbt) {
+	public static ItemData fromItem(ItemLike item, @Nullable CompoundTag nbt) {
 		return new ItemData(item, nbt);
 	}
 	
-	public static ItemData fromItem(@NotNull ItemLike item) {
+	public static ItemData fromItem(ItemLike item) {
 		return new ItemData(item, null);
 	}
 
-	public static ItemData fromStack(@NotNull ItemStack stack) {
+	public static ItemData fromStack(ItemStack stack) {
 		return fromItem(stack.getItem(), stack.getTag());
 	}
 	/**
@@ -63,6 +62,7 @@ public class ItemData {
 	 * @apiNote The returned {@link CompoundTag} is a copy so as to ensure that this {@link ItemData} is not accidentally modified via modifying the returned {@link
 	 * CompoundTag}. This means it is safe to modify the returned {@link CompoundTag}
 	 */
+	@SuppressWarnings("null") // Literally a null check right there, Eclipse is blind
 	@Nullable
 	public CompoundTag getNBT() {
 		return nbt == null ? null : nbt.copy();
@@ -72,6 +72,7 @@ public class ItemData {
 		return nbt != null;
 	}
 	
+	@SuppressWarnings("null") // Null only ever shows up when the registry doesnt support tags. The Item registry supports tags, so its fine
 	public boolean is(TagKey<Item> tag) {
 		return ForgeRegistries.ITEMS.tags().getTag(tag).contains(getItem());
 	}
@@ -92,14 +93,16 @@ public class ItemData {
 	/**
 	 * Writes the item and nbt fields to a NBT object.
 	 */
-	public CompoundTag write(@NotNull CompoundTag nbt) {
-		nbt.putString("item", item.getRegistryName().toString());
+	@SuppressWarnings("null") // If an item has a null ResourceLocation, that seems very bad and its probably OK to crash
+	public CompoundTag write(CompoundTag nbt) {
+		nbt.putString("item", ForgeRegistries.ITEMS.getKey(item).toString()); //item.getRegistryName().toString());
 		if (this.nbt != null) {
 			nbt.put("nbt", this.nbt);
 		}
 		return nbt;
 	}
-	
+
+	@SuppressWarnings("null") // Literally a null check right there, Eclipse is blind
 	@Override
 	public int hashCode() {
 		int code = item.hashCode();
@@ -119,10 +122,11 @@ public class ItemData {
 		return false;
 	}
 
+	@SuppressWarnings("null") // If an item has a null ResourceLocation, that seems very bad and its probably OK to crash
 	@Override
 	public String toString() {
 		String str = "";
-		str += item.getRegistryName().toString();
+		str += ForgeRegistries.ITEMS.getKey(item).toString();
 		if (nbt != null) {
 			str += nbt.toString();
 		}

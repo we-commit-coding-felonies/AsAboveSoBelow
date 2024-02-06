@@ -1,10 +1,15 @@
 {
   "homepage": "https://github.com/we-commit-coding-felonies/AsAboveSoBelow",
+  "1.20.1": {
+    "0.0.0.2": "slightly less early development version(s)"
+  },
   "1.18.2": {
     "0.0.0.1": "early development version(s)", 
     // "version": "changelog"
   },
   "promos": {
+    "1.20.1-latest": "0.0.0.2",
+    "1.20.1-recommended": "0.0.0.2",
     "1.18.2-latest": "0.0.0.1",
     "1.18.2-recommended": "0.0.0.1"
   }

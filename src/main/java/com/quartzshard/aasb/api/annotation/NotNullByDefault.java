@@ -9,6 +9,11 @@ import javax.annotation.meta.TypeQualifierDefault;
 import org.jetbrains.annotations.NotNull;
 
 /**
+ * i wrote this a while ago and then never used it until now <br>
+ * below are ramblings i do not recall or understand <br>
+ * hate
+ * <p><br>
+ * <p>
  * This exists because Eclipse is a very stinky and smelly IDE <br>
  * Loosely based off of their @NonNullByDefault, but implemented a bit differently (and also rather poorly, if I had to guess)
  * <p>
@@ -19,6 +24,4 @@ import org.jetbrains.annotations.NotNull;
  */
 @TypeQualifierDefault({PACKAGE, TYPE, METHOD, CONSTRUCTOR, FIELD, LOCAL_VARIABLE})
 @Retention(RUNTIME)
-public @interface NotNullByDefault {
-	
-}
+public @interface NotNullByDefault {}

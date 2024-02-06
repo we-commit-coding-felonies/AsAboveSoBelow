@@ -1,34 +1,55 @@
 package com.quartzshard.aasb.init;
 
-import com.quartzshard.aasb.AsAboveSoBelow;
-import com.quartzshard.aasb.api.alchemy.PhilosophersStone;
-import com.quartzshard.aasb.common.entity.living.HorrorEntity;
-import com.quartzshard.aasb.common.network.AASBNet;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
+import com.quartzshard.aasb.AASB;
+import com.quartzshard.aasb.data.LangData;
+import com.quartzshard.aasb.init.object.ItemInit;
 
-import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.item.Item;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.RegistryObject;
 
-@Mod.EventBusSubscriber(modid = AsAboveSoBelow.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+/**
+ * Deals with initializing some misc core parts of the mod, and the creative tabs
+ */
+@Mod.EventBusSubscriber(modid = AASB.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModInit {
-	public static void init(final FMLCommonSetupEvent event) {
-		AASBNet.register();
-		//TODO: Invoke the mapper here, once it exists.
-	}
 
-	public static final String TAB_NAME = AsAboveSoBelow.MODID;
-	public static final CreativeModeTab ITEM_GROUP = new CreativeModeTab(TAB_NAME) {
-		@Override
-		public ItemStack makeIcon() {
-			return new ItemStack(ObjectInit.Items.PHILOSOPHERS_STONE.get());
-		}
-	};
+	public static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, AASB.MODID);
+
+	public static void init(IEventBus bus) {
+		TABS.register(bus);
+		NetInit.register();
+		bus.addListener(ModInit::commonSetup);
+	}
 	
-    @SubscribeEvent
-    public static void onAttributeCreate(EntityAttributeCreationEvent event) {
-        event.put(ObjectInit.Entities.HORROR.get(), HorrorEntity.defaultAttributes().build());
-    }
+	public static void commonSetup(final FMLCommonSetupEvent event) {
+	}
+	
+	public static final RegistryObject<CreativeModeTab>
+		// TODO: fill out the tabs
+		NATURAL = TABS.register("natural", () -> CreativeModeTab.builder()
+			.title(Component.translatable(LangData.CTAB_NATURAL))
+			.withTabsBefore(CreativeModeTabs.COMBAT)
+			.icon(() -> ItemInit.PHILOSOPHERS_STONE.get().getDefaultInstance())
+			.displayItems((parameters, tab) -> {
+				for (RegistryObject<? extends Item> ro : ItemInit.ALL_NATURAL_ITEMS) {
+					tab.accept(ro.get());
+				}
+			}).build()),
+		SYNTHETIC = TABS.register("synthetic", () -> CreativeModeTab.builder()
+				.title(Component.translatable(LangData.CTAB_SYNTHETIC))
+				.withTabsBefore(NATURAL.getId())
+				.icon(() -> ItemInit.ELIXIR_OF_LIFE.get().getDefaultInstance())
+				.displayItems((parameters, tab) -> {
+					for (RegistryObject<? extends Item> ro : ItemInit.ALL_SYNTHETIC_ITEMS) {
+						tab.accept(ro.get());
+					}
+				}).build());
 }

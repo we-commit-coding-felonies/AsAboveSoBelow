@@ -1,5 +1,7 @@
 package com.quartzshard.aasb.config;
 
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraftforge.common.ForgeConfigSpec.Builder;
 import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
 
@@ -31,8 +33,10 @@ public class AlchemyCfg {
 	};
 	
 	// Server
-	public static ConfigValue<String> MAPPER_NBTS_STR;
-	public static ConfigValue<String> LIVING_ITEMS_STR;
+	@Nullable
+	public static ConfigValue<String>
+		MAPPER_NBTS_STR,
+		LIVING_ITEMS_STR;
 	public static void server(Builder cfg) {
 		cfg.comment("Settings related to the underlying alchemy system.").push("alch");
 		MAPPER_NBTS_STR = cfg

@@ -1,8 +1,9 @@
 package com.quartzshard.aasb.client.particle;
 
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Vector3f;
+import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3f;
 
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -52,7 +53,7 @@ public class CutParticle extends Particle {
 		
 		// vec of half the line, other half is just this but .reverse()
 		Vec3 halfLine = new Vec3(x,y,z).subtract(pos2).normalize();
-		Vector3f[] points = new Vector3f[]{new Vector3f(halfLine), new Vector3f(halfLine.reverse())};
+		Vector3f[] points = new Vector3f[]{halfLine.toVector3f(), halfLine.reverse().toVector3f()};
 		
 		// add camera-vectors to convert from particle-local-space to camera-local-space so we can render
 		// it also turns them back into points (rather than lines), which are our verticies
@@ -88,8 +89,8 @@ public class CutParticle extends Particle {
 		return ParticleRenderType.CUSTOM;
 	}
 	
-	public static class Provider implements ParticleProvider<SimpleParticleType> {		
-		@Override
+	public static class Provider implements ParticleProvider<SimpleParticleType> {
+		@Override @NotNull
 		public Particle createParticle(SimpleParticleType type, ClientLevel level, double x1, double y1, double z1, double x2, double y2, double z2) {
 			CutParticle particle = new CutParticle(level, x1,y1,z1, x2,y2,z2);
 			return particle;
