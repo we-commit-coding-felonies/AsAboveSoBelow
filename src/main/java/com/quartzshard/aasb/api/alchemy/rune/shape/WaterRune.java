@@ -136,6 +136,7 @@ public class WaterRune extends ShapeRune {
 			float power = tool.getEmpowerPercent(stack);
 			int cdTime = 0;
 			boolean didDo = false;
+			boolean consume = true;
 			InteractionHand hand = player.getOffhandItem() == stack ?
 					InteractionHand.OFF_HAND :
 					InteractionHand.MAIN_HAND;
@@ -144,6 +145,7 @@ public class WaterRune extends ShapeRune {
 					case SWORD:
 						didDo = triggerAutoSlash(stack, player);
 						cdTime = (int) (1+(charge/10));
+						consume = false;
 						break;
 					case PICKAXE:
 						if (strong) power += (power+1)*power;
@@ -197,8 +199,10 @@ public class WaterRune extends ShapeRune {
 				if (didDo) {
 					PlayerUtil.swingArm(player, level, hand);
 					cd.addCooldown(stack.getItem(), cdTime);
-					tool.setStoredWay(stack, 0);
-					level.playSound(null, player.blockPosition(), FxInit.SND_WAY_SLASH.get(), SoundSource.PLAYERS, 1, 1.2f);
+					if (consume) {
+						tool.setStoredWay(stack, 0);
+						level.playSound(null, player.blockPosition(), FxInit.SND_WAY_SLASH.get(), SoundSource.PLAYERS, 1, 1.2f);
+					}
 					if (style != ToolStyle.SWORD) {
 						PlayerUtil.doSweepAttackParticle(player, level);
 					}
@@ -581,47 +585,6 @@ public class WaterRune extends ShapeRune {
 			return !EntUtil.isInvincible(victim);
 		}
 		return false;
-	}
-	
-	public enum KillMode {
-		HOSTILE(LangData.TIP_SWORD_MODE_HOSTILE, ent -> ent instanceof Enemy),
-		HOSTILE_PLAYER(LangData.TIP_SWORD_MODE_HOSTILEPLAYER, ent -> ent instanceof Enemy || ent instanceof Player),
-		NOT_PLAYER(LangData.TIP_SWORD_MODE_NOTPLAYER, ent -> !(ent instanceof Player)),
-		EVERYTHING(LangData.TIP_SWORD_MODE_ALL, ent -> true);
-		
-		private final Predicate<LivingEntity> test;
-		private final Component loc, fLoc;
-		private KillMode(String langKey, Predicate<LivingEntity> test) {
-			this.test = test;
-			loc = LangData.tc(langKey);
-			fLoc = loc.copy().withStyle(ChatFormatting.LIGHT_PURPLE);
-		}
-		
-		public Component loc() {
-			return loc.copy();
-		}
-		
-		public Component fLoc() {
-			return fLoc.copy();
-		}
-		
-		public Predicate<LivingEntity> test() {
-			return this.test;
-		}
-		
-		public static KillMode byId(byte id) {
-			switch (id) {
-			default:
-			case 0:
-				return HOSTILE;
-			case 1:
-				return HOSTILE_PLAYER;
-			case 2:
-				return NOT_PLAYER;
-			case 3:
-				return EVERYTHING;
-			}
-		}
 	}
 	
 

@@ -14,6 +14,7 @@ import com.quartzshard.aasb.util.NBTUtil;
 import com.quartzshard.aasb.util.PlayerUtil;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -122,6 +123,7 @@ public interface IEmpowerable extends IWayHolder, IHandleKeybind {
 		if (isEmpowering(stack) && shouldEmpower(stack)) {
 			// Charging!!! TODO extract from waystones
 			insertWay(stack, wayChargeRate(stack));
+			entity.level().playSound(null, entity, FxInit.SND_WAY_CHARGE.get(), SoundSource.PLAYERS, 0.25f, 0.48f + 0.5f * getEmpowerPercent(stack));
 			return;
 		} else if (!shouldEmpower(stack)) {
 			setEmpowering(stack, false);

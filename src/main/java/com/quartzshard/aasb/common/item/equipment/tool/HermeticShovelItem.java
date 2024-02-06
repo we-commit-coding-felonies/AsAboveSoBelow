@@ -10,16 +10,12 @@ import com.quartzshard.aasb.api.alchemy.rune.Rune;
 import com.quartzshard.aasb.api.alchemy.rune.ToolRune;
 import com.quartzshard.aasb.api.alchemy.rune.ToolRune.ToolStyle;
 import com.quartzshard.aasb.api.item.IHermeticTool;
-import com.quartzshard.aasb.init.AlchInit;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShovelItem;
 import net.minecraft.world.item.TooltipFlag;
@@ -30,15 +26,6 @@ public class HermeticShovelItem extends ShovelItem implements IHermeticTool {
 	public HermeticShovelItem(int damage, float speed, Properties props) {
 		super(Tier.HERMETIC, damage, speed, props);
 	}
-	
-	// TODO: remove this debug code
-	@Override
-	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-		inscribeRune(AlchInit.RUNE_WATER.get(), getDefaultInstance(), 0);
-		inscribeRune(AlchInit.RUNE_EARTH.get(), getDefaultInstance(), 1);
-		return InteractionResultHolder.consume(player.getItemInHand(hand));
-	}
-
 	
 	@Override
 	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tips, TooltipFlag flags) {/*
