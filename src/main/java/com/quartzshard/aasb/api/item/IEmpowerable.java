@@ -120,7 +120,7 @@ public interface IEmpowerable extends IWayHolder, IHandleKeybind {
 	 */
 	default void tickEmpower(ItemStack stack, Entity entity) {
 		if (isEmpowering(stack) && shouldEmpower(stack)) {
-			// Charging!!!
+			// Charging!!! TODO extract from waystones
 			insertWay(stack, wayChargeRate(stack));
 			return;
 		} else if (!shouldEmpower(stack)) {

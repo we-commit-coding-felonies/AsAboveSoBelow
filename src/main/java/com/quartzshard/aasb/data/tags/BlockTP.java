@@ -26,6 +26,8 @@ public class BlockTP extends BlockTagsProvider {
 		ARROW_DESTROY = c("sentient_arrow_destroy"),
 		
 		HYPERSICKLE_CULLS = c("hypersickle_culls"),
+		HYPERSICKLE_PATHUNDER = c("hypersickle_pathunder"),
+		SUPERCUT_HARVESTS = c("supercut_harvests"),
 		
 		TICKACCEL_LIST = c("tickaccel_list"),
 		
@@ -81,7 +83,10 @@ public class BlockTP extends BlockTagsProvider {
 			.add(Blocks.BIG_DRIPLEAF_STEM)
 			.add(Blocks.SMALL_DRIPLEAF)
 			.add(Blocks.CACTUS);
-		
+		tag(SUPERCUT_HARVESTS)
+			.addTag(BlockTags.LOGS)
+			.addTag(BlockTags.LEAVES);
+			
 		tag(WAYBLAST_RESIST)
 			.addTag(BlockTags.WITHER_IMMUNE);
 		

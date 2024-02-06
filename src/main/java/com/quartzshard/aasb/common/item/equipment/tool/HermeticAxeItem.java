@@ -20,14 +20,14 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class HermeticPickItem extends PickaxeItem implements IHermeticTool {
-	public HermeticPickItem(int damage, float speed, Properties props) {
+public class HermeticAxeItem extends AxeItem implements IHermeticTool {
+	public HermeticAxeItem(int damage, float speed, Properties props) {
 		super(Tier.HERMETIC, damage, speed, props);
 	}
 	
@@ -103,8 +103,8 @@ public class HermeticPickItem extends PickaxeItem implements IHermeticTool {
 	
 	@Override
 	public boolean isEnchantable(ItemStack stack) {
-		Rune minor = this.getMinorRune(stack);
-		if (minor instanceof ToolRune tr) {
+		Rune major = this.getMajorRune(stack);
+		if (major instanceof ToolRune tr) {
 			return tr.isEnchantable();
 		}
 		return false;
@@ -127,6 +127,6 @@ public class HermeticPickItem extends PickaxeItem implements IHermeticTool {
 
 	@Override
 	public ToolStyle getToolStyle(ItemStack stack) {
-		return ToolStyle.PICKAXE;
+		return ToolStyle.AXE;
 	}
 }

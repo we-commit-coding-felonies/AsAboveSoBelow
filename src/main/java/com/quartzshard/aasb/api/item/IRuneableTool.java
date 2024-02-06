@@ -30,7 +30,6 @@ public interface IRuneableTool extends IRuneable {
 				rune = getMinorRune(stack);
 				break;
 			case ITEMFUNC_1:
-			case ITEMFUNC_2:
 				rune = getMajorRune(stack);
 				break;
 				

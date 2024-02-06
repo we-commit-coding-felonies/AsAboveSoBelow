@@ -24,6 +24,8 @@
     "minecraft:large_fern",
     "minecraft:grass",
     "minecraft:tall_grass",
-    "#minecraft:flowers"
+    "#minecraft:flowers",
+    "minecraft:pumpkin",
+    "minecraft:melon"
   ]
 }

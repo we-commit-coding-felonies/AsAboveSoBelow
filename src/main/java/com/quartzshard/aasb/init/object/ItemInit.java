@@ -88,8 +88,8 @@ public class ItemInit {
 		OMNITOOL = reg("internal_omnitool", () -> new OmnitoolItem(Float.MAX_VALUE, Float.MAX_VALUE, Tiers.NETHERITE, BlockTags.MINEABLE_WITH_PICKAXE, PROPS_GENERIC_1), Tab.NONE),
 		SWORD = unstack("hermetic_blade", Tab.SYN),
 		PICK = reg("hermetic_hammer", () -> new HermeticPickItem(1, -2.6f, PROPS_GENERIC_1), Tab.SYN),
-		SHOVEL = unstack("hermetic_spade", Tab.SYN),
-		AXE = unstack("hermetic_hatchet", Tab.SYN),
+		SHOVEL = reg("hermetic_spade", () -> new HermeticShovelItem(2, -2.8f, PROPS_GENERIC_1), Tab.SYN),
+		AXE = reg("hermetic_hatchet", () -> new HermeticAxeItem(5, -2.8f, PROPS_GENERIC_1), Tab.SYN),
 		HOE = unstack("hermetic_scythe", Tab.SYN),
 		
 		// Trinkets
