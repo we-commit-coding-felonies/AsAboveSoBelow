@@ -13,8 +13,13 @@ import com.quartzshard.aasb.api.alchemy.rune.shape.EarthRune;
 import com.quartzshard.aasb.api.alchemy.rune.shape.EarthRune.KillMode;
 import com.quartzshard.aasb.api.alchemy.rune.shape.WaterRune;
 import com.quartzshard.aasb.api.item.IHermeticTool;
+import com.quartzshard.aasb.client.Keybinds;
+import com.quartzshard.aasb.data.LangData;
+import com.quartzshard.aasb.init.AlchInit;
+import com.quartzshard.aasb.util.ClientUtil;
 import com.quartzshard.aasb.util.PlayerUtil;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -38,32 +43,34 @@ public class HermeticSwordItem extends SwordItem implements IHermeticTool {
 	}
 	
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tips, TooltipFlag flags) {/*
+	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tips, TooltipFlag flags) {
 		super.appendHoverText(stack, level, tips, flags);
 		
-		int runesVal = getRunesVal(stack);
-		if (validateRunes(runesVal) && runesVal > 0) {
+		int runesVal = IHermeticTool.getRunesVal(stack);
+		if (IHermeticTool.validateRunesVal(runesVal) && runesVal > 0) {
 			appendRuneText(stack, level, tips, flags);
 			if (ClientUtil.shiftHeld()) {
 				if (runesVal > 1) {
-					if (hasRune(runesVal, ShapeRune.WATER)) {
-						tips.add(AASBLang.NL);
-						tips.add(AASBLang.tc(AASBLang.TIP_HERM_PICKAXE_FLAVOR).copy().withStyle(ChatFormatting.UNDERLINE));
-						tips.add(AASBLang.tc(AASBLang.TIP_HERM_PICKAXE_DESC, AASBKeys.Bind.ITEMFUNC_1.fLoc()));
-					} else if (hasRune(runesVal, ShapeRune.FIRE)) {
-						appendEnchText(stack, level, tips, flags);
+					boolean tryEarth = false;
+					if (hasRune(stack, AlchInit.RUNE_WATER.get())) {
+						tips.add(LangData.NL);
+						tips.add(LangData.tc(LangData.TIP_SWORD_FLAVOR).copy().withStyle(ChatFormatting.UNDERLINE));
+						tips.add(LangData.tc(LangData.TIP_SWORD_DESC, Keybinds.Bind.ITEMFUNC_1.fLoc()));
+						tryEarth = true;
+					} else if (hasRune(stack, AlchInit.RUNE_FIRE.get())) {
+						appendEnchText(stack, level, tips, flags, runesAreStrong(stack));
 					}
 					
-					if (hasRune(runesVal, ShapeRune.EARTH)) {
-						appendDigStabilizerText(stack, level, tips, flags);
+					if (tryEarth && hasRune(stack, AlchInit.RUNE_EARTH.get())) {
+						tips.add(LangData.tc(LangData.TIP_SWORD_MODE_DESC, getKillMode(stack).fLoc(), Keybinds.Bind.ITEMMODE.fLoc()));
 					}
 				}
 				appendEmpowerText(stack, level, tips, flags);
 			} else {
 				LangData.appendMoreInfoText(stack, level, tips, flags);
 			}
-			//tips.add(AASBLang.NL);
-		}*/
+			tips.add(LangData.NL);
+		}
 	}
 	
 	@Override
@@ -103,16 +110,21 @@ public class HermeticSwordItem extends SwordItem implements IHermeticTool {
 						InteractionHand.MAIN_HAND;
 				long toConsume = strong ? 15 : 10;
 				boolean held = selected || hand == InteractionHand.OFF_HAND;
-				System.out.println(getStoredWay(stack));
 				if (held && getStoredWay(stack) >= toConsume) {
-					float power = WaterRune.getSlashingPower(stack);
-					int mod = strong ? 6 : 5;
-					float potency = (int) (mod * power);
-					mod++;
-					float range = mod+power*mod*(strong ? 4 : 2);
-					boolean didDo = WaterRune.tickAutoSlash(potency,
-							AABB.ofSize(plr.getBoundingBox().getCenter(), range, range, range), (ServerLevel)level, plr,
-							getKillMode(stack).test().and(ent -> WaterRune.isValidAutoslashTarget(ent, plr)));
+					float range = strong ? 35 : 18;
+					range *= WaterRune.getSlashingPower(stack);
+					boolean didDo = WaterRune.tickAutoSlash(plr, (ServerLevel)level,
+							AABB.ofSize(plr.getBoundingBox().getCenter(), range, range, range),
+							getKillMode(stack).test().and(ent -> WaterRune.isValidAutoslashTarget(ent, plr)),
+							strong);
+					//float power = WaterRune.getSlashingPower(stack);
+					//int mod = strong ? 6 : 5;
+					//float potency = (int) (mod * power);
+					//mod++;
+					//float range = mod+power*mod*(strong ? 4 : 2);
+					//boolean didDo = WaterRune.tickAutoSlash(potency,
+					//		AABB.ofSize(plr.getBoundingBox().getCenter(), range, range, range), (ServerLevel)level, plr,
+					//		getKillMode(stack).test().and(ent -> WaterRune.isValidAutoslashTarget(ent, plr)));
 					if (didDo) {
 						if (!plr.isCreative()) {
 							setStoredWay(stack, getStoredWay(stack) - toConsume);

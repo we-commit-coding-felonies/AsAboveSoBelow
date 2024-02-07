@@ -90,7 +90,7 @@ public class ItemInit {
 		PICK = reg("hermetic_hammer", () -> new HermeticPickItem(1, -2.6f, PROPS_GENERIC_1), Tab.SYN),
 		SHOVEL = reg("hermetic_spade", () -> new HermeticShovelItem(2, -2.8f, PROPS_GENERIC_1), Tab.SYN),
 		AXE = reg("hermetic_hatchet", () -> new HermeticAxeItem(5, -2.8f, PROPS_GENERIC_1), Tab.SYN),
-		HOE = unstack("hermetic_scythe", Tab.SYN),
+		HOE = reg("hermetic_scythe", () -> new HermeticHoeItem(-4, 0.2f, PROPS_GENERIC_1), Tab.SYN),
 		
 		// Trinkets
 		GLOVE = unstack("runed_glove", Tab.SYN),

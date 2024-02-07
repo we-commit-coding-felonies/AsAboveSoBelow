@@ -1,0 +1,130 @@
+{
+  "overrides": [
+    {
+      "model": "aasb:item/equipment/tool/axe/off/0",
+      "predicate": {
+        "aasb:inscribed_runes": 0.0,
+        "aasb:way_holder_status": 0.0
+      }
+    },
+    {
+      "model": "aasb:item/equipment/tool/axe/on/0",
+      "predicate": {
+        "aasb:inscribed_runes": 0.0,
+        "aasb:way_holder_status": 1.0
+      }
+    },
+    {
+      "model": "aasb:item/equipment/tool/axe/off/1",
+      "predicate": {
+        "aasb:inscribed_runes": 1.0,
+        "aasb:way_holder_status": 0.0
+      }
+    },
+    {
+      "model": "aasb:item/equipment/tool/axe/on/1",
+      "predicate": {
+        "aasb:inscribed_runes": 1.0,
+        "aasb:way_holder_status": 1.0
+      }
+    },
+    {
+      "model": "aasb:item/equipment/tool/axe/off/2",
+      "predicate": {
+        "aasb:inscribed_runes": 2.0,
+        "aasb:way_holder_status": 0.0
+      }
+    },
+    {
+      "model": "aasb:item/equipment/tool/axe/on/2",
+      "predicate": {
+        "aasb:inscribed_runes": 2.0,
+        "aasb:way_holder_status": 1.0
+      }
+    },
+    {
+      "model": "aasb:item/equipment/tool/axe/off/3",
+      "predicate": {
+        "aasb:inscribed_runes": 3.0,
+        "aasb:way_holder_status": 0.0
+      }
+    },
+    {
+      "model": "aasb:item/equipment/tool/axe/on/3",
+      "predicate": {
+        "aasb:inscribed_runes": 3.0,
+        "aasb:way_holder_status": 1.0
+      }
+    },
+    {
+      "model": "aasb:item/equipment/tool/axe/off/4",
+      "predicate": {
+        "aasb:inscribed_runes": 4.0,
+        "aasb:way_holder_status": 0.0
+      }
+    },
+    {
+      "model": "aasb:item/equipment/tool/axe/on/4",
+      "predicate": {
+        "aasb:inscribed_runes": 4.0,
+        "aasb:way_holder_status": 1.0
+      }
+    },
+    {
+      "model": "aasb:item/equipment/tool/axe/off/6",
+      "predicate": {
+        "aasb:inscribed_runes": 6.0,
+        "aasb:way_holder_status": 0.0
+      }
+    },
+    {
+      "model": "aasb:item/equipment/tool/axe/on/6",
+      "predicate": {
+        "aasb:inscribed_runes": 6.0,
+        "aasb:way_holder_status": 1.0
+      }
+    },
+    {
+      "model": "aasb:item/equipment/tool/axe/off/8",
+      "predicate": {
+        "aasb:inscribed_runes": 8.0,
+        "aasb:way_holder_status": 0.0
+      }
+    },
+    {
+      "model": "aasb:item/equipment/tool/axe/on/8",
+      "predicate": {
+        "aasb:inscribed_runes": 8.0,
+        "aasb:way_holder_status": 1.0
+      }
+    },
+    {
+      "model": "aasb:item/equipment/tool/axe/off/9",
+      "predicate": {
+        "aasb:inscribed_runes": 9.0,
+        "aasb:way_holder_status": 0.0
+      }
+    },
+    {
+      "model": "aasb:item/equipment/tool/axe/on/9",
+      "predicate": {
+        "aasb:inscribed_runes": 9.0,
+        "aasb:way_holder_status": 1.0
+      }
+    },
+    {
+      "model": "aasb:item/equipment/tool/axe/off/12",
+      "predicate": {
+        "aasb:inscribed_runes": 12.0,
+        "aasb:way_holder_status": 0.0
+      }
+    },
+    {
+      "model": "aasb:item/equipment/tool/axe/on/12",
+      "predicate": {
+        "aasb:inscribed_runes": 12.0,
+        "aasb:way_holder_status": 1.0
+      }
+    }
+  ]
+}

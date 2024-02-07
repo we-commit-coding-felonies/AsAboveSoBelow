@@ -14,7 +14,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.TierSortingRegistry;
 
 public enum Tier implements net.minecraft.world.item.Tier {
-	HERMETIC("hermetic", 0, 13, 9, 5, 30, () -> Ingredient.EMPTY, Tiers.NETHERITE, null);
+	HERMETIC("hermetic", 0, 15, 9, 5, 30, () -> Ingredient.EMPTY, Tiers.NETHERITE, null);
 
 	private final String name;
 	private final int durability, harvest, ench;

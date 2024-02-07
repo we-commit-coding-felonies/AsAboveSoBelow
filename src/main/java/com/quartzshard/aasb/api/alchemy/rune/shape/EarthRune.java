@@ -81,17 +81,19 @@ public class EarthRune extends ShapeRune {
 	public boolean toolAbility(ItemStack stack, ToolStyle style, ServerPlayer player, ServerLevel level, BindState state, boolean strong) {
 		switch (style) {
 			case SWORD:
-				Item item = stack.getItem();
-				if (!WaterRune.isCurrentlySlashing(stack) && item instanceof IRuneable runed) {
-					byte next = (byte)((getKillModeByte(stack)+1)%4);//(byte)(cur >= 3 ? 0 : cur+1);
-					KillMode mode = KillMode.byID(next);
-					NBTUtil.setByte(stack, TK_SWORDMODE, next);
-					player.displayClientMessage(Component.translatable(
-							LangData.TIP_GENERIC_MODE,
-							LangData.tc(LangData.TIP_SWORD_MODE),
-							mode.loc()
-					), true);
-					return true;
+				if (state == BindState.PRESSED) {
+					Item item = stack.getItem();
+					if (!WaterRune.isCurrentlySlashing(stack) && item instanceof IRuneable runed) {
+						byte next = (byte)((getKillModeByte(stack)+1)%4);//(byte)(cur >= 3 ? 0 : cur+1);
+						KillMode mode = KillMode.byID(next);
+						NBTUtil.setByte(stack, TK_SWORDMODE, next);
+						player.displayClientMessage(Component.translatable(
+								LangData.TIP_GENERIC_MODE,
+								LangData.tc(LangData.TIP_SWORD_MODE),
+								mode.loc()
+						), true);
+						return true;
+					}
 				}
 				break;
 			default:

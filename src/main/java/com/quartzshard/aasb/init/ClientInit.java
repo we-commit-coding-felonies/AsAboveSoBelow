@@ -3,6 +3,7 @@ package com.quartzshard.aasb.init;
 import java.util.Random;
 
 import com.quartzshard.aasb.AASB;
+import com.quartzshard.aasb.api.item.IHermeticTool;
 import com.quartzshard.aasb.api.item.IWayHolder;
 import com.quartzshard.aasb.client.particle.CutParticle;
 import com.quartzshard.aasb.client.render.MustangRenderer;
@@ -41,7 +42,7 @@ public class ClientInit {
 	public static void init(final FMLClientSetupEvent event) {
 		event.enqueueWork(() -> {
 			ItemProperties.registerGeneric(PRED_WAY_HOLDER, ClientInit::getWayHolderStatus);
-			ItemProperties.registerGeneric(PRED_RUNES, ClientInit::getInscribedRunes);
+			ItemProperties.registerGeneric(PRED_RUNES, ClientInit::getHermeticRunes);
 			ItemProperties.register(ItemInit.MINIUM_STONE.get(), PRED_MINIUM, ClientInit::getMiniumVariant);
 			//ItemProperties.register(ObjectInit.Items.FLASK_LEAD.get(), FLASK_STATUS, ClientInit::getFlaskStatus);
 			//ItemProperties.register(ObjectInit.Items.FLASK_GOLD.get(), FLASK_STATUS, ClientInit::getFlaskStatus);
@@ -88,10 +89,11 @@ public class ClientInit {
 		}
 		return -1;
 	}
-	private static float getInscribedRunes(ItemStack stack, ClientLevel level, LivingEntity entity, int seed) {
-		//if (stack.getItem() instanceof IHermeticTool item) {
-		//	return item.getRunesVal(stack);
-		//}
+	private static float getHermeticRunes(ItemStack stack, ClientLevel level, LivingEntity entity, int seed) {
+		// TODO make this work generically for any IRuneable
+		if (stack.getItem() instanceof IHermeticTool) {
+			return IHermeticTool.getRunesVal(stack);
+		}
 		return 0;
 	}
 	private static float getFlaskStatus(ItemStack stack, ClientLevel level, LivingEntity entity, int seed) {

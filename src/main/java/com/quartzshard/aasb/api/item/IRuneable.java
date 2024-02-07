@@ -90,6 +90,16 @@ public interface IRuneable extends IHandleKeybind {
 		return runes.get(slot);
 	}
 	
+	default boolean hasRune(ItemStack stack, Rune rune) {
+		List<Rune> runes = getInscribedRunes(stack);
+		for (Rune found : runes) {
+			if (found == rune) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	default boolean canInscribeRune(Rune rune, ItemStack stack, int slot) {
 		if (slot+1 <= getMaxRunes(stack)) {
 			Rune currentRune = getRune(stack, slot);
@@ -101,6 +111,7 @@ public interface IRuneable extends IHandleKeybind {
 	}
 	
 	default void inscribeRune(Rune rune, ItemStack stack, int slot) {
+		// FIXME doesnt work
 		if (canInscribeRune(rune, stack, slot)) {
 			ListTag tags = NBTUtil.getList(stack, TK_RUNES, 8, false);
 			if (tags.isEmpty()) {

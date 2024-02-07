@@ -230,7 +230,39 @@ public class WaterRune extends ShapeRune {
 		return false;
 	}
 	
-	public static boolean tickAutoSlash(float power, AABB area, ServerLevel level, ServerPlayer culprit, Predicate<LivingEntity> validator) {
+	public static boolean tickAutoSlash(ServerPlayer culprit, ServerLevel level, AABB area, Predicate<LivingEntity> validator, boolean strong) {
+		List<LivingEntity> validTargets = level.getEntitiesOfClass(LivingEntity.class, area, validator);
+		Map<Entity,Integer> hit = new HashMap<>();
+		if (!validTargets.isEmpty()) {
+			int numHits = strong ? validTargets.size() : 6;
+			for (int i = 0; i < numHits; i++) {
+				int victimIdx = strong ? i : AASB.RNG.nextInt(validTargets.size());
+				LivingEntity victim = validTargets.get(victimIdx);
+				float damage = strong ? 6 : 3;
+				victim.hurt(EntityInit.dmg(EntityInit.DMG_AUTOSLASH, level, culprit), damage);
+				if (hit.containsKey(victim)) {
+					hit.put(victim, hit.get(victim)+1);
+				} else hit.put(victim, 1);
+			}
+			double rot1 = -Mth.sin(culprit.getYRot() * ((float)Math.PI / 180f));
+			double rot2 = Mth.cos(culprit.getYRot() * ((float)Math.PI / 180f));
+			Random rand = AASB.RNG;
+			double maxNudge = 0.35;
+			Vec3 offset = new Vec3(rand.nextDouble(-maxNudge, maxNudge),rand.nextDouble(-maxNudge, maxNudge),rand.nextDouble(-maxNudge, maxNudge));
+			level.sendParticles(ParticleTypes.SWEEP_ATTACK, culprit.getX()+rot1+offset.x, culprit.getY(0.5)+offset.y, culprit.getZ()+rot2+offset.z, 1, 0, 0, 0, 0);
+			for (Entry<Entity,Integer> hitEnt : hit.entrySet()) {
+				// this kinda sucks and i should find a better way to do it
+				AABB box = BoxUtil.growToCube(hitEnt.getKey().getBoundingBox());
+				NetInit.toNearbyClients(new CutParticlePacket(hitEnt.getValue(), box), level, culprit.position(), 128);
+				level.playSound(null, hitEnt.getKey().blockPosition(), SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.PLAYERS, 1f, 0.1f);
+			}
+			level.playSound(null, culprit.blockPosition(), FxInit.SND_WAY_SLASH.get(), SoundSource.PLAYERS, 0.7f, 1.5f);
+			return true;
+		}
+		return false;
+	}
+	
+	public static boolean tickAutoSlashOld(float power, AABB area, ServerLevel level, ServerPlayer culprit, Predicate<LivingEntity> validator) {
 		List<LivingEntity> validTargets = level.getEntitiesOfClass(LivingEntity.class, area, validator);
 		Map<Entity,Integer> hit = new HashMap<>();
 		if (!validTargets.isEmpty()) {
@@ -446,9 +478,12 @@ public class WaterRune extends ShapeRune {
 		} else {
 			// cull plants
 			List<ItemStack> drops = new ArrayList<>();
+			if (strong) area = area.deflate(0, 3, 0);
+			System.out.println(area.minX +", "+ area.minY +", "+ area.minZ);
+			System.out.println(area.maxX +", "+ area.maxY +", "+ area.maxZ);
 			for (BlockPos pos : BoxUtil.allBlocksInBox(area)) {
 				BlockState state = level.getBlockState(pos);
-				if (state.is(BlockTP.HYPERSICKLE_CULLS)) {
+				if (!state.isAir() && state.is(BlockTP.HYPERSICKLE_CULLS)) {
 					//Ensure we are immutable so that changing blocks doesn't act weird
 					pos = pos.immutable();
 					if (!level.isClientSide && PlayerUtil.hasBreakPermission((ServerPlayer) player, pos)) {
@@ -533,7 +568,7 @@ public class WaterRune extends ShapeRune {
 		return true;
 	}
 	
-	private static Component opLang(byte mode) {
+	public static Component opLang(byte mode) {
 		switch (mode) {
 		default:
 		case 0:
@@ -545,7 +580,7 @@ public class WaterRune extends ShapeRune {
 		}
 	}
 	
-	private static Component opLangLong(byte mode) {
+	public static Component opLangLong(byte mode) {
 		switch (mode) {
 		default:
 		case 0:

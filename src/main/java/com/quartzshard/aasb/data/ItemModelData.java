@@ -3,6 +3,7 @@ package com.quartzshard.aasb.data;
 import org.jetbrains.annotations.NotNull;
 
 import com.quartzshard.aasb.AASB;
+import com.quartzshard.aasb.api.item.IHermeticTool;
 import com.quartzshard.aasb.api.item.IWayHolder;
 import com.quartzshard.aasb.common.item.MiniumStoneItem;
 import com.quartzshard.aasb.init.ClientInit;
@@ -57,11 +58,11 @@ public class ItemModelData extends ItemModelProvider {
 		basic(ItemInit.PHILOSOPHERS_STONE);
 
 		tool(ItemInit.OMNITOOL, "item/equipment/tool/devtool");
-		//hermTool(ItemInit.SWORD, "item/equipment/tool/herm/sword/");
-		//hermTool(ItemInit.PICK, "item/equipment/tool/herm/pickaxe/");
-		//hermTool(ItemInit.SHOVEL, "item/equipment/tool/herm/shovel/");
-		//hermTool(ItemInit.AXE, "item/equipment/tool/herm/axe/");
-		//hermTool(ItemInit.HOE, "item/equipment/tool/herm/hoe/");
+		hermTool(ItemInit.SWORD, "item/equipment/tool/sword/");
+		hermTool(ItemInit.PICK, "item/equipment/tool/pickaxe/");
+		hermTool(ItemInit.SHOVEL, "item/equipment/tool/shovel/");
+		hermTool(ItemInit.AXE, "item/equipment/tool/axe/");
+		hermTool(ItemInit.HOE, "item/equipment/tool/hoe/");
 
 		//tool(ItemInit.GLOVE);
 		//tool(ItemInit.BRACELET);
@@ -217,32 +218,29 @@ public class ItemModelData extends ItemModelProvider {
 		withExistingParent(ro.getId().getPath(), tex);
 	}
 	
-	/*protected ItemModelBuilder hermTool(RegistryObject<? extends Item> reg, String folder) {
-		tool(reg);
-		return null;
-		/*
+	protected ItemModelBuilder hermTool(RegistryObject<? extends Item> reg, String folder) {
 		ItemModelBuilder builder = getBuilder(reg.getId().getPath());
 		if (!(reg.get() instanceof IHermeticTool item)) throw new IllegalArgumentException(reg + " is not a hermetic tool");
 		for (int i = 0; i < 13; i++) {
-			if (!item.validateRunes(i)) continue;
+			if (!IHermeticTool.validateRunesVal(i)) continue;
 			String name = folder+"off/"+i;
 			builder.override()
-			.predicate(ClientInit.SHAPE_RUNE, i)
-			.predicate(ClientInit.EMPOWER_CHARGE, 0)
+			.predicate(ClientInit.PRED_RUNES, i)
+			.predicate(ClientInit.PRED_WAY_HOLDER, 0)
 			.model(withExistingParent(name, "item/handheld")
 					.texture("layer0", modLoc(name)))
 			.end();
 			
 			name = folder+"on/"+i;
 			builder.override()
-			.predicate(ClientInit.SHAPE_RUNE, i)
-			.predicate(ClientInit.EMPOWER_CHARGE, 1)
+			.predicate(ClientInit.PRED_RUNES, i)
+			.predicate(ClientInit.PRED_WAY_HOLDER, 1)
 			.model(withExistingParent(name, "item/handheld")
 					.texture("layer0", modLoc(name)))
 			.end();
 		}
 		return builder;
-	}*/
+	}
 
 
 	@Override

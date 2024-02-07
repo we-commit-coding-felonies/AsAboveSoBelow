@@ -10,6 +10,12 @@ import com.quartzshard.aasb.api.alchemy.rune.Rune;
 import com.quartzshard.aasb.api.alchemy.rune.ToolRune;
 import com.quartzshard.aasb.api.alchemy.rune.ToolRune.ToolStyle;
 import com.quartzshard.aasb.api.item.IHermeticTool;
+import com.quartzshard.aasb.client.Keybinds;
+import com.quartzshard.aasb.data.LangData;
+import com.quartzshard.aasb.init.AlchInit;
+import com.quartzshard.aasb.util.ClientUtil;
+
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -29,32 +35,32 @@ public class HermeticAxeItem extends AxeItem implements IHermeticTool {
 
 	
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tips, TooltipFlag flags) {/*
+	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tips, TooltipFlag flags) {
 		super.appendHoverText(stack, level, tips, flags);
 		
-		int runesVal = getRunesVal(stack);
-		if (validateRunes(runesVal) && runesVal > 0) {
+		int runesVal = IHermeticTool.getRunesVal(stack);
+		if (IHermeticTool.validateRunesVal(runesVal) && runesVal > 0) {
 			appendRuneText(stack, level, tips, flags);
 			if (ClientUtil.shiftHeld()) {
 				if (runesVal > 1) {
-					if (hasRune(runesVal, ShapeRune.WATER)) {
-						tips.add(AASBLang.NL);
-						tips.add(AASBLang.tc(AASBLang.TIP_HERM_PICKAXE_FLAVOR).copy().withStyle(ChatFormatting.UNDERLINE));
-						tips.add(AASBLang.tc(AASBLang.TIP_HERM_PICKAXE_DESC, AASBKeys.Bind.ITEMFUNC_1.fLoc()));
-					} else if (hasRune(runesVal, ShapeRune.FIRE)) {
-						appendEnchText(stack, level, tips, flags);
+					if (hasRune(stack, AlchInit.RUNE_WATER.get())) {
+						tips.add(LangData.NL);
+						tips.add(LangData.tc(LangData.TIP_AXE_FLAVOR).copy().withStyle(ChatFormatting.UNDERLINE));
+						tips.add(LangData.tc(LangData.TIP_AXE_DESC, Keybinds.Bind.ITEMFUNC_1.fLoc()));
+					} else if (hasRune(stack, AlchInit.RUNE_FIRE.get())) {
+						appendEnchText(stack, level, tips, flags, runesAreStrong(stack));
 					}
 					
-					if (hasRune(runesVal, ShapeRune.EARTH)) {
-						appendDigStabilizerText(stack, level, tips, flags);
+					if (hasRune(stack, AlchInit.RUNE_EARTH.get())) {
+						appendDigToggleText(stack, level, tips, flags);
 					}
 				}
 				appendEmpowerText(stack, level, tips, flags);
 			} else {
 				LangData.appendMoreInfoText(stack, level, tips, flags);
 			}
-			//tips.add(AASBLang.NL);
-		}*/
+			tips.add(LangData.NL);
+		}
 	}
 	
 	@Override
