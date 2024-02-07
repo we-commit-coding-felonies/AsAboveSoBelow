@@ -129,9 +129,8 @@ public class OmnitoolItem extends DiggerItem implements IDigStabilizer, IHandleK
 			return ctx.state() == BindState.PRESSED
 			&& AlchInit.RUNE_FIRE.get().combatAbility(ctx.stack(), ctx.player(), ctx.level(), BindState.PRESSED, true);
 		case ITEMFUNC_2:
-			System.out.println(WayUtil.getAvaliableWay(plr));
-			return ctx.state() == BindState.PRESSED;
-			//&& TrinketRunes.ETHEREAL.get().combatAbility(ctx.stack(), ctx.player(), ctx.level(), BindState.PRESSED, true);
+			return ctx.state() == BindState.PRESSED
+			&& AlchInit.RUNE_ETHEREAL.get().combatAbility(ctx.stack(), ctx.player(), ctx.level(), BindState.PRESSED, true);
 		case EMPOWER:
 			return ctx.state() == BindState.PRESSED
 			&& toggleInstamine(ctx.stack());

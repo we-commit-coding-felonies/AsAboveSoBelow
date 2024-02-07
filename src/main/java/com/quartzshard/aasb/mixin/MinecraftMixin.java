@@ -5,6 +5,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import com.quartzshard.aasb.common.item.equipment.armor.jewellery.CircletItem;
 import com.quartzshard.aasb.data.tags.EntityTP;
 import com.quartzshard.aasb.util.ClientUtil;
 
@@ -34,9 +35,9 @@ public abstract class MinecraftMixin {
 				if (!entity.getType().is(EntityTP.CLAIRVOYANCE_LIST) // TODO: configurable switch between black/whitelist
 					&& !entity.is(player)
 					&& entity instanceof LivingEntity ent
-					//&& CircletItem.canBeXrayd(ent)
-					//&& stack.getItem() instanceof CircletItem helm
-					//&& helm.sightEnabled(stack)
+					&& CircletItem.canBeXrayd(ent)
+					&& stack.getItem() instanceof CircletItem helm
+					&& helm.sightEnabled(stack)
 					) {
 					cir.setReturnValue(true);
 				}

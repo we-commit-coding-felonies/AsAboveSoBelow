@@ -26,16 +26,16 @@ public class WayGrenadeEntity extends ThrowableItemProjectile {
 	}
 
 	public WayGrenadeEntity(Level level, LivingEntity shooter) {
-		super(EntityInit.WAY_GRENADE.get(), shooter, level);
+		super(EntityInit.ENT_WAY_GRENADE.get(), shooter, level);
 	}
 	
 	public WayGrenadeEntity(Level level, LivingEntity shooter, ItemStack stack) {
-		super(EntityInit.WAY_GRENADE.get(), shooter, level);
+		super(EntityInit.ENT_WAY_GRENADE.get(), shooter, level);
 		this.setItem(stack);
 	}
 
 	public WayGrenadeEntity(Level level, double x, double y, double z) {
-		super(EntityInit.WAY_GRENADE.get(), x, y, z, level);
+		super(EntityInit.ENT_WAY_GRENADE.get(), x, y, z, level);
 	}
 
 	@Override

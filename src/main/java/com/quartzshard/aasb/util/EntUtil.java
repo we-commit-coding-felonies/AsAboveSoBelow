@@ -7,6 +7,9 @@ import java.util.UUID;
 
 import org.jetbrains.annotations.Nullable;
 
+import com.quartzshard.aasb.common.entity.projectile.SentientArrowEntity;
+import com.quartzshard.aasb.common.entity.projectile.SmartArrowEntity;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
@@ -87,7 +90,7 @@ public class EntUtil {
 						Logger.warn("EntUtil.Projectiles.ArrowType.make()", "UnsupportedNullShooter", "Attempted to create arrow of type "+this.name()+" with a null shooter, but that type does not support it. Falling back on a normal arrow.");
 						arrow = new Arrow(ctx.level, ctx.pos.x, ctx.pos.y, ctx.pos.z);
 						arrow.setBaseDamage(opts.damage);
-					} else arrow = new Arrow(ctx.level, ctx.pos.x, ctx.pos.y, ctx.pos.z);//new SmartArrow(ctx.level, ctx.shooter, opts.damage, 20, (byte) 2);
+					} else arrow = new SmartArrowEntity(ctx.level, ctx.shooter, opts.damage, 20, (byte) 2);
 					arrow.setNoGravity(true);
 					break;
 				case SMART:
@@ -95,7 +98,7 @@ public class EntUtil {
 						Logger.warn("ProjectileHelper.ArrowType.make()", "UnsupportedNullShooter", "Attempted to create arrow of type "+this.name()+" with a null shooter, but that type does not support it. Falling back on a normal arrow.");
 						arrow = new Arrow(ctx.level, ctx.pos.x, ctx.pos.y, ctx.pos.z);
 						arrow.setBaseDamage(opts.damage);
-					} else arrow = new Arrow(ctx.level, ctx.pos.x, ctx.pos.y, ctx.pos.z);//new SmartArrow(ctx.level, ctx.shooter, opts.damage);
+					} else arrow = new SmartArrowEntity(ctx.level, ctx.shooter, opts.damage);
 					break;
 				case HOMING:
 					if (true || ctx.shooter == null) {
@@ -107,8 +110,8 @@ public class EntUtil {
 					break;
 				case SENTIENT:
 					arrow = ctx.shooter == null ?
-							new Arrow(ctx.level, ctx.pos.x, ctx.pos.y, ctx.pos.z)://SentientArrow(ctx.level, ctx.pos.x, ctx.pos.y, ctx.pos.z) :
-							new Arrow(ctx.level, ctx.pos.x, ctx.pos.y, ctx.pos.z);//SentientArrow(ctx.level, ctx.shooter);
+							new SentientArrowEntity(ctx.level, ctx.pos.x, ctx.pos.y, ctx.pos.z) :
+							new SentientArrowEntity(ctx.level, ctx.shooter);
 					arrow.setGlowingTag(true);
 					arrow.setBaseDamage(opts.damage);
 					break;

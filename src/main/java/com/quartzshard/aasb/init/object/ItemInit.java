@@ -7,6 +7,7 @@ import java.util.function.Supplier;
 import com.quartzshard.aasb.AASB;
 import com.quartzshard.aasb.common.item.*;
 import com.quartzshard.aasb.common.item.equipment.*;
+import com.quartzshard.aasb.common.item.equipment.armor.jewellery.*;
 import com.quartzshard.aasb.common.item.equipment.tool.*;
 
 import net.minecraft.tags.BlockTags;
@@ -102,10 +103,10 @@ public class ItemInit {
 		CHESTPLATE = unstack("hermetic_cuirass", Tab.SYN),
 		LEGGINGS = unstack("hermetic_greaves", Tab.SYN),
 		BOOTS = unstack("hermetic_sabatons", Tab.SYN),
-		CIRCLET = unstack("circlet_of_the_seer", Tab.BOTH),
-		AMULET = unstack("amulet_of_the_philosopher", Tab.BOTH),
-		POCKETWATCH = unstack("watch_of_the_astrologer", Tab.BOTH),
-		ANKLET = unstack("anklet_of_the_prophet", Tab.BOTH),
+		CIRCLET = reg("circlet_of_the_seer", () -> new CircletItem(PROPS_GENERIC_1), Tab.BOTH),
+		AMULET = reg("amulet_of_the_philosopher", () -> new AmuletItem(PROPS_GENERIC_1), Tab.BOTH),
+		POCKETWATCH = reg("watch_of_the_astrologer", () -> new PocketwatchItem(PROPS_GENERIC_1), Tab.BOTH),
+		ANKLET = reg("anklet_of_the_prophet", () -> new AnkletItem(PROPS_GENERIC_1), Tab.BOTH),
 		
 		// Crafting items
 		C_GLOVE = unstack("ornate_glove", Tab.SYN),

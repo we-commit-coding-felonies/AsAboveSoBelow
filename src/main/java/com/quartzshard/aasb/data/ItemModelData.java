@@ -72,10 +72,10 @@ public class ItemModelData extends ItemModelProvider {
 		//armor(ItemInit.CHESTPLATE, "item/equipment/armor/herm/");
 		//armor(ItemInit.LEGGINGS, "item/equipment/armor/herm/");
 		//armor(ItemInit.BOOTS, "item/equipment/armor/herm/");
-		//armor(ItemInit.CIRCLET, "item/equipment/armor/jewelry/");
-		//armor(ItemInit.AMULET, "item/equipment/armor/jewelry/");
-		//armor(ItemInit.TIMEPIECE, "item/equipment/armor/jewelry/");
-		//armor(ItemInit.ANKLET, "item/equipment/armor/jewelry/");
+		armor(ItemInit.CIRCLET, "item/equipment/armor/jewellery/");
+		armor(ItemInit.AMULET, "item/equipment/armor/jewellery/");
+		armor(ItemInit.POCKETWATCH, "item/equipment/armor/jewellery/");
+		armor(ItemInit.ANKLET, "item/equipment/armor/jewellery/");
 
 		placeholder(ItemInit.C_GLOVE);
 		placeholder(ItemInit.C_BRACELET);

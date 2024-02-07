@@ -11,6 +11,42 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandler;
 
 public class WayUtil {
+
+	
+	/**
+	 * checks if the player has any Way <br>
+	 * works similar to getAvaliableWay, but will return immediately upon finding any amount of EMC to speed things up a tad
+	 * @param player
+	 * @return true if player has any Way
+	 */
+	public static boolean hasEmc(Player player) {
+		if (player.isCreative()) {
+			return true;
+		}
+		
+		// Curios
+		/*
+		IItemHandler curios = PlayerHelper.getCurios(player);
+		if (curios != null) {
+			for (int i = 0; i < curios.getSlots(); i++) {
+				ItemStack stack = curios.getStackInSlot(i);
+				if (stack.isEmpty()) continue;
+				if (getAvaliableEmcOfStack(stack) > 0) return true;
+			}
+		}*/
+
+		// Inventory
+		Optional<IItemHandler> itemHandlerCap = player.getCapability(ForgeCapabilities.ITEM_HANDLER).resolve();
+		if (itemHandlerCap.isPresent()) {
+			IItemHandler inv = itemHandlerCap.get();
+			for (int i = 0; i < inv.getSlots(); i++) {
+				ItemStack stack = inv.getStackInSlot(i);
+				if (stack.isEmpty()) continue;
+				if (getStackUsableWay(stack) > 0) return true;
+			}
+		}
+		return false;
+	}
 	
 	public static long getAvaliableWay(Player player) {
 		if (player.isCreative())

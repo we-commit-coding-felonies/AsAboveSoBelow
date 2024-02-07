@@ -32,13 +32,11 @@ public class NetInit {
 				.decoder(KeybindPacket::dec)
 				.consumerMainThread(KeybindPacket::handle)
 				.add();
-		/*
 		CHANNEL.messageBuilder(SlowFallPacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
 				.encoder(SlowFallPacket::enc)
 				.decoder(SlowFallPacket::dec)
-				.consumer(SlowFallPacket::handle)
+				.consumerMainThread(SlowFallPacket::handle)
 				.add();
-		*/
 		// server -> client
 		CHANNEL.messageBuilder(PresetParticlePacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
 				.encoder(PresetParticlePacket::enc)
@@ -50,22 +48,22 @@ public class NetInit {
 				.decoder(CutParticlePacket::dec)
 				.consumerMainThread(CutParticlePacket::handle)
 				.add();
-		/*
-		CHANNEL.messageBuilder(CreateLoopingSoundPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
-				.encoder(CreateLoopingSoundPacket::enc)
-				.decoder(CreateLoopingSoundPacket::dec)
-				.consumer(CreateLoopingSoundPacket::handle)
+		CHANNEL.messageBuilder(DrawParticleLinePacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
+				.encoder(DrawParticleLinePacket::enc)
+				.decoder(DrawParticleLinePacket::dec)
+				.consumerMainThread(DrawParticleLinePacket::handle)
 				.add();
 		CHANNEL.messageBuilder(DrawParticleAABBPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
 				.encoder(DrawParticleAABBPacket::enc)
 				.decoder(DrawParticleAABBPacket::dec)
-				.consumer(DrawParticleAABBPacket::handle)
+				.consumerMainThread(DrawParticleAABBPacket::handle)
 				.add();
-		CHANNEL.messageBuilder(DrawParticleLinePacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
-				.encoder(DrawParticleLinePacket::enc)
-				.decoder(DrawParticleLinePacket::dec)
-				.consumer(DrawParticleLinePacket::handle)
+		CHANNEL.messageBuilder(CreateLoopingSoundPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
+				.encoder(CreateLoopingSoundPacket::enc)
+				.decoder(CreateLoopingSoundPacket::dec)
+				.consumerMainThread(CreateLoopingSoundPacket::handle)
 				.add();
+		/*
 		CHANNEL.messageBuilder(ModifyPlayerVelocityPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
 				.encoder(ModifyPlayerVelocityPacket::enc)
 				.decoder(ModifyPlayerVelocityPacket::dec)

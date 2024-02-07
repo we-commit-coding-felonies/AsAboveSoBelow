@@ -313,7 +313,7 @@ public class WaterRune extends ShapeRune {
 		List<ItemStack> drops = new ArrayList<>();
 		ItemStack mineWith = stack.copy();
 		if (strong) {
-			mineWith.enchant(Enchantments.BLOCK_FORTUNE, 6);
+			//mineWith.enchant(Enchantments.BLOCK_FORTUNE, 6);
 		}
 		for (BlockPos pos : BoxUtil.allBlocksInBox(area)) {
 			if (level.isEmptyBlock(pos)) continue;

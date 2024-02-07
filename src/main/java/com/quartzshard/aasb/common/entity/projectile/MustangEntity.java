@@ -64,7 +64,7 @@ public class MustangEntity extends Projectile {
 		super(type, level);
 	}
 	private MustangEntity(Level level, double x, double y, double z, Vec3 vel) {
-		super(EntityInit.MUSTANG.get(), level);
+		super(EntityInit.ENT_MUSTANG.get(), level);
 		if (level.getFluidState(new BlockPos((int)x,(int)y,(int)z)).is(FluidTags.WATER))
 			entityData.set(WATER, true);
 		setPos(x,y,z);

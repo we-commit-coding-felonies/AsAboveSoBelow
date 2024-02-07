@@ -6,7 +6,9 @@ import com.quartzshard.aasb.AASB;
 import com.quartzshard.aasb.api.item.IHermeticTool;
 import com.quartzshard.aasb.api.item.IWayHolder;
 import com.quartzshard.aasb.client.particle.CutParticle;
+import com.quartzshard.aasb.client.render.AASBPlayerLayer;
 import com.quartzshard.aasb.client.render.MustangRenderer;
+import com.quartzshard.aasb.client.render.SentientArrowRenderer;
 import com.quartzshard.aasb.common.item.MiniumStoneItem;
 import com.quartzshard.aasb.common.item.equipment.WaystoneItem;
 import com.quartzshard.aasb.init.object.EntityInit;
@@ -18,6 +20,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
+import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
@@ -63,11 +66,21 @@ public class ClientInit {
 
 	@SubscribeEvent
 	public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
-		event.registerEntityRenderer(EntityInit.WAY_GRENADE.get(), ThrownItemRenderer::new);
-		//event.registerEntityRenderer(ObjectInit.Entities.SENTIENT_ARROW.get(), ctx -> new SentientArrowRenderer(ctx));
+		event.registerEntityRenderer(EntityInit.ENT_WAY_GRENADE.get(), ThrownItemRenderer::new);
+		event.registerEntityRenderer(EntityInit.ENT_SENTIENT_ARROW.get(), ctx -> new SentientArrowRenderer(ctx));
 		//event.registerEntityRenderer(ObjectInit.Entities.HORROR.get(), ctx -> new HorrorRenderer(ctx));
-		event.registerEntityRenderer(EntityInit.MUSTANG.get(), ctx -> new MustangRenderer(ctx));
+		event.registerEntityRenderer(EntityInit.ENT_MUSTANG.get(), ctx -> new MustangRenderer(ctx));
 		//event.registerBlockEntityRenderer(ObjectInit.TileEntities.DISTILLATION_TE.get(), DistillationRetortRenderer::new);
+	}
+
+	@SubscribeEvent
+	public static void addLayers(EntityRenderersEvent.AddLayers event) {
+		for (String skinName : event.getSkins()) {
+			PlayerRenderer skin = event.getSkin(skinName);
+			if (skin != null) {
+				skin.addLayer(new AASBPlayerLayer(skin));
+			}
+		}
 	}
 	
 	private static float getWayHolderStatus(ItemStack stack, ClientLevel level, LivingEntity entity, int seed) {

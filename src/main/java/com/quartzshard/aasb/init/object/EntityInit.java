@@ -3,6 +3,7 @@ package com.quartzshard.aasb.init.object;
 import org.jetbrains.annotations.Nullable;
 
 import com.quartzshard.aasb.AASB;
+import com.quartzshard.aasb.common.entity.buff.TransmutingBuff;
 import com.quartzshard.aasb.common.entity.projectile.*;
 
 import net.minecraft.core.Registry;
@@ -14,6 +15,7 @@ import net.minecraft.world.damagesource.DamageScaling;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DeathMessageType;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -27,26 +29,46 @@ import net.minecraftforge.registries.RegistryObject;
 // Handles initialization on entities and related (such as MobEffects & Damage Types)
 public class EntityInit {
 	private static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, AASB.MODID);
+	private static final DeferredRegister<MobEffect> BUFFS = DeferredRegister.create(ForgeRegistries.MOB_EFFECTS, AASB.MODID);
 	
 	public static void init(IEventBus bus) {
 		ENTITIES.register(bus);
+		BUFFS.register(bus);
 	}
 
 	public static final RegistryObject<EntityType<WayGrenadeEntity>>
-	WAY_GRENADE = ENTITIES.register("cracked_waystone", () -> EntityType.Builder.<WayGrenadeEntity>of(WayGrenadeEntity::new, MobCategory.MISC)
+	ENT_WAY_GRENADE = ENTITIES.register("cracked_waystone", () -> EntityType.Builder.<WayGrenadeEntity>of(WayGrenadeEntity::new, MobCategory.MISC)
 			.sized(.25f, .25f)
 			.clientTrackingRange(4)
 			.updateInterval(10)
 			.build("cracked_waystone"));
 	
 	public static final RegistryObject<EntityType<MustangEntity>>
-	MUSTANG = ENTITIES.register("mustang", () -> EntityType.Builder.<MustangEntity>of(MustangEntity::new, MobCategory.MISC)
+	ENT_MUSTANG = ENTITIES.register("mustang", () -> EntityType.Builder.<MustangEntity>of(MustangEntity::new, MobCategory.MISC)
 			.sized(0.5f, 0.5f)
 			.clientTrackingRange(6)
 			.updateInterval(10)
 			.fireImmune()
-			.noSummon().noSave()
+			.noSummon().noSave() // TODO stop being lazy and save this entity to disk
 			.build("mustang"));
+	
+	public static final RegistryObject<EntityType<SmartArrowEntity>>
+	ENT_SMART_ARROW = ENTITIES.register("smart_arrow", () -> EntityType.Builder.<SmartArrowEntity>of(SmartArrowEntity::new, MobCategory.MISC)
+			.sized(0.5F, 0.5F)
+			.clientTrackingRange(4)
+			.updateInterval(20)
+			.fireImmune()
+			.noSummon().noSave() // TODO stop being lazy and save this entity to disk
+			.build("smart_arrow"));
+
+	public static final RegistryObject<EntityType<SentientArrowEntity>>
+	ENT_SENTIENT_ARROW = ENTITIES.register("sentient_arrow", () -> EntityType.Builder.<SentientArrowEntity>of(SentientArrowEntity::new, MobCategory.MISC)
+			.sized(0.5F, 0.5F)
+			.clientTrackingRange(4)
+			.updateInterval(1)
+			.fireImmune()
+			.noSummon().noSave() // TODO stop being lazy and save this entity to disk
+			.build("sentient_arrow"));
 	
 	public static final ResourceKey<DamageType>
 		// "Direct" (always have a killer)
@@ -60,6 +82,10 @@ public class EntityInit {
 		// "Environmental" (generally dont have a killer)
 		DMG_TRANSMUTE_ENV = regDmg("transmute_env"),
 		DMG_SURFACE_TENSION_ENV = regDmg("surface_tension_env");
+	
+
+	public static final RegistryObject<MobEffect>
+		BUFF_TRANSMUTING = BUFFS.register("transmuting", () -> new TransmutingBuff());
 
 	private static ResourceKey<DamageType> regDmg(String id) {
 		return ResourceKey.create(Registries.DAMAGE_TYPE, AASB.rl(id));

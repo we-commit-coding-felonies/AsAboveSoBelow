@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 import com.quartzshard.aasb.AASB;
 import com.quartzshard.aasb.api.alchemy.aspect.FormAspect;
 import com.quartzshard.aasb.api.alchemy.rune.Rune;
+import com.quartzshard.aasb.api.alchemy.rune.form.*;
 import com.quartzshard.aasb.api.alchemy.rune.shape.*;
 import com.quartzshard.aasb.util.Colors;
 
@@ -98,6 +99,12 @@ public class AlchInit {
 		RUNE_WATER = RUNES.register("water", () -> new WaterRune()),
 		RUNE_EARTH = RUNES.register("earth", () -> new EarthRune()),
 		RUNE_FIRE = RUNES.register("fire", () -> new FireRune()),
-		RUNE_AIR = RUNES.register("air", () -> new AirRune());
+		RUNE_AIR = RUNES.register("air", () -> new AirRune()),
+
+		RUNE_ARCANE = RUNES.register("arcane", () -> new ArcaneRune()),
+		RUNE_ETHEREAL = RUNES.register("ethereal", () -> new EtherealRune()),
+		RUNE_ORGANIC = RUNES.register("organic", () -> new OrganicRune()),
+		RUNE_MINERAL = RUNES.register("mineral", () -> new MineralRune()),
+		RUNE_TERRAIN = RUNES.register("terrain", () -> new TerrainRune());
 
 }

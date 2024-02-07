@@ -28,8 +28,8 @@ public class EarthRune extends ShapeRune {
 	}
 
 	/**
-	 * Normal: 2D WorldEdit <br>
-	 * Strong: 3D WorldEdit
+	 * Normal: Psi break spell <br>
+	 * Strong: Destruction catalyst
 	 */
 	@Override
 	public boolean combatAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong) {
@@ -47,7 +47,7 @@ public class EarthRune extends ShapeRune {
 
 	/**
 	 * Normal: Autofeed with Way <br>
-	 * Strong: Potion resistance (incl Transmuting!)
+	 * Strong: MekaSuit style potion resistance (incl Transmuting!)
 	 */
 	@Override
 	public boolean passiveAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong) {
