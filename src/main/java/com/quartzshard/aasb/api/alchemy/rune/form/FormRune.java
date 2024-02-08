@@ -28,6 +28,11 @@ public abstract class FormRune extends Rune {
 	public MutableComponent fLoc() {
 		return getForm().fLoc();
 	}
+	
+	@Override
+	public int color() {
+		return getForm().getColor();
+	}
 
 	
 	public FormAspect getForm() {

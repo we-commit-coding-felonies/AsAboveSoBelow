@@ -1,6 +1,13 @@
 {
-  "parent": "minecraft:item/generated",
+  "parent": "minecraft:item/handheld",
+  "overrides": [
+    {
+      "model": "aasb:item/ornate_charm",
+      "predicate": {}
+    }
+  ],
   "textures": {
-    "layer0": "aasb:placeholder"
+    "layer0": "aasb:item/ornate_charm",
+    "layer1": "aasb:item/equipment/curio/charm_rune_1"
   }
 }

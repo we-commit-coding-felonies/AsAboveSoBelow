@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "aasb:item/amulet_of_the_philosopher/holder",
+    "layer1": "aasb:item/amulet_of_the_philosopher/way"
+  }
+}

@@ -1,12 +1,13 @@
 package com.quartzshard.aasb.common.item.equipment.armor.jewellery;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 import com.quartzshard.aasb.AASB;
 import com.quartzshard.aasb.api.item.IAlchemicalBarrier;
+import com.quartzshard.aasb.api.item.IWayHolder;
 import com.quartzshard.aasb.data.tags.DmgTP;
 import com.quartzshard.aasb.init.FxInit;
+import com.quartzshard.aasb.util.Colors;
 import com.quartzshard.aasb.util.WayUtil;
 
 import net.minecraft.sounds.SoundSource;
@@ -14,6 +15,8 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DyeItem;
+import net.minecraft.world.item.DyeableLeatherItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
@@ -22,24 +25,32 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = AASB.MODID)
-public class AmuletItem extends JewelleryArmorItem implements IAlchemicalBarrier {
+public class AmuletItem extends JewelleryArmorItem implements IAlchemicalBarrier, IWayHolder, DyeableLeatherItem {
 	public AmuletItem(Properties props) {
 		super(Type.CHESTPLATE, props);
 	}
-	/** Damage sources with corresponging cost multipliers. 0.5 would mean 1/2 cost */
-	public static final Map<DamageSource, Float> DMG_SRC_MODS_ALCHSHIELD = new HashMap<>();
 	
 	@Override
 	public void onArmorTick(ItemStack stack, Level level, Player player) {
-		// TODO: COST, major cleanup
 		JewellerySetInfo set = getArmorSetInfo(stack, level, player);
 		long plrWay = set.plrWay();
-		if (plrWay > 0 && level.getGameTime() % 160 == 0) {
-			shieldHum(player, stack);
+		if (plrWay > 0) {
+			if (level.getGameTime() % 20 == 0) {
+				long need = getMaxWay(stack) - getStoredWay(stack);
+				if (need > 0) {
+					long absorbed = WayUtil.clampWay(WayUtil.consumeAvaliableWaySkipAmulet(player, need), need, player);
+					if (absorbed > 0) {
+						insertWay(stack, absorbed);
+					}
+				}
+			}
+		}
+		if (getStoredWay(stack) > 0 && level.getGameTime() % 160 == 0) {
+			tryShieldHum(player, stack);
 		}
 	}
 	
-	private void shieldHum(Player player, ItemStack stack) {
+	private void tryShieldHum(Player player, ItemStack stack) {
 		if (shieldCondition(player, 1f, player.damageSources().generic(), stack)) {
 			player.level().playSound(player, player, FxInit.SND_BARRIER_AMBIENT.get(), SoundSource.PLAYERS, 1f, 1);
 		}
@@ -53,7 +64,7 @@ public class AmuletItem extends JewelleryArmorItem implements IAlchemicalBarrier
 	/** used in both canProtectAgainstFire and shieldCondition */
 	public static boolean isBarrierActive(Player player) {
 		if (fullSet(player)) {
-	    	return WayUtil.hasEmc(player);
+	    	return WayUtil.hasWay(player);
 		}
 		return false;
 	}
@@ -64,12 +75,7 @@ public class AmuletItem extends JewelleryArmorItem implements IAlchemicalBarrier
 	 * @param source
 	 * @return
 	 */
-	public static float getCostMultiplierForSource(DamageSource source) {
-		// explicit overrides
-		if (DMG_SRC_MODS_ALCHSHIELD.containsKey(source)) {
-			return DMG_SRC_MODS_ALCHSHIELD.get(source);
-		}
-		
+	public static float getCostMultiplierForSource(DamageSource source) {		
 		// overriders, biggest goes last so it takes priority
 		float mult = 1f;
 		if (source.is(DmgTP.BYPASSES_PHYSICAL)) mult = 1.1f;
@@ -110,6 +116,31 @@ public class AmuletItem extends JewelleryArmorItem implements IAlchemicalBarrier
 				amulet.tryShield(event, stack);
 			}
 		}
+	}
+
+	@Override
+	public long getMaxWay(ItemStack stack) {
+		return 16777216; // 2^24
+	}
+	
+	@Override
+	public boolean canInsertWay(ItemStack stack) {
+		return getStoredWay(stack) < getMaxWay(stack);
+	}
+	
+	@Override
+	public boolean hasCustomColor(ItemStack stack) {
+		return true;
+	}
+	
+	@Override
+	public int getColor(ItemStack stack) {
+		return Colors.materiaGradient((float)this.getStoredWay(stack)/(float)this.getMaxWay(stack));
+	}
+	
+	@Override
+	public void setColor(ItemStack stack, int color) {
+		// nah
 	}
 
 }

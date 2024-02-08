@@ -105,6 +105,10 @@ public class AlchInit {
 		RUNE_ETHEREAL = RUNES.register("ethereal", () -> new EtherealRune()),
 		RUNE_ORGANIC = RUNES.register("organic", () -> new OrganicRune()),
 		RUNE_MINERAL = RUNES.register("mineral", () -> new MineralRune()),
-		RUNE_TERRAIN = RUNES.register("terrain", () -> new TerrainRune());
+		RUNE_TERRAIN = RUNES.register("terrain", () -> new TerrainRune()),
+
+		RUNE_MATERIA = RUNES.register("materia", () -> new MateriaRune()),
+		RUNE_QUINTESSENCE = RUNES.register("quintessence", () -> new QuintessenceRune())
+		;
 
 }

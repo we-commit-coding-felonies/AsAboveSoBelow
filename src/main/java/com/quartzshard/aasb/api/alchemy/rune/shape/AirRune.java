@@ -6,6 +6,7 @@ import com.quartzshard.aasb.net.server.KeybindPacket.BindState;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Abilities;
 import net.minecraft.world.item.ItemStack;
 
 public class AirRune extends ShapeRune {
@@ -41,8 +42,18 @@ public class AirRune extends ShapeRune {
 		return false;
 	}
 	@Override
-	public void tickPassive(ItemStack stack, ServerPlayer player, ServerLevel level, boolean strong) {
-		// TODO Auto-generated method stub
+	public void tickPassive(ItemStack stack, ServerPlayer player, ServerLevel level, boolean strong, boolean unequipped) {
+		if (strong) {
+			Abilities a = player.getAbilities();
+			if (!unequipped && !a.mayfly) {
+				player.getAbilities().mayfly = true;
+				player.onUpdateAbilities();
+			} else if (unequipped) {
+				player.getAbilities().mayfly = false;
+				player.getAbilities().flying = false;
+				player.onUpdateAbilities();
+			}
+		}
 	}
 
 	/*

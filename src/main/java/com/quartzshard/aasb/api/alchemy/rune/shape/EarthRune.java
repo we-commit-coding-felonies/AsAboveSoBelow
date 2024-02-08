@@ -54,7 +54,7 @@ public class EarthRune extends ShapeRune {
 		return false;
 	}
 	@Override
-	public void tickPassive(ItemStack stack, ServerPlayer player, ServerLevel level, boolean strong) {
+	public void tickPassive(ItemStack stack, ServerPlayer player, ServerLevel level, boolean strong, boolean unequipped) {
 		// TODO Auto-generated method stub
 	}
 	

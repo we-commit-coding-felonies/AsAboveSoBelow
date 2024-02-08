@@ -1,6 +1,13 @@
 {
-  "parent": "minecraft:item/generated",
+  "parent": "minecraft:item/handheld",
+  "overrides": [
+    {
+      "model": "aasb:item/ornate_glove",
+      "predicate": {}
+    }
+  ],
   "textures": {
-    "layer0": "aasb:placeholder"
+    "layer0": "aasb:item/ornate_glove",
+    "layer1": "aasb:item/equipment/curio/glove_rune_1"
   }
 }

@@ -8,12 +8,12 @@ import com.quartzshard.aasb.AASB;
 import com.quartzshard.aasb.common.item.*;
 import com.quartzshard.aasb.common.item.equipment.*;
 import com.quartzshard.aasb.common.item.equipment.armor.jewellery.*;
+import com.quartzshard.aasb.common.item.equipment.curio.*;
 import com.quartzshard.aasb.common.item.equipment.tool.*;
 
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Tiers;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -31,7 +31,9 @@ public class ItemInit {
 	private static final Item.Properties
 		PROPS_GENERIC_64 = new Item.Properties(),
 		PROPS_GENERIC_16 = new Item.Properties().stacksTo(16),
-		PROPS_GENERIC_1 = new Item.Properties().stacksTo(1);
+		PROPS_GENERIC_1 = new Item.Properties().stacksTo(1), // for some godforsaken reason minecraft will give dura to shit using GENERIC_1
+		PROPS_GENERIC_TOOL = new Item.Properties().stacksTo(1) // unless we split tools off onto their own properties. why??????????????????
+		;
 	
 	/** these are used for the creative tabs, and are emptied once the tabs are filled out */
 	public static List<RegistryObject<? extends Item>>
@@ -69,16 +71,16 @@ public class ItemInit {
 		
 		// Flasks
 		FLASK_EMPTY = smallstack("flask", Tab.SYN),
-		FLASK_LIQUID = unstack("flask_of_liquid", Tab.SYN),
+		FLASK_LIQUID = unstack("flask_of_liquid", Tab.NONE),
 		FLASK_LEAD_EMPTY = smallstack("lead_flask", Tab.SYN),
-		FLASK_LEAD_LIQUID = unstack("lead_flask_of_liquid", Tab.SYN),
-		FLASK_LEAD_ASPECT = unstack("lead_flask_of_aspect", Tab.SYN),
+		FLASK_LEAD_LIQUID = unstack("lead_flask_of_liquid", Tab.NONE),
+		FLASK_LEAD_ASPECT = unstack("lead_flask_of_aspect", Tab.NONE),
 		FLASK_GOLD_EMPTY = smallstack("gold_flask", Tab.SYN),
-		FLASK_GOLD_LIQUID = unstack("gold_flask_of_liquid", Tab.SYN),
-		FLASK_GOLD_ASPECT = unstack("gold_flask_of_aspect", Tab.SYN),
+		FLASK_GOLD_LIQUID = unstack("gold_flask_of_liquid", Tab.NONE),
+		FLASK_GOLD_ASPECT = unstack("gold_flask_of_aspect", Tab.NONE),
 		FLASK_AETHER_EMPTY = smallstack("aetherglass_flask", Tab.SYN),
-		FLASK_AETHER_LIQUID = unstack("aetherglass_flask_of_liquid", Tab.SYN),
-		FLASK_AETHER_ASPECT = unstack("aetherglass_flask_of_aspect", Tab.SYN),
+		FLASK_AETHER_LIQUID = unstack("aetherglass_flask_of_liquid", Tab.NONE),
+		FLASK_AETHER_ASPECT = unstack("aetherglass_flask_of_aspect", Tab.NONE),
 		
 		// Philos
 		ELIXIR_OF_LIFE = unstack("elixir_of_life", Tab.SYN),
@@ -86,36 +88,36 @@ public class ItemInit {
 		PHILOSOPHERS_STONE = unstack("philosophers_stone", Tab.NAT),
 		
 		// Tools
-		OMNITOOL = reg("internal_omnitool", () -> new OmnitoolItem(Float.MAX_VALUE, Float.MAX_VALUE, Tiers.NETHERITE, BlockTags.MINEABLE_WITH_PICKAXE, PROPS_GENERIC_1), Tab.NONE),
-		SWORD = reg("hermetic_blade", () -> new HermeticSwordItem(3, -2.2f, PROPS_GENERIC_1), Tab.SYN),
-		PICK = reg("hermetic_hammer", () -> new HermeticPickItem(1, -2.6f, PROPS_GENERIC_1), Tab.SYN),
-		SHOVEL = reg("hermetic_spade", () -> new HermeticShovelItem(2, -2.8f, PROPS_GENERIC_1), Tab.SYN),
-		AXE = reg("hermetic_hatchet", () -> new HermeticAxeItem(5, -2.8f, PROPS_GENERIC_1), Tab.SYN),
-		HOE = reg("hermetic_scythe", () -> new HermeticHoeItem(-4, 0.2f, PROPS_GENERIC_1), Tab.SYN),
+		OMNITOOL = reg("internal_omnitool", () -> new OmnitoolItem(Float.MAX_VALUE, Float.MAX_VALUE, Tier.HERMETIC, BlockTags.MINEABLE_WITH_PICKAXE, PROPS_GENERIC_TOOL), Tab.NONE),
+		SWORD = reg("hermetic_blade", () -> new HermeticSwordItem(3, -2.2f, PROPS_GENERIC_TOOL), Tab.SYN),
+		PICK = reg("hermetic_hammer", () -> new HermeticPickItem(1, -2.6f, PROPS_GENERIC_TOOL), Tab.SYN),
+		SHOVEL = reg("hermetic_spade", () -> new HermeticShovelItem(2, -2.8f, PROPS_GENERIC_TOOL), Tab.SYN),
+		AXE = reg("hermetic_hatchet", () -> new HermeticAxeItem(5, -2.8f, PROPS_GENERIC_TOOL), Tab.SYN),
+		HOE = reg("hermetic_scythe", () -> new HermeticHoeItem(-4, 0.2f, PROPS_GENERIC_TOOL), Tab.SYN),
 		
 		// Trinkets
-		GLOVE = unstack("runed_glove", Tab.SYN),
-		BRACELET = unstack("runed_bracelet", Tab.SYN),
-		CHARM = unstack("runed_charm", Tab.SYN),
+		GLOVE1 = reg("ornate_glove", () -> new GloveItem(1, PROPS_GENERIC_1), Tab.SYN),
+		BRACELET1 = reg("ornate_bracelet", () -> new BraceletItem(1, PROPS_GENERIC_1), Tab.SYN),
+		CHARM1 = reg("ornate_charm", () -> new CharmItem(1, PROPS_GENERIC_1), Tab.SYN),
+		GLOVE2 = reg("hermeticized_glove", () -> new GloveItem(2, PROPS_GENERIC_1), Tab.SYN),
+		BRACELET2 = reg("hermeticized_bracelet", () -> new BraceletItem(2, PROPS_GENERIC_1), Tab.SYN),
+		CHARM2 = reg("hermeticized_charm", () -> new CharmItem(2, PROPS_GENERIC_1), Tab.SYN),
 		
 		// Armor
 		HELMET = unstack("hermetic_armet", Tab.SYN),
 		CHESTPLATE = unstack("hermetic_cuirass", Tab.SYN),
 		LEGGINGS = unstack("hermetic_greaves", Tab.SYN),
 		BOOTS = unstack("hermetic_sabatons", Tab.SYN),
-		CIRCLET = reg("circlet_of_the_seer", () -> new CircletItem(PROPS_GENERIC_1), Tab.BOTH),
-		AMULET = reg("amulet_of_the_philosopher", () -> new AmuletItem(PROPS_GENERIC_1), Tab.BOTH),
-		POCKETWATCH = reg("watch_of_the_astrologer", () -> new PocketwatchItem(PROPS_GENERIC_1), Tab.BOTH),
-		ANKLET = reg("anklet_of_the_prophet", () -> new AnkletItem(PROPS_GENERIC_1), Tab.BOTH),
+		CIRCLET = reg("circlet_of_the_seer", () -> new CircletItem(PROPS_GENERIC_TOOL), Tab.BOTH),
+		AMULET = reg("amulet_of_the_philosopher", () -> new AmuletItem(PROPS_GENERIC_TOOL), Tab.BOTH),
+		POCKETWATCH = reg("watch_of_the_astrologer", () -> new PocketwatchItem(PROPS_GENERIC_TOOL), Tab.BOTH),
+		ANKLET = reg("anklet_of_the_prophet", () -> new AnkletItem(PROPS_GENERIC_TOOL), Tab.BOTH),
 		
 		// Crafting items
-		C_GLOVE = unstack("ornate_glove", Tab.SYN),
-		C_BRACELET = unstack("ornate_ring", Tab.SYN),
-		C_CHARM = unstack("ornate_charm", Tab.SYN),
-		C_CIRCLET = unstack("mystical_headband", Tab.NAT),
-		C_AMULET = unstack("intriguing_talisman", Tab.NAT),
-		C_POCKETWATCH = unstack("intricate_timepiece", Tab.NAT),
-		C_ANKLET = unstack("radiant_chain", Tab.NAT),
+		C_CIRCLET = unstack("ancient_verdant_rock", Tab.NAT),
+		C_AMULET = unstack("ancient_glowing_sphere", Tab.NAT),
+		C_POCKETWATCH = unstack("ancient_intricate_mechanism", Tab.NAT),
+		C_ANKLET = unstack("ancient_weightless_loop", Tab.NAT),
 		C_AMALGAM = basic("amalgam", Tab.SYN),
 		
 		// Misc
@@ -123,7 +125,15 @@ public class ItemInit {
 		WAYSTONE = reg("waystone", () -> new WaystoneItem(PROPS_GENERIC_1), Tab.SYN),
 		WAY_GRENADE = reg("cracked_waystone", () -> new WayGrenadeItem(PROPS_GENERIC_1), Tab.SYN),
 		CHALK = unstack("chalk", Tab.NAT),
-		AETHERCHALK = unstack("aetherchalk", Tab.NAT)
+		AETHERCHALK = unstack("aetherchalk", Tab.NAT),
+		
+		// Cosmetics
+		COS_GAUNTLET1 = unstack("silver_gauntlet", Tab.NAT),
+		COS_GAUNTLET2 = unstack("hermetic_gauntlet", Tab.SYN),
+		COS_BAND1 = unstack("silver_band", Tab.NAT),
+		COS_BAND2 = unstack("hermetic_band", Tab.SYN),
+		COS_TRINKET1 = unstack("silver_trinket", Tab.NAT),
+		COS_TRINKET2 = unstack("hermetic_trinket", Tab.SYN)
 		
 		;
 

@@ -1,0 +1,14 @@
+{
+  "parent": "minecraft:item/handheld",
+  "overrides": [
+    {
+      "model": "aasb:item/hermeticized_charm",
+      "predicate": {}
+    }
+  ],
+  "textures": {
+    "layer0": "aasb:item/hermeticized_charm",
+    "layer1": "aasb:item/equipment/curio/charm_rune_1",
+    "layer2": "aasb:item/equipment/curio/charm_rune_2"
+  }
+}

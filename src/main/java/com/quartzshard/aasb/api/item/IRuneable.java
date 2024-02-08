@@ -8,12 +8,15 @@ import org.jetbrains.annotations.Nullable;
 import com.quartzshard.aasb.api.alchemy.rune.Rune;
 import com.quartzshard.aasb.api.alchemy.rune.ToolRune;
 import com.quartzshard.aasb.api.item.bind.IHandleKeybind;
+import com.quartzshard.aasb.common.item.equipment.curio.AbilityCurioItem;
+import com.quartzshard.aasb.data.LangData;
 import com.quartzshard.aasb.net.server.KeybindPacket.PressContext;
 import com.quartzshard.aasb.util.NBTUtil;
 
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 
@@ -54,6 +57,14 @@ public interface IRuneable extends IHandleKeybind {
 				return false;
 		}
 	}
+
+	default void tickRunes(ItemStack stack, ServerPlayer player, ServerLevel level, boolean unequip) {
+		for (Rune rune : getInscribedRunes(stack)) {
+			if (rune != null) {
+				rune.tickPassive(stack, player, level, runesAreStrong(stack), unequip);
+			}
+		}
+	}
 	
 	/**
 	 * @param stack
@@ -61,6 +72,10 @@ public interface IRuneable extends IHandleKeybind {
 	 */
 	default int getMaxRunes(ItemStack stack) {
 		return 2;
+	}
+	
+	default boolean isInscribed(ItemStack stack) {
+		return getRune(stack, 0) != null;
 	}
 	
 	/**
@@ -139,6 +154,15 @@ public interface IRuneable extends IHandleKeybind {
 	ItemAbility getAbility(ItemStack stack);
 	
 	enum ItemAbility {
-		COMBAT, UTILITY, PASSIVE, TOOL;
+		COMBAT(LangData.ITEM_GLOVE_RUNED),
+		UTILITY(LangData.ITEM_BRACELET_RUNED),
+		PASSIVE(LangData.ITEM_CHARM_RUNED),
+		TOOL(null); // :troled:
+		
+		@Nullable
+		public final String runedLang;
+		ItemAbility(String runedLang) {
+			this.runedLang = runedLang;
+		}
 	}
 }

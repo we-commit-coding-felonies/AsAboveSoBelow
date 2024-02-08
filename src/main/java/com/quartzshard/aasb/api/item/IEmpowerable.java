@@ -12,6 +12,7 @@ import com.quartzshard.aasb.net.server.KeybindPacket.ServerBind;
 import com.quartzshard.aasb.util.Colors;
 import com.quartzshard.aasb.util.NBTUtil;
 import com.quartzshard.aasb.util.PlayerUtil;
+import com.quartzshard.aasb.util.WayUtil;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundSource;
@@ -121,10 +122,18 @@ public interface IEmpowerable extends IWayHolder, IHandleKeybind {
 	 */
 	default void tickEmpower(ItemStack stack, Entity entity) {
 		if (isEmpowering(stack) && shouldEmpower(stack)) {
-			// Charging!!! TODO extract from waystones
-			insertWay(stack, wayChargeRate(stack));
-			entity.level().playSound(null, entity, FxInit.SND_WAY_CHARGE.get(), SoundSource.PLAYERS, 0.25f, 0.48f + 0.5f * getEmpowerPercent(stack));
-			return;
+			// Charging!!!
+			if (entity instanceof Player plr) {
+				long want = wayChargeRate(stack);
+				long way = WayUtil.clampWay(WayUtil.consumeAvaliableWay(plr, want), want, plr);
+				if (way > 0) {
+					insertWay(stack, way);
+					plr.level().playSound(null, entity, FxInit.SND_WAY_CHARGE.get(), SoundSource.PLAYERS, 0.25f, 0.48f + 0.5f * getEmpowerPercent(stack));
+					return;
+				}
+			}
+			// Not player, or no Way
+			setEmpowering(stack, false);
 		} else if (!shouldEmpower(stack)) {
 			setEmpowering(stack, false);
 		}

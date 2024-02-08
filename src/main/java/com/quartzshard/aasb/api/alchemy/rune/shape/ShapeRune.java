@@ -24,4 +24,9 @@ public abstract class ShapeRune extends ToolRune {
 	public ShapeAspect getShape() {
 		return shape;
 	}
+	
+	@Override
+	public int color() {
+		return shape.color;
+	}
 }

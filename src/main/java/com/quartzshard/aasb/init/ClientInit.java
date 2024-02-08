@@ -3,7 +3,9 @@ package com.quartzshard.aasb.init;
 import java.util.Random;
 
 import com.quartzshard.aasb.AASB;
+import com.quartzshard.aasb.api.alchemy.rune.Rune;
 import com.quartzshard.aasb.api.item.IHermeticTool;
+import com.quartzshard.aasb.api.item.IRuneable;
 import com.quartzshard.aasb.api.item.IWayHolder;
 import com.quartzshard.aasb.client.particle.CutParticle;
 import com.quartzshard.aasb.client.render.AASBPlayerLayer;
@@ -55,8 +57,18 @@ public class ClientInit {
 	
 	@SubscribeEvent
 	public static void addTints(final RegisterColorHandlersEvent.Item event) {
-		event.register(ClientInit::getWayHolderColor, ItemInit.WAYSTONE.get());
+		event.register(ClientInit::getWayHolderColor,
+				ItemInit.WAYSTONE.get(),
+				ItemInit.AMULET.get());
 		event.register(ClientInit::getWayUnstableColor, ItemInit.WAY_GRENADE.get());
+		event.register(ClientInit::getRuneColor,
+				ItemInit.GLOVE1.get(),
+				ItemInit.BRACELET1.get(),
+				ItemInit.CHARM1.get(),
+				ItemInit.GLOVE2.get(),
+				ItemInit.BRACELET2.get(),
+				ItemInit.CHARM2.get()
+		);
 	}
 	
 	@SubscribeEvent
@@ -108,6 +120,15 @@ public class ClientInit {
 			return IHermeticTool.getRunesVal(stack);
 		}
 		return 0;
+	}
+	private static int getRuneColor(ItemStack stack, int layer) {
+		if (layer != 0 && stack.getItem() instanceof IRuneable item) {
+			Rune rune = item.getInscribedRunes(stack).get(layer-1);
+			if (rune != null) {
+				return rune.color();
+			}
+		}
+		return -1;
 	}
 	private static float getFlaskStatus(ItemStack stack, ClientLevel level, LivingEntity entity, int seed) {
 		//if (stack.getItem() instanceof FlaskItem flask) {

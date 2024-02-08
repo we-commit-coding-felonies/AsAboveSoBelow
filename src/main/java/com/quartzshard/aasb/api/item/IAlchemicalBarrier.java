@@ -61,7 +61,7 @@ public interface IAlchemicalBarrier {
 
 	/**
 	 * Handles sounds and Way consumption, as well as running many of the other functions.
-	 * Override this if you need to change sounds or how EMC is consumed (for example, taking from the tablet instead of inventory)
+	 * Override this if you need to change sounds or how EMC is consumed (for example, taking from the inventory instead of just amulet)
 	 * 
 	 * @param player The player being shielded
 	 * @param damage The amount of damage to shield
@@ -99,9 +99,9 @@ public interface IAlchemicalBarrier {
 		if (shieldCondition(player, damage, source, stack)) {
 			if (damage <= 0) return true;
 			long wayCost = calcShieldingCost(player, damage, source, stack);
-			long wayHeld = WayUtil.getAvaliableWay(player);
+			long wayHeld = WayUtil.getAmuletWay(player);//WayUtil.getAvaliableWay(player);
 			if (wayCost <= wayHeld && wayHeld > 0) {
-				long wayConsumed = WayUtil.consumeAvaliableWay(player, wayCost);
+				long wayConsumed = WayUtil.consumeAmuletWay(player, wayCost);//WayUtil.consumeAvaliableWay(player, wayCost);
 				if (wayConsumed > wayCost) {
 					player.level().playSound(null, player, FxInit.SND_WAY_WASTE.get(), SoundSource.PLAYERS, 0.45F, 1.0F);
 				}
@@ -116,7 +116,7 @@ public interface IAlchemicalBarrier {
 			}
 			if (wayHeld <= 0) return false;
 			float canAfford = calcAffordableDamage(player, damage, source, stack, wayHeld);
-			WayUtil.consumeAvaliableWay(player, wayHeld);
+			WayUtil.consumeAmuletWay(player, wayHeld);
 			player.hurt(source, damage - canAfford);
 			player.level().playSound(null, player, FxInit.SND_BARRIER_FAIL.get(), SoundSource.PLAYERS, 1.5F, 1.0F);
 			return true;

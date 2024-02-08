@@ -1,5 +1,7 @@
 package com.quartzshard.aasb.common.item.equipment.armor.jewellery;
 
+import java.util.function.Consumer;
+
 import com.quartzshard.aasb.AASB;
 import com.quartzshard.aasb.util.Logger;
 import com.quartzshard.aasb.util.WayUtil;
@@ -7,6 +9,7 @@ import com.quartzshard.aasb.util.WayUtil;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
@@ -18,6 +21,9 @@ public abstract class JewelleryArmorItem extends ArmorItem {
 	public JewelleryArmorItem(Type slot, Properties props) {
 		super(JewelleryMaterial.MAT, slot, props);
 	}
+	
+	@Override
+	public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {return 0;}
 	
 	/**
 	 * Helper function for doing things involving this armor set <br>

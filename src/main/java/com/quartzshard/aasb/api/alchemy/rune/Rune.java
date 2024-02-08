@@ -16,6 +16,8 @@ public abstract class Rune {
 	public abstract MutableComponent loc();
 	public abstract MutableComponent fLoc();
 	
+	public abstract int color();
+	
 	/**
 	 * Serialize this Rune to a String.
 	 * @return A string representing this Rune
@@ -71,13 +73,15 @@ public abstract class Rune {
 	public abstract boolean passiveAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong);
 	
 	/**
-	 * Triggers this rune's active passive ability, called by charms EVERY TICK
+	 * Triggers this rune's active passive ability, called by charms EVERY TICK <br>
+	 * This is also called one final time when unequipped, so that effects can be properly turned off if necessary
 	 * @param stack The ItemStack activating this ability
 	 * @param player The ServerPlayer with the stack
 	 * @param level The ServerLevel that the player is in
 	 * @param state Whether the button was pressed or released
 	 * @param strong True if this ability has been powered up
+	 * @param unequipped True if this is the final call due to being unequipped. Clean up after yourself!
 	 * @return True if the ability was activated, false otherwise
 	 */
-	public abstract void tickPassive(ItemStack stack, ServerPlayer player, ServerLevel level, boolean strong);
+	public abstract void tickPassive(ItemStack stack, ServerPlayer player, ServerLevel level, boolean strong, boolean unequipped);
 }

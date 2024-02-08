@@ -64,26 +64,26 @@ public class ItemModelData extends ItemModelProvider {
 		hermTool(ItemInit.AXE, "item/equipment/tool/axe/");
 		hermTool(ItemInit.HOE, "item/equipment/tool/hoe/");
 
-		//tool(ItemInit.GLOVE);
-		//tool(ItemInit.BRACELET);
-		//tool(ItemInit.CHARM);
+		runeCurio(ItemInit.GLOVE1, CurioType.GLOVE, false);
+		runeCurio(ItemInit.BRACELET1, CurioType.BRACELET, false);
+		runeCurio(ItemInit.CHARM1, CurioType.CHARM, false);
+		runeCurio(ItemInit.GLOVE2, CurioType.GLOVE, true);
+		runeCurio(ItemInit.BRACELET2, CurioType.BRACELET, true);
+		runeCurio(ItemInit.CHARM2, CurioType.CHARM, true);
 
 		//armor(ItemInit.HELMET, "item/equipment/armor/herm/");
 		//armor(ItemInit.CHESTPLATE, "item/equipment/armor/herm/");
 		//armor(ItemInit.LEGGINGS, "item/equipment/armor/herm/");
 		//armor(ItemInit.BOOTS, "item/equipment/armor/herm/");
 		armor(ItemInit.CIRCLET, "item/equipment/armor/jewellery/");
-		armor(ItemInit.AMULET, "item/equipment/armor/jewellery/");
+		simpleWayHolder(ItemInit.AMULET);
 		armor(ItemInit.POCKETWATCH, "item/equipment/armor/jewellery/");
 		armor(ItemInit.ANKLET, "item/equipment/armor/jewellery/");
 
-		placeholder(ItemInit.C_GLOVE);
-		placeholder(ItemInit.C_BRACELET);
-		placeholder(ItemInit.C_CHARM);
-		placeholder(ItemInit.C_CIRCLET);
-		placeholder(ItemInit.C_AMULET);
-		placeholder(ItemInit.C_POCKETWATCH);
-		placeholder(ItemInit.C_ANKLET);
+		basic(ItemInit.C_CIRCLET);
+		basic(ItemInit.C_AMULET);
+		basic(ItemInit.C_POCKETWATCH);
+		basic(ItemInit.C_ANKLET);
 		placeholder(ItemInit.C_AMALGAM);
 		
 		basic(ItemInit.LOOTBALL);
@@ -91,6 +91,13 @@ public class ItemModelData extends ItemModelProvider {
 		simpleLayered(ItemInit.WAY_GRENADE, "holder", "cracks");
 		basic(ItemInit.CHALK);
 		basic(ItemInit.AETHERCHALK);
+
+		basic(ItemInit.COS_GAUNTLET1);
+		basic(ItemInit.COS_BAND1);
+		basic(ItemInit.COS_TRINKET1);
+		basic(ItemInit.COS_GAUNTLET2);
+		basic(ItemInit.COS_BAND2);
+		basic(ItemInit.COS_TRINKET2);
 		
 		// BlockItems
 		//block(ItemInit.ASH_STONE_BLOCKITEM, "block/ashen_stone");
@@ -138,7 +145,7 @@ public class ItemModelData extends ItemModelProvider {
 	private ItemModelBuilder simpleWayHolder(RegistryObject<? extends Item> ro) {
 		String name = ro.getId().getPath();
 		ItemModelBuilder builder = getBuilder(name);
-		if (!(ro.get() instanceof IWayHolder item)) throw new IllegalArgumentException(ro + " is not a minium stone");
+		if (!(ro.get() instanceof IWayHolder item)) throw new IllegalArgumentException(ro + " is not a way holder");
 		String path = "item/"+name+"/";
 		builder.override()
 			.predicate(ClientInit.PRED_WAY_HOLDER, 0)
@@ -164,6 +171,28 @@ public class ItemModelData extends ItemModelProvider {
 		}
 		builder.override().model(b).end();
 		return builder;
+	}
+	
+	private ItemModelBuilder runeCurio(RegistryObject<? extends Item> ro, CurioType slot, boolean tier2) {
+		String name = ro.getId().getPath();
+		ItemModelBuilder builder = getBuilder(name);
+		String path = "item/"+name;
+		ItemModelBuilder b = withExistingParent(path, "item/handheld");
+		b.texture("layer0", modLoc(path));
+		b.texture("layer1", modLoc("item/equipment/curio/"+slot.toString()+"_rune_1"));
+		if (tier2) 
+			b.texture("layer2", modLoc("item/equipment/curio/"+slot.toString()+"_rune_2"));
+		builder.override().model(b).end();
+		return builder;
+	}
+	
+	private enum CurioType {
+		GLOVE, BRACELET, CHARM;
+		
+		@Override
+		public String toString() {
+			return name().toLowerCase();
+		}
 	}
 	
 	

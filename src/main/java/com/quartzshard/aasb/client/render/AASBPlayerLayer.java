@@ -9,9 +9,11 @@ import org.joml.Vector3f;
 
 import com.quartzshard.aasb.AASB;
 import com.quartzshard.aasb.client.render.AASBRenderType;
+import com.quartzshard.aasb.common.item.equipment.armor.jewellery.AmuletItem;
 import com.quartzshard.aasb.common.item.equipment.armor.jewellery.CircletItem;
 import com.quartzshard.aasb.common.item.equipment.armor.jewellery.JewelleryArmorItem;
 import com.quartzshard.aasb.util.Colors;
+import com.quartzshard.aasb.util.WayUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -81,7 +83,6 @@ public class AASBPlayerLayer extends RenderLayer<AbstractClientPlayer, PlayerMod
 
 	/** for the alchemical barrier */
 	private void renderMagnumOpusHalo(PoseStack poseStack, MultiBufferSource renderBuffer, AbstractClientPlayer player, float ageInTicks) {
-		float emcLevel = 1;
 		String debugStr = "null";//DebugCfg.HALO_UUID.get();
 		UUID debugUUID = null;
 		if (!FMLEnvironment.production) {
@@ -94,13 +95,21 @@ public class AASBPlayerLayer extends RenderLayer<AbstractClientPlayer, PlayerMod
 		}
 		// in production, this should always be false, as debugUUID will never not be
 		// null
+		float chargeLevel = 0;
 		boolean isDev = debugUUID != null && player.getScoreboardName() == "Dev" && SPECIAL_HALOS.containsKey(debugUUID);
 		if (!isDev) {
 			// checks if the halo should render
-			for (ItemStack stack : player.getArmorSlots())
+			boolean hasWay = false;
+			for (ItemStack stack : player.getArmorSlots()) {
 				if (!(stack.getItem() instanceof JewelleryArmorItem))
 					return;
-			if (emcLevel <= 0)
+				if (stack.getItem() instanceof AmuletItem item) {
+					long stored = item.getStoredWay(stack);
+					hasWay = stored > 0;
+					chargeLevel = (float)stored/(float)item.getMaxWay(stack);
+				}
+			}
+			if (!hasWay)
 				return;
 		}
 		int timer = Math.round(ageInTicks);
@@ -130,7 +139,7 @@ public class AASBPlayerLayer extends RenderLayer<AbstractClientPlayer, PlayerMod
 		Matrix4f pose = poseStack.last().pose();
 
 		// blinks faster when low EMC
-		int alpha = Math.round(Colors.loopFade(timer, Math.round(Math.max(280 * emcLevel, 10)), 0, 96, 192));
+		int alpha = Math.round(Colors.loopFade(timer, Math.round(Math.max(280 * chargeLevel, 10)), 0, 96, 192));
 		if (fixed || data.fadeType == HaloFadeType.NONE) {
 			// fixed color mode, saves processing time by not doing fade stuff
 			int[] color = { c1.R, c1.G, c1.B };

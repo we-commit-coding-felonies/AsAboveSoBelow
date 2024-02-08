@@ -26,6 +26,9 @@ public class LangData extends LanguageProvider {
 	private static String f(String formName) {
 		return id("alchemy.%s.aspect.form."+formName);
 	}
+	private static String l(String processName) {
+		return id("alchemy.%s.labProcess."+processName);
+	}
 	
 	private static String dm(String template) {
 		return dm(template, false);
@@ -99,6 +102,33 @@ public class LangData extends LanguageProvider {
 			FORM_ETHEREAL = f("ethereal"),
 				FORM_MIND = f("mind"),
 				FORM_SOUL = f("soul"),
+
+		LAB_EVAPORATION = l("evaporation"),
+		LAB_FIXATION = l("fixation"),
+		LAB_AMALGAMATION = l("amalgamation"),
+		LAB_HOMOGENIZATION = l("homogenization"),
+		
+		LAB_DESICCATION = l("desiccation"),
+		LAB_OXIDATION = l("oxidation"),
+		LAB_CONGELATION = l("amalgamation"),
+		LAB_CERATION = l("homogenization"),
+		LAB_DEHYDRATION = l("dehydration"),
+		LAB_EXALTATION = l("exaltation"),
+		LAB_CONDEMNATION = l("condemnation"),
+		
+		LAB_SUBLIMATION = l("sublimation"),
+		LAB_CONJUNCTION = l("conjunction"),
+		LAB_STAGNATION = l("stagnation"),
+		LAB_SEPARATION = l("separation"),
+		LAB_FILTRATION = l("filtration"),
+
+		LAB_PROJECTION = l("projection"),
+		LAB_CONDENSATION = l("condensation"),
+		LAB_DISTILLATION = l("distillation"),
+		LAB_COHOBATION = l("cohobation"),
+		LAB_SOLUTION = l("solution"),
+		LAB_DIGESTION = l("digestion"),
+		LAB_MULTIPLICATION = l("multiplication"),
 		
 		KEY_HEAD = id("key.%s.headMode"),
 		KEY_CHEST = id("key.%s.chestMode"),
@@ -112,6 +142,12 @@ public class LangData extends LanguageProvider {
 		KEY_GLOVE = id("key.%s.trinket.triggerGlove"),
 		KEY_BRACELET = id("key.%s.trinket.triggerBracelet"),
 		KEY_CHARM = id("key.%s.trinket.triggerCharm"),
+		
+		ITEM_GLOVE_RUNED = id("item.%s.runed.glove"),
+		ITEM_BRACELET_RUNED = id("item.%s.runed.bracelet"),
+		ITEM_CHARM_RUNED = id("item.%s.runed.charm"),
+		ITEM_RUNED_1 = id("item.%s.runed.1"),
+		ITEM_RUNED_2 = id("item.%s.runed.2"),
 		
 		TIP_GENERIC_ON = id("toolTip.%s.generic.on"),
 		TIP_GENERIC_OFF = id("toolTip.%s.generic.off"),
@@ -288,9 +324,17 @@ public class LangData extends LanguageProvider {
 		add(ItemInit.AXE.get(), "Hermetic Hatchet");
 		add(ItemInit.HOE.get(), "Hermetic Scythe");
 
-		add(ItemInit.GLOVE.get(), "%s-Runed Glove");
-		add(ItemInit.BRACELET.get(), "%s-Runed Bracelet");
-		add(ItemInit.CHARM.get(), "%s-Runed Charm");
+		add(ItemInit.GLOVE1.get(), "Ornate Glove");
+		add(ItemInit.BRACELET1.get(), "Ornate Bracelet");
+		add(ItemInit.CHARM1.get(), "Ornate Charm");
+		add(ItemInit.GLOVE2.get(), "Hermeticized Glove");
+		add(ItemInit.BRACELET2.get(), "Hermeticized Bracelet");
+		add(ItemInit.CHARM2.get(), "Hermeticized Charm");
+		add(ITEM_GLOVE_RUNED, "Glove of %s");
+		add(ITEM_BRACELET_RUNED, "Bracelet of %s");
+		add(ITEM_CHARM_RUNED, "Charm of %s");
+		add(ITEM_RUNED_1, "%s");
+		add(ITEM_RUNED_2, "%s & %s");
 		
 		add(ItemInit.HELMET.get(), "Hermetic Armet");
 		add(ItemInit.CHESTPLATE.get(), "Hermetic Cuirass");

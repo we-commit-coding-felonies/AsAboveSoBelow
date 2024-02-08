@@ -4,13 +4,30 @@ import java.util.Optional;
 
 import com.quartzshard.aasb.api.item.IWayHolder;
 import com.quartzshard.aasb.data.tags.ItemTP;
+import com.quartzshard.aasb.init.FxInit;
 
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandler;
 
 public class WayUtil {
+	
+	/**
+	 * Clamps way to a set maximum value and playes the "waste" noise if any is voided
+	 * @param way The Way to be clamped
+	 * @param max The maximum value that the Way will be clamped to
+	 * @return Math.min(way, max)
+	 */
+	public static long clampWay(long way, long max, Entity entity) {
+		if (way > max) {
+			way = max;
+			entity.level().playSound(null, entity.blockPosition(), FxInit.SND_WAY_WASTE.get(), entity.getSoundSource());
+		}
+		return way;
+	}
 
 	
 	/**
@@ -19,7 +36,7 @@ public class WayUtil {
 	 * @param player
 	 * @return true if player has any Way
 	 */
-	public static boolean hasEmc(Player player) {
+	public static boolean hasWay(Player player) {
 		if (player.isCreative()) {
 			return true;
 		}
@@ -119,6 +136,54 @@ public class WayUtil {
 		return totalConsumed;
 	}
 	
+	/**
+	 * A function to consume Way from all sources in the inventory, but will skip the chestplate <br>
+	 * used by the Amulet for automatic absorption of inventory Way into its reservoir
+	 * 
+	 * @param player
+	 * @param toConsume
+	 * @return The amount of Way consumed. May be more than toConsume if inefficient sources were used!
+	 */
+	public static long consumeAvaliableWaySkipAmulet(Player player, long toConsume) {
+		if (player.isCreative())
+			return Long.MAX_VALUE;
+		boolean didConsume = false;
+		long consumed = 0, totalConsumed = 0;
+
+		// Offhand first, because thats probably what the player wants
+		consumed = consumeStackUsableWay(toConsume - totalConsumed, player.getOffhandItem());
+		if (consumed != 0) {
+			didConsume = true;
+			totalConsumed = addToTotal(totalConsumed, consumed);
+			consumed = 0;
+		}
+		if (totalConsumed == Long.MAX_VALUE) return totalConsumed;
+
+		// Inventory last
+		Optional<IItemHandler> oiih = player.getCapability(ForgeCapabilities.ITEM_HANDLER).resolve();
+		if (oiih.isPresent()) {
+			IItemHandler inv = oiih.get();
+			for (int i = 0; i < inv.getSlots(); i++) {
+				if (i == 40 || i == 38) continue; // offhand was already checked, and we dont check chestplate
+				ItemStack stack = inv.getStackInSlot(i);
+				if (stack.isEmpty()) {
+					continue;
+				}
+
+				consumed = consumeStackUsableWay(toConsume - totalConsumed, stack);
+				if (consumed != 0) {
+					didConsume = true;
+					totalConsumed = addToTotal(totalConsumed, consumed);
+					consumed = 0;
+				}
+				if (totalConsumed == Long.MAX_VALUE) return totalConsumed;
+			}
+		}
+		if (didConsume) player.containerMenu.broadcastChanges();
+		
+		return totalConsumed;
+	}
+	
 	
 	
 	public static long getStackUsableWay(ItemStack stack) {
@@ -156,5 +221,32 @@ public class WayUtil {
 		if (next < 0)
 			return Long.MAX_VALUE;
 		return next;
+	}
+
+	public static long getAmuletWay(Player player) {
+		ItemStack stack = player.getItemBySlot(EquipmentSlot.CHEST);
+		if (stack.getItem() instanceof IWayHolder item) {
+			return item.getStoredWay(stack);
+		}
+		return 0;
+	}
+	public static float getAmuletPercent(Player player) {
+		ItemStack stack = player.getItemBySlot(EquipmentSlot.CHEST);
+		if (stack.getItem() instanceof IWayHolder item) {
+			return (float)item.getStoredWay(stack)/(float)item.getMaxWay(stack);
+		}
+		return 0;
+	}
+	public static long consumeAmuletWay(Player player, long toConsume) {
+		if (player.isCreative())
+			return Long.MAX_VALUE;
+		boolean didConsume = false;
+		long consumed = 0;
+
+		consumed = consumeStackUsableWay(toConsume, player.getItemBySlot(EquipmentSlot.CHEST));
+		didConsume = consumed != 0;
+		if (didConsume) player.containerMenu.broadcastChanges();
+		
+		return consumed;
 	}
 }
