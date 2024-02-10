@@ -60,6 +60,19 @@ public interface IAlchemicalBarrier {
 	}
 
 	/**
+	 * Preliminary shielding against things that can be blocked for free so long as the shield is up
+	 * 
+	 * @param player The player being shielded
+	 * @param damage The amount of damage to shield
+	 * @param source The DamageSource we are shielding
+	 * @param stack The ItemStack doing the shielding
+	 * @return If shielding was at all successful
+	 */
+	default boolean shieldForFree(Player player, float damage, DamageSource source, ItemStack stack) {
+		return damage <= 0 || source.is(DmgTP.FORCEFIELD_EZBLOCK);
+	}
+
+	/**
 	 * Handles sounds and Way consumption, as well as running many of the other functions.
 	 * Override this if you need to change sounds or how EMC is consumed (for example, taking from the inventory instead of just amulet)
 	 * 
@@ -97,7 +110,7 @@ public interface IAlchemicalBarrier {
 		}
 		
 		if (shieldCondition(player, damage, source, stack)) {
-			if (damage <= 0) return true;
+			if (shieldForFree(player, damage, source, stack)) return true;
 			long wayCost = calcShieldingCost(player, damage, source, stack);
 			long wayHeld = WayUtil.getAmuletWay(player);//WayUtil.getAvaliableWay(player);
 			if (wayCost <= wayHeld && wayHeld > 0) {

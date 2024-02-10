@@ -360,7 +360,7 @@ public class WaterRune extends ShapeRune {
 		}
 		boolean hasAction = false;
 		List<ItemStack> drops = new ArrayList<>();
-		ItemStack breakerStack = new ItemStack(ItemInit.OMNITOOL.get());
+		ItemStack breakerStack = new ItemStack(ItemInit.THE_PHILOSOPHERS_STONE.get());
 		for (BlockPos newPos : BoxUtil.allBlocksInBox(box)) {
 			if (level.isEmptyBlock(newPos)) {
 				continue;

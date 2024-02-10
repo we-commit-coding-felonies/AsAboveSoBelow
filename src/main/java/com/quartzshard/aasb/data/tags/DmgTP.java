@@ -24,6 +24,8 @@ public class DmgTP extends TagsProvider<DamageType> {
 	}
 	
 	public static final TagKey<DamageType>
+		FORCEFIELD_EZBLOCK = c("forcefield_blocks_for_free"),
+		
 		BYPASSES_DMG_SPONGE = c("bypasses_dmg_sponge"), // bypasses hermetic armor DR
 		BYPASSES_FORCEFIELD = c("bypasses_forcefield"), // bypasses the alchemical barrier
 		
@@ -38,6 +40,12 @@ public class DmgTP extends TagsProvider<DamageType> {
 
 	@Override
 	protected void addTags(Provider pProvider) {
+		tag(FORCEFIELD_EZBLOCK)
+			.add(DamageTypes.CACTUS)
+			.add(DamageTypes.HOT_FLOOR)
+			.add(DamageTypes.SWEET_BERRY_BUSH)
+			.add(DamageTypes.STING);
+		
 		// BYPASS SECTION
 		tag(UNSTOPPABLE_FORCE)
 			.add(EntityInit.DMG_TRANSMUTE)

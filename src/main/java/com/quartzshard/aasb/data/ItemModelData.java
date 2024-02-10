@@ -34,7 +34,9 @@ public class ItemModelData extends ItemModelProvider {
 		basic(ItemInit.SALT);
 		basic(ItemInit.SPUT);
 		basic(ItemInit.AETHER);
-		
+
+		materia(ItemInit.MATERIA_NEG2, -2);
+		materia(ItemInit.MATERIA_NEG1, -1);
 		materia(ItemInit.MATERIA_1, 1);
 		materia(ItemInit.MATERIA_2, 2);
 		materia(ItemInit.MATERIA_3, 3);
@@ -55,9 +57,8 @@ public class ItemModelData extends ItemModelProvider {
 
 		basic(ItemInit.ELIXIR_OF_LIFE);
 		miniumStone(ItemInit.MINIUM_STONE);
-		basic(ItemInit.PHILOSOPHERS_STONE);
 
-		tool(ItemInit.OMNITOOL, "item/equipment/tool/devtool");
+		basic(ItemInit.THE_PHILOSOPHERS_STONE);
 		hermTool(ItemInit.SWORD, "item/equipment/tool/sword/");
 		hermTool(ItemInit.PICK, "item/equipment/tool/pickaxe/");
 		hermTool(ItemInit.SHOVEL, "item/equipment/tool/shovel/");
@@ -75,10 +76,10 @@ public class ItemModelData extends ItemModelProvider {
 		//armor(ItemInit.CHESTPLATE, "item/equipment/armor/herm/");
 		//armor(ItemInit.LEGGINGS, "item/equipment/armor/herm/");
 		//armor(ItemInit.BOOTS, "item/equipment/armor/herm/");
-		armor(ItemInit.CIRCLET, "item/equipment/armor/jewellery/");
+		basic(ItemInit.CIRCLET);
 		simpleWayHolder(ItemInit.AMULET);
-		armor(ItemInit.POCKETWATCH, "item/equipment/armor/jewellery/");
-		armor(ItemInit.ANKLET, "item/equipment/armor/jewellery/");
+		basic(ItemInit.POCKETWATCH);
+		basic(ItemInit.ANKLET);
 
 		basic(ItemInit.C_CIRCLET);
 		basic(ItemInit.C_AMULET);

@@ -17,8 +17,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 // Basically, ItemInfo from projectE. Thanks, sin!
 // https://github.com/sinkillerj/ProjectE/blob/mc1.18.x/src/api/java/moze_intel/projecte/api/ItemInfo.java
 /**
- * Class used for keeping track of a combined {@link Item} and {@link CompoundTag}. Unlike {@link ItemStack} this class does not keep track of count, and overrides {@link
- * #equals(Object)} and {@link #hashCode()} so that it can be used properly in a {@link java.util.Set}.
+ * Class used for keeping track of a combined {@link Item} and {@link CompoundTag}. Unlike {@link ItemStack} this class does not keep track of count,
+ * and overrides {@link#equals(Object)} and {@link #hashCode()} so that it can be used properly in a {@link java.util.Set}.
  *
  * @implNote If the {@link CompoundTag} this {@link ItemData} is given is empty, then it converts it to being null.
  * @apiNote {@link ItemData} and the data it stores is Immutable
@@ -38,15 +38,15 @@ public class ItemData {
 	 * Creates an {@link ItemData} object from a given {@link Item} with an optional {@link CompoundTag} attached.
 	 */
 	public static ItemData fromItem(ItemLike item, @Nullable CompoundTag nbt) {
-		return new ItemData(item, nbt);
+		return new ItemData(item, nbt); // TODO trim out tags we dont care about?
 	}
 	
 	public static ItemData fromItem(ItemLike item) {
-		return new ItemData(item, null);
+		return new ItemData(item, null); // TODO trim out tags we dont care about?
 	}
 
 	public static ItemData fromStack(ItemStack stack) {
-		return fromItem(stack.getItem(), stack.getTag());
+		return fromItem(stack.getItem(), stack.getTag()); // TODO trim out tags we dont care about?
 	}
 	/**
 	 * @return The {@link Item} stored in this {@link ItemData}.
@@ -117,6 +117,7 @@ public class ItemData {
 		if (o == this) {
 			return true;
 		} else if (o instanceof ItemData other) {
+			 // TODO possibly improve nbt equivalence check to ingore tags we dont care about
 			return item == other.item && Objects.equals(nbt, other.nbt);
 		}
 		return false;

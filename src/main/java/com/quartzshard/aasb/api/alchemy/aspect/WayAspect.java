@@ -1,11 +1,15 @@
 package com.quartzshard.aasb.api.alchemy.aspect;
 
+import java.util.Random;
+
 import org.jetbrains.annotations.Nullable;
 
 /**
  * Way is a simple numerical value. <br>
- * It's flow is similar to the concept of inertia, it wants to remain the same value. <br>
- * Flow violation is gradual, with half & double both being the points at which it is 100%
+ * It's flow is similar to the concept of inertia, it flows to the same value. <br>
+ * Way flow violation is impossible, as violations of Way flow can easily lead to duplication exploits.
+ * <p>
+ * <b><i><u>UNDER NO CIRCUMSTANCES SHOULD WAY FLOW EVER BE VIOLATED IN TRANSMUTATION, UNLESS YOU THOROUGHLY UNDERSTAND THE CONSEQUENCES!!!
  */
 public class WayAspect implements IAspect<WayAspect> {
 	public static final WayAspect ZERO = new WayAspect(0);
@@ -32,15 +36,17 @@ public class WayAspect implements IAspect<WayAspect> {
 
 	@Override
 	public float violationTo(WayAspect other) {
-		long oVal = other.getValue();
-		if (oVal > value) {
-			float bound = value * 2f;
-			return ((float)oVal - (float)value) / (bound - value);
-		} else if (oVal < value) {
-			float bound = value / 2f;
-			return ((float)value - (float)oVal) / (value - bound);
-		}
 		return flowsTo(other) ? 0 : 1;
+		//long oVal = other.getValue();
+		//if (oVal > value) {
+		//	float bound = value * 2f;
+		//	return ((float)oVal - (float)value) / (bound - value);
+		//} else if (oVal < value) {
+		//	float bound = value / 2f;
+		//	return ((float)value - (float)oVal) / (value - bound);
+		//}
+		//return flowsTo(other) ? 0 : 1;
+		
 	}
 
 	@Override
@@ -73,5 +79,8 @@ public class WayAspect implements IAspect<WayAspect> {
 		}
 		return null;
 	}
-
+	
+	public static WayAspect fromSeed(long seed) {
+		return new WayAspect(new Random(seed).nextLong(1048576, 2097152));
+	}
 }

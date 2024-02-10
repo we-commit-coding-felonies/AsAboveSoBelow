@@ -1,29 +1,43 @@
 package com.quartzshard.aasb.api.alchemy;
 
+import java.nio.ByteBuffer;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.UUID;
 
 import org.jetbrains.annotations.Nullable;
 
+import com.google.common.collect.Maps;
+import com.google.common.primitives.Longs;
 import com.quartzshard.aasb.api.alchemy.aspect.*;
 import com.quartzshard.aasb.config.AlchemyCfg;
 import com.quartzshard.aasb.util.Logger;
 
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.IntArrayTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.ReloadableServerResources;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.util.Tuple;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.event.TagsUpdatedEvent;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 /**
  * This is Phil, short for Philosopher's Stone. He handles a large portion of the alchemy backend. <br>
@@ -33,7 +47,7 @@ import net.minecraftforge.registries.ForgeRegistries;
  * @author quartzshard
  */
 public class Phil {
-	public static HashMap<ItemData,AlchData> THE_MAP = new HashMap<ItemData,AlchData>();
+	private static Map<ItemData,AlchData> alchMap = new HashMap<>();
 	public static NonNullList<NbtWhitelistData> MAPPER_NBTS = NonNullList.create();
 	public static NonNullList<LivingItemData> LIVING_ITEMS = NonNullList.create();
 	
@@ -179,6 +193,308 @@ public class Phil {
 			}
 			RELOAD_DAT = null;
 		}
+	}
+	
+	/**
+	 * Gets aspects for The Philosopher's Stone from world seed
+	 * @param level
+	 * @return the current aspects of The Philosopher's Stone
+	 */
+	public static AlchData getPhilAspects(ServerLevel level) {
+		return getPhilAspects(level.getSeed());
+	}
+
+	/**
+	 * Gets aspects for The Philosopher's Stone from a number
+	 * @param seed The seed to use for generating aspects
+	 * @return the aspects of The Philosopher's Stone for the given seed
+	 */
+	public static AlchData getPhilAspects(long seed) {
+		MessageDigest d;
+		try {
+			d = MessageDigest.getInstance("SHA-256");
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+			throw new UnknownError("NoSuchAlgorithException caught in com.quartzshard.aasb.api.alchemy.Phil.getPhilAspects(long seed), but such an exception should be impossible to encounter!");
+		}
+		ByteBuffer hash = ByteBuffer.wrap(d.digest(Longs.toByteArray(seed)));
+		long[] aspectSeeds = {
+				hash.getLong(),
+				hash.getLong(),
+				hash.getLong(),
+				hash.getLong()
+		};
+		return new AlchData(
+					WayAspect.fromSeed(aspectSeeds[0]), // TODO configurable way range
+					ShapeAspect.fromSeed(aspectSeeds[1]),
+					FormAspect.fromSeed(aspectSeeds[2]),
+					ComplexityAspect.PHIL
+				);
+	}
+
+	/**
+	 * Converts a UUID into aspects
+	 * @param uuid UUID in int array format
+	 * @return Corresponding AlchData with ComplexityAspect SEEDGEN
+	 */
+	public static AlchData getUUIDAspects(int[] uuid) {
+		return AlchData.fromSeeds(uuid[0],uuid[1],uuid[2]);
+	}
+	public static AlchData getUUIDAspects(UUID uuid) {
+		return getUUIDAspects(UUIDUtil.uuidToIntArray(uuid));
+	}
+	public static AlchData getUUIDAspects(String uuid) {
+		return getUUIDAspects(UUID.fromString(uuid));
+	}
+	public static AlchData getUUIDAspects(IntArrayTag uuid) {
+		return getUUIDAspects(uuid.getAsIntArray());
+	}
+
+	/**
+	 * Checks if the alchemy map has aspects for the given ItemData
+	 * @param item the ItemData
+	 * @return True if it has aspects
+	 */
+	public static boolean hasAspects(ItemData item) {
+		return alchMap.containsKey(item);
+	}
+	/**
+	 * Checks if the alchemy map has aspects for the given ItemLike
+	 * @param item the ItemLike
+	 * @return True if it has aspects
+	 */
+	public static boolean hasAspects(ItemLike item) {
+		return hasAspects(ItemData.fromItem(item));
+	}
+	/**
+	 * Checks if the alchemy map has aspects for the given Item RegistryObject
+	 * @param item the RegistryObject
+	 * @return True if it has aspects
+	 */
+	public static boolean hasAspects(RegistryObject<? extends Item> item) {
+		return hasAspects(item.get());
+	}
+	/**
+	 * Checks if the alchemy map has aspects for the given ItemStack
+	 * @param item the ItemStack
+	 * @return True if it has aspects
+	 * @apiNote Does not take stack size into consideration
+	 */
+	public static boolean hasAspects(ItemStack item) {
+		return hasAspects(ItemData.fromStack(item));
+	}
+	
+	/**
+	 * Queries the alchemy map for the aspects of a specific ItemData
+	 * @param item the ItemData
+	 * @return Aspects for the item, or UNMAPPED if the they couldn't be found
+	 */
+	public static AlchData getAspects(ItemData item) {
+		return alchMap.getOrDefault(item, UNMAPPED);
+	}
+	/**
+	 * Queries the alchemy map for the aspects of an ItemLike
+	 * @param ro the ItemLike
+	 * @return Aspects for the item, or UNMAPPED if they couldn't be found
+	 */
+	public static AlchData getAspects(ItemLike item) {
+		return getAspects(ItemData.fromItem(item));
+	}
+	/**
+	 * Queries the alchemy map for the aspects of an Item RegistryObject
+	 * @param item the RegistryObject
+	 * @return Aspects for the item, or UNMAPPED if they couldn't be found
+	 */
+	public static AlchData getAspects(RegistryObject<? extends Item> item) {
+		return getAspects(item.get());
+	}
+	/**
+	 * Queries the alchemy map for the aspects of an ItemStack <br>
+	 * @param item the ItemStack
+	 * @return Aspects for the item, or UNMAPPED if they couldn't be found
+	 * @apiNote Does not take stack size into consideration
+	 */
+	public static AlchData getAspects(ItemStack item) {
+		return getAspects(ItemData.fromStack(item));
+	}
+	
+	/**
+	 * Gets the WayAspect of an item
+	 * @param item
+	 * @return WayAspect
+	 */
+	@Nullable
+	public static WayAspect getWay(ItemData item) {
+		return getAspects(item).way();
+	}
+	@Nullable
+	public static WayAspect getWay(ItemLike item) {
+		return getAspects(item).way();
+	}
+	@Nullable
+	public static WayAspect getWay(RegistryObject<? extends Item> item) {
+		return getAspects(item).way();
+	}
+	/**
+	 * Gets the WayAspect of an item. Does not take stack size into consideration.
+	 * @param item
+	 * @return WayAspect
+	 */
+	@Nullable
+	public static WayAspect getWay(ItemStack item) {
+		return getAspects(item).way();
+	}
+	
+	/**
+	 * Gets the raw numerical value of the item's Way.
+	 * @param item
+	 * @return Numerical value of Way, or -1 if null
+	 */
+	public static long getWaySimple(ItemData item) {
+		WayAspect way = getWay(item);
+		return way == null ? -1 : way.getValue();
+	}
+	public static long getWaySimple(ItemLike item) {
+		return getWaySimple(ItemData.fromItem(item));
+	}
+	public static long getWaySimple(RegistryObject<? extends Item> item) {
+		return getWaySimple(item.get());
+	}
+	/**
+	 * Gets the raw numerical value of the item's Way. Does not take stack size into consideration
+	 * @param item
+	 * @return Numerical value of Way, or -1 if null
+	 */
+	public static long getWaySimple(ItemStack item) {
+		return getWaySimple(ItemData.fromStack(item));
+	}
+
+	/**
+	 * Gets the ShapeAspect of an item
+	 * @param item
+	 * @return ShapeAspect
+	 */
+	@Nullable
+	public static ShapeAspect getShape(ItemData item) {
+		return getAspects(item).shape();
+	}
+	@Nullable
+	public static ShapeAspect getShape(ItemLike item) {
+		return getAspects(item).shape();
+	}
+	@Nullable
+	public static ShapeAspect getShape(RegistryObject<? extends Item> item) {
+		return getAspects(item).shape();
+	}
+	/**
+	 * Gets the ShapeAspect of an item. Does not take stack size into consideration
+	 * @param item
+	 * @return ShapeAspect
+	 */
+	@Nullable
+	public static ShapeAspect getShape(ItemStack item) {
+		return getAspects(item).shape();
+	}
+	
+
+	/**
+	 * Gets the FormAspect of the item
+	 * @param item
+	 * @return FormAspect
+	 */
+	@Nullable
+	public static FormAspect getForm(ItemData item) {
+		return getAspects(item).form();
+	}
+	@Nullable
+	public static FormAspect getForm(ItemLike item) {
+		return getAspects(item).form();
+	}
+	@Nullable
+	public static FormAspect getForm(RegistryObject<? extends Item> item) {
+		return getAspects(item).form();
+	}
+	/**
+	 * Gets the FormAspect of the item. Does not take stack size into consideration
+	 * @param item
+	 * @return FormAspect
+	 */
+	@Nullable
+	public static FormAspect getForm(ItemStack item) {
+		return getAspects(item).form();
+	}
+
+	/**
+	 * Checks whether the given transmuation has perfect flow
+	 * @param from ItemData input
+	 * @param to ItemData output
+	 * @return True if the transmutation does not violate at all
+	 */
+	public static boolean flows(ItemData from, ItemData to) {
+		return getAspects(from).flowsTo(getAspects(to));
+	}
+	public static boolean flows(ItemLike from, ItemLike to) {
+		return getAspects(from).flowsTo(getAspects(to));
+	}
+	public static boolean flows(RegistryObject<? extends Item> from, RegistryObject<? extends Item> to) {
+		return getAspects(from).flowsTo(getAspects(to));
+	}
+	public static boolean flows(ItemStack from, ItemStack to) {
+		return getAspects(from).flowsTo(getAspects(to));
+	}
+	
+
+	/**
+	 * Gets how violating the given transmutation is
+	 * @param from ItemData input
+	 * @param to ItemData output
+	 * @return % violation of the transmutation
+	 */
+	public static float violation(ItemData from, ItemData to) {
+		return getAspects(from).violationTo(getAspects(to));
+	}
+	public static float violation(ItemLike from, ItemLike to) {
+		return getAspects(from).violationTo(getAspects(to));
+	}
+	public static float violation(RegistryObject<? extends Item> from, RegistryObject<? extends Item> to) {
+		return getAspects(from).violationTo(getAspects(to));
+	}
+	public static float violation(ItemStack from, ItemStack to) {
+		return getAspects(from).violationTo(getAspects(to));
+	}
+	
+	/**
+	 * Gets a list of possible targets for transmutation from the given input, sorted from least violating to most violating <br>
+	 * Specifically, the list is of Tuple(ItemData,Float). ItemData is the target item, Float is the violation. <br>
+	 * If the list is empty, there were no targets.
+	 * @param from Input aspects
+	 * @return List
+	 */
+	public static List<Tuple<ItemData,Float>> getTransmutationTargets(AlchData from) {
+		//Map<ItemData,AlchData> fmap = Maps.filterEntries(alchMap, (to) -> from.violationTo(to.getValue()) < 1);
+		List<Tuple<ItemData,Float>> flowList = new ArrayList<>();
+		for (Entry<ItemData,AlchData> entry : alchMap.entrySet()) {
+			flowList.add(new Tuple<>(entry.getKey(), from.violationTo(entry.getValue())));
+		}
+		flowList.sort((t1,t2) -> {
+			float a = t1.getB(), b = t2.getB();
+			if (a < b) return -1;
+			if (a > b) return 1;
+			return 0;
+		});
+		return flowList;
+	}
+	public static List<Tuple<ItemData,Float>> getTransmutationTargets(ItemData from) {
+		return getTransmutationTargets(getAspects(from));
+	}
+	public static List<Tuple<ItemData,Float>> getTransmutationTargets(ItemLike from) {
+		return getTransmutationTargets(getAspects(from));
+	}
+	public static List<Tuple<ItemData,Float>> getTransmutationTargets(RegistryObject<? extends Item> from) {
+		return getTransmutationTargets(getAspects(from));
+	}
+	public static List<Tuple<ItemData,Float>> getTransmutationTargets(ItemStack from) {
+		return getTransmutationTargets(getAspects(from));
 	}
 	
 	public static Map<ResourceLocation,ItemData> getAllItems() {

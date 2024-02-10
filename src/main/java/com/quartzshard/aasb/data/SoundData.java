@@ -1,5 +1,8 @@
 package com.quartzshard.aasb.data;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 
 import com.quartzshard.aasb.AASB;
@@ -8,7 +11,7 @@ import com.quartzshard.aasb.init.FxInit;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
-
+import net.minecraft.util.Tuple;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.common.data.SoundDefinition;
 import net.minecraftforge.common.data.SoundDefinitionsProvider;
@@ -55,6 +58,13 @@ public class SoundData extends SoundDefinitionsProvider {
 				"trinket/glove2",
 				"trinket/glove3",
 				"trinket/glove4");
+		
+		Map<ResourceLocation,Double> snds = new HashMap<>();
+		snds.put(new ResourceLocation("item/bottle/drink_honey1"), 1.0);
+		snds.put(new ResourceLocation("item/bottle/drink_honey2"), 1.0);
+		snds.put(new ResourceLocation("item/bottle/drink_honey3"), 0.35);
+		snds.put(new ResourceLocation("item/bottle/drink_honey3"), 0.75);
+		multi(FxInit.SND_ELIXIR, snds);
 	}
 
 	private void simple(Supplier<SoundEvent> ro, String loc) {
@@ -78,6 +88,13 @@ public class SoundData extends SoundDefinitionsProvider {
 		SoundDefinition def = definition();
 		for (ResourceLocation loc : locs) {
 			def.with(sound(loc));
+		}
+		add(ro, def.subtitle(subFor(ro)));
+	}
+	private void multi(Supplier<SoundEvent> ro, Map<ResourceLocation,Double> locs) {
+		SoundDefinition def = definition();
+		for (Map.Entry<ResourceLocation,Double> loc : locs.entrySet()) {
+			def.with(sound(loc.getKey()).pitch(loc.getValue()));
 		}
 		add(ro, def.subtitle(subFor(ro)));
 	}

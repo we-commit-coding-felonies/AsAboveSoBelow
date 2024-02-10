@@ -1,6 +1,8 @@
 package com.quartzshard.aasb.api.alchemy.aspect;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Random;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -13,6 +15,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.registries.IForgeRegistry;
 
 /**
  * Form is an arbitrary size tree <br>
@@ -147,29 +150,41 @@ public class FormAspect implements IAspect<FormAspect> {
 	public int getColor() {
 		return color;
 	}
+	
+	public int rootDistance() {
+		int i = 0;
+		FormAspect ancestor = getParent();
+		while (ancestor != null) {
+			i++;
+			ancestor = ancestor.getParent();
+		}
+		return i;
+	}
 
 	@Override
 	public boolean flowsTo(FormAspect other) {
-		// TODO Auto-generated method stub
-		return false;
+		return other.getParent() == this
+				|| this == AlchInit.MATERIA.get() && other != this;
 	}
 
 	@Override
 	public boolean flowsFrom(FormAspect other) {
-		// TODO Auto-generated method stub
-		return false;
+		return other.flowsTo(this);
 	}
 
 	@Override
 	public float violationTo(FormAspect other) {
-		// TODO Auto-generated method stub
+		if (!flowsTo(other)) {
+			if (this == other && this != AlchInit.MATERIA.get())
+				return this.children.length == 0 ? 0 : 0.1f;
+			return this.getParent() == other ? 1f/rootDistance() : 1;
+		}
 		return 0;
 	}
 
 	@Override
 	public float violationFrom(FormAspect other) {
-		// TODO Auto-generated method stub
-		return 0;
+		return other.violationTo(this);
 	}
 
 	@Override
@@ -194,5 +209,10 @@ public class FormAspect implements IAspect<FormAspect> {
 			return AlchInit.getForm(ResourceLocation.tryParse(dat.replace("Form.", "")));
 		}
 		return null;
+	}
+	
+	public static FormAspect fromSeed(long seed) {
+		Collection<FormAspect> reg = AlchInit.FORMS_SUPPLIER.get().getValues();
+		return reg.toArray(new FormAspect[0])[new Random(seed).nextInt(reg.size())];
 	}
 }

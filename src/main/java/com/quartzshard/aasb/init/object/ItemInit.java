@@ -6,12 +6,15 @@ import java.util.function.Supplier;
 
 import com.quartzshard.aasb.AASB;
 import com.quartzshard.aasb.common.item.*;
+import com.quartzshard.aasb.common.item.ItemTraits.Rarity;
+import com.quartzshard.aasb.common.item.ItemTraits.Tier;
 import com.quartzshard.aasb.common.item.equipment.*;
 import com.quartzshard.aasb.common.item.equipment.armor.jewellery.*;
 import com.quartzshard.aasb.common.item.equipment.curio.*;
 import com.quartzshard.aasb.common.item.equipment.tool.*;
 
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -31,8 +34,26 @@ public class ItemInit {
 	private static final Item.Properties
 		PROPS_GENERIC_64 = new Item.Properties(),
 		PROPS_GENERIC_16 = new Item.Properties().stacksTo(16),
-		PROPS_GENERIC_1 = new Item.Properties().stacksTo(1), // for some godforsaken reason minecraft will give dura to shit using GENERIC_1
-		PROPS_GENERIC_TOOL = new Item.Properties().stacksTo(1) // unless we split tools off onto their own properties. why??????????????????
+		PROPS_GENERIC_1 = new Item.Properties().stacksTo(1),
+		
+		// for some godforsaken reason minecraft will give dura to shit
+		// unless we split tools off onto their own properties. why????
+		PROPS_GENERIC_TOOL = new Item.Properties().stacksTo(1).rarity(Rarity.QUINTESSENTIAL.get()),
+		PROPS_CURIO_2 = new Item.Properties().stacksTo(1).rarity(Rarity.QUINTESSENTIAL.get()),
+		
+		PROPS_MATERIA_NEG2 = new Item.Properties().rarity(Rarity.MATERIA_NEG2.get()),
+		PROPS_MATERIA_NEG1 = new Item.Properties().rarity(Rarity.MATERIA_NEG1.get()),
+		PROPS_MATERIA_0 = new Item.Properties().rarity(Rarity.MATERIA_0.get()),
+		PROPS_MATERIA_1 = new Item.Properties().rarity(Rarity.MATERIA_1.get()),
+		PROPS_MATERIA_2 = new Item.Properties().rarity(Rarity.MATERIA_2.get()),
+		PROPS_MATERIA_3 = new Item.Properties().rarity(Rarity.MATERIA_3.get()),
+		PROPS_MATERIA_4 = new Item.Properties().rarity(Rarity.MATERIA_4.get()),
+		PROPS_MATERIA_5 = new Item.Properties().rarity(Rarity.MATERIA_5.get()),
+		PROPS_MATERIA_6 = new Item.Properties().rarity(Rarity.MATERIA_6.get()),
+		PROPS_QUINTESSENCE = new Item.Properties().rarity(Rarity.QUINTESSENTIAL.get()),
+		PROPS_AETHER = new Item.Properties().rarity(Rarity.NULLIFIED.get()),
+		PROPS_IMPOSSIBLE = new Item.Properties().rarity(Rarity.IMPOSSIBLE.get()),
+		PROPS_ELIXIR = new Item.Properties().rarity(Rarity.IMPOSSIBLE.get()).stacksTo(1).food(new FoodProperties.Builder().alwaysEat().build())
 		;
 	
 	/** these are used for the creative tabs, and are emptied once the tabs are filled out */
@@ -45,21 +66,24 @@ public class ItemInit {
 	}
 	
 	// Normal items
+	@SuppressWarnings("null") // null RegistryObject should never show up here under any circumstances
 	public static final RegistryObject<Item>
 		// Junks
 		ASH = basic("ash", Tab.BOTH),
-		SOOT = basic("soot", Tab.SYN),
-		SALT = basic("salt", Tab.SYN),
-		SPUT = basic("sput", Tab.SYN),
-		AETHER = basic("aether", Tab.SYN),
+		SOOT = nulled("soot"),
+		SALT = nulled("salt"),
+		SPUT = nulled("sput"),
+		AETHER = nulled("aether"),
 		
 		// Materia
-		MATERIA_1 = basic("materia_infirma", Tab.NAT),
-		MATERIA_2 = basic("materia_minor", Tab.NAT),
-		MATERIA_3 = basic("materia_modica", Tab.NAT),
-		MATERIA_4 = basic("materia_major", Tab.NAT),
-		MATERIA_5 = basic("materia_prima", Tab.NAT),
-		QUINTESSENCE = basic("quintessential_condensate", Tab.SYN),
+		MATERIA_NEG2 = materia("exalted_redstone", -2),
+		MATERIA_NEG1 = materia("homogenized_glowstone", -1),
+		MATERIA_1 = materia("materia_infirma", 1),
+		MATERIA_2 = materia("materia_minor", 2),
+		MATERIA_3 = materia("materia_modica", 3),
+		MATERIA_4 = materia("materia_major", 4),
+		MATERIA_5 = materia("materia_prima", 5),
+		QUINTESSENCE = reg("quintessential_condensate", PROPS_QUINTESSENCE, Tab.SYN),
 		
 		// Metals
 		LEAD_INGOT = basic("lead_ingot", Tab.NAT),
@@ -83,12 +107,11 @@ public class ItemInit {
 		FLASK_AETHER_ASPECT = unstack("aetherglass_flask_of_aspect", Tab.NONE),
 		
 		// Philos
-		ELIXIR_OF_LIFE = unstack("elixir_of_life", Tab.SYN),
-		MINIUM_STONE = reg("minium_stone", () -> new MiniumStoneItem(PROPS_GENERIC_1), Tab.NAT),
-		PHILOSOPHERS_STONE = unstack("philosophers_stone", Tab.NAT),
+		ELIXIR_OF_LIFE = reg("elixir_of_life", () -> new ElixirOfLifeItem(PROPS_ELIXIR), Tab.SYN),
+		MINIUM_STONE = reg("minium_stone", () -> new MiniumStoneItem(PROPS_IMPOSSIBLE), Tab.NAT),
 		
 		// Tools
-		OMNITOOL = reg("internal_omnitool", () -> new OmnitoolItem(Float.MAX_VALUE, Float.MAX_VALUE, Tier.HERMETIC, BlockTags.MINEABLE_WITH_PICKAXE, PROPS_GENERIC_TOOL), Tab.NONE),
+		THE_PHILOSOPHERS_STONE = reg("the_philosophers_stone", () -> new OmnitoolItem(Float.MAX_VALUE, Float.MAX_VALUE, Tier.HERMETIC, BlockTags.MINEABLE_WITH_PICKAXE, PROPS_GENERIC_TOOL), Tab.NONE),
 		SWORD = reg("hermetic_blade", () -> new HermeticSwordItem(3, -2.2f, PROPS_GENERIC_TOOL), Tab.SYN),
 		PICK = reg("hermetic_hammer", () -> new HermeticPickItem(1, -2.6f, PROPS_GENERIC_TOOL), Tab.SYN),
 		SHOVEL = reg("hermetic_spade", () -> new HermeticShovelItem(2, -2.8f, PROPS_GENERIC_TOOL), Tab.SYN),
@@ -99,9 +122,9 @@ public class ItemInit {
 		GLOVE1 = reg("ornate_glove", () -> new GloveItem(1, PROPS_GENERIC_1), Tab.SYN),
 		BRACELET1 = reg("ornate_bracelet", () -> new BraceletItem(1, PROPS_GENERIC_1), Tab.SYN),
 		CHARM1 = reg("ornate_charm", () -> new CharmItem(1, PROPS_GENERIC_1), Tab.SYN),
-		GLOVE2 = reg("hermeticized_glove", () -> new GloveItem(2, PROPS_GENERIC_1), Tab.SYN),
-		BRACELET2 = reg("hermeticized_bracelet", () -> new BraceletItem(2, PROPS_GENERIC_1), Tab.SYN),
-		CHARM2 = reg("hermeticized_charm", () -> new CharmItem(2, PROPS_GENERIC_1), Tab.SYN),
+		GLOVE2 = reg("hermeticized_glove", () -> new GloveItem(2, PROPS_CURIO_2), Tab.SYN),
+		BRACELET2 = reg("hermeticized_bracelet", () -> new BraceletItem(2, PROPS_CURIO_2), Tab.SYN),
+		CHARM2 = reg("hermeticized_charm", () -> new CharmItem(2, PROPS_CURIO_2), Tab.SYN),
 		
 		// Armor
 		HELMET = unstack("hermetic_armet", Tab.SYN),
@@ -118,7 +141,7 @@ public class ItemInit {
 		C_AMULET = unstack("ancient_glowing_sphere", Tab.NAT),
 		C_POCKETWATCH = unstack("ancient_intricate_mechanism", Tab.NAT),
 		C_ANKLET = unstack("ancient_weightless_loop", Tab.NAT),
-		C_AMALGAM = basic("amalgam", Tab.SYN),
+		C_AMALGAM = basic("metallic_amalgam", Tab.SYN),
 		
 		// Misc
 		LOOTBALL = reg("complex_mass", () -> new LootBallItem(PROPS_GENERIC_1), Tab.NONE),
@@ -153,6 +176,53 @@ public class ItemInit {
 	public static <B extends Block> RegistryObject<BlockItem> fromBlock(RegistryObject<B> block, Tab tab) {
 		return reg(block.getId().getPath(), () -> new BlockItem(block.get(), PROPS_GENERIC_64), tab);
 	}
+	
+	private static RegistryObject<Item> materia(String name, int tier) {
+		Item.Properties props = PROPS_GENERIC_64;
+		switch (tier) {
+			case -2:
+				props = PROPS_MATERIA_NEG2;
+				break;
+			case -1:
+				props = PROPS_MATERIA_NEG1;
+				break;
+			case 0:
+				props = PROPS_MATERIA_0;
+				break;
+			case 1:
+				props = PROPS_MATERIA_1;
+				break;
+			case 2:
+				props = PROPS_MATERIA_2;
+				break;
+			case 3:
+				props = PROPS_MATERIA_3;
+				break;
+			case 4:
+				props = PROPS_MATERIA_4;
+				break;
+			case 5:
+				props = PROPS_MATERIA_5;
+				break;
+			case 6:
+				props = PROPS_MATERIA_6;
+				break;
+				
+			default:
+				break;
+		}
+		return reg(name, props, tier < 1 ? Tab.SYN : Tab.NAT);
+	}
+	private static RegistryObject<Item> impossible(String name) {
+		Item.Properties props = PROPS_IMPOSSIBLE;
+		return reg(name, props, Tab.NAT);
+	}
+	private static RegistryObject<Item> nulled(String name) {
+		Item.Properties props = PROPS_AETHER;
+		return reg(name, props, Tab.SYN);
+	}
+	
+	
 	
 	private static final RegistryObject<Item> reg(String name, Item.Properties props, Tab tab) {
 		return reg(name, () -> new Item(props), tab);

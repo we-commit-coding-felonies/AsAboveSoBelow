@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "aasb:item/equipment/armor/jewellery/head"
+    "layer0": "aasb:item/circlet_of_the_seer"
   }
 }

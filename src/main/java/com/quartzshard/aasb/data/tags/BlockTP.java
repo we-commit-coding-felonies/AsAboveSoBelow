@@ -22,6 +22,8 @@ public class BlockTP extends BlockTagsProvider {
 	}
 	
 	public static final TagKey<Block>
+		AREABLAST_EFFECTIVE = c("areablast_effective"),
+	
 		ARROW_NOCLIP = c("sentient_arrow_noclip"),
 		ARROW_DESTROY = c("sentient_arrow_destroy"),
 		

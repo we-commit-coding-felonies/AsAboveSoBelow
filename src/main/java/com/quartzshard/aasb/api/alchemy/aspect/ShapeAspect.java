@@ -1,5 +1,7 @@
 package com.quartzshard.aasb.api.alchemy.aspect;
 
+import java.util.Random;
+
 import org.jetbrains.annotations.Nullable;
 
 import com.quartzshard.aasb.AASB;
@@ -28,7 +30,7 @@ public enum ShapeAspect implements IAspect<ShapeAspect> {
 	public final String lang;
 	private final Component loc, fLoc;
 
-	// duplicate code because cant call name() before the end of the constructor
+	// duplicate code because cant call name() from within constructor
 	ShapeAspect(int color) {
 		this.color = color;
 		String lang = autoLangKey();
@@ -130,4 +132,7 @@ public enum ShapeAspect implements IAspect<ShapeAspect> {
 		return null;
 	}
 	
+	public static ShapeAspect fromSeed(long seed) {
+		return ShapeAspect.values()[new Random(seed).nextInt(ShapeAspect.values().length)];
+	}
 }

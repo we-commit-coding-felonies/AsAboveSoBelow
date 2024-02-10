@@ -33,11 +33,10 @@ public class ModInit {
 	}
 	
 	public static final RegistryObject<CreativeModeTab>
-		// TODO: fill out the tabs
 		NATURAL = TABS.register("natural", () -> CreativeModeTab.builder()
 			.title(Component.translatable(LangData.CTAB_NATURAL))
 			.withTabsBefore(CreativeModeTabs.COMBAT)
-			.icon(() -> ItemInit.PHILOSOPHERS_STONE.get().getDefaultInstance())
+			.icon(() -> ItemInit.THE_PHILOSOPHERS_STONE.get().getDefaultInstance())
 			.displayItems((parameters, tab) -> {
 				for (RegistryObject<? extends Item> ro : ItemInit.ALL_NATURAL_ITEMS) {
 					tab.accept(ro.get());

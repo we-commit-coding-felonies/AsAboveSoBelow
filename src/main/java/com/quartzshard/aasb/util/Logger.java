@@ -211,4 +211,38 @@ public class Logger {
 		player.sendSystemMessage(Component.literal("|"+ label +"| - Message from ["+ name +"]:"));
 		player.sendSystemMessage(Component.literal(msg));
 	}
+	
+	/**
+	 * Prints a standardized message to a player's chat 
+	 * with some extra info contained in a Map
+	 * 
+	 * @param name A name for what is printing this
+	 * @param label A label for this, meant for searching
+	 * @param msg A short message describing the error
+	 * @param playet The player to send the message to
+	 */
+	public static void chat(String name, String label, String msg, Player player, Map<String,String> data) {
+		player.sendSystemMessage(Component.literal("|"+ label +"| - Message from ["+ name +"]:"));
+		player.sendSystemMessage(Component.literal(msg));
+		for (Map.Entry<String,String> entry : data.entrySet()) {
+			player.sendSystemMessage(Component.literal(entry.getKey() +" : "+ entry.getValue()));
+		}
+	}
+	
+	/**
+	 * Prints a standardized message to a player's chat 
+	 * alongside some extra info
+	 * 
+	 * @param name A name for what is printing this
+	 * @param label A label for this, meant for searching
+	 * @param msg A short message describing the error
+	 * @param playet The player to send the message to
+	 */
+	public static void chat(String name, String label, String msg, Player player, String... data) {
+		Map<String,String> dm = new LinkedHashMap<>();
+		for (int i = 0; i < data.length; i++) {
+			dm.put("("+i+")", data[i]);
+		}
+		chat(name, label, msg, player, dm);
+	}
 }

@@ -209,6 +209,12 @@ public class LangData extends LanguageProvider {
 		TIP_TOOL_EMPOWER_DESC = id("toolTip.%s.tool.empower.desc"),
 		TIP_TOOL_EMPOWER_GUIDE = id("toolTip.%s.tool.empower.guide"),
 		
+		TIP_PHIL_1 = id("toolTip.%s.phil.1"),
+		TIP_PHIL_2 = id("toolTip.%s.phil.2"),
+		TIP_PHIL_3 = id("toolTip.%s.phil.3"),
+		TIP_PHIL_4 = id("toolTip.%s.phil.4"),
+		TIP_PHIL_5 = id("toolTip.%s.phil.5"),
+		
 		// Death Messages
 		DIE_AUTOSLASH = "autoslash",
 		DIE_MUSTANG = "mustang",
@@ -286,7 +292,9 @@ public class LangData extends LanguageProvider {
 		add(ItemInit.SALT.get(), "Salt");
 		add(ItemInit.SPUT.get(), "Sput");
 		add(ItemInit.AETHER.get(), "Aether");
-		
+
+		add(ItemInit.MATERIA_NEG2.get(), "Exalted Redstone");
+		add(ItemInit.MATERIA_NEG1.get(), "Homogenized Glowstone");
 		add(ItemInit.MATERIA_1.get(), "Materia Infirma");
 		add(ItemInit.MATERIA_2.get(), "Materia Minor");
 		add(ItemInit.MATERIA_3.get(), "Materia Modica");
@@ -315,9 +323,8 @@ public class LangData extends LanguageProvider {
 		
 		add(ItemInit.ELIXIR_OF_LIFE.get(), "Elixir of Life");
 		add(ItemInit.MINIUM_STONE.get(), "Minium Stone");
-		add(ItemInit.PHILOSOPHERS_STONE.get(), "The Philosopher's Stone");
-
-		add(ItemInit.OMNITOOL.get(), "Test item, please ignore.");
+		
+		add(ItemInit.THE_PHILOSOPHERS_STONE.get(), "The Philosopher's Stone");
 		add(ItemInit.SWORD.get(), "Hermetic Blade");
 		add(ItemInit.PICK.get(), "Hermetic Hammer");
 		add(ItemInit.SHOVEL.get(), "Hermetic Spade");
@@ -344,12 +351,26 @@ public class LangData extends LanguageProvider {
 		add(ItemInit.AMULET.get(), "Amulet of the Philosopher");
 		add(ItemInit.POCKETWATCH.get(), "Watch of the Astrologer");
 		add(ItemInit.ANKLET.get(), "Anklet of the Prophet");
+		
+		add(ItemInit.C_CIRCLET.get(), "Circlet of the Seer");
+		add(ItemInit.C_AMULET.get(), "Amulet of the Philosopher");
+		add(ItemInit.C_POCKETWATCH.get(), "Watch of the Astrologer");
+		add(ItemInit.C_ANKLET.get(), "Anklet of the Prophet");
+		add(ItemInit.C_AMALGAM.get(), "Metallic Amalgam");
 
 		add(ItemInit.LOOTBALL.get(), "Complex Mass");
 		add(ItemInit.WAYSTONE.get(), "Waystone");
 		add(ItemInit.WAY_GRENADE.get(), "Cracked Waystone");
 		add(ItemInit.CHALK.get(), "Chalk");
 		add(ItemInit.AETHERCHALK.get(), "Aetherchalk");
+
+		add(ItemInit.COS_GAUNTLET1.get(), "Silver Gauntlet");
+		add(ItemInit.COS_GAUNTLET2.get(), "Hermetic Gauntlet");
+		add(ItemInit.COS_BAND1.get(), "Silver Band");
+		add(ItemInit.COS_BAND2.get(), "Hermetic Band");
+		add(ItemInit.COS_TRINKET1.get(), "Silver Trinket");
+		add(ItemInit.COS_TRINKET2.get(), "Hermetic Trinket");
+		
 		// Blocks
 		/*add(ObjectInit.Blocks.ASH_STONE.get(), "Ashen Stone");
 		add(ObjectInit.Blocks.WAYSTONE.get(), "Waystone");
@@ -415,6 +436,12 @@ public class LangData extends LanguageProvider {
 		
 		add(TIP_TOOL_EMPOWER_DESC, "Abilities require empowerment to function");
 		add(TIP_TOOL_EMPOWER_GUIDE, "Hold %s to empower with Way");
+
+		add(TIP_PHIL_1, "WARNING: THIS DEBUG ITEM MAY BE UNSTABLE!!!");
+		add(TIP_PHIL_2, "This item is not normally obtainable.");
+		add(TIP_PHIL_3, "It is intended for testing / debugging by devs,");
+		add(TIP_PHIL_4, "and may cause strange effects, crashes, or worse!");
+		add(TIP_PHIL_5, "BUG REPORTS RELATED TO THIS ITEM WILL BE IGNORED");
 		
 		// Death Messages
 		add(dm(DIE_AUTOSLASH), "%s was decimated by %s");

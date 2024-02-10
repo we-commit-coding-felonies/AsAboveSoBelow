@@ -12,6 +12,7 @@ import com.quartzshard.aasb.api.alchemy.rune.ToolRune.ToolStyle;
 import com.quartzshard.aasb.api.alchemy.rune.shape.WaterRune;
 import com.quartzshard.aasb.api.item.IHermeticTool;
 import com.quartzshard.aasb.client.Keybinds;
+import com.quartzshard.aasb.common.item.ItemTraits.Tier;
 import com.quartzshard.aasb.data.LangData;
 import com.quartzshard.aasb.init.AlchInit;
 import com.quartzshard.aasb.net.server.KeybindPacket.BindState;

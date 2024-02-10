@@ -58,7 +58,7 @@ public class TransmutingBuff extends MobEffect {
 	@Override
 	public List<ItemStack> getCurativeItems() {
 		ArrayList<ItemStack> cures = new ArrayList<ItemStack>();
-		cures.add(new ItemStack(ItemInit.ELIXIR_OF_LIFE.get()));
+		cures.add(new ItemStack(ItemInit.THE_PHILOSOPHERS_STONE.get()));
 		return cures;
 	}
 

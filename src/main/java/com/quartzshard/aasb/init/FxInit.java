@@ -54,7 +54,8 @@ public class FxInit {
 			SND_TARGETLOCK = snd("misc.targetlock"),
 			SND_WHISTLE = snd("misc.whistle"),
 			SND_MUSTANG = snd("misc.mustang"),
-			SND_TICK = snd("misc.tick");
+			SND_TICK = snd("misc.tick"),
+			SND_ELIXIR = snd("misc.elixir");
 
 	private static RegistryObject<SoundEvent> snd(String name) {
 		return SOUNDS.register(name, () -> SoundEvent.createVariableRangeEvent(AASB.rl(name)));

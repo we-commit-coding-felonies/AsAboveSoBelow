@@ -5,19 +5,29 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Very different from the other aspects, complexity describes
  * the state of an items AlchData and how it behaves in transmutation <br>
- * Flow behaves very strangely with complex items, flowing from SIMPLE -> SIMPLE <br>
- * Violation is absolute. 
+ * Flow behaves very strangely with complex items, flowing from SIMPLE -> SIMPLE or COMPLEX -> SIMPLE <br>
+ * Violation is absolute. Everything that doesnt flow violates 100%
  */
 public enum ComplexityAspect implements IAspect<ComplexityAspect> {
 	SIMPLE, // Anything that is mapped properly and is able to be used as input and output for transmutation with no issues
 	COMPLEX, // For things that were mapped, but aspect resolution could not flow, so it cannot be an output of transmutation
 	NULLED, // Anything that *explicitly* has null as at least one of it's aspects. Cannot be used in transmutation circles at all
 	UNKNOWN, // Things that were not mapped (either not found or mapping failed), and cannot be used for any alchemical processes
+	
+	SEEDGEN, // Marks aspects as ones generated from some seed value. Generally treated like UNKNOWN.
+	PHIL, // Marks aspects as those of Phil. Any transmutation with this as its output will do Impossible Object crafting instead. Otherwise, acts like UNKNOWN
 	;
 
 	@Override
 	public boolean flowsTo(ComplexityAspect other) {
-		return this == other && other == ComplexityAspect.SIMPLE;
+		switch (this) {
+			case SIMPLE:
+			case COMPLEX:
+				return other == SIMPLE;
+			
+			default:
+				return false;
+		}
 	}
 
 	@Override

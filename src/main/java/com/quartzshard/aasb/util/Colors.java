@@ -23,6 +23,8 @@ public enum Colors {
 	
 	BROWN(115,80,46, 30,60,45, 0x73502e),
 	
+	AETHER(129,143,139, 164,10,56, 0x818f8b),
+	
 	MATERIA_LOWRED(191,48,48, 0,75,75, 0xbf3030),
 	MATERIA_NEG2(191,86,48, 16,75,75, 0xbf5630),
 	MATERIA_NEG1(191,186,48, 58,75,75, 0xbfba30),
@@ -73,12 +75,14 @@ public enum Colors {
 	}
 	
 	/**
+	 * @deprecated hardcoded garbage, use materiaGradient() or one of the fade functions instead
 	 * Originally from ProjectTwEaked <br>
 	 * Designed specifically for use with durability bars
 	 * 
 	 * @param fillPercent
 	 * @return color integer
 	 */
+	@Deprecated
 	public static int covalenceInt(float fillPercent) {
 		float f = Math.max(0.3911f, fillPercent / 1.65125495376f);
 		return Mth.hsvToRgb(f, 1.0f, 0.824f);
