@@ -49,15 +49,14 @@ public class SoundData extends SoundDefinitionsProvider {
 				"trinket/glove3",
 				"trinket/glove4");
 		multi(FxInit.SND_TRINKET_RING,
-				"trinket/glove1",
-				"trinket/glove2",
-				"trinket/glove3",
-				"trinket/glove4");
+				"trinket/band1",
+				"trinket/band2",
+				"trinket/band3",
+				"trinket/band4");
 		multi(FxInit.SND_TRINKET_CHARM,
-				"trinket/glove1",
-				"trinket/glove2",
-				"trinket/glove3",
-				"trinket/glove4");
+				"trinket/charm1");
+		
+		simple(FxInit.SND_TICK, "misc/tick");
 		
 		Map<ResourceLocation,Double> snds = new HashMap<>();
 		snds.put(new ResourceLocation("item/bottle/drink_honey1"), 1.0);
@@ -99,7 +98,7 @@ public class SoundData extends SoundDefinitionsProvider {
 		add(ro, def.subtitle(subFor(ro)));
 	}
 	
-	private static String subFor(Supplier<SoundEvent> ro) {
+	public static String subFor(Supplier<SoundEvent> ro) {
 		return "subtitles." + ro.get().getLocation().toString().replace(':', '.').replace('/', '.');
 	}
 	

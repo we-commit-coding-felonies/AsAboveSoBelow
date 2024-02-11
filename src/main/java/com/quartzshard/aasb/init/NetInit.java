@@ -37,6 +37,8 @@ public class NetInit {
 				.decoder(SlowFallPacket::dec)
 				.consumerMainThread(SlowFallPacket::handle)
 				.add();
+		
+		
 		// server -> client
 		CHANNEL.messageBuilder(PresetParticlePacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
 				.encoder(PresetParticlePacket::enc)
@@ -63,13 +65,11 @@ public class NetInit {
 				.decoder(CreateLoopingSoundPacket::dec)
 				.consumerMainThread(CreateLoopingSoundPacket::handle)
 				.add();
-		/*
 		CHANNEL.messageBuilder(ModifyPlayerVelocityPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
 				.encoder(ModifyPlayerVelocityPacket::enc)
 				.decoder(ModifyPlayerVelocityPacket::dec)
-				.consumer(ModifyPlayerVelocityPacket::handle)
+				.consumerMainThread(ModifyPlayerVelocityPacket::handle)
 				.add();
-		*/
 	}
 	
 	public static <PKT> void toServer(PKT packet) {

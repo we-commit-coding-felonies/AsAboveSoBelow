@@ -90,7 +90,7 @@ public class FormAspect implements IAspect<FormAspect> {
 	}
 	
 	private static String autoLangKey(ResourceLocation loc) {
-		String langKey = "misc."+loc.getNamespace()+".aspect.form."+loc.getPath();
+		String langKey = "alchemy."+loc.getNamespace()+".aspect.form."+loc.getPath();
 		Logger.debug("AspectForm.autoLangKey()", "MadeKey", langKey);
 		return langKey;
 	}

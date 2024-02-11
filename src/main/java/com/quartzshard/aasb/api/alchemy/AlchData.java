@@ -1,5 +1,6 @@
 package com.quartzshard.aasb.api.alchemy;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.quartzshard.aasb.api.alchemy.aspect.*;
@@ -20,7 +21,7 @@ public record AlchData(
 	public AlchData(WayAspect way, ShapeAspect shape, ResourceLocation form, ComplexityAspect complexity) {
 		this(way, shape, AlchInit.getForm(form), complexity);
 	}
-	public AlchData(WayAspect way, ShapeAspect shape, String form, ComplexityAspect complexity) {
+	public AlchData(WayAspect way, ShapeAspect shape, @NotNull String form, ComplexityAspect complexity) {
 		this(way, shape, AlchInit.getForm(ResourceLocation.tryParse(form)), complexity);
 	}
 	

@@ -2,6 +2,7 @@ package com.quartzshard.aasb.common.entity.projectile;
 
 import com.quartzshard.aasb.common.item.equipment.WayGrenadeItem;
 import com.quartzshard.aasb.common.level.WayExplosionDamageCalculator;
+import com.quartzshard.aasb.init.FxInit;
 import com.quartzshard.aasb.init.object.EntityInit;
 import com.quartzshard.aasb.init.object.ItemInit;
 
@@ -62,8 +63,8 @@ public class WayGrenadeEntity extends ThrowableItemProjectile {
 	 * TODO: make something fancier at higher explosion powers (above ~15)
 	 */
 	public void det() {
-		level().playSound(null, this.blockPosition(), SoundEvents.GENERIC_EXPLODE, this.getSoundSource(), 4.0F, (1.0F + (this.level().random.nextFloat() - this.level().random.nextFloat()) * 0.5F) * 0.3F);
-		level().playSound(null, this.blockPosition(), SoundEvents.GENERIC_EXPLODE, this.getSoundSource(), 4.0F, (1.0F + (this.level().random.nextFloat() - this.level().random.nextFloat()) * 0.5F) * 0.5F);
+		//level().playSound(null, this.blockPosition(), SoundEvents.GENERIC_EXPLODE, this.getSoundSource(), 4.0F, (1.0F + (this.level().random.nextFloat() - this.level().random.nextFloat()) * 0.5F) * 0.3F);
+		level().playSound(null, this.blockPosition(), FxInit.SND_WAY_EXPLODE.get(), this.getSoundSource(), 4.0F, (1.0F + (this.level().random.nextFloat() - this.level().random.nextFloat()) * 0.5F) * 1.25F);
 		if (!level().isClientSide) {
 			DamageSource dmgSrc = EntityInit.dmg(EntityInit.DMG_WAYBOMB, this.level(), this, this.getOwner());
 			ItemStack stack = this.getItem();

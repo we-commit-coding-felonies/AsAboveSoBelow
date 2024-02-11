@@ -1,15 +1,18 @@
 package com.quartzshard.aasb.data;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 import com.quartzshard.aasb.AASB;
 import com.quartzshard.aasb.client.Keybinds;
+import com.quartzshard.aasb.init.FxInit;
 import com.quartzshard.aasb.init.object.ItemInit;
 import com.quartzshard.aasb.util.ClientUtil;
 
 import net.minecraft.data.PackOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
@@ -48,6 +51,9 @@ public class LangData extends LanguageProvider {
 			id = id + (environmental ? ".player" : ".item");
 		}
 		return id;
+	}
+	private static String sub(Supplier<SoundEvent> ro) {
+		return SoundData.subFor(ro);
 	}
 	
 	public static final Component NL = Component.literal(" ");
@@ -352,10 +358,10 @@ public class LangData extends LanguageProvider {
 		add(ItemInit.POCKETWATCH.get(), "Watch of the Astrologer");
 		add(ItemInit.ANKLET.get(), "Anklet of the Prophet");
 		
-		add(ItemInit.C_CIRCLET.get(), "Circlet of the Seer");
-		add(ItemInit.C_AMULET.get(), "Amulet of the Philosopher");
-		add(ItemInit.C_POCKETWATCH.get(), "Watch of the Astrologer");
-		add(ItemInit.C_ANKLET.get(), "Anklet of the Prophet");
+		add(ItemInit.C_CIRCLET.get(), "Shattered Verdant Rock");
+		add(ItemInit.C_AMULET.get(), "Cracked Glowing Sphere");
+		add(ItemInit.C_POCKETWATCH.get(), "Broken Intricate Mechanism");
+		add(ItemInit.C_ANKLET.get(), "Rusted Weightless Loop");
 		add(ItemInit.C_AMALGAM.get(), "Metallic Amalgam");
 
 		add(ItemInit.LOOTBALL.get(), "Complex Mass");
@@ -437,11 +443,11 @@ public class LangData extends LanguageProvider {
 		add(TIP_TOOL_EMPOWER_DESC, "Abilities require empowerment to function");
 		add(TIP_TOOL_EMPOWER_GUIDE, "Hold %s to empower with Way");
 
-		add(TIP_PHIL_1, "WARNING: THIS DEBUG ITEM MAY BE UNSTABLE!!!");
+		add(TIP_PHIL_1, "WARNING: THIS IS A DEBUG ITEM AND IT MAY BE UNSTABLE!!!");
 		add(TIP_PHIL_2, "This item is not normally obtainable.");
 		add(TIP_PHIL_3, "It is intended for testing / debugging by devs,");
 		add(TIP_PHIL_4, "and may cause strange effects, crashes, or worse!");
-		add(TIP_PHIL_5, "BUG REPORTS RELATED TO THIS ITEM WILL BE IGNORED");
+		add(TIP_PHIL_5, "BUG REPORTS RELATED TO THIS ITEM WILL BE IGNORED, YOU HAVE BEEN WARNED");
 		
 		// Death Messages
 		add(dm(DIE_AUTOSLASH), "%s was decimated by %s");
@@ -452,7 +458,7 @@ public class LangData extends LanguageProvider {
 		add(edm(DIE_SURFACE_TENSION_ENV, true), "%s was proven guilty of witchcraft by %s");
 		add(dm(DIE_TRANSMUTE), "%s lost their Way at the hands of %s");
 		add(dm(DIE_TRANSMUTE, true), "%s fueled %s's transmutation via %s");
-		add(edm(DIE_TRANSMUTE_ENV), "%s became abominable.");
+		add(edm(DIE_TRANSMUTE_ENV), "%s became abominable");
 		add(edm(DIE_TRANSMUTE_ENV, true), "%s became unrecognizable whilst fighting %s");
 		add(dm(DIE_WAYBOMB), "%s was aspectually atomized due to %s");
 		add(dm(DIE_WAYBOMB, true), "%s underwent alchemical fission because of %s whilst wielding %s");
@@ -462,6 +468,37 @@ public class LangData extends LanguageProvider {
 		add(dm(DIE_YONDU, true), "%s experienced impalement thanks to Sentient Arrow, assisted by %s and their %s");
 		
 		// Subtitles
+		add(sub(FxInit.SND_SENTIENT_WHISPERS), "Sentient whispers");
+		
+		add(sub(FxInit.SND_TRANSMUTE_GENERIC), "Transmutation");
+		add(sub(FxInit.SND_TRANSMUTE_WATER), "Water transmutation");
+		add(sub(FxInit.SND_TRANSMUTE_EARTH), "Earth transmutation");
+		add(sub(FxInit.SND_TRANSMUTE_FIRE), "Fire transmutation");
+		add(sub(FxInit.SND_TRANSMUTE_AIR), "Air transmutation");
+		add(sub(FxInit.SND_TRANSMUTE_ALIVE), "Living transmutation");
+		add(sub(FxInit.SND_TRANSMUTE_IMPOSSIBLE), "Impossible transmutation");
+		add(sub(FxInit.SND_TRANSMUTE_FAIL), "Failed transmutation");
+
+		add(sub(FxInit.SND_WAY_WASTE), "Way dispersed");
+		add(sub(FxInit.SND_WAY_LEAK), "Way leaks");
+		add(sub(FxInit.SND_WAY_EXPLODE), "Way violently dispersed");
+		add(sub(FxInit.SND_WAY_CHARGE), "Way empowers");
+		add(sub(FxInit.SND_WAY_SLASH), "Way discharged");
+
+		add(sub(FxInit.SND_BARRIER_AMBIENT), "Barrier hums");
+		add(sub(FxInit.SND_BARRIER_PROTECT), "Barrier blocks");
+		add(sub(FxInit.SND_BARRIER_FAIL), "Barrier breaks");
+
+		add(sub(FxInit.SND_TRINKET_GLOVE), "Finger snap");
+		add(sub(FxInit.SND_TRINKET_RING), "Hand wave");
+		add(sub(FxInit.SND_TRINKET_CHARM), "Charm triggered");
+
+		add(sub(FxInit.SND_TARGETLOCK), "Arrow finds target");
+		add(sub(FxInit.SND_WHISTLE), "Whistling");
+		add(sub(FxInit.SND_MUSTANG), "Atmosphere ignites");
+		add(sub(FxInit.SND_TICK), "Ticking");
+		add(sub(FxInit.SND_ELIXIR), "Drinking Elixir of Life");
+		add(sub(FxInit.SND_VANISH), "Something vanishes");
 	}
 
 

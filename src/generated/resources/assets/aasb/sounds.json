@@ -1,4 +1,15 @@
 {
+  "misc.elixir": {
+    "sounds": [
+      {
+        "name": "item/bottle/drink_honey3",
+        "pitch": 0.75
+      },
+      "item/bottle/drink_honey2",
+      "item/bottle/drink_honey1"
+    ],
+    "subtitle": "subtitles.aasb.misc.elixir"
+  },
   "misc.mustang": {
     "sounds": [
       "aasb:misc/mustang"
@@ -10,6 +21,12 @@
       "aasb:misc/targetlock"
     ],
     "subtitle": "subtitles.aasb.misc.targetlock"
+  },
+  "misc.tick": {
+    "sounds": [
+      "aasb:misc/tick"
+    ],
+    "subtitle": "subtitles.aasb.misc.tick"
   },
   "misc.whistle": {
     "sounds": [
@@ -27,10 +44,7 @@
   },
   "trinket.charm": {
     "sounds": [
-      "aasb:trinket/glove1",
-      "aasb:trinket/glove2",
-      "aasb:trinket/glove3",
-      "aasb:trinket/glove4"
+      "aasb:trinket/charm1"
     ],
     "subtitle": "subtitles.aasb.trinket.charm"
   },
@@ -45,10 +59,10 @@
   },
   "trinket.ring": {
     "sounds": [
-      "aasb:trinket/glove1",
-      "aasb:trinket/glove2",
-      "aasb:trinket/glove3",
-      "aasb:trinket/glove4"
+      "aasb:trinket/band1",
+      "aasb:trinket/band2",
+      "aasb:trinket/band3",
+      "aasb:trinket/band4"
     ],
     "subtitle": "subtitles.aasb.trinket.ring"
   },

@@ -9,15 +9,19 @@ import org.jetbrains.annotations.Nullable;
 
 import com.google.common.collect.Lists;
 import com.quartzshard.aasb.common.entity.ai.HomingArrowNavigation;
+import com.quartzshard.aasb.common.item.equipment.armor.jewellery.AmuletItem;
 import com.quartzshard.aasb.data.tags.BlockTP;
 import com.quartzshard.aasb.data.tags.EntityTP;
 import com.quartzshard.aasb.init.FxInit;
 import com.quartzshard.aasb.init.NetInit;
 import com.quartzshard.aasb.init.object.EntityInit;
+import com.quartzshard.aasb.net.client.CreateLoopingSoundPacket;
+import com.quartzshard.aasb.net.client.CreateLoopingSoundPacket.LoopingSound;
 import com.quartzshard.aasb.net.client.DrawParticleLinePacket;
 import com.quartzshard.aasb.net.client.DrawParticleLinePacket.LineParticlePreset;
 import com.quartzshard.aasb.util.EntUtil;
 import com.quartzshard.aasb.util.Logger;
+import com.quartzshard.aasb.util.WayUtil;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -27,6 +31,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -501,9 +506,9 @@ public class SentientArrowEntity extends AbstractArrow {
 	@Override
 	public void kill() {
 		debugLog("EndOfLife");
-		//playSound(EffectInit.ARCHANGELS_EXPIRE.get(), 1, 1);
+		playSound(FxInit.SND_VANISH.get(), 1, 1);
 		if (getOwner() != null) {
-			//level.playSound(null, getOwner().blockPosition(), EffectInit.ARCHANGELS_EXPIRE.get(), SoundSource.PLAYERS, 1, 0.1f);
+			level().playSound(null, getOwner().blockPosition(), FxInit.SND_VANISH.get(), SoundSource.PLAYERS, 1, 0.1f);
 		}
 		discard();
 	}
@@ -736,17 +741,14 @@ public class SentientArrowEntity extends AbstractArrow {
 	private void attemptToTransmuteEntity(LivingEntity entity) {
 		debugLog("AttemptTransmuteEntity");
 		Player owner = owner();
-		//int oldInvuln = entity.invulnerableTime;
-		//entity.invulnerableTime = 0;
-		/*if (entity instanceof Player plr && AmuletItem.isBarrierActive(plr) && owner != null) {
+		if (entity instanceof Player plr && AmuletItem.isBarrierActive(plr) && owner != null) {
 			// massive damage to alchshield
-			entity.hurt(EntityInit.dmg(EntityInit.DMG_TRANSMUTE, level(), this, this.owner()), entity.getMaxHealth() * 3);
-		} else*/ if (!entity.addEffect(new MobEffectInstance(EntityInit.BUFF_TRANSMUTING.get(), 7, 1))) {
+			entity.hurt(EntityInit.dmg(EntityInit.DMG_SENTIENT_ARROW, level(), this, this.owner()), 60);
+		} else if (!entity.addEffect(new MobEffectInstance(EntityInit.BUFF_TRANSMUTING.get(), 7, 1))) {
 			// if we cant do the effect, do a shitload of damage
 			entity.hurt(EntityInit.dmg(EntityInit.DMG_TRANSMUTE, level(), this, this.owner()), entity.getMaxHealth() / 8);
 		}
-		//entity.invulnerableTime = oldInvuln;
-		//entity.playSound(EffectInit.ARCHANGELS_SENTIENT_HIT.get(), 1, 2f);
+		entity.playSound(FxInit.SND_TRANSMUTE_GENERIC.get(), 1, 1f);
 		
 		if (entity.is(getTarget())) {
 			resetTarget();
@@ -820,22 +822,14 @@ public class SentientArrowEntity extends AbstractArrow {
 		if (isInert()) {
 			setState(ArrowState.DIRECT);
 			for (ServerPlayer plr : ((ServerLevel)level()).players()) {
-				//NetInit.toClient(new CreateLoopingSoundPacket(LoopingSound.SENTIENT_WHISPERS, this.getId()), plr);
+				NetInit.toClient(new CreateLoopingSoundPacket(LoopingSound.SENTIENT_WHISPERS, this.getId()), plr);
 			}
 		}
 		Entity owner = getOwner();
 		if (owner == null) return false;
 		if (this.inGround) {
 			// teleport to owner if we are stuck
-			// TODO: COST
-			long teleCost = (long) position().distanceTo(owner.position()) * (maxLife - tickCount);
-			if (true){//EmcHelper.getAvaliableEmc(owner()) >= teleCost) {
-				inGround = false;
-				level().playSound(null, this.blockPosition(), SoundEvents.CHORUS_FRUIT_TELEPORT, this.getSoundSource(), 1, 2);
-				level().playSound(null, owner.blockPosition(), SoundEvents.CHORUS_FRUIT_TELEPORT, this.getSoundSource(), 1, 2);
-				//EmcHelper.consumeAvaliableEmc(owner(), teleCost);
-				this.setPos(owner.position());
-			}
+			recallToPlayer(owner());
 		}
 		// Entity oldTarget = getTarget();
 		Vec3 ray = owner.getLookAngle().scale(128);
@@ -853,6 +847,18 @@ public class SentientArrowEntity extends AbstractArrow {
 		isReturningToOwner = true;
 		return false;
 	}
+	
+	public void recallToPlayer(Player owner) {
+		long teleCost = (long) position().distanceTo(owner.position()) * (maxLife - tickCount);
+		if (WayUtil.getAvaliableWay(owner) >= teleCost) {
+			inGround = false;
+			level().playSound(null, this.blockPosition(), SoundEvents.CHORUS_FRUIT_TELEPORT, this.getSoundSource(), 1, 2);
+			level().playSound(null, owner.blockPosition(), SoundEvents.CHORUS_FRUIT_TELEPORT, this.getSoundSource(), 1, 2);
+			WayUtil.consumeAvaliableWay(owner, teleCost);
+			this.setPos(owner.position());
+		}
+	}
+	
 	private boolean trySwappingTargetTo(Entity newTarget) {
 		if (newTarget != null && !newTarget.is(getTarget())) {
 			setTarget(newTarget.getId());
@@ -867,7 +873,7 @@ public class SentientArrowEntity extends AbstractArrow {
 		return entity != null
 				&& owner != null
 				&& canTheoreticallyHitEntity(entity)
-				&& !entity.getType().is(EntityTP.HOMING_IGNORE)
+				&& !entity.getType().is(EntityTP.HOMING_LIST)
 				&& (!entity.isInvisible() || entity.isCurrentlyGlowing())
 				&& !entity.hasEffect(EntityInit.BUFF_TRANSMUTING.get())
 				&& !EntUtil.isTamedByOrTrusts(entity, owner);

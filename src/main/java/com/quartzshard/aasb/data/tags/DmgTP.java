@@ -112,8 +112,8 @@ public class DmgTP extends TagsProvider<DamageType> {
 		tag(DamageTypeTags.IS_FIRE)
 			.addTag(IS_STRONG_FIRE);
 		tag(DamageTypeTags.IS_PROJECTILE)
-			.add(EntityInit.DMG_ARROW_SWARM)
-			.add(EntityInit.DMG_SENTIENT_ARROW);
+			.add(EntityInit.DMG_ARROW_SWARM);
+			//.add(EntityInit.DMG_SENTIENT_ARROW);
 		
 		// OTHER SECTION
 		tag(DamageTypeTags.AVOIDS_GUARDIAN_THORNS)

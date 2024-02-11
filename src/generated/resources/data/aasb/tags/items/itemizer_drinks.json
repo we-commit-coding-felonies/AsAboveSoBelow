@@ -1,0 +1,11 @@
+{
+  "values": [
+    "minecraft:experience_bottle",
+    "minecraft:honey_bottle",
+    "minecraft:potion",
+    "minecraft:milk_bucket",
+    "minecraft:lava_bucket",
+    "minecraft:water_bucket",
+    "aasb:elixir_of_life"
+  ]
+}

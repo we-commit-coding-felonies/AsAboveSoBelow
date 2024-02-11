@@ -169,7 +169,7 @@ public class Phil {
 	public static void stashReloadData(ReloadableServerResources svRes, RegistryAccess regAccess, ResourceManager resMngr) {
 		RELOAD_DAT = new ReloadData(svRes, regAccess, resMngr);
 	}
-	
+
 	public static void mapAspects(TagsUpdatedEvent event) {
 		if (RELOAD_DAT != null) {
 			long start = System.currentTimeMillis();
@@ -193,6 +193,11 @@ public class Phil {
 			}
 			RELOAD_DAT = null;
 		}
+	}
+	
+	// FIXME this must be removed!!!!!
+	public static void debugTestChangeMap(Map<ItemData,AlchData> newMap) {
+		alchMap = newMap;
 	}
 	
 	/**

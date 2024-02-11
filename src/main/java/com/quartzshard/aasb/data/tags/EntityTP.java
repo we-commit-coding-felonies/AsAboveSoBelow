@@ -22,7 +22,7 @@ public class EntityTP extends EntityTypeTagsProvider {
 	
 	public static final TagKey<EntityType<?>>
 		ITEMIZER_LIST = c("itemizer_list"),
-		HOMING_IGNORE = c("homing_ignore"),
+		HOMING_LIST = c("homing_list"),
 		CLAIRVOYANCE_LIST = c("clairvoyance_list");
 	
 	@Override
@@ -30,7 +30,7 @@ public class EntityTP extends EntityTypeTagsProvider {
 		tag(ITEMIZER_LIST)
 			.add(EntityType.ENDER_DRAGON);
 		
-		tag(HOMING_IGNORE)
+		tag(HOMING_LIST)
 			.add(EntityType.ARMOR_STAND)
 			.add(EntityType.ENDERMAN);
 		

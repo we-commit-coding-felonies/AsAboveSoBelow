@@ -39,6 +39,7 @@ public class DataGens {
 			gen.addProvider(true, btp);
 			gen.addProvider(true, new ItemTP(out, lp, help, btp));
 			gen.addProvider(true, new EntityTP(out, lp, help));
+			gen.addProvider(true, new TileTP(out, lp, help));
 			gen.addProvider(true, new DmgTP(out, lp, help));
 		}
 	}

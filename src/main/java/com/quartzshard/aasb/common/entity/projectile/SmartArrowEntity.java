@@ -158,7 +158,7 @@ public class SmartArrowEntity extends Arrow {
 	protected boolean isValidHomingTarget(LivingEntity entity) {
 		return canHitEntity(entity)
 				&& !entity.is(getOwner())
-				&& !entity.getType().is(EntityTP.HOMING_IGNORE)
+				&& !entity.getType().is(EntityTP.HOMING_LIST)
 				&& !entity.isInvulnerable()
 				&& (!entity.isInvisible() || entity.isCurrentlyGlowing())
 				&& (level().clip(new ClipContext(this.getBoundingBox().getCenter(), entity.getBoundingBox().getCenter(), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this)).getType() == HitResult.Type.MISS)

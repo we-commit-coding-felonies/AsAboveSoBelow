@@ -5,10 +5,12 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.quartzshard.aasb.common.entity.projectile.SentientArrowEntity;
 import com.quartzshard.aasb.common.entity.projectile.SmartArrowEntity;
+import com.quartzshard.aasb.init.object.ItemInit;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -310,5 +312,9 @@ public class EntUtil {
 	
 	public static boolean isTamedByOrTrusts(Entity entity, Player player) {
 		return isTamedBy(entity, player) || isTrustingOf(entity, player);
+	}
+
+	public static boolean resistsSpacetimeShenanigans(@NotNull LivingEntity entity) {
+		return (entity instanceof Player player && player.getItemBySlot(EquipmentSlot.LEGS).is(ItemInit.POCKETWATCH.get())) || isInvincible(entity);
 	}
 }

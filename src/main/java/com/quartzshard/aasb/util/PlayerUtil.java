@@ -2,28 +2,45 @@ package com.quartzshard.aasb.util;
 
 import java.util.Arrays;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import com.quartzshard.aasb.util.MathUtil.Constants;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundAnimatePacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
+import net.minecraft.util.Tuple;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.CapabilityToken;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.BlockSnapshot;
+import net.minecraftforge.common.util.INBTSerializable;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.level.BlockEvent;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.server.ServerLifecycleHooks;
+import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.SlotContext;
+import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 
 public class PlayerUtil {
 	
@@ -287,5 +304,114 @@ public class PlayerUtil {
 			return false;
 		}
 		return true;
+	}
+
+	@Nullable
+	public static IItemHandler getCuriosInv(Player player) {
+		return CuriosApi.getCuriosInventory(player).lazyMap(ICuriosItemHandler::getEquippedCurios).resolve().orElse(null);
+	}
+
+	@Nullable
+	public static Tuple<ItemStack,SlotContext> getCurio(Player player, String type, int idx) {
+		return CuriosApi.getCuriosInventory(player).lazyMap(handler -> {
+			Tuple<ItemStack,SlotContext> curio = new Tuple<>(null,null);
+			handler.findCurio(type, idx).ifPresent(result -> {
+				curio.setA(result.stack());
+				curio.setB(result.slotContext());
+			});
+			return curio;
+		}).resolve().orElse(null);
+	}
+	
+
+	// Next 2: https://github.com/sinkillerj/ProjectE/blob/68fbb2dea0cf8a6394fa6c7c084063046d94cee5/src/main/java/moze_intel/projecte/utils/PlayerHelper.java#L109C3-L127C3
+	public static BlockHitResult getBlockLookingAt(Player player, double maxDistance) {
+		Tuple<Vec3, Vec3> vecs = getLookVec(player, maxDistance);
+		ClipContext ctx = new ClipContext(vecs.getA(), vecs.getB(), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, player);
+		return player.level().clip(ctx);
+	}
+	public static Tuple<Vec3, Vec3> getLookVec(Player player, double maxDistance) {
+		// Thank you ForgeEssentials
+		Vec3 look = player.getViewVector(1.0F);
+		Vec3 playerPos = new Vec3(player.getX(), player.getY() + player.getEyeHeight(), player.getZ());
+		Vec3 src = playerPos.add(0, player.getEyeHeight(), 0);
+		Vec3 dest = src.add(look.x * maxDistance, look.y * maxDistance, look.z * maxDistance);
+		return new Tuple<>(src, dest);
+	}
+	
+	public static class PlayerSelectedHand {
+		public static final String TK_HAND = "ActiveAlchemyHand";
+		private InteractionHand hand = InteractionHand.MAIN_HAND;
+
+		public boolean main() {
+			return hand == InteractionHand.MAIN_HAND;
+		}
+		public boolean off() {
+			return hand == InteractionHand.OFF_HAND;
+		}
+		
+		public InteractionHand getHand() {
+			return hand;
+		}
+		
+		public void swapHand() {
+			hand = hand == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
+		}
+		
+		public void copyFrom(PlayerSelectedHand other) {
+			hand = other.getHand();
+		}
+
+		public void serialize(CompoundTag tag) {
+			tag.putBoolean(TK_HAND, hand == InteractionHand.MAIN_HAND);
+		}
+		public void deserialize(CompoundTag tag) {
+			hand = tag.getBoolean(TK_HAND) ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
+		}
+	}
+	
+	public static class PlayerSelectedHandProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
+		public static Capability<PlayerSelectedHand> PLAYER_SELECTED_HAND = CapabilityManager.get(new CapabilityToken<>(){});
+		
+		private final LazyOptional<PlayerSelectedHand> lo = LazyOptional.of(this::make);
+		
+		@Nullable private PlayerSelectedHand hand = null;
+		
+		private PlayerSelectedHand make() {
+			// fuck you
+			PlayerSelectedHand hand = new PlayerSelectedHand();
+			if (this.hand == null) {
+				this.hand = hand;
+			}
+			hand = this.hand;
+			return hand;
+		}
+		
+		@Override
+		public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap) {
+			if (cap == PLAYER_SELECTED_HAND) {
+				return lo.cast();
+			}
+			return LazyOptional.empty();
+		}
+
+		@Override
+		public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+			return getCapability(cap);
+		}
+		
+		@Override
+		public CompoundTag serializeNBT() {
+			CompoundTag tag = new CompoundTag();
+			make().serialize(tag);
+			return tag;
+		}
+
+		@Override
+		public void deserializeNBT(CompoundTag nbt) {
+			// TODO Auto-generated method stub
+			
+		}
+		
 	}
 }

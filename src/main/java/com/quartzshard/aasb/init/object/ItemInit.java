@@ -52,7 +52,8 @@ public class ItemInit {
 		PROPS_MATERIA_6 = new Item.Properties().rarity(Rarity.MATERIA_6.get()),
 		PROPS_QUINTESSENCE = new Item.Properties().rarity(Rarity.QUINTESSENTIAL.get()),
 		PROPS_AETHER = new Item.Properties().rarity(Rarity.NULLIFIED.get()),
-		PROPS_IMPOSSIBLE = new Item.Properties().rarity(Rarity.IMPOSSIBLE.get()),
+		PROPS_IMPOSSIBLE_64 = new Item.Properties().rarity(Rarity.IMPOSSIBLE.get()),
+		PROPS_IMPOSSIBLE_1 = new Item.Properties().rarity(Rarity.IMPOSSIBLE.get()),
 		PROPS_ELIXIR = new Item.Properties().rarity(Rarity.IMPOSSIBLE.get()).stacksTo(1).food(new FoodProperties.Builder().alwaysEat().build())
 		;
 	
@@ -108,7 +109,7 @@ public class ItemInit {
 		
 		// Philos
 		ELIXIR_OF_LIFE = reg("elixir_of_life", () -> new ElixirOfLifeItem(PROPS_ELIXIR), Tab.SYN),
-		MINIUM_STONE = reg("minium_stone", () -> new MiniumStoneItem(PROPS_IMPOSSIBLE), Tab.NAT),
+		MINIUM_STONE = reg("minium_stone", () -> new MiniumStoneItem(PROPS_IMPOSSIBLE_1), Tab.NAT),
 		
 		// Tools
 		THE_PHILOSOPHERS_STONE = reg("the_philosophers_stone", () -> new OmnitoolItem(Float.MAX_VALUE, Float.MAX_VALUE, Tier.HERMETIC, BlockTags.MINEABLE_WITH_PICKAXE, PROPS_GENERIC_TOOL), Tab.NONE),
@@ -131,10 +132,10 @@ public class ItemInit {
 		CHESTPLATE = unstack("hermetic_cuirass", Tab.SYN),
 		LEGGINGS = unstack("hermetic_greaves", Tab.SYN),
 		BOOTS = unstack("hermetic_sabatons", Tab.SYN),
-		CIRCLET = reg("circlet_of_the_seer", () -> new CircletItem(PROPS_GENERIC_TOOL), Tab.BOTH),
-		AMULET = reg("amulet_of_the_philosopher", () -> new AmuletItem(PROPS_GENERIC_TOOL), Tab.BOTH),
-		POCKETWATCH = reg("watch_of_the_astrologer", () -> new PocketwatchItem(PROPS_GENERIC_TOOL), Tab.BOTH),
-		ANKLET = reg("anklet_of_the_prophet", () -> new AnkletItem(PROPS_GENERIC_TOOL), Tab.BOTH),
+		CIRCLET = reg("circlet_of_the_seer", () -> new CircletItem(PROPS_IMPOSSIBLE_1), Tab.NAT),
+		AMULET = reg("amulet_of_the_philosopher", () -> new AmuletItem(PROPS_IMPOSSIBLE_1), Tab.NAT),
+		POCKETWATCH = reg("watch_of_the_astrologer", () -> new PocketwatchItem(PROPS_IMPOSSIBLE_1), Tab.NAT),
+		ANKLET = reg("anklet_of_the_prophet", () -> new AnkletItem(PROPS_IMPOSSIBLE_1), Tab.NAT),
 		
 		// Crafting items
 		C_CIRCLET = unstack("ancient_verdant_rock", Tab.NAT),
@@ -213,8 +214,8 @@ public class ItemInit {
 		}
 		return reg(name, props, tier < 1 ? Tab.SYN : Tab.NAT);
 	}
-	private static RegistryObject<Item> impossible(String name) {
-		Item.Properties props = PROPS_IMPOSSIBLE;
+	private static RegistryObject<Item> impossible(String name, boolean stacks) {
+		Item.Properties props = stacks ? PROPS_IMPOSSIBLE_64 : PROPS_IMPOSSIBLE_1;
 		return reg(name, props, Tab.NAT);
 	}
 	private static RegistryObject<Item> nulled(String name) {

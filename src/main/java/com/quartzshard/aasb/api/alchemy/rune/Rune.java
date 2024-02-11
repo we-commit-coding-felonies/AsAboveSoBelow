@@ -1,7 +1,10 @@
 package com.quartzshard.aasb.api.alchemy.rune;
 
+import java.util.UUID;
+
 import org.jetbrains.annotations.Nullable;
 
+import com.google.common.collect.Multimap;
 import com.quartzshard.aasb.init.AlchInit;
 import com.quartzshard.aasb.net.server.KeybindPacket.BindState;
 
@@ -9,7 +12,10 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
+import top.theillusivec4.curios.api.SlotContext;
 
 public abstract class Rune {
 	
@@ -84,4 +90,13 @@ public abstract class Rune {
 	 * @return True if the ability was activated, false otherwise
 	 */
 	public abstract void tickPassive(ItemStack stack, ServerPlayer player, ServerLevel level, boolean strong, boolean unequipped);
+
+	/**
+	 * Called by the curios to get attrib modifiers. All params are passed directly from curio counterpart <br>
+	 * @return Multimap of modifiers for this rune, or null for none / default 
+	 */
+	@Nullable
+	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(SlotContext ctx, UUID uuid, ItemStack stack) {
+		return null;
+	}
 }

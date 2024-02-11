@@ -46,12 +46,16 @@ public class EtherealRune extends FormRune {
 		// TODO: COST
 		if (strong) {
 			if (hasTrackedArrow(stack)) {
-				SentientArrowEntity arrow = getTrackedArrow(stack, player.level());
-				if (arrow == null) resetTrackedArrow(stack);
+				SentientArrowEntity arrow = getTrackedArrow(stack, level);
+				if (arrow == null) resetTrackedArrow(stack); // TODO sometimes the arrow seems to get a bit stuck in unloaded chunks and doesnt despawn? find a fix for this
+				else if (!level.isPositionEntityTicking(arrow.blockPosition())) {
+					arrow.recallToPlayer(player);
+					return true;
+				}
 				else {
 					sentientArrowControl(getTrackedArrow(stack, level), player);
 					PlayerUtil.coolDown(player, stack.getItem(), 15);
-					return true;
+					return false; // we return false here to prevent arm swing and snap sound
 				}
 			}
 			
@@ -68,7 +72,7 @@ public class EtherealRune extends FormRune {
 			//}
 		} else {
 			boolean up = player.onGround();
-			long amount = /*Math.min(*/up ? 28 : 56;//, plrEmc/Archangel.SMART.get());
+			long amount = /*Math.min(*/up ? 14 : 28;//, plrEmc/Archangel.SMART.get());
 			ShootContext ctx = up ?
 					new ShootContext(level, player, new Vec3(-90, 0, 0)) :
 					new ShootContext(level, player);

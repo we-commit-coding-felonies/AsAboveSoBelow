@@ -1,13 +1,22 @@
 package com.quartzshard.aasb.common.item.equipment.curio;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
 import com.quartzshard.aasb.api.alchemy.rune.Rune;
 import com.quartzshard.aasb.api.item.IRuneable;
 import com.quartzshard.aasb.data.LangData;
 import com.quartzshard.aasb.init.AlchInit;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
 public abstract class AbilityCurioItem extends Item implements IRuneable, ICurioItem {
@@ -46,5 +55,28 @@ public abstract class AbilityCurioItem extends Item implements IRuneable, ICurio
 			return Component.translatable(getAbility(stack).runedLang, runeText);
 		}
 		return super.getName(stack);
+	}
+
+	/**
+	 * Retrieves a map of attribute modifiers for the curio.
+	 * <br>
+	 * Note that only the identifier is guaranteed to be present in the slot context. For instances
+	 * where the ItemStack may not be in a curio slot, such as when retrieving item tooltips, the
+	 * index is -1 and the wearer may be null.
+	 *
+	 * @param slotContext Context about the slot that the ItemStack is in
+	 * @param uuid        Slot-unique UUID
+	 * @return A map of attribute modifiers to apply
+	 */
+	@Override
+	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(SlotContext ctx, UUID uuid, ItemStack stack) {
+		List<Multimap<Attribute, AttributeModifier>> maps = new ArrayList<>();
+		ImmutableMultimap.Builder<Attribute,AttributeModifier> builder = ImmutableMultimap.builder();
+		for (Rune rune : this.getInscribedRunes(stack)) {
+			Multimap<Attribute, AttributeModifier> map = rune.getAttributeModifiers(ctx, uuid, stack);
+			if (map != null) builder.putAll(map);
+		}
+		builder.putAll(ICurioItem.super.getAttributeModifiers(ctx, uuid, stack));
+		return builder.build();
 	}
 }

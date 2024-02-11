@@ -31,7 +31,7 @@ public class BlockTP extends BlockTagsProvider {
 		HYPERSICKLE_PATHUNDER = c("hypersickle_pathunder"),
 		SUPERCUT_HARVESTS = c("supercut_harvests"),
 		
-		TICKACCEL_LIST = c("tickaccel_list"),
+		NO_TICKACCEL = c("no_tickaccel"),
 		
 		WAYBLAST_RESIST = c("wayblast_resist"),
 		WAYBLAST_IMMUNE = c("wayblast_immune"),

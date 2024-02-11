@@ -8,6 +8,7 @@ import com.quartzshard.aasb.util.Logger;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
+import net.minecraft.world.entity.Entity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddReloadListenerEvent;
@@ -67,8 +68,12 @@ public class AASB {
 			bus.addListener(Keybinds::register);
 		});
 
+		MinecraftForge.EVENT_BUS.addGenericListener(Entity.class, ModInit::attachEntityCaps);
+		MinecraftForge.EVENT_BUS.addListener(ModInit::onPlayerCloned);
+		MinecraftForge.EVENT_BUS.addListener(ModInit::onRegisterCapabilities);
 		MinecraftForge.EVENT_BUS.addListener(this::addReloadListeners);
 		MinecraftForge.EVENT_BUS.addListener(Phil::mapAspects);
+		
 	}
 
 	// https://github.com/sinkillerj/ProjectE/blob/68fbb2dea0cf8a6394fa6c7c084063046d94cee5/src/main/java/moze_intel/projecte/PECore.java#L347

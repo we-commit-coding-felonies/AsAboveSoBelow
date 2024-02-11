@@ -2,16 +2,21 @@ package com.quartzshard.aasb.net.server;
 
 import java.util.function.Supplier;
 
+import com.quartzshard.aasb.api.item.IRuneable;
 import com.quartzshard.aasb.api.item.bind.IHandleKeybind;
 import com.quartzshard.aasb.util.Logger;
+import com.quartzshard.aasb.util.PlayerUtil;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Tuple;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 
 import net.minecraftforge.network.NetworkEvent;
+import top.theillusivec4.curios.api.SlotContext;
 
 /**
  * keybinds client -> server, except this time without the spam
@@ -82,14 +87,49 @@ public record KeybindPacket(ServerBind bind, BindState state) {
 						passBindToVanillaSlots(player, level, EquipmentSlot.MAINHAND, EquipmentSlot.OFFHAND);
 						break;
 					
-					// TODO: implement!!!
 					case HANDSWAP:
+						if (state == BindState.PRESSED)
+							player.getCapability(PlayerUtil.PlayerSelectedHandProvider.PLAYER_SELECTED_HAND).ifPresent(cap -> {
+								cap.swapHand();
+								System.out.println(cap.getHand().toString());
+							});
 						break;
 					case GLOVE:
+						player.getCapability(PlayerUtil.PlayerSelectedHandProvider.PLAYER_SELECTED_HAND).ifPresent(cap -> {
+							int idx = cap.getHand() == InteractionHand.MAIN_HAND ? 0 : 1;
+							Tuple<ItemStack,SlotContext> curio = PlayerUtil.getCurio(player, "hands", idx);
+							if (curio != null) {
+								ItemStack stack = curio.getA();
+								if (stack.getItem() instanceof IRuneable item && !PlayerUtil.onCooldown(player, stack.getItem())) {
+									if (item.handle(new PressContext(bind, state, stack, player, level))) {
+										PlayerUtil.swingArm(player, level, cap.getHand());
+									}
+								}
+							}
+						});
 						break;
 					case BRACELET:
+						player.getCapability(PlayerUtil.PlayerSelectedHandProvider.PLAYER_SELECTED_HAND).ifPresent(cap -> {
+							int idx = cap.getHand() == InteractionHand.MAIN_HAND ? 0 : 1;
+							Tuple<ItemStack,SlotContext> curio = PlayerUtil.getCurio(player, "bracelet", idx);
+							if (curio != null) {
+								ItemStack stack = curio.getA();
+								if (stack.getItem() instanceof IRuneable item && !PlayerUtil.onCooldown(player, stack.getItem())) {
+									if (item.handle(new PressContext(bind, state, stack, player, level))) {
+										PlayerUtil.swingArm(player, level, cap.getHand());
+									}
+								}
+							}
+						});
 						break;
 					case CHARM:
+						Tuple<ItemStack,SlotContext> curio = PlayerUtil.getCurio(player, "charm", 0);
+						if (curio != null) {
+							ItemStack stack = curio.getA();
+							if (stack.getItem() instanceof IRuneable item && !PlayerUtil.onCooldown(player, stack.getItem())) {
+								item.handle(new PressContext(bind, state, stack, player, level));
+							}
+						}
 						break;
 						
 					default:

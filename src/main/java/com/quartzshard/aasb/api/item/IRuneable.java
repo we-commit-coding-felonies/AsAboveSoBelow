@@ -5,11 +5,13 @@ import java.util.List;
 
 import org.jetbrains.annotations.Nullable;
 
+import com.quartzshard.aasb.AASB;
 import com.quartzshard.aasb.api.alchemy.rune.Rune;
 import com.quartzshard.aasb.api.alchemy.rune.ToolRune;
 import com.quartzshard.aasb.api.item.bind.IHandleKeybind;
 import com.quartzshard.aasb.common.item.equipment.curio.AbilityCurioItem;
 import com.quartzshard.aasb.data.LangData;
+import com.quartzshard.aasb.init.FxInit;
 import com.quartzshard.aasb.net.server.KeybindPacket.PressContext;
 import com.quartzshard.aasb.util.NBTUtil;
 
@@ -48,14 +50,27 @@ public interface IRuneable extends IHandleKeybind {
 		boolean strong = runesAreStrong(stack);
 		switch (getAbility(stack)) {
 			case COMBAT:
-				return rune.combatAbility(stack, player, ctx.level(), ctx.state(), strong);
+				if (rune.combatAbility(stack, player, ctx.level(), ctx.state(), strong)) {
+					ctx.level().playSound(null, player.blockPosition(), FxInit.SND_TRINKET_GLOVE.get(), player.getSoundSource(), 1f, AASB.RNG.nextFloat(1, 2));
+					return true;
+				}
+				break;
 			case UTILITY:
-				return rune.utilityAbility(stack, player, ctx.level(), ctx.state(), strong);
+				if (rune.utilityAbility(stack, player, ctx.level(), ctx.state(), strong)) {
+					ctx.level().playSound(null, player.blockPosition(), FxInit.SND_TRINKET_RING.get(), player.getSoundSource());
+					return true;
+				}
+				break;
 			case PASSIVE:
-				return rune.passiveAbility(stack, player, ctx.level(), ctx.state(), strong);
+				if (rune.passiveAbility(stack, player, ctx.level(), ctx.state(), strong)) {
+					ctx.level().playSound(null, player.blockPosition(), FxInit.SND_TRINKET_CHARM.get(), player.getSoundSource());
+					return true;
+				}
+				break;
 			default:
-				return false;
+				break;
 		}
+		return false;
 	}
 
 	default void tickRunes(ItemStack stack, ServerPlayer player, ServerLevel level, boolean unequip) {

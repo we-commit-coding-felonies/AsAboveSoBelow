@@ -15,6 +15,7 @@ import com.quartzshard.aasb.api.alchemy.rune.shape.WaterRune;
 import com.quartzshard.aasb.net.server.KeybindPacket.PressContext;
 import com.quartzshard.aasb.util.NBTUtil;
 
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -27,7 +28,6 @@ import net.minecraft.world.level.block.state.BlockState;
  * A combination of multiple other item-related interfaces, use this if you want to make a new kind of Hermetic Tool with minimal differences
  */
 public interface IHermeticTool extends IDigStabilizer, IEmpowerable, IEnchantBoostable, IRuneableTool {
-
 	@Override
 	default boolean handle(PressContext ctx) {
 		switch (ctx.bind()) {

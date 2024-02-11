@@ -12,6 +12,7 @@ import com.quartzshard.aasb.api.alchemy.AlchData;
 import com.quartzshard.aasb.api.alchemy.ItemData;
 import com.quartzshard.aasb.api.alchemy.Phil;
 import com.quartzshard.aasb.api.alchemy.aspect.ComplexityAspect;
+import com.quartzshard.aasb.api.alchemy.aspect.FormAspect;
 import com.quartzshard.aasb.api.alchemy.aspect.ShapeAspect;
 import com.quartzshard.aasb.api.item.IDigStabilizer;
 import com.quartzshard.aasb.api.item.IHermeticTool;
@@ -61,7 +62,6 @@ import net.minecraftforge.fml.common.Mod;
 public class OmnitoolItem extends DiggerItem implements IDigStabilizer, IHandleKeybind {
 	public OmnitoolItem(float damage, float speed, Tier tier, TagKey<Block> breakableBlocks, Properties props) {
 		super(damage, speed, tier, breakableBlocks, props);
-		this.appendHoverText(getDefaultInstance(), null, null, null);
 	}
 	
 	@Override
@@ -71,7 +71,7 @@ public class OmnitoolItem extends DiggerItem implements IDigStabilizer, IHandleK
 	
 	@Override
 	public boolean isBarVisible(ItemStack stack) {
-		return true;
+		return NBTUtil.getBoolean(stack, "AmIARealBoy-ccccccuthdkhdbhtbindtlhrjinenkcveuhddnvhkvrk", false);
 	}
 	
 	@Override
@@ -81,15 +81,26 @@ public class OmnitoolItem extends DiggerItem implements IDigStabilizer, IHandleK
 	
 	@Override
 	public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
-		NBTUtil.setBoolean(stack, "AmIARealBoy-ccccccuthdkhdbhtbindtlhrjinenkcveuhddnvhkvrk", true);
-		if (selected) {
-			if (entity instanceof Player plr && plr.hasPermissions(4)) {
-				if (!isFoil(stack)) {
-					NBTUtil.setBoolean(stack, "IsExtremelyOP", true);
-				}
-			} else {
-				if (isFoil(stack)) {
-					NBTUtil.setBoolean(stack, "IsExtremelyOP", false);
+		if (entity instanceof Player plr) {
+			if (!NBTUtil.getBoolean(stack, "AmIARealBoy-ccccccuthdkhdbhtbindtlhrjinenkcveuhddnvhkvrk", false)) {
+				NBTUtil.setBoolean(stack, "AmIARealBoy-ccccccuthdkhdbhtbindtlhrjinenkcveuhddnvhkvrk", true);
+				Logger.chat("OmnitoolItem.inventoryTick()", "WarningMessage", "PLEASE READ THE FOLLOWING:", plr,
+							"You have just given yourself a DEBUG ITEM, which is not normally obtainable",
+							"It is intended for use by the developers of AASB for testing various things",
+							"The item may behave unpredictably, cause glitches, crash the game, or worse!",
+							"By continuing to use this item, you accept the risks involved with doing so",
+							"ANY BUG REPORTS RELATED TO THIS ITEM WILL BE IGNORED! YOU HAVE BEEN WARNED!"
+						);
+			}
+			if (selected) {
+				if (plr.hasPermissions(4)) {
+					if (!isFoil(stack)) {
+						NBTUtil.setBoolean(stack, "IsExtremelyOP", true);
+					}
+				} else {
+					if (isFoil(stack)) {
+						NBTUtil.setBoolean(stack, "IsExtremelyOP", false);
+					}
 				}
 			}
 		}
@@ -121,10 +132,6 @@ public class OmnitoolItem extends DiggerItem implements IDigStabilizer, IHandleK
 	public boolean toggleInstamine(ItemStack stack) {
 		boolean wasInstamine = NBTUtil.getBoolean(stack, "Instamine", false);
 		NBTUtil.setBoolean(stack, "Instamine", !wasInstamine);
-		//if (wasInstamine)
-		//	AlchemyInit.TrinketRunes.FIRE.get().combatAbility(stack, player, level, BindState.PRESSED);
-		//else
-		//	AlchemyInit.TrinketRunes.WATER.get().combatAbility(stack, player, level, BindState.PRESSED);
 		return true;
 	}
 
@@ -141,41 +148,17 @@ public class OmnitoolItem extends DiggerItem implements IDigStabilizer, IHandleK
 		ServerPlayer plr = ctx.player();
 		switch (ctx.bind()) {
 		case ITEMMODE:
-			if (ctx.state() == BindState.PRESSED) {
-				if (!plr.isShiftKeyDown()) {
-					plr.displayClientMessage(Component.literal("GODMODE"), false);
-					plr.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, Integer.MAX_VALUE, 4));
-					plr.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, Integer.MAX_VALUE, 0));
-					plr.addEffect(new MobEffectInstance(MobEffects.HEAL, Integer.MAX_VALUE, 99));
-					plr.addEffect(new MobEffectInstance(MobEffects.SATURATION, Integer.MAX_VALUE, 99));
-				} else {
-					plr.displayClientMessage(Component.literal("mortal mode"), false);
-					plr.removeEffect(MobEffects.DAMAGE_RESISTANCE);
-					plr.removeEffect(MobEffects.FIRE_RESISTANCE);
-					plr.removeEffect(MobEffects.HEAL);
-					plr.removeEffect(MobEffects.SATURATION);
-				}
-			}
-			return true;
-		case ITEMFUNC_1:
-			return ctx.state() == BindState.PRESSED
-			&& AlchInit.RUNE_FIRE.get().combatAbility(ctx.stack(), ctx.player(), ctx.level(), BindState.PRESSED, true);
-		case ITEMFUNC_2:
-			return ctx.state() == BindState.PRESSED
-			&& AlchInit.RUNE_ETHEREAL.get().combatAbility(ctx.stack(), ctx.player(), ctx.level(), BindState.PRESSED, true);
-		case EMPOWER:
-			//Logger.chat("debug", "code", AlchInit.ROUGH.get().violationTo(AlchInit.ROCK.get())+"", ctx.player());
-			//AlchData dat = Phil.getPhilAspects(19);
-			//Map<String,String> info = new LinkedHashMap<>();
-			//info.put("Way", dat.way().getValue()+"");
-			//info.put("Shape", dat.shape().name());
-			//info.put("Form", dat.form().getName().toString());
-			//Logger.chat("debug", "code", "Recipe for The Philosopher's Stone:", ctx.player(), info);
-			for (int i = 0; i < 144; i++) {
-				System.out.println("      "+i+",");
-			}
+			Logger.chat("debug", "code", Phil.violation(ItemInit.MATERIA_1.get(), ItemInit.MATERIA_1.get())+"", plr);
 			return ctx.state() == BindState.PRESSED
 			&& toggleInstamine(ctx.stack());
+		case ITEMFUNC_1:
+			plr.sendSystemMessage(Component.literal(""+Phil.violation(ItemInit.MERCURY_BOTTLE.get(), Items.IRON_INGOT)));
+			return true;
+		case ITEMFUNC_2:
+			return true;
+		case EMPOWER:
+			Phil.debugTestChangeMap(QuickAndDirtyRuntimeCodeTests.Mapper.createTestMap());
+			return true;
 		default:
 			return false;
 		}
@@ -225,7 +208,7 @@ public class OmnitoolItem extends DiggerItem implements IDigStabilizer, IHandleK
 						new AlchData(1, ShapeAspect.EARTH, "aasb:soil", ComplexityAspect.SIMPLE));
 				map.put(
 						ItemData.fromItem(Items.SAND),
-						new AlchData(2, ShapeAspect.EARTH, "aasb:soil", ComplexityAspect.SIMPLE));
+						new AlchData(2, ShapeAspect.EARTH, "aasb:terrain", ComplexityAspect.SIMPLE));
 				map.put(
 						ItemData.fromItem(Items.GLASS),
 						new AlchData(2, ShapeAspect.FIRE, "aasb:soil", ComplexityAspect.SIMPLE));
@@ -256,9 +239,40 @@ public class OmnitoolItem extends DiggerItem implements IDigStabilizer, IHandleK
 				map.put(
 						ItemData.fromItem(ItemInit.MERCURY_BOTTLE.get()),
 						new AlchData(512, ShapeAspect.WATER, "aasb:metal", ComplexityAspect.SIMPLE));
+				map.put(
+						ItemData.fromItem(ItemInit.SOOT.get()),
+						new AlchData(1, ShapeAspect.FIRE, (FormAspect)null, ComplexityAspect.NULLED));
+				map.put(
+						ItemData.fromItem(ItemInit.SALT.get()),
+						new AlchData(1, null, "aasb:mineral", ComplexityAspect.NULLED));
+				map.put(
+						ItemData.fromItem(ItemInit.SPUT.get()),
+						new AlchData(null, ShapeAspect.FIRE, "aasb:organic", ComplexityAspect.NULLED));
+				map.put(
+						ItemData.fromItem(ItemInit.MATERIA_NEG2.get()),
+						new AlchData(1, ShapeAspect.QUINTESSENCE, "aasb:materia", ComplexityAspect.SIMPLE));
+				map.put(
+						ItemData.fromItem(ItemInit.MATERIA_NEG1.get()),
+						new AlchData(2, ShapeAspect.QUINTESSENCE, "aasb:materia", ComplexityAspect.SIMPLE));
+				map.put(
+						ItemData.fromItem(ItemInit.MATERIA_1.get()),
+						new AlchData(64, ShapeAspect.QUINTESSENCE, "aasb:materia", ComplexityAspect.SIMPLE));
+				map.put(
+						ItemData.fromItem(ItemInit.MATERIA_2.get()),
+						new AlchData(128, ShapeAspect.QUINTESSENCE, "aasb:materia", ComplexityAspect.SIMPLE));
+				map.put(
+						ItemData.fromItem(ItemInit.MATERIA_3.get()),
+						new AlchData(256, ShapeAspect.QUINTESSENCE, "aasb:materia", ComplexityAspect.SIMPLE));
+				map.put(
+						ItemData.fromItem(ItemInit.MATERIA_4.get()),
+						new AlchData(512, ShapeAspect.QUINTESSENCE, "aasb:materia", ComplexityAspect.SIMPLE));
+				map.put(
+						ItemData.fromItem(ItemInit.MATERIA_5.get()),
+						new AlchData(1024, ShapeAspect.QUINTESSENCE, "aasb:materia", ComplexityAspect.SIMPLE));
 				
 				return map;
 			}
+			
 		}
 	}
 }

@@ -10,6 +10,7 @@ import com.quartzshard.aasb.init.object.ItemInit;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -116,11 +117,12 @@ public class ElixirOfLifeItem extends Item {
 	
 	public static void grantImmortality(LivingEntity entity) {
 		if (!entity.level().isClientSide) {
+			entity.level().playSound(null, entity.blockPosition(), SoundEvents.TOTEM_USE, entity.getSoundSource());
 			entity.addEffect(new MobEffectInstance(MobEffects.HEALTH_BOOST, 1200, 9)); // really healthy...
 			entity.setHealth(entity.getMaxHealth());
 			entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 60, 5)); // and invincible!!!
-			entity.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 100, 5)); // and invincible!!!
-			if (entity.hasEffect(EntityInit.BUFF_TRANSMUTING.get())) // ...with a catch
+			entity.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 200, 0)); // ...with a catch
+			if (entity.hasEffect(EntityInit.BUFF_TRANSMUTING.get()))
 				entity.removeEffect(EntityInit.BUFF_TRANSMUTING.get());
 			else
 				entity.addEffect(new MobEffectInstance(EntityInit.BUFF_TRANSMUTING.get(), 100));

@@ -36,6 +36,8 @@ public class FxInit {
 			SND_TRANSMUTE_FIRE = snd("transmute.fire"),
 			SND_TRANSMUTE_AIR = snd("transmute.air"),
 			SND_TRANSMUTE_ALIVE = snd("transmute.living"),
+			SND_TRANSMUTE_IMPOSSIBLE = snd("transmute.impossible"),
+			SND_TRANSMUTE_FAIL = snd("transmute.fail"),
 	
 			SND_WAY_WASTE = snd("way.waste"),
 			SND_WAY_LEAK = snd("way.leak"),
@@ -55,7 +57,8 @@ public class FxInit {
 			SND_WHISTLE = snd("misc.whistle"),
 			SND_MUSTANG = snd("misc.mustang"),
 			SND_TICK = snd("misc.tick"),
-			SND_ELIXIR = snd("misc.elixir");
+			SND_ELIXIR = snd("misc.elixir"),
+			SND_VANISH = snd("misc.vanish");
 
 	private static RegistryObject<SoundEvent> snd(String name) {
 		return SOUNDS.register(name, () -> SoundEvent.createVariableRangeEvent(AASB.rl(name)));
