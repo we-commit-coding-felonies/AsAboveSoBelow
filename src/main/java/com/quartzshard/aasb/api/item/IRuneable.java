@@ -20,6 +20,7 @@ import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 /**
@@ -31,10 +32,16 @@ public interface IRuneable extends IHandleKeybind {
 	
 	@Override
 	default boolean handle(PressContext ctx) {
+		String slot = null;
 		switch (ctx.bind()) {
 			case GLOVE:
+				slot = "hands";
+				break;
 			case BRACELET:
+				slot = "bracelet";
+				break;
 			case CHARM:
+				slot = "charm";
 				break;
 			
 			default: // this is so we dont handle things unless we are equipped
@@ -50,20 +57,20 @@ public interface IRuneable extends IHandleKeybind {
 		boolean strong = runesAreStrong(stack);
 		switch (getAbility(stack)) {
 			case COMBAT:
-				if (rune.combatAbility(stack, player, ctx.level(), ctx.state(), strong)) {
+				if (rune.combatAbility(stack, player, ctx.level(), ctx.state(), strong, slot)) {
 					ctx.level().playSound(null, player.blockPosition(), FxInit.SND_TRINKET_GLOVE.get(), player.getSoundSource(), 1f, AASB.RNG.nextFloat(1, 2));
 					return true;
 				}
 				break;
 			case UTILITY:
-				if (rune.utilityAbility(stack, player, ctx.level(), ctx.state(), strong)) {
-					ctx.level().playSound(null, player.blockPosition(), FxInit.SND_TRINKET_RING.get(), player.getSoundSource());
+				if (rune.utilityAbility(stack, player, ctx.level(), ctx.state(), strong, slot)) {
+					ctx.level().playSound(null, player.blockPosition(), FxInit.SND_TRINKET_RING.get(), player.getSoundSource(), 1f, AASB.RNG.nextFloat(1, 2));
 					return true;
 				}
 				break;
 			case PASSIVE:
-				if (rune.passiveAbility(stack, player, ctx.level(), ctx.state(), strong)) {
-					ctx.level().playSound(null, player.blockPosition(), FxInit.SND_TRINKET_CHARM.get(), player.getSoundSource());
+				if (rune.passiveAbility(stack, player, ctx.level(), ctx.state(), strong, slot)) {
+					ctx.level().playSound(null, player.blockPosition(), FxInit.SND_TRINKET_CHARM.get(), player.getSoundSource(), 1f, AASB.RNG.nextFloat(1, 2));
 					return true;
 				}
 				break;
@@ -160,6 +167,13 @@ public interface IRuneable extends IHandleKeybind {
 	 * @return True if runes should be strong
 	 */
 	boolean runesAreStrong(ItemStack stack);
+	
+	/**
+	 * Gets the tagret item for when this is transmuted by an inscribed Materia rune
+	 * @return Item to morph into, or null if this item does not morph
+	 */
+	@Nullable
+	Item getMateriaRuneTarget(ItemStack stack);
 	
 	/**
 	 * Gets what type of rune ability the item should trigger

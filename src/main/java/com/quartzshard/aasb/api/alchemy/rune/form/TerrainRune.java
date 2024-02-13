@@ -18,7 +18,7 @@ public class TerrainRune extends FormRune {
 	 * strong: 3d worldedit //set
 	 */
 	@Override
-	public boolean combatAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong) {
+	public boolean combatAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -28,7 +28,7 @@ public class TerrainRune extends FormRune {
 	 * strong: 3d worldedit //replace
 	 */
 	@Override
-	public boolean utilityAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong) {
+	public boolean utilityAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -38,7 +38,7 @@ public class TerrainRune extends FormRune {
 	 * strong: walk on air? should be distinct from Air rune flight
 	 */
 	@Override
-	public boolean passiveAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong) {
+	public boolean passiveAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
 		// TODO Auto-generated method stub
 		return false;
 	}

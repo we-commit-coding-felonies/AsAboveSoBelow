@@ -20,7 +20,7 @@ public class AirRune extends ShapeRune {
 	 * Strong: UNNNNLIMITED POWWWEERRRRR (chain lightning)
 	 */
 	@Override
-	public boolean combatAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong) {
+	public boolean combatAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
 		return false;
 	}
 
@@ -29,7 +29,7 @@ public class AirRune extends ShapeRune {
 	 * Strong: Absurd gust self + nearby
 	 */
 	@Override
-	public boolean utilityAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong) {
+	public boolean utilityAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
 		return false;
 	}
 
@@ -38,7 +38,7 @@ public class AirRune extends ShapeRune {
 	 * Strong: Creative flight
 	 */
 	@Override
-	public boolean passiveAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong) {
+	public boolean passiveAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
 		return false;
 	}
 	@Override

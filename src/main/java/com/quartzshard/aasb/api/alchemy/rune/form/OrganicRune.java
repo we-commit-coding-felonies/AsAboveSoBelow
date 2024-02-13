@@ -18,7 +18,7 @@ public class OrganicRune extends FormRune {
 	 * strong: wither vine
 	 */
 	@Override
-	public boolean combatAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong) {
+	public boolean combatAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -28,7 +28,7 @@ public class OrganicRune extends FormRune {
 	 * strong: area bonemeal
 	 */
 	@Override
-	public boolean utilityAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong) {
+	public boolean utilityAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -38,7 +38,7 @@ public class OrganicRune extends FormRune {
 	 * strong: stronger boost and +10 hearts
 	 */
 	@Override
-	public boolean passiveAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong) {
+	public boolean passiveAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
 		// TODO Auto-generated method stub
 		return false;
 	}

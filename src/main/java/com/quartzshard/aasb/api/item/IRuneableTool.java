@@ -14,6 +14,7 @@ import com.quartzshard.aasb.net.server.KeybindPacket.PressContext;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
@@ -101,5 +102,10 @@ public interface IRuneableTool extends IRuneable {
 		}
 		if (didDo)
 			tips.add(runeText);
+	}
+	
+	@Override @Nullable
+	default Item getMateriaRuneTarget(ItemStack stack) {
+		return null;
 	}
 }

@@ -1,10 +1,14 @@
 package com.quartzshard.aasb.util;
 
 import java.util.Arrays;
+import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.quartzshard.aasb.api.item.IRuneable;
+import com.quartzshard.aasb.api.misc.Wrapper;
+import com.quartzshard.aasb.net.server.KeybindPacket.PressContext;
 import com.quartzshard.aasb.util.MathUtil.Constants;
 
 import net.minecraft.core.BlockPos;
@@ -41,6 +45,7 @@ import net.minecraftforge.server.ServerLifecycleHooks;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
+import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
 
 public class PlayerUtil {
 	
@@ -321,6 +326,39 @@ public class PlayerUtil {
 			});
 			return curio;
 		}).resolve().orElse(null);
+	}
+	
+	/**
+	 * Sets the specified curio slot to have the ItemStack, regardless of whats already there or if it fits
+	 * @param player
+	 * @param type
+	 * @param idx
+	 * @param stack
+	 * @return
+	 */
+	@Nullable
+	public static void forceSetCurio(Player player, String type, int idx, ItemStack stack) {
+		CuriosApi.getCuriosInventory(player).ifPresent(handler -> {
+			Map<String,ICurioStacksHandler> curiosMap = handler.getCurios();
+			for (Map.Entry<String,ICurioStacksHandler> entry : curiosMap.entrySet()) {
+				if (entry.getKey().equals(type)) {
+					System.out.println(entry.getKey());
+					entry.getValue().getStacks().setStackInSlot(idx, stack);
+				}
+			}
+		});
+	}
+
+	@Nullable
+	public static InteractionHand getActiveRuneHand(ServerPlayer player) {
+		Wrapper<InteractionHand> hand = new Wrapper<>();
+		player.getCapability(PlayerUtil.PlayerSelectedHandProvider.PLAYER_SELECTED_HAND).ifPresent(cap -> {
+			hand.set(cap.getHand());
+		});
+		return hand.get();
+	}
+	public static int getActiveRuneHandVal(ServerPlayer player) {
+		return getActiveRuneHand(player) == InteractionHand.MAIN_HAND ? 0 : 1;
 	}
 	
 

@@ -24,7 +24,7 @@ public class FireRune extends ShapeRune {
 	 * Strong: Mustang
 	 */
 	@Override
-	public boolean combatAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong) {
+	public boolean combatAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
 		// TODO: COST
 		if (state == BindState.PRESSED) {
 			if (player.level().isRainingAt(player.blockPosition())) {
@@ -56,7 +56,7 @@ public class FireRune extends ShapeRune {
 	 * Strong: Floodfill lava bucket
 	 */
 	@Override
-	public boolean utilityAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong) {
+	public boolean utilityAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
 		return false;
 	}
 
@@ -65,7 +65,7 @@ public class FireRune extends ShapeRune {
 	 * Strong: Lava immunity + Mustang resistance
 	 */
 	@Override
-	public boolean passiveAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong) {
+	public boolean passiveAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
 		return false;
 	}
 	@Override

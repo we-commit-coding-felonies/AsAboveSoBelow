@@ -73,8 +73,10 @@ public abstract class AbilityCurioItem extends Item implements IRuneable, ICurio
 		List<Multimap<Attribute, AttributeModifier>> maps = new ArrayList<>();
 		ImmutableMultimap.Builder<Attribute,AttributeModifier> builder = ImmutableMultimap.builder();
 		for (Rune rune : this.getInscribedRunes(stack)) {
-			Multimap<Attribute, AttributeModifier> map = rune.getAttributeModifiers(ctx, uuid, stack);
-			if (map != null) builder.putAll(map);
+			if (rune != null) {
+				Multimap<Attribute, AttributeModifier> map = rune.getAttributeModifiers(ctx, uuid, stack);
+				if (map != null) builder.putAll(map);
+			}
 		}
 		builder.putAll(ICurioItem.super.getAttributeModifiers(ctx, uuid, stack));
 		return builder.build();

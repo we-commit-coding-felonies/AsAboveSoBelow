@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 import com.google.common.collect.Multimap;
 import com.quartzshard.aasb.init.AlchInit;
 import com.quartzshard.aasb.net.server.KeybindPacket.BindState;
+import com.quartzshard.aasb.util.NBTUtil;
 
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -18,6 +19,8 @@ import net.minecraft.world.item.ItemStack;
 import top.theillusivec4.curios.api.SlotContext;
 
 public abstract class Rune {
+	public static final String
+		TK_ACTIVATED = "TrinketActive";
 	
 	public abstract MutableComponent loc();
 	public abstract MutableComponent fLoc();
@@ -53,7 +56,7 @@ public abstract class Rune {
 	 * @param strong True if this ability has been powered up
 	 * @return True if the ability was activated, false otherwise
 	 */
-	public abstract boolean combatAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong);
+	public abstract boolean combatAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot);
 	
 	/**
 	 * Triggers this rune's utility ability, called by bracelets
@@ -64,7 +67,7 @@ public abstract class Rune {
 	 * @param strong True if this ability has been powered up
 	 * @return True if the ability was activated, false otherwise
 	 */
-	public abstract boolean utilityAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong);
+	public abstract boolean utilityAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot);
 	
 	/**
 	 * Triggers this rune's active passive ability, called by charms when the keybind is pressed <br>
@@ -76,7 +79,18 @@ public abstract class Rune {
 	 * @param strong True if this ability has been powered up
 	 * @return True if the ability was activated, false otherwise
 	 */
-	public abstract boolean passiveAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong);
+	public boolean passiveAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
+		if (state != BindState.PRESSED) return false;
+		togglePassive(stack);
+		return true;
+	}
+
+	public boolean passiveEnabled(ItemStack stack) {
+		return NBTUtil.getBoolean(stack, TK_ACTIVATED, false);
+	}
+	public void togglePassive(ItemStack stack) {
+		NBTUtil.setBoolean(stack, TK_ACTIVATED, !passiveEnabled(stack));
+	}
 	
 	/**
 	 * Triggers this rune's active passive ability, called by charms EVERY TICK <br>

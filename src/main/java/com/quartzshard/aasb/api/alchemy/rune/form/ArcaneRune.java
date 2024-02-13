@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.quartzshard.aasb.AASB;
+import com.quartzshard.aasb.client.gui.menu.PortableCraftingMenu;
 import com.quartzshard.aasb.common.item.equipment.armor.jewellery.AmuletItem;
 import com.quartzshard.aasb.common.item.equipment.curio.AbilityCurioItem;
 import com.quartzshard.aasb.data.LangData;
@@ -39,6 +40,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -50,6 +52,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ChunkPos;
@@ -81,8 +84,7 @@ public class ArcaneRune extends FormRune {
 	public static final UUID UUID_TIMEACCEL = UUID.fromString("311f77f1-5573-431d-8340-06511e72d28f");
 	public static final String
 		TK_PITCH = "TimeAccelTickHighPitch",
-		TK_TICKTIME = "TimeAccelTickCount",
-		TK_JOJOACTIVE = "TimeAccelEnabled";
+		TK_TICKTIME = "TimeAccelTickCount";
 
 	public ArcaneRune() {
 		super(AASB.rl("arcane"));
@@ -93,7 +95,7 @@ public class ArcaneRune extends FormRune {
 	 * strong: transmuting touch (itemizer)
 	 */
 	@Override
-	public boolean combatAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong) {
+	public boolean combatAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
 		double reach = player.getEntityReach();
 		Vec3 checkVec = player.getLookAngle().scale(reach); 
 		@Nullable EntityHitResult hitRes = ProjectileUtil.getEntityHitResult(
@@ -132,29 +134,13 @@ public class ArcaneRune extends FormRune {
 	 * strong: portable transmutation
 	 */
 	@Override
-	public boolean utilityAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong) {
+	public boolean utilityAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
 		if (strong) {
-			
+			// TODO transmutation tablet
 		}
-		BlockHitResult lookingAt = PlayerUtil.getBlockLookingAt(player, 64);
-		BlockPos c;
-		if (lookingAt.getType() == BlockHitResult.Type.MISS) {
-			c = BlockPos.containing(PlayerUtil.getLookVec(player, 32).getB());
-		} else {
-			c = lookingAt.getBlockPos();
-		}
-		EntityTeleportEvent event = new EntityTeleportEvent(player, c.getX(), c.getY(), c.getZ());
-		if (!MinecraftForge.EVENT_BUS.post(event)) {
-			if (player.isPassenger()) {
-				player.stopRiding();
-			}
-			player.teleportTo(event.getTargetX(), event.getTargetY(), event.getTargetZ());
-			player.level().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.CHORUS_FRUIT_TELEPORT, SoundSource.PLAYERS, 1, 1);
-			player.fallDistance = 0;
-			PlayerUtil.coolDown(player, stack.getItem(), 10);
-			return true;
-		}
-		return false;
+		ContainerLevelAccess wp = ContainerLevelAccess.create(level, BlockPos.ZERO);
+		player.openMenu(new SimpleMenuProvider((id, inv, plr) -> new PortableCraftingMenu(id, inv, wp), stack.getHoverName()));
+		return true;
 	}
 
 	/**
@@ -162,12 +148,12 @@ public class ArcaneRune extends FormRune {
 	 * strong: really op jojo reference
 	 */
 	@Override
-	public boolean passiveAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong) {
+	public boolean passiveAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
 		if (state != BindState.PRESSED) return false;
-		if (NBTUtil.getBoolean(stack, TK_JOJOACTIVE, false)) {
+		if (passiveEnabled(stack)) {
 			resetAccel(player, stack);
 		} else {
-			NBTUtil.setBoolean(stack, TK_JOJOACTIVE, true);
+			NBTUtil.setBoolean(stack, TK_ACTIVATED, true);
 		}
 		return true;
 	}
@@ -180,7 +166,7 @@ public class ArcaneRune extends FormRune {
 			//NBTUtil.setBoolean(stack, TK_JOJOACTIVE, false);
 			//NBTUtil.setInt(stack, TK_TICKTIME, 0);
 			//resetTimeAccelSpeed(player);
-		} else if (!unequipped && NBTUtil.getBoolean(stack, TK_JOJOACTIVE, false)) {
+		} else if (!unequipped && NBTUtil.getBoolean(stack, TK_ACTIVATED, false)) {
 			long plrEmc = WayUtil.getAvaliableWay(player);
 			if (plrEmc >= (strong ? 64 : 8)) {
 				NBTUtil.setInt(stack, TK_TICKTIME, timeTicking(stack)+1);
@@ -193,7 +179,7 @@ public class ArcaneRune extends FormRune {
 	
 	@Override @Nullable
 	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(SlotContext ctx, UUID uuid, ItemStack stack) {
-		if (NBTUtil.getBoolean(stack, TK_JOJOACTIVE, false) && stack.getItem() instanceof AbilityCurioItem item) {
+		if (NBTUtil.getBoolean(stack, TK_ACTIVATED, false) && stack.getItem() instanceof AbilityCurioItem item) {
 			ImmutableMultimap.Builder<Attribute,AttributeModifier> map = ImmutableMultimap.builder();
 			double curPow = Math.min(1d, (double)timeTicking(stack)/(double)1200);
 			double selfSpeedMult = curPow * 10;// + (10d/3d-1d); // 10/3-1 cancels out the movespeed penalty when using an item
@@ -215,7 +201,7 @@ public class ArcaneRune extends FormRune {
 	}
 	
 	private static void resetAccel(Player player, ItemStack stack) {
-		NBTUtil.setBoolean(stack, TK_JOJOACTIVE, false);
+		NBTUtil.setBoolean(stack, TK_ACTIVATED, false);
 		NBTUtil.setInt(stack, TK_TICKTIME, 0);
 		resetTimeAccelSpeed(player);
 	}
@@ -276,7 +262,7 @@ public class ArcaneRune extends FormRune {
 			AABB aoe = AABB.ofSize( player.position(), size, size, size);
 			
 			for (LivingEntity ent : player.level().getEntitiesOfClass(LivingEntity.class, aoe, EntUtil::resistsSpacetimeShenanigans)) {
-				if (!ent.level().isClientSide && ent instanceof ServerPlayer plr) {
+				if (!ent.level().isClientSide && ent instanceof ServerPlayer plr && !plr.is(player)) {
 					NetInit.toClient(new ModifyPlayerVelocityPacket(slowVec, VecOp.MULTIPLY), plr);
 				}
 				else if ( !(ent instanceof Player) ) ent.setDeltaMovement(ent.getDeltaMovement().multiply(slowVec));

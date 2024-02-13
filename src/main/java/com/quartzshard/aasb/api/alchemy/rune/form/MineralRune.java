@@ -18,17 +18,17 @@ public class MineralRune extends FormRune {
 	 * strong: turn self to bedrock (immobile, immune to damage)
 	 */
 	@Override
-	public boolean combatAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong) {
+	public boolean combatAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	/**
 	 * normal: divining rod <br>
-	 * strong: silk-touch veinmine
+	 * strong: divining rod + xray
 	 */
 	@Override
-	public boolean utilityAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong) {
+	public boolean utilityAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -37,11 +37,11 @@ public class MineralRune extends FormRune {
 	 * normal: +1 fortune <br>
 	 * strong: +3 fortune
 	 */
-	@Override
-	public boolean passiveAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	//@Override
+	//public boolean passiveAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
+	//	// TODO Auto-generated method stub
+	//	return false;
+	//}
 
 	@Override
 	public void tickPassive(ItemStack stack, ServerPlayer player, ServerLevel level, boolean strong, boolean unequipped) {

@@ -79,7 +79,7 @@ public class WaterRune extends ShapeRune {
 	 * Strong: Freeze target (immobilized w/ damage resistance)
 	 */
 	@Override
-	public boolean combatAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong) {
+	public boolean combatAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
 		return false;
 	}
 
@@ -88,7 +88,7 @@ public class WaterRune extends ShapeRune {
 	 * Strong: Floodfill water (works in nether)
 	 */
 	@Override
-	public boolean utilityAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong) {
+	public boolean utilityAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
 		return false;
 	}
 
@@ -97,7 +97,7 @@ public class WaterRune extends ShapeRune {
 	 * Strong: Water breathing + Dolphin's Grace
 	 */
 	@Override
-	public boolean passiveAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong) {
+	public boolean passiveAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
 		return false;
 	}
 	@Override

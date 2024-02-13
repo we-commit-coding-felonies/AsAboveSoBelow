@@ -32,7 +32,7 @@ public class EarthRune extends ShapeRune {
 	 * Strong: Destruction catalyst
 	 */
 	@Override
-	public boolean combatAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong) {
+	public boolean combatAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
 		return false;
 	}
 
@@ -41,7 +41,7 @@ public class EarthRune extends ShapeRune {
 	 * Strong: Conjure temp angel block
 	 */
 	@Override
-	public boolean utilityAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong) {
+	public boolean utilityAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
 		return false;
 	}
 
@@ -50,7 +50,7 @@ public class EarthRune extends ShapeRune {
 	 * Strong: MekaSuit style potion resistance (incl Transmuting!)
 	 */
 	@Override
-	public boolean passiveAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong) {
+	public boolean passiveAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
 		return false;
 	}
 	@Override

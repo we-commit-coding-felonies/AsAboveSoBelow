@@ -1,5 +1,7 @@
 package com.quartzshard.aasb.api.alchemy.rune.form;
 
+import java.util.Optional;
+
 import org.jetbrains.annotations.Nullable;
 
 import com.quartzshard.aasb.AASB;
@@ -18,6 +20,7 @@ import com.quartzshard.aasb.util.EntUtil.Projectiles.ArrowType;
 import com.quartzshard.aasb.util.EntUtil.Projectiles.ShootContext;
 import com.quartzshard.aasb.util.NBTUtil;
 import com.quartzshard.aasb.util.PlayerUtil;
+import com.quartzshard.aasb.util.WayUtil;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -29,6 +32,8 @@ import net.minecraft.world.entity.projectile.AbstractArrow.Pickup;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.items.IItemHandler;
 
 public class EtherealRune extends FormRune {
 	public static final String TK_ARROWTRACKER = "SentientArrowTracker";
@@ -42,7 +47,7 @@ public class EtherealRune extends FormRune {
 	 * strong: sentient arrow
 	 */
 	@Override
-	public boolean combatAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong) {
+	public boolean combatAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
 		// TODO: COST
 		if (strong) {
 			if (hasTrackedArrow(stack)) {
@@ -88,8 +93,7 @@ public class EtherealRune extends FormRune {
 	 * strong: astral projection
 	 */
 	@Override
-	public boolean utilityAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong) {
-		// TODO Auto-generated method stub
+	public boolean utilityAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
 		return false;
 	}
 
@@ -97,15 +101,30 @@ public class EtherealRune extends FormRune {
 	 * normal: autorepair with XP, maybe other mods googles? <br>
 	 * strong: autorepair with Way
 	 */
-	@Override
-	public boolean passiveAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	//@Override
+	//public boolean passiveAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong) {
+	//	return false;
+	//}
 
 	@Override
 	public void tickPassive(ItemStack stack, ServerPlayer player, ServerLevel level, boolean strong, boolean unequipped) {
-		// TODO Auto-generated method stub
+		long playerXp = PlayerUtil.Xp.getXp(player);
+		boolean doWay = strong && WayUtil.hasWay(player);
+		if (playerXp > 0 || doWay) {
+			Optional<IItemHandler> oiih = player.getCapability(ForgeCapabilities.ITEM_HANDLER).resolve();
+			if (oiih.isPresent()) {
+				IItemHandler inv = oiih.get();			
+				for (int i = 0; i < inv.getSlots(); i++) {
+					ItemStack repairTarget = inv.getStackInSlot(i);
+					if (repairTarget.isDamageableItem() && repairTarget.isDamaged()) {
+						repairTarget.setDamageValue(repairTarget.getDamageValue() - 1);
+						if (doWay)
+							WayUtil.consumeAvaliableWay(player, 8);
+						else PlayerUtil.Xp.extractXp(player, 1);
+					}
+				}
+			}
+		}
 	}
 	
 	

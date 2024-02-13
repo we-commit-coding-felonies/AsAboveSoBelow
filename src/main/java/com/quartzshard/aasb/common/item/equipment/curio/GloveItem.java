@@ -1,7 +1,10 @@
 package com.quartzshard.aasb.common.item.equipment.curio;
 
+import org.jetbrains.annotations.Nullable;
+
 import com.quartzshard.aasb.api.item.IRuneable;
 import com.quartzshard.aasb.init.AlchInit;
+import com.quartzshard.aasb.init.object.ItemInit;
 
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -17,6 +20,11 @@ public class GloveItem extends AbilityCurioItem implements IRuneable, ICurioItem
 	@Override
 	public ItemAbility getAbility(ItemStack stack) {
 		return ItemAbility.COMBAT;
+	}
+
+	@Override
+	public @Nullable Item getMateriaRuneTarget(ItemStack stack) {
+		return (this.getMaxRunes(stack) == 1 ? ItemInit.BRACELET1 : ItemInit.BRACELET2).get();
 	}
 
 }
