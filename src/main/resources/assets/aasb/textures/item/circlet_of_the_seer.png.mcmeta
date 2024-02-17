@@ -1,0 +1,12 @@
+{
+  "animation": {
+    "interpolate": false,
+    "frametime": 1,
+    "frames": [
+      {"index": 0,"time": 600},
+      1,
+      0,
+      1
+    ]
+  }
+}

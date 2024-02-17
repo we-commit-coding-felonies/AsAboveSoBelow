@@ -1,0 +1,16 @@
+{
+  "overrides": [
+    {
+      "model": "aasb:item/amulet_of_the_philosopher/empty",
+      "predicate": {
+        "aasb:way_holder_status": 0.0
+      }
+    },
+    {
+      "model": "aasb:item/amulet_of_the_philosopher/filled",
+      "predicate": {
+        "aasb:way_holder_status": 1.0
+      }
+    }
+  ]
+}

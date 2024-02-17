@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "aasb:item/waystone/holder",
+    "layer1": "aasb:item/waystone/way"
+  }
+}

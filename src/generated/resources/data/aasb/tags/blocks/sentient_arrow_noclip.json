@@ -1,0 +1,20 @@
+{
+  "values": [
+    "minecraft:ice",
+    "minecraft:frosted_ice",
+    "minecraft:scaffolding",
+    "#forge:glass",
+    "#forge:glass_panes",
+    "minecraft:air",
+    "minecraft:lava",
+    "minecraft:iron_bars",
+    "#minecraft:signs",
+    "#minecraft:leaves",
+    "#minecraft:banners",
+    "#minecraft:buttons",
+    "#minecraft:crops",
+    "#minecraft:replaceable",
+    "#minecraft:flowers",
+    "#minecraft:climbable"
+  ]
+}

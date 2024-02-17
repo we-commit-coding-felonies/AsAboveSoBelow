@@ -1,0 +1,13 @@
+{
+  "parent": "minecraft:item/generated",
+  "overrides": [
+    {
+      "model": "aasb:item/cracked_waystone",
+      "predicate": {}
+    }
+  ],
+  "textures": {
+    "layer0": "aasb:item/cracked_waystone/holder",
+    "layer1": "aasb:item/cracked_waystone/cracks"
+  }
+}

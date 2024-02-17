@@ -1,0 +1,16 @@
+{
+  "overrides": [
+    {
+      "model": "aasb:item/waystone/empty",
+      "predicate": {
+        "aasb:way_holder_status": 0.0
+      }
+    },
+    {
+      "model": "aasb:item/waystone/filled",
+      "predicate": {
+        "aasb:way_holder_status": 1.0
+      }
+    }
+  ]
+}

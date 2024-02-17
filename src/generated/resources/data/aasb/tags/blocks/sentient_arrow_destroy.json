@@ -1,0 +1,9 @@
+{
+  "values": [
+    "minecraft:ice",
+    "minecraft:frosted_ice",
+    "minecraft:scaffolding",
+    "#forge:glass",
+    "#forge:glass_panes"
+  ]
+}

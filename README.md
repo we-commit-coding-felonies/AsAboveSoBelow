@@ -1,4 +1,4 @@
 # As Above, So Below
-A minecraft alchemy mod, thematically and mechanically inspired by Equivalent Exchange, Thaumcraft and Fullmetal Alchemist.
+An alchemy mod for Minecraft that actually tries to be balanced.
 
-This is super early WIP, but the plan is to provide a transmutation framework for turning blocks into other blocks, in a way that doesn't toatally destroy any suggestion of balance the game has.
+Heavily inspired by Equivalent Exchange 2 & 3, with additional influence from Fullmetal Alchemist and Thaumcraft.
