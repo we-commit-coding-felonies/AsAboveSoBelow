@@ -163,7 +163,7 @@ public class ItemInit {
 
 	// BlockItems
 	public static final RegistryObject<BlockItem>
-		TEST_BLOCK_ITEM = fromBlock(BlockInit.TEST_BLOCK, Tab.SYN);
+		TEST_BLOCK_ITEM = fromBlock(BlockInit.CRUMBLING_STONE, Tab.SYN);
 	
 	private static final RegistryObject<Item> basic(String name, Tab tab) {
 		return reg(name, PROPS_GENERIC_64, tab);

@@ -24,7 +24,6 @@ import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid = AASB.MODID)
 public class AmuletItem extends JewelleryArmorItem implements IAlchemicalBarrier, IWayHolder, DyeableLeatherItem {
 	public AmuletItem(Properties props) {
 		super(Type.CHESTPLATE, props);
@@ -99,24 +98,6 @@ public class AmuletItem extends JewelleryArmorItem implements IAlchemicalBarrier
 		return (float) (Math.pow(emcHeld, 1/64)/getCostMultiplierForSource(source));
 	}
 	
-	
-	/** what
-	 * <p>
-	 * i agree, previous me. what?
-	 * <p>
-	 * i cleaned it up dont worry :3
-	 * */
-	@SubscribeEvent
-	public static void checkAlchemicalBarrier(LivingAttackEvent event) {
-		Entity ent = event.getEntity();
-		
-		if (ent instanceof Player player) {
-			ItemStack stack = player.getItemBySlot(EquipmentSlot.CHEST);
-			if (stack.getItem() instanceof AmuletItem amulet) {
-				amulet.tryShield(event, stack);
-			}
-		}
-	}
 
 	@Override
 	public long getMaxWay(ItemStack stack) {

@@ -15,35 +15,35 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 
 /**
- * 
+ * @deprecated remove later once confirmed that it isnt needed
  */
-@Mixin(Entity.class)
+//@Mixin(Entity.class)
 public abstract class EntityMixin {
 	
-	@Inject(method = "isInvulnerableTo", at = @At("RETURN"), cancellable = true)
-	protected void onCheckInvulnerableTo(DamageSource dmgSrc, CallbackInfoReturnable<Boolean> cir) {
-		if (dmgSrc.is(DmgTP.IS_STRONG_FIRE)
-				&& dmgSrc.is(DamageTypeTags.IS_FIRE)
-				&& this.fireImmune()
-				&& !this.isRemoved()
-				&& !(this.invulnerable && !dmgSrc.is(DamageTypeTags.BYPASSES_INVULNERABILITY) && !dmgSrc.isCreativePlayer())
-				&& !(dmgSrc.is(DamageTypeTags.IS_FALL) && this.getType().is(EntityTypeTags.FALL_DAMAGE_IMMUNE))) {
-			cir.setReturnValue(false);
-		}
-	}
-	
-	
-	
-	// :reallyhighrestransparentshadow:
-	@Shadow
-	private boolean invulnerable;
-	
-	@Shadow
-	public abstract boolean isRemoved();
-	
-	@Shadow
-	public abstract boolean fireImmune();
-	
-	@Shadow
-	public abstract EntityType<?> getType();
+	//@Inject(method = "isInvulnerableTo", at = @At("RETURN"), cancellable = true)
+	//protected void onCheckInvulnerableTo(DamageSource dmgSrc, CallbackInfoReturnable<Boolean> cir) {
+	//	if (dmgSrc.is(DmgTP.IS_STRONG_FIRE)
+	//			&& dmgSrc.is(DamageTypeTags.IS_FIRE)
+	//			&& this.fireImmune()
+	//			&& !this.isRemoved()
+	//			&& !(this.invulnerable && !dmgSrc.is(DamageTypeTags.BYPASSES_INVULNERABILITY) && !dmgSrc.isCreativePlayer())
+	//			&& !(dmgSrc.is(DamageTypeTags.IS_FALL) && this.getType().is(EntityTypeTags.FALL_DAMAGE_IMMUNE))) {
+	//		cir.setReturnValue(false);
+	//	}
+	//}
+	//
+	//
+	//
+	//// :reallyhighrestransparentshadow:
+	//@Shadow
+	//private boolean invulnerable;
+	//
+	//@Shadow
+	//public abstract boolean isRemoved();
+	//
+	//@Shadow
+	//public abstract boolean fireImmune();
+	//
+	//@Shadow
+	//public abstract EntityType<?> getType();
 }

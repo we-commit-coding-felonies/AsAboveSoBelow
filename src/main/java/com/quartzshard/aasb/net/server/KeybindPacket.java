@@ -91,7 +91,6 @@ public record KeybindPacket(ServerBind bind, BindState state) {
 						if (state == BindState.PRESSED)
 							player.getCapability(PlayerUtil.PlayerSelectedHandProvider.PLAYER_SELECTED_HAND).ifPresent(cap -> {
 								cap.swapHand();
-								System.out.println(cap.getHand().toString());
 							});
 						break;
 					case GLOVE:

@@ -11,6 +11,7 @@ import com.quartzshard.aasb.init.object.ItemInit;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import top.theillusivec4.curios.api.SlotContext;
@@ -32,6 +33,8 @@ public class CharmItem extends AbilityCurioItem implements IRuneable, ICurioItem
 	public void curioTick(SlotContext ctx, ItemStack stack) {
 		if (ctx.entity() instanceof ServerPlayer plr) {
 			tickRunes(stack, plr, plr.serverLevel(), false);
+		} else if (ctx.entity() instanceof Player plr){
+			tickRunesClient(stack, plr, plr.level(), false);
 		}
 	}
 	
@@ -42,6 +45,8 @@ public class CharmItem extends AbilityCurioItem implements IRuneable, ICurioItem
 			tickRunes(prev, plr, plr.serverLevel(), true);
 			//System.out.print("NEXT = ");
 			//tickRunes(next, plr, plr.serverLevel(), true);
+		} else if (ctx.entity() instanceof Player plr){
+			tickRunesClient(prev, plr, plr.level(), true);
 		}
 	}
 

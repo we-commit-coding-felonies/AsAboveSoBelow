@@ -28,6 +28,7 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -223,7 +224,7 @@ public class MustangEntity extends Projectile {
 						DamageSource dmgSrc = EntityInit.dmg(EntityInit.DMG_MUSTANG, this.level(), this, this.getOwner());
 						// TODO change the mustang damage calculation to something easier to understand, and maybe less overpowered
 						float dmg = (float) Math.pow( ((int)((invDist*invDist+invDist)/2d*7d*8d+1d)), 2 );
-						if (ent.fireImmune()) dmg /= 10;
+						if (ent.fireImmune() || ent.hasEffect(MobEffects.FIRE_RESISTANCE)) dmg /= 10;
 						ent.hurt(dmgSrc, dmg);
 					}
 				}

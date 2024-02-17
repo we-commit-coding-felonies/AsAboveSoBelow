@@ -37,10 +37,10 @@ public class QuintessenceRune extends Rune {
 	public boolean utilityAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
 		return false;
 	}
-	@Override
-	public boolean passiveAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
-		return false;
-	}
+	//@Override
+	//public boolean passiveAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
+	//	return false;
+	//}
 	@Override
 	public void tickPassive(ItemStack stack, ServerPlayer player, ServerLevel level, boolean strong, boolean unequipped) {
 	}

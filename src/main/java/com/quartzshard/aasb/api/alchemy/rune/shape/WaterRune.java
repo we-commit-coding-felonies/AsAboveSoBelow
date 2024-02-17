@@ -24,12 +24,14 @@ import com.quartzshard.aasb.util.BoxUtil;
 import com.quartzshard.aasb.util.EntUtil;
 import com.quartzshard.aasb.util.NBTUtil;
 import com.quartzshard.aasb.util.PlayerUtil;
+import com.quartzshard.aasb.util.WayUtil;
 import com.quartzshard.aasb.util.WorldUtil;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -38,10 +40,17 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.PrimedTnt;
+import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Fireball;
+import net.minecraft.world.entity.vehicle.MinecartTNT;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemCooldowns;
 import net.minecraft.world.item.ItemStack;
@@ -51,8 +60,11 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FarmBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.material.LavaFluid;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -63,7 +75,7 @@ import net.minecraftforge.common.ToolActions;
 
 /**
  * this file is bad and solunareclipse1 should feel bad <br>
- * TODO modernize & streamline most of this
+ * TODO modernize & streamline most of the tool stuff
  */
 public class WaterRune extends ShapeRune {
 	public static final String
@@ -80,6 +92,22 @@ public class WaterRune extends ShapeRune {
 	 */
 	@Override
 	public boolean combatAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
+		if (state == BindState.PRESSED) {
+			long wayHeld = WayUtil.getAvaliableWay(player);
+			if (strong) {
+				
+			} else {
+				if (wayHeld >= 8) {
+					long limit = wayHeld / 8;
+					int count = extinguishAoe(player, AABB.ofSize(player.getBoundingBox().getCenter(), 16, 16, 16), limit);
+					if (count > 0) {
+						WayUtil.consumeAvaliableWay(player, 8 * count);
+						PlayerUtil.coolDown(player, stack.getItem(), 10);
+						return true;
+					}
+				}
+			}
+		}
 		return false;
 	}
 
@@ -89,6 +117,34 @@ public class WaterRune extends ShapeRune {
 	 */
 	@Override
 	public boolean utilityAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
+		if (state == BindState.PRESSED) {
+			BlockHitResult hitRes = PlayerUtil.getTargetedBlock(player, strong ? player.getBlockReach()-0.5 : 32);
+			if (hitRes.getType() == HitResult.Type.BLOCK) {
+				BlockPos origin = hitRes.getBlockPos();
+				if (!WorldUtil.canWaterlog(level, origin)) {
+					origin = origin.relative(hitRes.getDirection());
+				}
+				if (WorldUtil.canWaterlog(level, origin)) {
+					if (strong) {
+						AABB bounds = AABB.ofSize(origin.getCenter(), 20, 20, 20);
+						bounds.move(0, -10, 0);
+						long held = WayUtil.getAvaliableWay(player);
+						if (held >= 64) {
+							WayUtil.consumeAvaliableWay(player, 64);
+							int cdTime = WorldUtil.floodFillDown(level, origin, (lvl,bPos) -> {
+								return bounds.contains(bPos.getCenter()) && WorldUtil.canWaterlog(level, bPos);
+							}, WorldUtil::waterlog) / 10;
+							if (cdTime > 0) {
+								PlayerUtil.coolDown(player, stack.getItem(), cdTime);
+								return true;
+							}
+						}
+					} else {
+						return level.setBlock(origin, WorldUtil.waterlog(level.getBlockState(origin)), 3);
+					}
+				}
+			}
+		}
 		return false;
 	}
 
@@ -102,7 +158,101 @@ public class WaterRune extends ShapeRune {
 	}
 	@Override
 	public void tickPassive(ItemStack stack, ServerPlayer player, ServerLevel level, boolean strong, boolean unequipped) {
-		// TODO Auto-generated method stub
+		long wayHeld = WayUtil.getAvaliableWay(player);
+		if (strong) {
+			player.addEffect(new MobEffectInstance(MobEffects.DOLPHINS_GRACE, 20));
+		}
+	}
+	
+	private int extinguishAoe(Player player, AABB area, long limit) { // FIXME hardcoded garbage
+		Vec3 min = new Vec3(area.minX, area.minY, area.minZ),
+			max = new Vec3(area.maxX, area.maxY, area.maxZ);
+		
+		int amount = 0;
+		if (!player.level().isClientSide) {
+			for (BlockPos pos : BlockPos.betweenClosed(BlockPos.containing(min), BlockPos.containing(max))) {
+				if (amount >= limit) break;
+				pos = pos.immutable();
+				if (player.level().getBlockState(pos).getBlock() == Blocks.FIRE && PlayerUtil.hasBreakPermission((ServerPlayer)player, pos)) {
+					player.level().removeBlock(pos, false);
+		            player.level().playSound(null, pos, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 0.5f, 2.6f + (player.level().random.nextFloat() - player.level().random.nextFloat()) * 0.8f);
+					amount++;
+				} else if (player.level().getFluidState(pos).is(Fluids.LAVA) && PlayerUtil.hasBreakPermission((ServerPlayer)player, pos)) {
+					player.level().setBlock(pos, Blocks.OBSIDIAN.defaultBlockState(), 3);
+		            player.level().playSound(null, pos, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 0.5f, 2.6f + (player.level().random.nextFloat() - player.level().random.nextFloat()) * 0.8f);
+					amount++;
+				} else if (player.level().getFluidState(pos).is(Fluids.FLOWING_LAVA) && PlayerUtil.hasBreakPermission((ServerPlayer)player, pos)) {
+					player.level().setBlock(pos, Blocks.COBBLESTONE.defaultBlockState(), 3);
+		            player.level().playSound(null, pos, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 0.5f, 2.6f + (player.level().random.nextFloat() - player.level().random.nextFloat()) * 0.8f);
+					amount++;
+				}
+			}
+			if (amount < limit) {
+				for (Entity ent : player.level().getEntitiesOfClass(Entity.class, area, ent -> canBeExtinguished(ent))) {
+					if (amount >= limit) break;
+					if (ent instanceof PrimedTnt || ent instanceof Fireball) {
+						ItemStack drop;
+						if (ent instanceof Fireball fb) {
+							drop = fb.getItem();
+						} else {
+							drop = ent.getPickedResult(null);
+							if (drop == ItemStack.EMPTY) {
+								drop = new ItemStack(Items.TNT);
+							}
+						}
+						ent.spawnAtLocation(drop);
+						ent.discard();
+					} else if (ent instanceof MinecartTNT cart) {
+						// FIXME WHAT THE ACTUAL FUCK?!?!?!?!?!?!
+						MinecartTNT newCart = new MinecartTNT(cart.level(), cart.getX(), cart.getY(), cart.getZ());
+						newCart.setDeltaMovement(cart.getDeltaMovement());
+						newCart.setXRot(cart.getXRot());
+						newCart.setYRot(cart.getYRot());
+						newCart.setDamage(cart.getDamage());
+						newCart.setCanUseRail(cart.canUseRail());
+						if (cart.hasCustomDisplay()) {
+							newCart.setCustomDisplay(true);
+							newCart.setDisplayBlockState(cart.getDisplayBlockState());
+							newCart.setDisplayOffset(cart.getDisplayOffset());
+						}
+						if (cart.hasCustomName()) {
+							newCart.setCustomName(cart.getCustomName());
+							newCart.setCustomNameVisible(cart.isCustomNameVisible());
+						}
+						newCart.setSilent(cart.isSilent());
+						newCart.setHurtTime(cart.getHurtTime());
+						newCart.setHurtDir(cart.getHurtDir());
+						cart.discard();
+						ent.level().addFreshEntity(newCart);
+					} else if (ent instanceof Creeper creeper) {
+						// this is a little silly but it works?
+						CompoundTag tag = creeper.getPersistentData();
+						tag.putByte("ExplosionRadius", (byte) 0);
+						tag.putShort("Fuse", Short.MAX_VALUE);
+						creeper.readAdditionalSaveData(tag);
+					} else if (ent instanceof LivingEntity lent && lent.isSensitiveToWater()) {
+						lent.setLastHurtByPlayer(player);
+						lent.setLastHurtByMob(player);
+						lent.hurt(lent.damageSources().drown(), 4);
+					} else {
+						ent.clearFire();
+					}
+					amount++;
+				}
+			}
+		}
+		return amount;
+	}
+	
+	private boolean canBeExtinguished(Entity ent) {
+		return !ent.isRemoved()
+				&& (ent instanceof PrimedTnt
+					|| (ent instanceof MinecartTNT cart && cart.isPrimed())
+					|| ent instanceof Fireball
+					|| ent instanceof Creeper
+					|| (ent instanceof LivingEntity lent && lent.isSensitiveToWater())
+					|| (ent.getRemainingFireTicks() > 0 && !(ent.fireImmune() || ent.isInLava()))
+		);
 	}
 	
 	@Override

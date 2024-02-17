@@ -3,8 +3,10 @@ package com.quartzshard.aasb.init.object;
 import java.util.function.Supplier;
 
 import com.quartzshard.aasb.AASB;
+import com.quartzshard.aasb.common.block.CrumblingStoneBlock;
 
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -24,11 +26,18 @@ public class BlockInit {
 	
 	// Shared properties
 	private static final BlockBehaviour.Properties
-		PROPS_GENERIC = BlockBehaviour.Properties.of();
+		PROPS_GENERIC = BlockBehaviour.Properties.of(),
+		PROPS_GENERIC_SOIL = BlockBehaviour.Properties.of().strength(0.5f).sound(SoundType.GRAVEL),
+		PROPS_GENERIC_STONE = BlockBehaviour.Properties.of().strength(1.5F, 6.0F).requiresCorrectToolForDrops();
 	
 	// Generic blocks
 	public static final RegistryObject<Block>
-		TEST_BLOCK = reg("test_block");
+		// Basic / Decor
+		ASHEN_STONE = reg("ashen_stone", PROPS_GENERIC_STONE),
+		
+		
+		// Misc
+		CRUMBLING_STONE = reg("crumbling_stone", () -> new CrumblingStoneBlock(BlockBehaviour.Properties.of().randomTicks().instabreak().noLootTable().sound(SoundType.NETHERRACK)));
 
 	
 	private static final <B extends Block> RegistryObject<B> reg(String name, Supplier<B> sup) {

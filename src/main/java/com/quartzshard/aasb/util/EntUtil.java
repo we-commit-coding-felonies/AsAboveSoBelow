@@ -14,6 +14,7 @@ import com.quartzshard.aasb.init.object.ItemInit;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
@@ -21,7 +22,9 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.animal.Fox;
@@ -43,6 +46,18 @@ import net.minecraft.world.phys.Vec3;
  * @author solunareclipse1
  */
 public class EntUtil {
+	
+	@Nullable
+	public static LightningBolt smite(Level level, Vec3 pos, @Nullable ServerPlayer culprit, boolean harmless) {
+		LightningBolt bolt = EntityType.LIGHTNING_BOLT.create(level);
+		if (bolt != null) {
+			bolt.moveTo(pos);
+			bolt.setCause(culprit);
+			bolt.setVisualOnly(harmless);
+			level.addFreshEntity(bolt);
+		}
+		return bolt;
+	}
 	
 	public class Projectiles {
 		
@@ -163,15 +178,15 @@ public class EntUtil {
 			}
 			return arrows;
 		}
-		
-		public static SmallFireball fireball(Level level, Vec3 pos, Vec3 target, @Nullable LivingEntity owner) {
+
+		public static SmallFireball fireball(Level level, Vec3 pos, Vec3 target, @Nullable LivingEntity owner, double accMod) {
 	        double dist = pos.distanceToSqr(target);//owner.distanceToSqr(target);
 	        Vec3 shootVec = new Vec3(
 	        	target.x - pos.x,
 	        	target.y - pos.y,
 	        	target.z - pos.z
 	        );
-	        double acc = Math.sqrt(Math.sqrt(dist)) * 0.25;
+	        double acc = Math.sqrt(Math.sqrt(dist)) * accMod;
 			SmallFireball fb = new SmallFireball(level, owner,
 					shootVec.x + owner.getRandom().nextGaussian() * acc,
 					shootVec.y + owner.getRandom().nextGaussian() * acc,
@@ -179,6 +194,9 @@ public class EntUtil {
 			fb.setPos(pos);
 			level.addFreshEntity(fb);
 			return fb;
+		}
+		public static SmallFireball fireball(Level level, Vec3 pos, Vec3 target, @Nullable LivingEntity owner) {
+			return fireball(level, pos, target, owner, 0.35);
 		}
 	}
 

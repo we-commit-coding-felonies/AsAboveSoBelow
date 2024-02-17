@@ -261,11 +261,13 @@ public class ArcaneRune extends FormRune {
 			Vec3 slowVec = new Vec3(mobSlow, mobSlow, mobSlow);
 			AABB aoe = AABB.ofSize( player.position(), size, size, size);
 			
-			for (LivingEntity ent : player.level().getEntitiesOfClass(LivingEntity.class, aoe, EntUtil::resistsSpacetimeShenanigans)) {
+			for (LivingEntity ent : player.level().getEntitiesOfClass(LivingEntity.class, aoe, ent -> !EntUtil.resistsSpacetimeShenanigans(ent))) {
 				if (!ent.level().isClientSide && ent instanceof ServerPlayer plr && !plr.is(player)) {
 					NetInit.toClient(new ModifyPlayerVelocityPacket(slowVec, VecOp.MULTIPLY), plr);
 				}
-				else if ( !(ent instanceof Player) ) ent.setDeltaMovement(ent.getDeltaMovement().multiply(slowVec));
+				else if ( !(ent instanceof Player) ) {
+					ent.setDeltaMovement(ent.getDeltaMovement().multiply(slowVec));
+				}
 			}
 			Level level = player.level();
 			if (!level.isClientSide()) {
@@ -317,8 +319,8 @@ public class ArcaneRune extends FormRune {
 						BlockState state = level.getBlockState(pos);
 						Block block = state.getBlock();
 						if (state.isRandomlyTicking() && !state.is(BlockTP.NO_TICKACCEL)
-							&& !(block instanceof LiquidBlock) // Don't speed non-source fluid blocks - dupe issues
-							&& !(block instanceof BonemealableBlock) && !(block instanceof IPlantable)) {// All plants should be sped using Harvest Goddess
+							&& !(block instanceof LiquidBlock)) { // Don't speed non-source fluid blocks - dupe issues
+							//&& !(block instanceof BonemealableBlock) && !(block instanceof IPlantable)) {// All plants should be sped using Harvest Goddess
 							pos = pos.immutable();
 							for (int i = 0; i < extraTicks && plrEmc >= 64; i++) {
 								toConsume += 64;

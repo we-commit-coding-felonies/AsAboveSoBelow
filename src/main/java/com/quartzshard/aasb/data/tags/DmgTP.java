@@ -35,7 +35,7 @@ public class DmgTP extends TagsProvider<DamageType> {
 		UNSTOPPABLE_FORCE = c("unstoppable_force"), // bypass everything short of stuff like creative mode & iframes
 		
 		IS_ALCHEMY = c("is_alchemy"), // increase effectiveness vs alchemical defenses
-		IS_STRONG_FIRE = c("is_strong_fire") // marked as fiery, but not blocked by standard fire resistance
+		IS_STRONG_FIRE = c("is_strong_fire") // things that are fiery, but go beyond ordinary "fire damage"
 		;
 
 	@Override
@@ -43,6 +43,7 @@ public class DmgTP extends TagsProvider<DamageType> {
 		tag(FORCEFIELD_EZBLOCK)
 			.add(DamageTypes.CACTUS)
 			.add(DamageTypes.HOT_FLOOR)
+			.add(DamageTypes.ON_FIRE)
 			.add(DamageTypes.SWEET_BERRY_BUSH)
 			.add(DamageTypes.STING);
 		
@@ -109,8 +110,8 @@ public class DmgTP extends TagsProvider<DamageType> {
 			.add(EntityInit.DMG_WAYBOMB);
 		tag(DamageTypeTags.IS_FALL)
 			.add(EntityInit.DMG_SURFACE_TENSION_ENV);
-		tag(DamageTypeTags.IS_FIRE)
-			.addTag(IS_STRONG_FIRE);
+		//tag(DamageTypeTags.IS_FIRE)
+		//	.addTag(IS_STRONG_FIRE);
 		tag(DamageTypeTags.IS_PROJECTILE)
 			.add(EntityInit.DMG_ARROW_SWARM);
 			//.add(EntityInit.DMG_SENTIENT_ARROW);

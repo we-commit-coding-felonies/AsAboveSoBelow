@@ -360,10 +360,16 @@ public class PlayerUtil {
 	public static int getActiveRuneHandVal(ServerPlayer player) {
 		return getActiveRuneHand(player) == InteractionHand.MAIN_HAND ? 0 : 1;
 	}
-	
+
+	public static BlockHitResult getTargetedBlock(Player player, double distance) {
+		Vec3 eyePos = player.getEyePosition();
+		Vec3 ray = player.getLookAngle().scale(distance);
+		Vec3 rayPos = eyePos.add(ray);
+		return player.level().clip(new ClipContext(eyePos, rayPos, ClipContext.Block.VISUAL, ClipContext.Fluid.NONE, player));
+	}
 
 	// Next 2: https://github.com/sinkillerj/ProjectE/blob/68fbb2dea0cf8a6394fa6c7c084063046d94cee5/src/main/java/moze_intel/projecte/utils/PlayerHelper.java#L109C3-L127C3
-	public static BlockHitResult getBlockLookingAt(Player player, double maxDistance) {
+	public static BlockHitResult getBlockLookingAtPE(Player player, double maxDistance) {
 		Tuple<Vec3, Vec3> vecs = getLookVec(player, maxDistance);
 		ClipContext ctx = new ClipContext(vecs.getA(), vecs.getB(), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, player);
 		return player.level().clip(ctx);

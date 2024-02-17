@@ -23,7 +23,7 @@ public class DataGens {
 		ExistingFileHelper help = event.getExistingFileHelper();
 		
 		if (event.includeClient()) {
-			//gen.addProvider(new AASBBlockStates(gen, help));
+			gen.addProvider(true, new BlockModelData(out, help));
 			gen.addProvider(true, new ItemModelData(out, help));
 			gen.addProvider(true, new LangData(out));
 			gen.addProvider(true, new SoundData(out, help));

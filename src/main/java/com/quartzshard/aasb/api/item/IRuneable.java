@@ -20,8 +20,10 @@ import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 /**
  * Items that can receive runes via Projection
@@ -49,9 +51,14 @@ public interface IRuneable extends IHandleKeybind {
 		}
 		ItemStack stack = ctx.stack();
 		ServerPlayer player = ctx.player();
-		@Nullable Rune rune = getInscribedRunes(stack).get(player.isShiftKeyDown() ? 1 : 0);
-		if (rune == null) // Null rune, lets try the other one...
-			rune = getInscribedRunes(stack).get(player.isShiftKeyDown() ? 0 : 1);
+		@Nullable Rune rune;
+		if (this.getMaxRunes(stack) == 1) {
+			rune = getInscribedRunes(stack).get(0);
+		} else {
+			rune = getInscribedRunes(stack).get(player.isShiftKeyDown() ? 1 : 0);
+			if (rune == null) // Null rune, lets try the other one...
+				rune = getInscribedRunes(stack).get(player.isShiftKeyDown() ? 0 : 1);
+		}
 		if (rune == null) // Thats no good either
 			return false; // Nothing to do, return false
 		boolean strong = runesAreStrong(stack);
@@ -84,6 +91,13 @@ public interface IRuneable extends IHandleKeybind {
 		for (Rune rune : getInscribedRunes(stack)) {
 			if (rune != null) {
 				rune.tickPassive(stack, player, level, runesAreStrong(stack), unequip);
+			}
+		}
+	}
+	default void tickRunesClient(ItemStack stack, Player player, Level level, boolean unequip) {
+		for (Rune rune : getInscribedRunes(stack)) {
+			if (rune != null) {
+				rune.tickPassiveClient(stack, player, level, runesAreStrong(stack), unequip);
 			}
 		}
 	}

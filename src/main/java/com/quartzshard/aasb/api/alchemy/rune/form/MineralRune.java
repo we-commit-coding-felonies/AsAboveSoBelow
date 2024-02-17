@@ -6,6 +6,7 @@ import com.quartzshard.aasb.net.server.KeybindPacket.BindState;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantments;
 
 public class MineralRune extends FormRune {
 
@@ -45,7 +46,12 @@ public class MineralRune extends FormRune {
 
 	@Override
 	public void tickPassive(ItemStack stack, ServerPlayer player, ServerLevel level, boolean strong, boolean unequipped) {
-		// TODO Auto-generated method stub
+		if (this.passiveEnabled(stack)) {
+			if (!stack.isEnchanted())
+				stack.enchant(Enchantments.BLOCK_FORTUNE, strong ? 3 : 1);
+		} else {
+			stack.removeTagKey("Enchantments");
+		}
 	}
 
 }

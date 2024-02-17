@@ -5,7 +5,7 @@
   "compatibilityLevel": "JAVA_16",
   "refmap": "aasb.refmap.json",
   "mixins": [
-	"EntityMixin",
+	"ProtectionEnchantmentMixin",
 	"ArmorDyeRecipeMixin",
   ],
   "client": [

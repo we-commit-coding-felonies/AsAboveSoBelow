@@ -15,7 +15,9 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import top.theillusivec4.curios.api.SlotContext;
 
 public abstract class Rune {
@@ -93,17 +95,26 @@ public abstract class Rune {
 	}
 	
 	/**
-	 * Triggers this rune's active passive ability, called by charms EVERY TICK <br>
+	 * Triggers this rune's active passive ability, called by charms EVERY TICK, on the SERVER <br>
 	 * This is also called one final time when unequipped, so that effects can be properly turned off if necessary
 	 * @param stack The ItemStack activating this ability
 	 * @param player The ServerPlayer with the stack
 	 * @param level The ServerLevel that the player is in
-	 * @param state Whether the button was pressed or released
 	 * @param strong True if this ability has been powered up
 	 * @param unequipped True if this is the final call due to being unequipped. Clean up after yourself!
-	 * @return True if the ability was activated, false otherwise
 	 */
 	public abstract void tickPassive(ItemStack stack, ServerPlayer player, ServerLevel level, boolean strong, boolean unequipped);
+	
+	/**
+	 * Triggers this rune's active passive ability, called by charms EVERY TICK, but on CLIENTSIDE <br>
+	 * This is also called one final time when unequipped, so that effects can be properly turned off if necessary
+	 * @param stack The ItemStack activating this ability
+	 * @param player The Player with the stack
+	 * @param level The Level that the player is in
+	 * @param strong True if this ability has been powered up
+	 * @param unequipped True if this is the final call due to being unequipped. Clean up after yourself!
+	 */
+	public void tickPassiveClient(ItemStack stack, Player player, Level level, boolean strong, boolean unequipped) {}
 
 	/**
 	 * Called by the curios to get attrib modifiers. All params are passed directly from curio counterpart <br>
