@@ -1,106 +1,120 @@
 {
+  "misc.elixir": {
+    "sounds": [
+      {
+        "name": "item/bottle/drink_honey3",
+        "pitch": 0.75
+      },
+      "item/bottle/drink_honey2",
+      "item/bottle/drink_honey1"
+    ],
+    "subtitle": "subtitles.aasb.misc.elixir"
+  },
+  "misc.mustang": {
+    "sounds": [
+      "aasb:misc/mustang"
+    ],
+    "subtitle": "subtitles.aasb.misc.mustang"
+  },
+  "misc.targetlock": {
+    "sounds": [
+      "aasb:misc/targetlock"
+    ],
+    "subtitle": "subtitles.aasb.misc.targetlock"
+  },
+  "misc.tick": {
+    "sounds": [
+      "aasb:misc/tick"
+    ],
+    "subtitle": "subtitles.aasb.misc.tick"
+  },
   "misc.whistle": {
-    "subtitle": "subtitles.aasb.misc.whistle",
     "sounds": [
       "aasb:misc/whistle1",
       "aasb:misc/whistle2",
       "aasb:misc/whistle3"
-    ]
+    ],
+    "subtitle": "subtitles.aasb.misc.whistle"
   },
-  "misc.mustang": {
-    "subtitle": "subtitles.aasb.misc.mustang",
+  "sentient.whispers": {
     "sounds": [
-      "aasb:misc/mustang"
-    ]
+      "aasb:sentient/whispers"
+    ],
+    "subtitle": "subtitles.aasb.sentient.whispers"
   },
-  "misc.targetlock": {
-    "subtitle": "subtitles.aasb.misc.targetlock",
+  "trinket.charm": {
     "sounds": [
-      "aasb:misc/targetlock"
-    ]
+      "aasb:trinket/charm1"
+    ],
+    "subtitle": "subtitles.aasb.trinket.charm"
+  },
+  "trinket.glove": {
+    "sounds": [
+      "aasb:trinket/glove1",
+      "aasb:trinket/glove2",
+      "aasb:trinket/glove3",
+      "aasb:trinket/glove4"
+    ],
+    "subtitle": "subtitles.aasb.trinket.glove"
+  },
+  "trinket.ring": {
+    "sounds": [
+      "aasb:trinket/band1",
+      "aasb:trinket/band2",
+      "aasb:trinket/band3",
+      "aasb:trinket/band4"
+    ],
+    "subtitle": "subtitles.aasb.trinket.ring"
   },
   "way.barrier.ambient": {
-    "subtitle": "subtitles.aasb.way.barrier.ambient",
     "sounds": [
       {
         "name": "block/beacon/ambient",
         "pitch": 0.5
       }
-    ]
-  },
-  "way.barrier.protect": {
-    "subtitle": "subtitles.aasb.way.barrier.protect",
-    "sounds": [
-      "aasb:way/barrier/protect"
-    ]
+    ],
+    "subtitle": "subtitles.aasb.way.barrier.ambient"
   },
   "way.barrier.fail": {
-    "subtitle": "subtitles.aasb.way.barrier.fail",
     "sounds": [
       "aasb:way/barrier/fail"
-    ]
+    ],
+    "subtitle": "subtitles.aasb.way.barrier.fail"
   },
-  "way.waste": {
-    "subtitle": "subtitles.aasb.way.waste",
+  "way.barrier.protect": {
     "sounds": [
-      "aasb:way/waste"
-    ]
-  },
-  "way.leak": {
-    "subtitle": "subtitles.aasb.way.leak",
-    "sounds": [
-      "aasb:way/leak"
-    ]
-  },
-  "way.explode": {
-    "subtitle": "subtitles.aasb.way.explode",
-    "sounds": [
-      "aasb:way/explode"
-    ]
+      "aasb:way/barrier/protect"
+    ],
+    "subtitle": "subtitles.aasb.way.barrier.protect"
   },
   "way.charge": {
-    "subtitle": "subtitles.aasb.way.charge",
     "sounds": [
       "aasb:way/charge"
-    ]
+    ],
+    "subtitle": "subtitles.aasb.way.charge"
+  },
+  "way.explode": {
+    "sounds": [
+      "aasb:way/explode"
+    ],
+    "subtitle": "subtitles.aasb.way.explode"
+  },
+  "way.leak": {
+    "sounds": [
+      "aasb:way/leak"
+    ],
+    "subtitle": "subtitles.aasb.way.leak"
   },
   "way.slash": {
-    "subtitle": "subtitles.aasb.way.slash",
     "sounds": [
       "aasb:way/slash"
-    ]
+    ],
+    "subtitle": "subtitles.aasb.way.slash"
   },
-  "sentient.whispers": {
-    "subtitle": "subtitles.aasb.sentient.whispers",
+  "way.waste": {
     "sounds": [
-      "aasb:sentient/whispers"
-    ]
-  },
-  "trinket.glove": {
-    "subtitle": "subtitles.aasb.trinket.glove",
-    "sounds": [
-      "aasb:trinket/glove1",
-      "aasb:trinket/glove2",
-      "aasb:trinket/glove3",
-      "aasb:trinket/glove4"
-    ]
-  },
-  "trinket.ring": {
-    "subtitle": "subtitles.aasb.trinket.ring",
-    "sounds": [
-      "aasb:trinket/glove1",
-      "aasb:trinket/glove2",
-      "aasb:trinket/glove3",
-      "aasb:trinket/glove4"
-    ]
-  },
-  "trinket.charm": {
-    "subtitle": "subtitles.aasb.trinket.charm",
-    "sounds": [
-      "aasb:trinket/glove1",
-      "aasb:trinket/glove2",
-      "aasb:trinket/glove3",
-      "aasb:trinket/glove4"
-    ]
+      "aasb:way/waste"
+    ],
+    "subtitle": "subtitles.aasb.way.waste"
   }
 }

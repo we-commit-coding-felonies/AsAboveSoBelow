@@ -8,18 +8,18 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.mutable.MutableBoolean;
+import org.jetbrains.annotations.Nullable;
 
-import com.quartzshard.aasb.AsAboveSoBelow;
-import com.quartzshard.aasb.init.ObjectInit;
-import com.quartzshard.aasb.util.ColorsHelper;
-import com.quartzshard.aasb.util.LogHelper;
+import com.quartzshard.aasb.AASB;
+import com.quartzshard.aasb.init.object.ItemInit;
+import com.quartzshard.aasb.util.Colors;
+import com.quartzshard.aasb.util.Logger;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -52,10 +52,10 @@ import net.minecraftforge.registries.ForgeRegistries;
  * based off the code for bundles / BundleItem
  * @author solunareclipse1
  */
-@Mod.EventBusSubscriber(modid = AsAboveSoBelow.MODID)
+@Mod.EventBusSubscriber(modid = AASB.MODID)
 public class LootBallItem extends Item {
 	private static final Supplier<ItemStack> EMPTY_BALL_SUPPLIER = () -> {
-		ItemStack ball = new ItemStack(ObjectInit.Items.LOOT_BALL.get());
+		ItemStack ball = new ItemStack(ItemInit.LOOTBALL.get());
 		CompoundTag tag = ball.getOrCreateTag();
 		if (!tag.contains("LootBallStorage")) {
 			tag.put("LootBallStorage", new ListTag());
@@ -97,7 +97,7 @@ public class LootBallItem extends Item {
 
 	@Override
 	public int getBarColor(ItemStack stack) {
-		return ColorsHelper.covalenceGradient((float)storedItemCount(stack)/(float)MAX_ITEMS);
+		return Colors.materiaGradient((float)storedItemCount(stack)/(float)MAX_ITEMS);
 	}
 
 	private static int storedItemCount(ItemStack stack) {
@@ -141,8 +141,8 @@ public class LootBallItem extends Item {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
-		pTooltipComponents.add(new TextComponent(String.format("%s/%s", storedItemCount(stack), MAX_ITEMS)).withStyle(ChatFormatting.GRAY));
+	public void appendHoverText(ItemStack stack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
+		pTooltipComponents.add(Component.literal(String.format("%s/%s", storedItemCount(stack), MAX_ITEMS)).withStyle(ChatFormatting.GRAY));
 	}
 
 	@Override
@@ -151,7 +151,7 @@ public class LootBallItem extends Item {
 	}
 
 	private static void playDropContentsSound(Entity pEntity) {
-		pEntity.playSound(SoundEvents.BUNDLE_DROP_CONTENTS, 0.8F, 0.8F + pEntity.getLevel().getRandom().nextFloat() * 0.4F);
+		pEntity.playSound(SoundEvents.BUNDLE_DROP_CONTENTS, 0.8F, 0.8F + pEntity.level().getRandom().nextFloat() * 0.4F);
 	}
 
 	@SubscribeEvent
@@ -160,13 +160,13 @@ public class LootBallItem extends Item {
 		ItemStack stack = itemEnt.getItem();
 		ItemStack oldStack = stack.copy();
 		Item item = stack.getItem();
-		if (item == ObjectInit.Items.LOOT_BALL.get()) {
-			Player player = event.getPlayer();
+		if (item == ItemInit.LOOTBALL.get()) {
+			Player player = event.getEntity();
 			boolean didMerge = false;
 			Iterator<ItemStack> playerInv = player.getInventory().items.iterator();
 			while (playerInv.hasNext() && !stack.isEmpty()) {
 				ItemStack heldStack = playerInv.next();
-				if (heldStack.getItem() == ObjectInit.Items.LOOT_BALL.get() && storedItemCount(heldStack) < MAX_ITEMS) {
+				if (heldStack.getItem() == ItemInit.LOOTBALL.get() && storedItemCount(heldStack) < MAX_ITEMS) {
 					stack = combineLoot(stack, heldStack);
 					didMerge = didMerge || !ItemStack.isSameItemSameTags(oldStack, stack);
 				}
@@ -180,7 +180,7 @@ public class LootBallItem extends Item {
 				}
 				itemEnt.kill();
 				event.setCanceled(true);
-				player.level.playSound((Player)null, player, SoundEvents.ITEM_PICKUP, SoundSource.HOSTILE, 1, player.getRandom().nextFloat(0.5f, 0.7f));
+				player.level().playSound(null, player, SoundEvents.ITEM_PICKUP, SoundSource.HOSTILE, 1, AASB.RNG.nextFloat(0.5f, 0.7f));
 			}
 		}
 	}
@@ -242,7 +242,7 @@ public class LootBallItem extends Item {
 	 * @return loot ball containing leftovers that couldnt be merged, or EMPTY if all was merged
 	 */
 	public static ItemStack combineLoot(ItemStack donor, ItemStack receiver) {
-		if (!donor.is(ObjectInit.Items.LOOT_BALL.get()) || !receiver.is(ObjectInit.Items.LOOT_BALL.get()))
+		if (!donor.is(ItemInit.LOOTBALL.get()) || !receiver.is(ItemInit.LOOTBALL.get()))
 			return donor;
 		List<ItemStack> leftoverInv = new ArrayList<>();
 		MutableBoolean full = new MutableBoolean(false);
@@ -371,19 +371,19 @@ public class LootBallItem extends Item {
 	public boolean canFitInsideContainerItems() {
 		return false;
 	}
-	public static CompoundTag tagFromStack(ItemStack stack, CompoundTag pCompoundTag) {
-		ResourceLocation resourcelocation = stack.getItem().getRegistryName();
-		pCompoundTag.putString("id", resourcelocation == null ? "minecraft:air" : resourcelocation.toString());
-		pCompoundTag.putInt("Count", stack.getCount());
+	public static CompoundTag tagFromStack(ItemStack stack, CompoundTag tag) {
+		ResourceLocation resourcelocation = ForgeRegistries.ITEMS.getKey(stack.getItem());
+		tag.putString("id", resourcelocation == null ? "minecraft:air" : resourcelocation.toString());
+		tag.putInt("Count", stack.getCount());
 		if (stack.hasTag()) {
-			pCompoundTag.put("tag", stack.getTag().copy());
+			tag.put("tag", stack.getTag().copy());
 		}
 		/* TODO: save caps to loot balls instead of voiding them
 		CompoundTag cnbt = stack.serializeCaps();
 		if (cnbt != null && !cnbt.isEmpty()) {
 			pCompoundTag.put("ForgeCaps", cnbt);
 		} */
-		return pCompoundTag;
+		return tag;
 	}
 	public static ItemStack stackFromTag(CompoundTag tag) {
 		try {
@@ -396,7 +396,7 @@ public class LootBallItem extends Item {
 			}
 			return tagStack;
 		} catch (RuntimeException e) {
-			LogHelper.LOGGER.debug("Tried to load invalid item: {}", tag, e);
+			Logger.LOG.debug("Tried to load invalid item: {}", tag, e);
 			return ItemStack.EMPTY;
 		}
 	}

@@ -1,130 +1,130 @@
 {
   "overrides": [
     {
+      "model": "aasb:item/equipment/tool/hoe/off/0",
       "predicate": {
-        "aasb:shape_rune": 0.0,
-        "aasb:empowerment_charge": 0.0
-      },
-      "model": "aasb:item/equipment/tool/herm/hoe/off/0"
+        "aasb:inscribed_runes": 0.0,
+        "aasb:way_holder_status": 0.0
+      }
     },
     {
+      "model": "aasb:item/equipment/tool/hoe/on/0",
       "predicate": {
-        "aasb:shape_rune": 0.0,
-        "aasb:empowerment_charge": 1.0
-      },
-      "model": "aasb:item/equipment/tool/herm/hoe/on/0"
+        "aasb:inscribed_runes": 0.0,
+        "aasb:way_holder_status": 1.0
+      }
     },
     {
+      "model": "aasb:item/equipment/tool/hoe/off/1",
       "predicate": {
-        "aasb:shape_rune": 1.0,
-        "aasb:empowerment_charge": 0.0
-      },
-      "model": "aasb:item/equipment/tool/herm/hoe/off/1"
+        "aasb:inscribed_runes": 1.0,
+        "aasb:way_holder_status": 0.0
+      }
     },
     {
+      "model": "aasb:item/equipment/tool/hoe/on/1",
       "predicate": {
-        "aasb:shape_rune": 1.0,
-        "aasb:empowerment_charge": 1.0
-      },
-      "model": "aasb:item/equipment/tool/herm/hoe/on/1"
+        "aasb:inscribed_runes": 1.0,
+        "aasb:way_holder_status": 1.0
+      }
     },
     {
+      "model": "aasb:item/equipment/tool/hoe/off/2",
       "predicate": {
-        "aasb:shape_rune": 2.0,
-        "aasb:empowerment_charge": 0.0
-      },
-      "model": "aasb:item/equipment/tool/herm/hoe/off/2"
+        "aasb:inscribed_runes": 2.0,
+        "aasb:way_holder_status": 0.0
+      }
     },
     {
+      "model": "aasb:item/equipment/tool/hoe/on/2",
       "predicate": {
-        "aasb:shape_rune": 2.0,
-        "aasb:empowerment_charge": 1.0
-      },
-      "model": "aasb:item/equipment/tool/herm/hoe/on/2"
+        "aasb:inscribed_runes": 2.0,
+        "aasb:way_holder_status": 1.0
+      }
     },
     {
+      "model": "aasb:item/equipment/tool/hoe/off/3",
       "predicate": {
-        "aasb:shape_rune": 3.0,
-        "aasb:empowerment_charge": 0.0
-      },
-      "model": "aasb:item/equipment/tool/herm/hoe/off/3"
+        "aasb:inscribed_runes": 3.0,
+        "aasb:way_holder_status": 0.0
+      }
     },
     {
+      "model": "aasb:item/equipment/tool/hoe/on/3",
       "predicate": {
-        "aasb:shape_rune": 3.0,
-        "aasb:empowerment_charge": 1.0
-      },
-      "model": "aasb:item/equipment/tool/herm/hoe/on/3"
+        "aasb:inscribed_runes": 3.0,
+        "aasb:way_holder_status": 1.0
+      }
     },
     {
+      "model": "aasb:item/equipment/tool/hoe/off/4",
       "predicate": {
-        "aasb:shape_rune": 4.0,
-        "aasb:empowerment_charge": 0.0
-      },
-      "model": "aasb:item/equipment/tool/herm/hoe/off/4"
+        "aasb:inscribed_runes": 4.0,
+        "aasb:way_holder_status": 0.0
+      }
     },
     {
+      "model": "aasb:item/equipment/tool/hoe/on/4",
       "predicate": {
-        "aasb:shape_rune": 4.0,
-        "aasb:empowerment_charge": 1.0
-      },
-      "model": "aasb:item/equipment/tool/herm/hoe/on/4"
+        "aasb:inscribed_runes": 4.0,
+        "aasb:way_holder_status": 1.0
+      }
     },
     {
+      "model": "aasb:item/equipment/tool/hoe/off/6",
       "predicate": {
-        "aasb:shape_rune": 6.0,
-        "aasb:empowerment_charge": 0.0
-      },
-      "model": "aasb:item/equipment/tool/herm/hoe/off/6"
+        "aasb:inscribed_runes": 6.0,
+        "aasb:way_holder_status": 0.0
+      }
     },
     {
+      "model": "aasb:item/equipment/tool/hoe/on/6",
       "predicate": {
-        "aasb:shape_rune": 6.0,
-        "aasb:empowerment_charge": 1.0
-      },
-      "model": "aasb:item/equipment/tool/herm/hoe/on/6"
+        "aasb:inscribed_runes": 6.0,
+        "aasb:way_holder_status": 1.0
+      }
     },
     {
+      "model": "aasb:item/equipment/tool/hoe/off/8",
       "predicate": {
-        "aasb:shape_rune": 8.0,
-        "aasb:empowerment_charge": 0.0
-      },
-      "model": "aasb:item/equipment/tool/herm/hoe/off/8"
+        "aasb:inscribed_runes": 8.0,
+        "aasb:way_holder_status": 0.0
+      }
     },
     {
+      "model": "aasb:item/equipment/tool/hoe/on/8",
       "predicate": {
-        "aasb:shape_rune": 8.0,
-        "aasb:empowerment_charge": 1.0
-      },
-      "model": "aasb:item/equipment/tool/herm/hoe/on/8"
+        "aasb:inscribed_runes": 8.0,
+        "aasb:way_holder_status": 1.0
+      }
     },
     {
+      "model": "aasb:item/equipment/tool/hoe/off/9",
       "predicate": {
-        "aasb:shape_rune": 9.0,
-        "aasb:empowerment_charge": 0.0
-      },
-      "model": "aasb:item/equipment/tool/herm/hoe/off/9"
+        "aasb:inscribed_runes": 9.0,
+        "aasb:way_holder_status": 0.0
+      }
     },
     {
+      "model": "aasb:item/equipment/tool/hoe/on/9",
       "predicate": {
-        "aasb:shape_rune": 9.0,
-        "aasb:empowerment_charge": 1.0
-      },
-      "model": "aasb:item/equipment/tool/herm/hoe/on/9"
+        "aasb:inscribed_runes": 9.0,
+        "aasb:way_holder_status": 1.0
+      }
     },
     {
+      "model": "aasb:item/equipment/tool/hoe/off/12",
       "predicate": {
-        "aasb:shape_rune": 12.0,
-        "aasb:empowerment_charge": 0.0
-      },
-      "model": "aasb:item/equipment/tool/herm/hoe/off/12"
+        "aasb:inscribed_runes": 12.0,
+        "aasb:way_holder_status": 0.0
+      }
     },
     {
+      "model": "aasb:item/equipment/tool/hoe/on/12",
       "predicate": {
-        "aasb:shape_rune": 12.0,
-        "aasb:empowerment_charge": 1.0
-      },
-      "model": "aasb:item/equipment/tool/herm/hoe/on/12"
+        "aasb:inscribed_runes": 12.0,
+        "aasb:way_holder_status": 1.0
+      }
     }
   ]
 }

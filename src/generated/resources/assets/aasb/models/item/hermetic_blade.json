@@ -1,130 +1,130 @@
 {
   "overrides": [
     {
+      "model": "aasb:item/equipment/tool/sword/off/0",
       "predicate": {
-        "aasb:shape_rune": 0.0,
-        "aasb:empowerment_charge": 0.0
-      },
-      "model": "aasb:item/equipment/tool/herm/sword/off/0"
+        "aasb:inscribed_runes": 0.0,
+        "aasb:way_holder_status": 0.0
+      }
     },
     {
+      "model": "aasb:item/equipment/tool/sword/on/0",
       "predicate": {
-        "aasb:shape_rune": 0.0,
-        "aasb:empowerment_charge": 1.0
-      },
-      "model": "aasb:item/equipment/tool/herm/sword/on/0"
+        "aasb:inscribed_runes": 0.0,
+        "aasb:way_holder_status": 1.0
+      }
     },
     {
+      "model": "aasb:item/equipment/tool/sword/off/1",
       "predicate": {
-        "aasb:shape_rune": 1.0,
-        "aasb:empowerment_charge": 0.0
-      },
-      "model": "aasb:item/equipment/tool/herm/sword/off/1"
+        "aasb:inscribed_runes": 1.0,
+        "aasb:way_holder_status": 0.0
+      }
     },
     {
+      "model": "aasb:item/equipment/tool/sword/on/1",
       "predicate": {
-        "aasb:shape_rune": 1.0,
-        "aasb:empowerment_charge": 1.0
-      },
-      "model": "aasb:item/equipment/tool/herm/sword/on/1"
+        "aasb:inscribed_runes": 1.0,
+        "aasb:way_holder_status": 1.0
+      }
     },
     {
+      "model": "aasb:item/equipment/tool/sword/off/2",
       "predicate": {
-        "aasb:shape_rune": 2.0,
-        "aasb:empowerment_charge": 0.0
-      },
-      "model": "aasb:item/equipment/tool/herm/sword/off/2"
+        "aasb:inscribed_runes": 2.0,
+        "aasb:way_holder_status": 0.0
+      }
     },
     {
+      "model": "aasb:item/equipment/tool/sword/on/2",
       "predicate": {
-        "aasb:shape_rune": 2.0,
-        "aasb:empowerment_charge": 1.0
-      },
-      "model": "aasb:item/equipment/tool/herm/sword/on/2"
+        "aasb:inscribed_runes": 2.0,
+        "aasb:way_holder_status": 1.0
+      }
     },
     {
+      "model": "aasb:item/equipment/tool/sword/off/3",
       "predicate": {
-        "aasb:shape_rune": 3.0,
-        "aasb:empowerment_charge": 0.0
-      },
-      "model": "aasb:item/equipment/tool/herm/sword/off/3"
+        "aasb:inscribed_runes": 3.0,
+        "aasb:way_holder_status": 0.0
+      }
     },
     {
+      "model": "aasb:item/equipment/tool/sword/on/3",
       "predicate": {
-        "aasb:shape_rune": 3.0,
-        "aasb:empowerment_charge": 1.0
-      },
-      "model": "aasb:item/equipment/tool/herm/sword/on/3"
+        "aasb:inscribed_runes": 3.0,
+        "aasb:way_holder_status": 1.0
+      }
     },
     {
+      "model": "aasb:item/equipment/tool/sword/off/4",
       "predicate": {
-        "aasb:shape_rune": 4.0,
-        "aasb:empowerment_charge": 0.0
-      },
-      "model": "aasb:item/equipment/tool/herm/sword/off/4"
+        "aasb:inscribed_runes": 4.0,
+        "aasb:way_holder_status": 0.0
+      }
     },
     {
+      "model": "aasb:item/equipment/tool/sword/on/4",
       "predicate": {
-        "aasb:shape_rune": 4.0,
-        "aasb:empowerment_charge": 1.0
-      },
-      "model": "aasb:item/equipment/tool/herm/sword/on/4"
+        "aasb:inscribed_runes": 4.0,
+        "aasb:way_holder_status": 1.0
+      }
     },
     {
+      "model": "aasb:item/equipment/tool/sword/off/6",
       "predicate": {
-        "aasb:shape_rune": 6.0,
-        "aasb:empowerment_charge": 0.0
-      },
-      "model": "aasb:item/equipment/tool/herm/sword/off/6"
+        "aasb:inscribed_runes": 6.0,
+        "aasb:way_holder_status": 0.0
+      }
     },
     {
+      "model": "aasb:item/equipment/tool/sword/on/6",
       "predicate": {
-        "aasb:shape_rune": 6.0,
-        "aasb:empowerment_charge": 1.0
-      },
-      "model": "aasb:item/equipment/tool/herm/sword/on/6"
+        "aasb:inscribed_runes": 6.0,
+        "aasb:way_holder_status": 1.0
+      }
     },
     {
+      "model": "aasb:item/equipment/tool/sword/off/8",
       "predicate": {
-        "aasb:shape_rune": 8.0,
-        "aasb:empowerment_charge": 0.0
-      },
-      "model": "aasb:item/equipment/tool/herm/sword/off/8"
+        "aasb:inscribed_runes": 8.0,
+        "aasb:way_holder_status": 0.0
+      }
     },
     {
+      "model": "aasb:item/equipment/tool/sword/on/8",
       "predicate": {
-        "aasb:shape_rune": 8.0,
-        "aasb:empowerment_charge": 1.0
-      },
-      "model": "aasb:item/equipment/tool/herm/sword/on/8"
+        "aasb:inscribed_runes": 8.0,
+        "aasb:way_holder_status": 1.0
+      }
     },
     {
+      "model": "aasb:item/equipment/tool/sword/off/9",
       "predicate": {
-        "aasb:shape_rune": 9.0,
-        "aasb:empowerment_charge": 0.0
-      },
-      "model": "aasb:item/equipment/tool/herm/sword/off/9"
+        "aasb:inscribed_runes": 9.0,
+        "aasb:way_holder_status": 0.0
+      }
     },
     {
+      "model": "aasb:item/equipment/tool/sword/on/9",
       "predicate": {
-        "aasb:shape_rune": 9.0,
-        "aasb:empowerment_charge": 1.0
-      },
-      "model": "aasb:item/equipment/tool/herm/sword/on/9"
+        "aasb:inscribed_runes": 9.0,
+        "aasb:way_holder_status": 1.0
+      }
     },
     {
+      "model": "aasb:item/equipment/tool/sword/off/12",
       "predicate": {
-        "aasb:shape_rune": 12.0,
-        "aasb:empowerment_charge": 0.0
-      },
-      "model": "aasb:item/equipment/tool/herm/sword/off/12"
+        "aasb:inscribed_runes": 12.0,
+        "aasb:way_holder_status": 0.0
+      }
     },
     {
+      "model": "aasb:item/equipment/tool/sword/on/12",
       "predicate": {
-        "aasb:shape_rune": 12.0,
-        "aasb:empowerment_charge": 1.0
-      },
-      "model": "aasb:item/equipment/tool/herm/sword/on/12"
+        "aasb:inscribed_runes": 12.0,
+        "aasb:way_holder_status": 1.0
+      }
     }
   ]
 }

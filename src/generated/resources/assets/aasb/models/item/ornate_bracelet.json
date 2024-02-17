@@ -1,0 +1,13 @@
+{
+  "parent": "minecraft:item/handheld",
+  "overrides": [
+    {
+      "model": "aasb:item/ornate_bracelet",
+      "predicate": {}
+    }
+  ],
+  "textures": {
+    "layer0": "aasb:item/ornate_bracelet",
+    "layer1": "aasb:item/equipment/curio/bracelet_rune_1"
+  }
+}

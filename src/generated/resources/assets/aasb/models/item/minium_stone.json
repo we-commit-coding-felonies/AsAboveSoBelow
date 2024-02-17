@@ -1,6 +1,52 @@
 {
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "aasb:item/minium_stone"
-  }
+  "overrides": [
+    {
+      "model": "aasb:item/minium_stone/0",
+      "predicate": {
+        "aasb:minium_variant": 0.0
+      }
+    },
+    {
+      "model": "aasb:item/minium_stone/1",
+      "predicate": {
+        "aasb:minium_variant": 1.0
+      }
+    },
+    {
+      "model": "aasb:item/minium_stone/2",
+      "predicate": {
+        "aasb:minium_variant": 2.0
+      }
+    },
+    {
+      "model": "aasb:item/minium_stone/3",
+      "predicate": {
+        "aasb:minium_variant": 3.0
+      }
+    },
+    {
+      "model": "aasb:item/minium_stone/4",
+      "predicate": {
+        "aasb:minium_variant": 4.0
+      }
+    },
+    {
+      "model": "aasb:item/minium_stone/5",
+      "predicate": {
+        "aasb:minium_variant": 5.0
+      }
+    },
+    {
+      "model": "aasb:item/minium_stone/6",
+      "predicate": {
+        "aasb:minium_variant": 6.0
+      }
+    },
+    {
+      "model": "aasb:item/minium_stone/7",
+      "predicate": {
+        "aasb:minium_variant": 7.0
+      }
+    }
+  ]
 }

@@ -1,32 +1,84 @@
 package com.quartzshard.aasb.init;
 
-import com.quartzshard.aasb.AsAboveSoBelow;
-import com.quartzshard.aasb.common.entity.living.HorrorEntity;
-import com.quartzshard.aasb.common.network.AASBNet;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
+import com.quartzshard.aasb.AASB;
+import com.quartzshard.aasb.data.LangData;
+import com.quartzshard.aasb.init.object.ItemInit;
+import com.quartzshard.aasb.util.PlayerUtil;
+import com.quartzshard.aasb.util.PlayerUtil.PlayerSelectedHandProvider;
 
-import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.item.Item;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.RegistryObject;
 
-@Mod.EventBusSubscriber(modid = AsAboveSoBelow.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+/**
+ * Deals with initializing some misc core parts of the mod, and the creative tabs <br>
+ * also does some stupid capability bullshit
+ */
+@Mod.EventBusSubscriber(modid = AASB.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModInit {
-	public static void init(final FMLCommonSetupEvent event) {
-		AASBNet.register();
+
+	public static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, AASB.MODID);
+
+	public static void init(IEventBus bus) {
+		TABS.register(bus);
+		NetInit.register();
+		bus.addListener(ModInit::commonSetup);
+	}
+	
+	public static void commonSetup(final FMLCommonSetupEvent event) {
+	}
+	
+	public static final RegistryObject<CreativeModeTab>
+		NATURAL = TABS.register("natural", () -> CreativeModeTab.builder()
+			.title(Component.translatable(LangData.CTAB_NATURAL))
+			.withTabsBefore(CreativeModeTabs.COMBAT)
+			.icon(() -> ItemInit.THE_PHILOSOPHERS_STONE.get().getDefaultInstance())
+			.displayItems((parameters, tab) -> {
+				for (RegistryObject<? extends Item> ro : ItemInit.ALL_NATURAL_ITEMS) {
+					tab.accept(ro.get());
+				}
+			}).build()),
+		SYNTHETIC = TABS.register("synthetic", () -> CreativeModeTab.builder()
+				.title(Component.translatable(LangData.CTAB_SYNTHETIC))
+				.withTabsBefore(NATURAL.getId())
+				.icon(() -> ItemInit.ELIXIR_OF_LIFE.get().getDefaultInstance())
+				.displayItems((parameters, tab) -> {
+					for (RegistryObject<? extends Item> ro : ItemInit.ALL_SYNTHETIC_ITEMS) {
+						tab.accept(ro.get());
+					}
+				}).build());
+	
+	public static void attachEntityCaps(AttachCapabilitiesEvent<Entity> event){
+		if (event.getObject() instanceof Player) {
+			if (!event.getObject().getCapability(PlayerSelectedHandProvider.PLAYER_SELECTED_HAND).isPresent()) {
+				event.addCapability(AASB.rl("player_selected_hand"), new PlayerSelectedHandProvider());
+			}
+		}
 	}
 
-	public static final String TAB_NAME = AsAboveSoBelow.MODID;
-	public static final CreativeModeTab ITEM_GROUP = new CreativeModeTab(TAB_NAME) {
-		@Override
-		public ItemStack makeIcon() {
-			return new ItemStack(ObjectInit.Items.PHILOSOPHERS_STONE.get());
+	public static void onPlayerCloned(PlayerEvent.Clone event) {
+		if (event.isWasDeath()) { // so its not lost on death
+			event.getOriginal().getCapability(PlayerSelectedHandProvider.PLAYER_SELECTED_HAND).ifPresent(oldStore -> {
+				event.getEntity().getCapability(PlayerSelectedHandProvider.PLAYER_SELECTED_HAND).ifPresent(newStore -> {
+					newStore.copyFrom(oldStore);
+				});
+			});
 		}
-	};
-	
-    @SubscribeEvent
-    public static void onAttributeCreate(EntityAttributeCreationEvent event) {
-        event.put(ObjectInit.Entities.HORROR.get(), HorrorEntity.defaultAttributes().build());
-    }
+	}
+
+	public static void onRegisterCapabilities(RegisterCapabilitiesEvent event) {
+		event.register(PlayerUtil.PlayerSelectedHand.class);
+	}
 }

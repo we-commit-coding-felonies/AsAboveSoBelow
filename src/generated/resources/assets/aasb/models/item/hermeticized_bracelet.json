@@ -1,0 +1,14 @@
+{
+  "parent": "minecraft:item/handheld",
+  "overrides": [
+    {
+      "model": "aasb:item/hermeticized_bracelet",
+      "predicate": {}
+    }
+  ],
+  "textures": {
+    "layer0": "aasb:item/hermeticized_bracelet",
+    "layer1": "aasb:item/equipment/curio/bracelet_rune_1",
+    "layer2": "aasb:item/equipment/curio/bracelet_rune_2"
+  }
+}

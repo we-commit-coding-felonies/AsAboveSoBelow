@@ -1,0 +1,53 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"connect-back": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 0.5,
+			"bones": {
+				"pipe_n": {
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.5": {
+							"vector": [0, 0, -6],
+							"easing": "easeInBack"
+						}
+					}
+				}
+			}
+		},
+		"extended-back": {
+			"loop": true,
+			"bones": {
+				"pipe_n": {
+					"position": {
+						"vector": [0, 0, -6]
+					}
+				}
+			}
+		},
+		"detach-back": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 0.5,
+			"bones": {
+				"pipe_n": {
+					"position": {
+						"0.0": {
+							"vector": [0, 0, -6]
+						},
+						"0.5": {
+							"vector": [0, 0, 0],
+							"easing": "easeOutBack"
+						}
+					}
+				}
+			}
+		},
+		"active": {
+			"loop": true
+		}
+	},
+	"geckolib_format_version": 2
+}

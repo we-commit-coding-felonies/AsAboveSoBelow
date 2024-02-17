@@ -1,9 +1,7 @@
 {
-  "replace": false,
   "values": [
     "minecraft:ice",
     "minecraft:frosted_ice",
-    "aasb:air_ice",
     "minecraft:scaffolding",
     "#forge:glass",
     "#forge:glass_panes",
@@ -15,7 +13,7 @@
     "#minecraft:banners",
     "#minecraft:buttons",
     "#minecraft:crops",
-    "#minecraft:replaceable_plants",
+    "#minecraft:replaceable",
     "#minecraft:flowers",
     "#minecraft:climbable"
   ]
