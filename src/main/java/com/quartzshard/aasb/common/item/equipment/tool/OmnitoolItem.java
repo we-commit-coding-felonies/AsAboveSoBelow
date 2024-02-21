@@ -148,17 +148,18 @@ public class OmnitoolItem extends DiggerItem implements IDigStabilizer, IHandleK
 		ServerPlayer plr = ctx.player();
 		switch (ctx.bind()) {
 		case ITEMMODE:
-			Logger.chat("debug", "code", Phil.violation(ItemInit.MATERIA_1.get(), ItemInit.MATERIA_1.get())+"", plr);
-			return ctx.state() == BindState.PRESSED
-			&& toggleInstamine(ctx.stack());
+			Logger.printChat(BlockPos.of(6304)+"", plr);
+			return true;
 		case ITEMFUNC_1:
-			plr.sendSystemMessage(Component.literal(""+Phil.violation(ItemInit.MERCURY_BOTTLE.get(), Items.IRON_INGOT)));
 			return true;
 		case ITEMFUNC_2:
 			return true;
+			
+			
+			
 		case EMPOWER:
-			Phil.debugTestChangeMap(QuickAndDirtyRuntimeCodeTests.Mapper.createTestMap());
-			return true;
+			return ctx.state() == BindState.PRESSED
+					&& toggleInstamine(ctx.stack());
 		default:
 			return false;
 		}

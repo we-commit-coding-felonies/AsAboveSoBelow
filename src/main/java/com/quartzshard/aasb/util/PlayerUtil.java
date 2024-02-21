@@ -2,6 +2,7 @@ package com.quartzshard.aasb.util;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Optional;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -35,6 +36,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.BlockSnapshot;
 import net.minecraftforge.common.util.INBTSerializable;
@@ -289,6 +291,68 @@ public class PlayerUtil {
 	}
 
 	/**
+	 * Gets the total amount of exact matches (Item and NBT) a player has in inventory
+	 * @param player
+	 * @param stack stack to match
+	 * @return total amount of items held
+	 */
+	public static int getTotalHeldCount(Player player, ItemStack stack) {
+		return getTotalHeldCount(player, stack, null);
+	}
+	/**
+	 * Gets the total amount of exact matches (Item and NBT) a player has in inventory
+	 * @param player
+	 * @param stack stack to match
+	 * @return total amount of items held
+	 */
+	public static int getTotalHeldCount(Player player, ItemStack stack, @Nullable InteractionHand ignoreHand) {
+		int count = 0;
+		Optional<IItemHandler> itemHandlerCap = player.getCapability(ForgeCapabilities.ITEM_HANDLER).resolve();
+		if (itemHandlerCap.isPresent()) {
+			IItemHandler inv = itemHandlerCap.get();
+			for (int i = 0; i < inv.getSlots(); i++) {
+				ItemStack found = inv.getStackInSlot(i), foundClone = found.copy();
+				foundClone.setCount(stack.getCount()); // we do this so that the equals check later ignores stack count
+				if (ignoreHand != null && found == player.getItemInHand(ignoreHand)) continue;
+				if (!found.isEmpty() && foundClone.equals(stack, false)) {
+					count += found.getCount();
+				}
+			}
+		}
+		return count;
+	}
+	
+	/**
+	 * Eats items from a players inventory matching an itemstack
+	 * @param player
+	 * @param stack stack to match
+	 * @return amount actually consumed
+	 */
+	public static int consumeItems(Player player, ItemStack stack, int toConsume) {
+		int consumed = 0;
+		Optional<IItemHandler> itemHandlerCap = player.getCapability(ForgeCapabilities.ITEM_HANDLER).resolve();
+		if (itemHandlerCap.isPresent()) {
+			IItemHandler inv = itemHandlerCap.get();
+			for (int i = 0; i < inv.getSlots(); i++) {
+				int todo = toConsume-consumed;
+				if (todo <= 0) break;
+				ItemStack f = inv.getStackInSlot(i);
+				if (!f.isEmpty() && f.equals(stack, false)) {
+					int fc = f.getCount();
+					if (fc >= todo) {
+						consumed += todo;
+						f.shrink(todo);
+					} else {
+						consumed += fc;
+						f.setCount(0);
+					}
+				}
+			}
+		}
+		return consumed;
+	}
+
+	/**
 	 * Tries placing a block and fires an event for it.
 	 * https://github.com/sinkillerj/ProjectE/blob/mc1.18.x/src/main/java/moze_intel/projecte/utils/PlayerHelper.java#L52
 	 * @return Whether the block was successfully placed
@@ -366,6 +430,12 @@ public class PlayerUtil {
 		Vec3 ray = player.getLookAngle().scale(distance);
 		Vec3 rayPos = eyePos.add(ray);
 		return player.level().clip(new ClipContext(eyePos, rayPos, ClipContext.Block.VISUAL, ClipContext.Fluid.NONE, player));
+	}
+	public static BlockHitResult getTargetedBlockGrass(Player player, double distance) {
+		Vec3 eyePos = player.getEyePosition();
+		Vec3 ray = player.getLookAngle().scale(distance);
+		Vec3 rayPos = eyePos.add(ray);
+		return player.level().clip(new ClipContext(eyePos, rayPos, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, player));
 	}
 
 	// Next 2: https://github.com/sinkillerj/ProjectE/blob/68fbb2dea0cf8a6394fa6c7c084063046d94cee5/src/main/java/moze_intel/projecte/utils/PlayerHelper.java#L109C3-L127C3

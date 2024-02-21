@@ -12,7 +12,9 @@ import com.quartzshard.aasb.net.client.CreateLoopingSoundPacket;
 import com.quartzshard.aasb.net.client.CreateLoopingSoundPacket.LoopingSound;
 import com.quartzshard.aasb.net.client.DrawParticleLinePacket;
 import com.quartzshard.aasb.net.client.DrawParticleLinePacket.LineParticlePreset;
+import com.quartzshard.aasb.net.client.FreecamPacket;
 import com.quartzshard.aasb.net.server.KeybindPacket.BindState;
+import com.quartzshard.aasb.util.ClientUtil;
 import com.quartzshard.aasb.util.EntUtil;
 import com.quartzshard.aasb.util.EntUtil.Projectiles;
 import com.quartzshard.aasb.util.EntUtil.Projectiles.ArrowOptions;
@@ -25,14 +27,18 @@ import com.quartzshard.aasb.util.WayUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow.Pickup;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.event.entity.EntityTeleportEvent;
 import net.minecraftforge.items.IItemHandler;
 
 public class EtherealRune extends FormRune {
@@ -89,11 +95,33 @@ public class EtherealRune extends FormRune {
 	}
 
 	/**
-	 * normal: tele through wall <br>
+	 * normal: teleport <br>
 	 * strong: astral projection
 	 */
 	@Override
 	public boolean utilityAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
+		if (state == BindState.PRESSED) {
+			if (strong) {
+				// TODO cost, either high upfront or constant while active
+				NetInit.toClient(new FreecamPacket(true), player);
+				return true;
+			}
+			BlockHitResult hitRes = PlayerUtil.getTargetedBlock(player, 64);
+			if (hitRes.getType() != BlockHitResult.Type.MISS) {
+				BlockPos c = hitRes.getBlockPos().relative(hitRes.getDirection());
+				EntityTeleportEvent event = new EntityTeleportEvent(player, c.getX(), c.getY(), c.getZ());
+				if (!MinecraftForge.EVENT_BUS.post(event)) {
+					if (player.isPassenger()) {
+						player.stopRiding();
+					}
+					player.teleportTo(event.getTargetX()+0.5, event.getTargetY()+0.5, event.getTargetZ()+0.5);
+					player.level().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.CHORUS_FRUIT_TELEPORT, SoundSource.PLAYERS, 1, 2);
+					player.fallDistance = 0;
+					PlayerUtil.coolDown(player, stack.getItem(), 10);
+					return true;
+				}
+			}
+		}
 		return false;
 	}
 

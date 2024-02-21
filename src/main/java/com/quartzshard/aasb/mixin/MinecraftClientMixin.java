@@ -3,14 +3,18 @@ package com.quartzshard.aasb.mixin;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.quartzshard.aasb.common.entity.projectile.SentientArrowEntity;
 import com.quartzshard.aasb.common.item.equipment.armor.jewellery.CircletItem;
 import com.quartzshard.aasb.data.tags.EntityTP;
 import com.quartzshard.aasb.util.ClientUtil;
+import com.quartzshard.aasb.util.ClientUtil.AstralProjection;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.Input;
+import net.minecraft.client.player.KeyboardInput;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -20,7 +24,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 
 @Mixin(Minecraft.class)
-public abstract class MinecraftMixin {
+public abstract class MinecraftClientMixin {
 	
 	@Inject(method = "shouldEntityAppearGlowing", at = @At("HEAD"), cancellable = true)
 	protected void onCheckGlowing(Entity entity, CallbackInfoReturnable<Boolean> cir) {
@@ -43,6 +47,51 @@ public abstract class MinecraftMixin {
 					cir.setReturnValue(true);
 				}
 			}
+		}
+	}
+	
+
+
+	// Prevents player from being controlled when freecam is enabled.
+	@Inject(method = "tick", at = @At("HEAD"))
+	private void onTick(CallbackInfo ci) {
+		if (AstralProjection.isEnabled()) {
+			Minecraft mc = ClientUtil.mc();
+			if (mc.player != null && mc.player.input instanceof KeyboardInput) {
+				Input input = new Input();
+				input.shiftKeyDown = mc.player.input.shiftKeyDown; // Makes player continue to sneak after freecam is enabled.
+				mc.player.input = input;
+			}
+			mc.gameRenderer.setRenderHand(false);
+
+			//if (Freecam.disableNextTick()) {
+			//	Freecam.toggle();
+			//	Freecam.setDisableNextTick(false);
+			//}
+		}
+	}
+
+	// Prevents attacks when allowInteract is disabled.
+	@Inject(method = "startAttack", at = @At("HEAD"), cancellable = true)
+	private void onStartAttack(CallbackInfoReturnable<Boolean> cir) {
+		if (AstralProjection.isEnabled()) {
+			cir.cancel();
+		}
+	}
+
+	// Prevents item pick when allowInteract is disabled.
+	@Inject(method = "pickBlock", at = @At("HEAD"), cancellable = true)
+	private void onPickBlock(CallbackInfo ci) {
+		if (AstralProjection.isEnabled()) {
+			ci.cancel();
+		}
+	}
+
+	// Prevents block breaking when allowInteract is disabled.
+	@Inject(method = "continueAttack", at = @At("HEAD"), cancellable = true)
+	private void onHandleBlockBreaking(CallbackInfo ci) {
+		if (AstralProjection.isEnabled()) {
+			ci.cancel();
 		}
 	}
 }

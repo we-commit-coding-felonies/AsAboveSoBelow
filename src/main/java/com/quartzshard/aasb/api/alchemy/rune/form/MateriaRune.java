@@ -40,7 +40,6 @@ public class MateriaRune extends FormRune {
 				if (!nbt.isEmpty())
 					newStack.setTag(nbt);
 				PlayerUtil.forceSetCurio(player, slot, slotIdx(slot, player), newStack);
-				System.out.println("idiot");
 				return true;
 			}
 		}

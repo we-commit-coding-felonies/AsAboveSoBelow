@@ -70,6 +70,11 @@ public class NetInit {
 				.decoder(ModifyPlayerVelocityPacket::dec)
 				.consumerMainThread(ModifyPlayerVelocityPacket::handle)
 				.add();
+		CHANNEL.messageBuilder(FreecamPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
+				.encoder(FreecamPacket::enc)
+				.decoder(FreecamPacket::dec)
+				.consumerMainThread(FreecamPacket::handle)
+				.add();
 	}
 	
 	public static <PKT> void toServer(PKT packet) {

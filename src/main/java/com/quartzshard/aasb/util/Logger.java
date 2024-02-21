@@ -200,6 +200,13 @@ public class Logger {
 	}
 	
 	/**
+	 * For use in testing, treat like println()
+	 */
+	public static void printChat(String msg, Player player) {
+		player.sendSystemMessage(Component.literal(msg));
+	}
+	
+	/**
 	 * Prints a standardized message to a player's chat
 	 * 
 	 * @param name A name for what is printing this

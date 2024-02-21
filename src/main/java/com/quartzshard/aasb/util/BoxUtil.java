@@ -228,5 +228,13 @@ public class BoxUtil {
 		}
 		return sa;
 	}
+	
+	/**
+	 * @param box
+	 * @return perimeter length of the box in meters
+	 */
+	public static double perimeter(AABB box) {
+		return box.getXsize()*4 + box.getYsize()*4 + box.getZsize()*4;
+	}
 
 }
