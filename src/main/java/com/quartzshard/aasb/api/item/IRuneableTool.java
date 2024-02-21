@@ -2,6 +2,7 @@ package com.quartzshard.aasb.api.item;
 
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.quartzshard.aasb.api.alchemy.rune.Rune;
@@ -22,7 +23,7 @@ import net.minecraft.world.level.Level;
 public interface IRuneableTool extends IRuneable {
 	
 	@Override
-	default boolean handle(PressContext ctx) {
+	default boolean handle(@NotNull PressContext ctx) {
 		ItemStack stack = ctx.stack();
 		ServerPlayer player = ctx.player();
 		@Nullable Rune rune;
@@ -46,17 +47,17 @@ public interface IRuneableTool extends IRuneable {
 	}
 	
 	@Nullable
-	default Rune getMajorRune(ItemStack stack) {
+	default Rune getMajorRune(@NotNull ItemStack stack) {
 		return getRune(stack, 0);
 	}
 	
 	@Nullable
-	default Rune getMinorRune(ItemStack stack) {
+	default Rune getMinorRune(@NotNull ItemStack stack) {
 		return getRune(stack, 1);
 	}
 	
 	@Override
-	default boolean runesAreStrong(ItemStack stack) {
+	default boolean runesAreStrong(@NotNull ItemStack stack) {
 		return getMinorRune(stack) instanceof AirRune;
 	}
 	
@@ -84,8 +85,8 @@ public interface IRuneableTool extends IRuneable {
 	 * @param flags
 	 */
 	default void appendRuneText(ItemStack stack, Level level, List<Component> tips, TooltipFlag flags) {
-		Component runeText = null;
-		Rune major = getMajorRune(stack), minor = getMinorRune(stack);
+		@Nullable Component runeText = null;
+		@Nullable Rune major = getMajorRune(stack), minor = getMinorRune(stack);
 		boolean hasNull = major == null || minor == null,
 				didDo = false; 
 		if (hasNull && major != minor) {

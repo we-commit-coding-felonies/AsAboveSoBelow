@@ -48,10 +48,10 @@ public class WorldUtil {
 	}
 
 
-	public static List<BlockEntity> allTEInBox(Level level, AABB box) {
+	public static @NotNull List<BlockEntity> allTEInBox(Level level, AABB box) {
 		List<BlockEntity> list = new ArrayList<>();
 		for (BlockPos pos : BoxUtil.allBlocksInBox(box)) {
-			BlockEntity te = getBlockEntity(level, pos);
+			@Nullable BlockEntity te = getBlockEntity(level, pos);
 			if (te != null) {
 				list.add(te);
 			}
@@ -62,10 +62,10 @@ public class WorldUtil {
 	public static int floodFillDown(Level level, BlockPos origin, AABB bounds, BlockState fill) {
 		return floodFillDown(level, origin, bounds, (bs) -> fill);
 	}
-	public static int floodFillDown(Level level, BlockPos origin, BlockState fill, BiFunction<Level,BlockPos,Boolean> inside) {
+	public static int floodFillDown(@NotNull Level level, BlockPos origin, BlockState fill, @NotNull BiFunction<Level,BlockPos,Boolean> inside) {
 		return floodFillDown(level, origin, inside, (bs) -> fill);
 	}
-	public static int floodFillDown(Level level, BlockPos origin, AABB bounds, UnaryOperator<BlockState> transformer) {
+	public static int floodFillDown(@NotNull Level level, BlockPos origin, AABB bounds, @NotNull UnaryOperator<BlockState> transformer) {
 		return floodFillDown(level, origin, (lvl,bPos) -> {
 			return bounds.contains(bPos.getCenter()) && lvl.getBlockState(bPos).isAir();
 		}, transformer);
@@ -79,7 +79,7 @@ public class WorldUtil {
 	 * @return True if the floodfill did anything (transformer was run at least once)
 	 */
 	public static int floodFillDown(Level level, BlockPos origin, BiFunction<Level,BlockPos,Boolean> inside, UnaryOperator<BlockState> transformer) {
-		Deque<BlockPos> dq = new ArrayDeque<>();
+		@NotNull Deque<BlockPos> dq = new ArrayDeque<>();
 		dq.add(origin);
 		int ops = 0;
 		while (!dq.isEmpty()) {

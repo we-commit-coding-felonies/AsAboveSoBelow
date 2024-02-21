@@ -13,6 +13,8 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.Vec3;
 
 import net.minecraftforge.network.NetworkEvent;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * preset multi-particle-type effects
@@ -23,7 +25,7 @@ public record PresetParticlePacket(ParticlePreset preset, Vec3 pos) {
 		MUSTANG
 	}
 	
-	public void enc(FriendlyByteBuf buffer) {
+	public void enc(@NotNull FriendlyByteBuf buffer) {
 		buffer.writeEnum(preset);
 		buffer.writeDouble(pos.x);
 		buffer.writeDouble(pos.y);
@@ -38,16 +40,16 @@ public record PresetParticlePacket(ParticlePreset preset, Vec3 pos) {
 	public boolean handle(Supplier<NetworkEvent.Context> sup) {
 		NetworkEvent.Context ctx = sup.get();
 		ctx.enqueueWork(() -> {
-			Minecraft mc = ClientUtil.mc();
-			ClientLevel level = mc.level;
-			RandomSource rand = level.getRandom();
+			@NotNull Minecraft mc = ClientUtil.mc();
+			@Nullable ClientLevel level = mc.level;
+			@NotNull RandomSource rand = level.getRandom();
 			double
 				x = pos.x,
 				y = pos.y,
 				z = pos.z;
 			level.addParticle(ParticleTypes.FLASH, true, x, y, z, 0, 0, 0);
 			for (int i = 0; i < 3; i++) {
-				Particle p = ClientUtil.hackyParticle(ParticleTypes.FLASH, true, false, rand.nextGaussian() + x, rand.nextGaussian() + y, rand.nextGaussian() + z, 0, Math.abs(rand.nextGaussian()/10), 0);
+				@Nullable Particle p = ClientUtil.hackyParticle(ParticleTypes.FLASH, true, false, rand.nextGaussian() + x, rand.nextGaussian() + y, rand.nextGaussian() + z, 0, Math.abs(rand.nextGaussian()/10), 0);
 				if (p != null)
 					p.setColor(1, 0.25f, 0);
 			}

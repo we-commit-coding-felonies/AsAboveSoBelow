@@ -12,6 +12,7 @@ import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
 
 public class BlockModelData extends BlockStateProvider {
 
@@ -31,7 +32,7 @@ public class BlockModelData extends BlockStateProvider {
 		;
 	}
 	
-	private ConfiguredModel modelOf(Block block, String suffix) {
+	private ConfiguredModel modelOf(@NotNull Block block, String suffix) {
 		return new ConfiguredModel(models().getExistingFile(ModelLocationUtils.getModelLocation(block, suffix)));
 	}
 	

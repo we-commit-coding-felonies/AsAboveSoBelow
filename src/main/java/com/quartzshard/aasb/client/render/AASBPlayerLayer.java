@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
@@ -32,7 +34,7 @@ import net.minecraftforge.fml.loading.FMLEnvironment;
 
 public class AASBPlayerLayer extends RenderLayer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> {
 
-	public AASBPlayerLayer(PlayerRenderer renderer) {
+	public AASBPlayerLayer(@NotNull PlayerRenderer renderer) {
 		super(renderer);
 		this.renderer = renderer;
 
@@ -83,8 +85,8 @@ public class AASBPlayerLayer extends RenderLayer<AbstractClientPlayer, PlayerMod
 
 	/** for the alchemical barrier */
 	private void renderMagnumOpusHalo(PoseStack poseStack, MultiBufferSource renderBuffer, AbstractClientPlayer player, float ageInTicks) {
-		String debugStr = "null";//DebugCfg.HALO_UUID.get();
-		UUID debugUUID = null;
+		@NotNull String debugStr = "null";//DebugCfg.HALO_UUID.get();
+		@Nullable UUID debugUUID = null;
 		if (!FMLEnvironment.production) {
 			try {
 				debugUUID = UUID.fromString(debugStr);
@@ -136,13 +138,13 @@ public class AASBPlayerLayer extends RenderLayer<AbstractClientPlayer, PlayerMod
 		boolean fixed = c1 == c2;
 
 		VertexConsumer buffer = renderBuffer.getBuffer(AASBRenderType.MAGNUM_OPUS_HALO.apply(texture));
-		Matrix4f pose = poseStack.last().pose();
+		@NotNull Matrix4f pose = poseStack.last().pose();
 
 		// blinks faster when low EMC
 		int alpha = Math.round(Colors.loopFade(timer, Math.round(Math.max(280 * chargeLevel, 10)), 0, 96, 192));
 		if (fixed || data.fadeType == HaloFadeType.NONE) {
 			// fixed color mode, saves processing time by not doing fade stuff
-			int[] color = { c1.R, c1.G, c1.B };
+			int @NotNull [] color = { c1.R, c1.G, c1.B };
 			buffer.vertex(pose, 0, 0, 0).color(color[0], color[1], color[2], alpha).uv(0, 0).endVertex();
 			buffer.vertex(pose, 0, 0, 1).color(color[0], color[1], color[2], alpha).uv(0, 1).endVertex();
 			buffer.vertex(pose, 1, 0, 1).color(color[0], color[1], color[2], alpha).uv(1, 1).endVertex();

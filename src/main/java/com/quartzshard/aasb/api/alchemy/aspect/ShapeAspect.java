@@ -2,6 +2,7 @@ package com.quartzshard.aasb.api.alchemy.aspect;
 
 import java.util.Random;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.quartzshard.aasb.AASB;
@@ -28,7 +29,7 @@ public enum ShapeAspect implements IAspect<ShapeAspect> {
 	
 	public final int color;
 	public final String lang;
-	private final Component loc, fLoc;
+	private final @NotNull Component loc, fLoc;
 
 	// duplicate code because cant call name() from within constructor
 	ShapeAspect(int color) {
@@ -54,7 +55,7 @@ public enum ShapeAspect implements IAspect<ShapeAspect> {
 	public MutableComponent loc() {
 		return loc.copy();
 	}
-	public MutableComponent fLoc() {
+	public @NotNull MutableComponent fLoc() {
 		return fLoc.copy();
 	}
 	
@@ -102,12 +103,12 @@ public enum ShapeAspect implements IAspect<ShapeAspect> {
 	}
 
 	@Override
-	public float violationFrom(ShapeAspect other) {
+	public float violationFrom(@NotNull ShapeAspect other) {
 		return other.violationTo(this);
 	}
 	
 	@Override
-	public String toString() {
+	public @NotNull String toString() {
 		return "Shape."+this.name().toLowerCase();
 	}
 

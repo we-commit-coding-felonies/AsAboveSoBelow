@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
+import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3f;
 
 import com.quartzshard.aasb.util.Colors;
@@ -36,7 +37,7 @@ public record DrawParticleLinePacket(Vec3 start, Vec3 end, LineParticlePreset pr
 		SMITE
 	}
 	
-	public void enc(FriendlyByteBuf buffer) {
+	public void enc(@NotNull FriendlyByteBuf buffer) {
 		buffer.writeDouble(start.x); //
 		buffer.writeDouble(start.y); // start point
 		buffer.writeDouble(start.z); //
@@ -48,7 +49,7 @@ public record DrawParticleLinePacket(Vec3 start, Vec3 end, LineParticlePreset pr
 		buffer.writeEnum(preset); // particle preset
 	}
 
-	public static DrawParticleLinePacket dec(FriendlyByteBuf buffer) {
+	public static DrawParticleLinePacket dec(@NotNull FriendlyByteBuf buffer) {
 		return new DrawParticleLinePacket(
 				new Vec3(buffer.readDouble(), buffer.readDouble(), buffer.readDouble()), // start point
 				new Vec3(buffer.readDouble(), buffer.readDouble(), buffer.readDouble()), // end point

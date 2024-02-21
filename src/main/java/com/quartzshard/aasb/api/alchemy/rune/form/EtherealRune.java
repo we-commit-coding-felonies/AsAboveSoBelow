@@ -2,6 +2,7 @@ package com.quartzshard.aasb.api.alchemy.rune.form;
 
 import java.util.Optional;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.quartzshard.aasb.AASB;
@@ -53,7 +54,7 @@ public class EtherealRune extends FormRune {
 	 * strong: sentient arrow
 	 */
 	@Override
-	public boolean combatAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
+	public boolean combatAbility(ItemStack stack, ServerPlayer player, @NotNull ServerLevel level, BindState state, boolean strong, String slot) {
 		// TODO: COST
 		if (strong) {
 			if (hasTrackedArrow(stack)) {
@@ -99,17 +100,17 @@ public class EtherealRune extends FormRune {
 	 * strong: astral projection
 	 */
 	@Override
-	public boolean utilityAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
+	public boolean utilityAbility(@NotNull ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
 		if (state == BindState.PRESSED) {
 			if (strong) {
 				// TODO cost, either high upfront or constant while active
 				NetInit.toClient(new FreecamPacket(true), player);
 				return true;
 			}
-			BlockHitResult hitRes = PlayerUtil.getTargetedBlock(player, 64);
+			@NotNull BlockHitResult hitRes = PlayerUtil.getTargetedBlock(player, 64);
 			if (hitRes.getType() != BlockHitResult.Type.MISS) {
 				BlockPos c = hitRes.getBlockPos().relative(hitRes.getDirection());
-				EntityTeleportEvent event = new EntityTeleportEvent(player, c.getX(), c.getY(), c.getZ());
+				@NotNull EntityTeleportEvent event = new EntityTeleportEvent(player, c.getX(), c.getY(), c.getZ());
 				if (!MinecraftForge.EVENT_BUS.post(event)) {
 					if (player.isPassenger()) {
 						player.stopRiding();
@@ -135,7 +136,7 @@ public class EtherealRune extends FormRune {
 	//}
 
 	@Override
-	public void tickPassive(ItemStack stack, ServerPlayer player, ServerLevel level, boolean strong, boolean unequipped) {
+	public void tickPassive(ItemStack stack, @NotNull ServerPlayer player, ServerLevel level, boolean strong, boolean unequipped) {
 		long playerXp = PlayerUtil.Xp.getXp(player);
 		boolean doWay = strong && WayUtil.hasWay(player);
 		if (playerXp > 0 || doWay) {
@@ -143,7 +144,7 @@ public class EtherealRune extends FormRune {
 			if (oiih.isPresent()) {
 				IItemHandler inv = oiih.get();			
 				for (int i = 0; i < inv.getSlots(); i++) {
-					ItemStack repairTarget = inv.getStackInSlot(i);
+					@NotNull ItemStack repairTarget = inv.getStackInSlot(i);
 					if (repairTarget.isDamageableItem() && repairTarget.isDamaged()) {
 						repairTarget.setDamageValue(repairTarget.getDamageValue() - 1);
 						if (doWay)
@@ -169,7 +170,7 @@ public class EtherealRune extends FormRune {
 		return null;
 	}
 	
-	public void changeTrackedArrow(ItemStack stack, SentientArrowEntity arrow) {
+	public void changeTrackedArrow(@NotNull ItemStack stack, SentientArrowEntity arrow) {
 		NBTUtil.setInt(stack, TK_ARROWTRACKER, arrow.getId());
 	}
 	
@@ -177,15 +178,15 @@ public class EtherealRune extends FormRune {
 		NBTUtil.setInt(stack, TK_ARROWTRACKER, -1);
 	}
 	
-	public boolean sentientArrowControl(SentientArrowEntity arrow, ServerPlayer player) {
+	public boolean sentientArrowControl(@NotNull SentientArrowEntity arrow, ServerPlayer player) {
 		// try redirecting the arrow
 		boolean foundTarget = arrow.attemptManualRetarget();
 		player.level().playSound(null, player, FxInit.SND_WHISTLE.get(), SoundSource.PLAYERS, 1, AASB.RNG.nextFloat(0.1f, 2f));
 		if (foundTarget) {
 			for (Player nplr : player.level().players()) {
 				ServerPlayer plr = (ServerPlayer) nplr;
-				Entity target = arrow.getTarget();
-				BlockPos pos = plr.blockPosition();
+				@Nullable Entity target = arrow.getTarget();
+				@NotNull BlockPos pos = plr.blockPosition();
 				boolean nearOwner = pos.closerToCenterThan(player.getEyePosition(), 128);
 				// owner -> arrow communicate
 				if (nearOwner || pos.closerToCenterThan(arrow.getBoundingBox().getCenter(), 128)) {
@@ -199,7 +200,7 @@ public class EtherealRune extends FormRune {
 		} else {
 			// returning to owner
 			for (ServerPlayer plr : ((ServerLevel)player.level()).players()) {
-				BlockPos pos = plr.blockPosition();
+				@NotNull BlockPos pos = plr.blockPosition();
 				boolean nearOwner = pos.closerToCenterThan(player.getEyePosition(), 128);
 				// arrow -> owner tracer
 				if (nearOwner || pos.closerToCenterThan(arrow.getBoundingBox().getCenter(), 128)) {

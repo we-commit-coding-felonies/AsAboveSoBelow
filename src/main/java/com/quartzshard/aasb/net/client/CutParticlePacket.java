@@ -11,6 +11,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.network.NetworkEvent;
+import org.jetbrains.annotations.NotNull;
 
 public record CutParticlePacket(int amount, AABB area) {	
 	
@@ -24,7 +25,7 @@ public record CutParticlePacket(int amount, AABB area) {
 		buffer.writeDouble(area.maxZ);
 	}
 
-	public static CutParticlePacket dec(FriendlyByteBuf buffer) {
+	public static CutParticlePacket dec(@NotNull FriendlyByteBuf buffer) {
 		return new CutParticlePacket(buffer.readInt(),
 				new AABB(buffer.readDouble(),buffer.readDouble(),buffer.readDouble(),
 						buffer.readDouble(),buffer.readDouble(),buffer.readDouble()));

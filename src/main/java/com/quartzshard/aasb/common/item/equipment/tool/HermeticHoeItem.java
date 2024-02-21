@@ -3,6 +3,7 @@ package com.quartzshard.aasb.common.item.equipment.tool;
 import java.util.List;
 import java.util.function.Consumer;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.google.common.collect.Multimap;
@@ -105,7 +106,7 @@ public class HermeticHoeItem extends HoeItem implements IHermeticTool {
 	}
 	
 	@Override
-	public Multimap<Attribute,AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
+	public Multimap<Attribute,AttributeModifier> getAttributeModifiers(EquipmentSlot slot, @NotNull ItemStack stack) {
 		return enchAttribMods(slot, stack, super.getAttributeModifiers(slot, stack));
 	}
 	
@@ -115,7 +116,7 @@ public class HermeticHoeItem extends HoeItem implements IHermeticTool {
     }
 	
 	@Override
-	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
+	public boolean shouldCauseReequipAnimation(@NotNull ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
 		if (slotChanged) return true;
 		return stacksDifferentIgnoreWay(oldStack, newStack);
 	}
@@ -151,7 +152,7 @@ public class HermeticHoeItem extends HoeItem implements IHermeticTool {
 	}
 
 	@Override
-	public ToolStyle getToolStyle(ItemStack stack) {
+	public @NotNull ToolStyle getToolStyle(ItemStack stack) {
 		return ToolStyle.HOE;
 	}
 }

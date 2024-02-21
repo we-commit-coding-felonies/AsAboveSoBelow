@@ -17,12 +17,13 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.Level.ExplosionInteraction;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * "grenade" is a bit of an understatement
  */
 public class WayGrenadeEntity extends ThrowableItemProjectile {
-	public WayGrenadeEntity(EntityType<? extends WayGrenadeEntity> entType, Level level) {
+	public WayGrenadeEntity(@NotNull EntityType<? extends WayGrenadeEntity> entType, Level level) {
 		super(entType, level);
 	}
 
@@ -69,7 +70,7 @@ public class WayGrenadeEntity extends ThrowableItemProjectile {
 			DamageSource dmgSrc = EntityInit.dmg(EntityInit.DMG_WAYBOMB, this.level(), this, this.getOwner());
 			ItemStack stack = this.getItem();
 			float detPower = ((WayGrenadeItem)getDefaultItem()).getDetPower(stack);
-			WayExplosionDamageCalculator nukeCalc = new WayExplosionDamageCalculator(detPower);
+			@NotNull WayExplosionDamageCalculator nukeCalc = new WayExplosionDamageCalculator(detPower);
 			Vec3 c = this.getBoundingBox().getCenter();
 			this.level().explode(this, dmgSrc, nukeCalc, c.x, c.y, c.z, detPower, this.isOnFire(), ExplosionInteraction.BLOCK, true);
 		}

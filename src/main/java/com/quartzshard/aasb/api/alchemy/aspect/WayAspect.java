@@ -2,6 +2,7 @@ package com.quartzshard.aasb.api.alchemy.aspect;
 
 import java.util.Random;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -30,7 +31,7 @@ public class WayAspect implements IAspect<WayAspect> {
 	}
 
 	@Override
-	public boolean flowsFrom(WayAspect other) {
+	public boolean flowsFrom(@NotNull WayAspect other) {
 		return other.flowsTo(this);
 	}
 
@@ -55,7 +56,7 @@ public class WayAspect implements IAspect<WayAspect> {
 	}
 	
 	@Override
-	public String toString() {
+	public @NotNull String toString() {
 		return "Way."+value;
 	}
 

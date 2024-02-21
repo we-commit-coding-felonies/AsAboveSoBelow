@@ -8,6 +8,8 @@ import com.quartzshard.aasb.util.NBTUtil;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Items that can contain Way, and possibly inserted to / extracted from
@@ -119,16 +121,16 @@ public interface IWayHolder {
 	 * @param newStack
 	 * @return False if the items are the same except for Way charge
 	 */
-	default boolean stacksDifferentIgnoreWay(ItemStack oldStack, ItemStack newStack) {
+	default boolean stacksDifferentIgnoreWay(@NotNull ItemStack oldStack, ItemStack newStack) {
 		if (!newStack.is(oldStack.getItem()))
 			return true;
 
 		CompoundTag newTag = newStack.getTag();
-		CompoundTag oldTag = oldStack.getTag();
+		@Nullable CompoundTag oldTag = oldStack.getTag();
 
 		if (newTag == null || oldTag == null)
 			return !(newTag == null && oldTag == null);
-		Set<String> newKeys = new HashSet<>(newTag.getAllKeys());
+		@NotNull Set<String> newKeys = new HashSet<>(newTag.getAllKeys());
 		Set<String> oldKeys = new HashSet<>(oldTag.getAllKeys());
 
 		newKeys.remove(TK_STOREDWAY);

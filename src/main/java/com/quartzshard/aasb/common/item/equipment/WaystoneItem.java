@@ -10,6 +10,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 public class WaystoneItem extends Item implements IWayHolder {
 	public static final String TK_CURINSERTED = "CurrentWayInserted";
@@ -19,7 +20,7 @@ public class WaystoneItem extends Item implements IWayHolder {
 	}
 	
 	@Override
-	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+	public InteractionResultHolder<ItemStack> use(Level level, @NotNull Player player, InteractionHand hand) {
 		ItemStack stack = player.getItemInHand(hand);
 		long todo = player.isShiftKeyDown() ? Long.MAX_VALUE : player.getItemInHand(hand == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND).getCount();
 		long did;

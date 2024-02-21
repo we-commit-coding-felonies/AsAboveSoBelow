@@ -14,6 +14,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Item that recieves boosts based on the enchantments it has
@@ -30,9 +31,9 @@ public interface IEnchantBoostable {
 	}
 	
 	default double getBonusStrength(ItemStack stack) {
-		Set<Entry<Enchantment,Integer>> enchList = EnchantmentHelper.getEnchantments(stack).entrySet();
+		@NotNull Set<Entry<Enchantment,Integer>> enchList = EnchantmentHelper.getEnchantments(stack).entrySet();
 		double lvls = 0;
-		for (Entry<Enchantment,Integer> ench : enchList) {
+		for (@NotNull Entry<Enchantment,Integer> ench : enchList) {
 			lvls += ench.getValue();
 		}
 		int amount = enchList.size();
@@ -41,7 +42,7 @@ public interface IEnchantBoostable {
 		return (lvls + 2*amount) / Constants.SQRT_PI_E;
 	}
 	
-	default boolean shouldApplyBonus(ItemStack stack) {
+	default boolean shouldApplyBonus(@NotNull ItemStack stack) {
 		return stack.isEnchanted();
 	}
 	

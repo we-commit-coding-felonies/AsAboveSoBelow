@@ -2,6 +2,7 @@ package com.quartzshard.aasb.api.alchemy.rune.form;
 
 import java.util.UUID;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.google.common.collect.ImmutableMultimap;
@@ -61,7 +62,7 @@ public class OrganicRune extends FormRune {
 	 * strong: area bonemeal
 	 */
 	@Override
-	public boolean utilityAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
+	public boolean utilityAbility(ItemStack stack, ServerPlayer player, @NotNull ServerLevel level, BindState state, boolean strong, String slot) {
 		if (state == BindState.PRESSED) {
 			// TODO cost based on way of bone meal
 			ItemStack meal = new ItemStack(Items.BONE_MEAL, 64);

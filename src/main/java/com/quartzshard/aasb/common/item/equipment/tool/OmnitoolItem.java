@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.quartzshard.aasb.AASB;
@@ -60,7 +61,7 @@ import net.minecraftforge.fml.common.Mod;
  */
 @Mod.EventBusSubscriber(modid = AASB.MODID)
 public class OmnitoolItem extends DiggerItem implements IDigStabilizer, IHandleKeybind {
-	public OmnitoolItem(float damage, float speed, Tier tier, TagKey<Block> breakableBlocks, Properties props) {
+	public OmnitoolItem(float damage, float speed, @NotNull Tier tier, TagKey<Block> breakableBlocks, @NotNull Properties props) {
 		super(damage, speed, tier, breakableBlocks, props);
 	}
 	
@@ -144,7 +145,7 @@ public class OmnitoolItem extends DiggerItem implements IDigStabilizer, IHandleK
 	 * serverside code can be thrown in here to quickly test it
 	 */
 	@Override
-	public boolean handle(PressContext ctx) {
+	public boolean handle(@NotNull PressContext ctx) {
 		ServerPlayer plr = ctx.player();
 		switch (ctx.bind()) {
 		case ITEMMODE:
@@ -198,8 +199,8 @@ public class OmnitoolItem extends DiggerItem implements IDigStabilizer, IHandleK
 	 */
 	public static class QuickAndDirtyRuntimeCodeTests {
 		public class Mapper {
-			public static Map<ItemData,AlchData> createTestMap() {
-				HashMap<ItemData,AlchData> map = new HashMap<>();
+			public static @NotNull Map<ItemData,AlchData> createTestMap() {
+				@NotNull HashMap<ItemData,AlchData> map = new HashMap<>();
 				
 				map.put(
 						ItemData.fromItem(Items.COBBLESTONE),

@@ -25,6 +25,7 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
+import org.jetbrains.annotations.NotNull;
 
 public class FireRune extends ShapeRune {
 
@@ -37,7 +38,7 @@ public class FireRune extends ShapeRune {
 	 * Strong: Mustang
 	 */
 	@Override
-	public boolean combatAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
+	public boolean combatAbility(ItemStack stack, ServerPlayer player, @NotNull ServerLevel level, BindState state, boolean strong, String slot) {
 		// TODO: COST
 		if (state == BindState.PRESSED) {
 			if (player.level().isRainingAt(player.blockPosition())) {
@@ -68,14 +69,14 @@ public class FireRune extends ShapeRune {
 	 * Strong: Floodfill lava bucket
 	 */
 	@Override
-	public boolean utilityAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
+	public boolean utilityAbility(ItemStack stack, ServerPlayer player, @NotNull ServerLevel level, BindState state, boolean strong, String slot) {
 		if (state == BindState.PRESSED) {
 			BlockHitResult hitRes = PlayerUtil.getTargetedBlock(player, strong ? player.getBlockReach()-0.5 : 32);
 			if (hitRes.getType() == HitResult.Type.BLOCK) {
 				BlockPos origin = hitRes.getBlockPos().relative(hitRes.getDirection());
 				if (level.getBlockState(origin).isAir() || level.getFluidState(origin).is(Fluids.FLOWING_LAVA)) {
 					if (strong) {
-						AABB bounds = AABB.ofSize(origin.getCenter(), 20, 20, 20);
+						@NotNull AABB bounds = AABB.ofSize(origin.getCenter(), 20, 20, 20);
 						bounds.move(0, -10, 0); // TODO: cost based on Way value of lava
 						int cdTime = WorldUtil.floodFillDown(level, origin, bounds, Blocks.LAVA.defaultBlockState()) / 5;
 						if (cdTime > 0) {

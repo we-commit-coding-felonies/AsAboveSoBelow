@@ -2,6 +2,7 @@ package com.quartzshard.aasb.common.item.equipment.curio;
 
 import java.util.UUID;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.google.common.collect.Multimap;
@@ -30,7 +31,7 @@ public class CharmItem extends AbilityCurioItem implements IRuneable, ICurioItem
 	}
 	
 	@Override
-	public void curioTick(SlotContext ctx, ItemStack stack) {
+	public void curioTick(@NotNull SlotContext ctx, @NotNull ItemStack stack) {
 		if (ctx.entity() instanceof ServerPlayer plr) {
 			tickRunes(stack, plr, plr.serverLevel(), false);
 		} else if (ctx.entity() instanceof Player plr){
@@ -39,7 +40,7 @@ public class CharmItem extends AbilityCurioItem implements IRuneable, ICurioItem
 	}
 	
 	@Override
-	public void onUnequip(SlotContext ctx, ItemStack next, ItemStack prev) {
+	public void onUnequip(@NotNull SlotContext ctx, ItemStack next, ItemStack prev) {
 		if (ctx.entity() instanceof ServerPlayer plr) {
 			//System.out.print("PREV = ");
 			tickRunes(prev, plr, plr.serverLevel(), true);

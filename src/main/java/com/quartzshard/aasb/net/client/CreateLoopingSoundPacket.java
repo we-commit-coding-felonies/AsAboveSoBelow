@@ -16,6 +16,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 
 import net.minecraftforge.network.NetworkEvent;
+import org.jetbrains.annotations.NotNull;
 
 public record CreateLoopingSoundPacket(LoopingSound type, int entId) {
 	
@@ -35,7 +36,7 @@ public record CreateLoopingSoundPacket(LoopingSound type, int entId) {
 		);
 	}
 	
-	public boolean handle(Supplier<NetworkEvent.Context> sup) {
+	public boolean handle(@NotNull Supplier<NetworkEvent.Context> sup) {
 		NetworkEvent.Context ctx = sup.get();
 		ctx.enqueueWork(() -> {
 			ClientLevel level = ClientUtil.level();

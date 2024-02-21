@@ -72,6 +72,8 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.ToolAction;
 import net.minecraftforge.common.ToolActions;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * this file is bad and solunareclipse1 should feel bad <br>
@@ -116,7 +118,7 @@ public class WaterRune extends ShapeRune {
 	 * Strong: Floodfill water (works in nether)
 	 */
 	@Override
-	public boolean utilityAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
+	public boolean utilityAbility(ItemStack stack, ServerPlayer player, @NotNull ServerLevel level, BindState state, boolean strong, String slot) {
 		if (state == BindState.PRESSED) {
 			BlockHitResult hitRes = PlayerUtil.getTargetedBlock(player, strong ? player.getBlockReach()-0.5 : 32);
 			if (hitRes.getType() == HitResult.Type.BLOCK) {
@@ -126,7 +128,7 @@ public class WaterRune extends ShapeRune {
 				}
 				if (WorldUtil.canWaterlog(level, origin)) {
 					if (strong) {
-						AABB bounds = AABB.ofSize(origin.getCenter(), 20, 20, 20);
+						@NotNull AABB bounds = AABB.ofSize(origin.getCenter(), 20, 20, 20);
 						bounds.move(0, -10, 0);
 						long held = WayUtil.getAvaliableWay(player);
 						if (held >= 64) {
@@ -164,7 +166,7 @@ public class WaterRune extends ShapeRune {
 		}
 	}
 	
-	private int extinguishAoe(Player player, AABB area, long limit) { // FIXME hardcoded garbage
+	private int extinguishAoe(@NotNull Player player, AABB area, long limit) { // FIXME hardcoded garbage
 		Vec3 min = new Vec3(area.minX, area.minY, area.minZ),
 			max = new Vec3(area.maxX, area.maxY, area.maxZ);
 		
@@ -271,14 +273,14 @@ public class WaterRune extends ShapeRune {
 	}
 
 	@Override
-	public boolean toolAbility(ItemStack stack, ToolStyle style, ServerPlayer player, ServerLevel level, BindState state, boolean strong) {
+	public boolean toolAbility(ItemStack stack, @NotNull ToolStyle style, @NotNull ServerPlayer player, ServerLevel level, BindState state, boolean strong) {
 		if (state != BindState.PRESSED) return false;
 		// TODO make this less specific to hermetic stuff somehow
 		// also make it NOT ACTUAL REAL SATAN
 		Item item = stack.getItem();
 		if (item instanceof IHermeticTool tool) {
 			long charge = tool.getStoredWay(stack);
-			ItemCooldowns cd = player.getCooldowns();
+			@NotNull ItemCooldowns cd = player.getCooldowns();
 			boolean onCooldown = player.getAttackStrengthScale(0) < 1 || cd.isOnCooldown(item);
 			if (charge < 32 || onCooldown)
 				return false;
@@ -305,10 +307,10 @@ public class WaterRune extends ShapeRune {
 						cdTime = 20;
 						break;
 					case SHOVEL:
-						Vec3 eyePos = player.getEyePosition();
-						Vec3 rayShovel = player.getLookAngle().scale(player.getBlockReach()-0.5);
+						@NotNull Vec3 eyePos = player.getEyePosition();
+						@NotNull Vec3 rayShovel = player.getLookAngle().scale(player.getBlockReach()-0.5);
 						Vec3 rayPos = eyePos.add(rayShovel);
-						BlockHitResult hitResShovel = player.level().clip(new ClipContext(eyePos, rayPos, ClipContext.Block.VISUAL, ClipContext.Fluid.NONE, player));
+						@NotNull BlockHitResult hitResShovel = player.level().clip(new ClipContext(eyePos, rayPos, ClipContext.Block.VISUAL, ClipContext.Fluid.NONE, player));
 						if (hitResShovel.getType() != HitResult.Type.MISS) {
 							if (strong) power += (power)*(power);
 							float sizeShovel = 1f + 4f*power;
@@ -319,14 +321,14 @@ public class WaterRune extends ShapeRune {
 					case AXE:
 						if (strong) power += (power+1)*power;
 						float sizeAxe = 5f + 20f*power;
-						AABB areaAxe = AABB.ofSize(player.getBoundingBox().getCenter(), sizeAxe*1.5, sizeAxe*0.75, sizeAxe*1.5);
+						@NotNull AABB areaAxe = AABB.ofSize(player.getBoundingBox().getCenter(), sizeAxe*1.5, sizeAxe*0.75, sizeAxe*1.5);
 						didDo = supercut(player, areaAxe, level, stack, strong);
 						cdTime = 20;
 						break;
 					case HOE:
 						Vec3 pos1 = null;
 						Vec3 ray = null;
-						Vec3 pos2 = null;
+						@Nullable Vec3 pos2 = null;
 						BlockHitResult hitRes = null;
 						byte op = getOperationByte(stack);
 						if (op != 2) {
@@ -339,7 +341,7 @@ public class WaterRune extends ShapeRune {
 							power = tool.getEmpowerPercent(stack);
 							if (strong) power += (power+1)*power;
 							float size = 5f + 20f*power;
-							AABB area = AABB.ofSize(player.getBoundingBox().getCenter(), size*1.75, size*0.25, size*1.75);
+							@NotNull AABB area = AABB.ofSize(player.getBoundingBox().getCenter(), size*1.75, size*0.25, size*1.75);
 							didDo = hypersickle(player, hand, hitRes, area, level, stack, HypersickleMode.byID(op), strong);
 						}
 						break;
@@ -364,7 +366,7 @@ public class WaterRune extends ShapeRune {
 	}
 
 	public static boolean triggerAutoSlash(ItemStack stack, ServerPlayer player) {
-		Item item = stack.getItem();
+		@NotNull Item item = stack.getItem();
 		if (item instanceof IHermeticTool tool) {
 			long charge = tool.getStoredWay(stack);
 			ItemCooldowns cd = player.getCooldowns();
@@ -381,7 +383,7 @@ public class WaterRune extends ShapeRune {
 	}
 	
 	public static boolean tickAutoSlash(ServerPlayer culprit, ServerLevel level, AABB area, Predicate<LivingEntity> validator, boolean strong) {
-		List<LivingEntity> validTargets = level.getEntitiesOfClass(LivingEntity.class, area, validator);
+		@NotNull List<LivingEntity> validTargets = level.getEntitiesOfClass(LivingEntity.class, area, validator);
 		Map<Entity,Integer> hit = new HashMap<>();
 		if (!validTargets.isEmpty()) {
 			int numHits = strong ? validTargets.size() : 6;
@@ -396,7 +398,7 @@ public class WaterRune extends ShapeRune {
 			}
 			double rot1 = -Mth.sin(culprit.getYRot() * ((float)Math.PI / 180f));
 			double rot2 = Mth.cos(culprit.getYRot() * ((float)Math.PI / 180f));
-			Random rand = AASB.RNG;
+			@NotNull Random rand = AASB.RNG;
 			double maxNudge = 0.35;
 			Vec3 offset = new Vec3(rand.nextDouble(-maxNudge, maxNudge),rand.nextDouble(-maxNudge, maxNudge),rand.nextDouble(-maxNudge, maxNudge));
 			level.sendParticles(ParticleTypes.SWEEP_ATTACK, culprit.getX()+rot1+offset.x, culprit.getY(0.5)+offset.y, culprit.getZ()+rot2+offset.z, 1, 0, 0, 0, 0);
@@ -413,7 +415,7 @@ public class WaterRune extends ShapeRune {
 	}
 	
 	public static boolean tickAutoSlashOld(float power, AABB area, ServerLevel level, ServerPlayer culprit, Predicate<LivingEntity> validator) {
-		List<LivingEntity> validTargets = level.getEntitiesOfClass(LivingEntity.class, area, validator);
+		@NotNull List<LivingEntity> validTargets = level.getEntitiesOfClass(LivingEntity.class, area, validator);
 		Map<Entity,Integer> hit = new HashMap<>();
 		if (!validTargets.isEmpty()) {
 			int limit = Mth.ceil(power);// + validTargets.size()/2;
@@ -458,10 +460,10 @@ public class WaterRune extends ShapeRune {
 	 * @param strong if true, applies crazy fortune
 	 * @return if the proximine happened
 	 */
-	public static boolean proximine(ServerPlayer player, AABB area, ServerLevel level, ItemStack stack, boolean strong) {
+	public static boolean proximine(ServerPlayer player, AABB area, @NotNull ServerLevel level, @NotNull ItemStack stack, boolean strong) {
 		boolean didDo = false;
 		List<ItemStack> drops = new ArrayList<>();
-		ItemStack mineWith = stack.copy();
+		@NotNull ItemStack mineWith = stack.copy();
 		if (strong) {
 			//mineWith.enchant(Enchantments.BLOCK_FORTUNE, 6);
 		}
@@ -500,7 +502,7 @@ public class WaterRune extends ShapeRune {
 	 * @param stack the item generating the insurance claim
 	 * @return if the areablast succeeded
 	 */
-	public static boolean areablast(ServerPlayer player, BlockPos pos, Direction dir, float size, ServerLevel level, ItemStack stack, boolean strong) {
+	public static boolean areablast(ServerPlayer player, BlockPos pos, @NotNull Direction dir, float size, @NotNull ServerLevel level, ItemStack stack, boolean strong) {
 		AABB box = BoxUtil.getCubeForAoeInFront(pos, dir, size);
 		if (player.onGround() && !dir.getAxis().isVertical()) {
 			// move the area up so that it matches with player feet
@@ -515,7 +517,7 @@ public class WaterRune extends ShapeRune {
 			if (level.isEmptyBlock(newPos)) {
 				continue;
 			}
-			BlockState state = level.getBlockState(newPos);
+			@NotNull BlockState state = level.getBlockState(newPos);
 			if (state.getDestroySpeed(level, newPos) != -1 /*&& breakerStack.isCorrectToolForDrops(state)*/) {
 				if (level.isClientSide) {
 					return true;
@@ -555,7 +557,7 @@ public class WaterRune extends ShapeRune {
 		boolean didDo = false;
 		List<ItemStack> drops = new ArrayList<>();
 		for (BlockPos pos : BoxUtil.allBlocksInBox(area)) {
-			BlockState state = level.getBlockState(pos);
+			@NotNull BlockState state = level.getBlockState(pos);
 			if (state.is(BlockTP.SUPERCUT_HARVESTS)) {
 				//Ensure we are immutable so that changing blocks doesn't act weird
 				pos = pos.immutable();
@@ -587,15 +589,15 @@ public class WaterRune extends ShapeRune {
 	 * @param operation hypersickle operation to perform
 	 * @return if the hypersickle did the thing
 	 */
-	public static boolean hypersickle(Player player, InteractionHand hand, BlockHitResult hitRes, AABB area, Level level, ItemStack stack, HypersickleMode operation, boolean strong) {
+	public static boolean hypersickle(Player player, @NotNull InteractionHand hand, BlockHitResult hitRes, AABB area, @NotNull Level level, @NotNull ItemStack stack, @NotNull HypersickleMode operation, boolean strong) {
 		boolean didDo = false;
 		BlockPos center = hitRes == null ?
 				BlockPos.containing(area.getCenter()) :
 				hitRes.getBlockPos();
-		BlockState centerBlock = level.getBlockState(center);
+		@NotNull BlockState centerBlock = level.getBlockState(center);
 		UseOnContext ctx = null;
 		ToolAction act = null;
-		SoundEvent snd = null;
+		@Nullable SoundEvent snd = null;
 		switch (operation) {
 			case TILL: // 0
 				ctx = new UseOnContext(level, player, hand, stack, hitRes);
@@ -612,7 +614,7 @@ public class WaterRune extends ShapeRune {
 			default: // 2?
 				break;
 		}
-		BlockState modState = ctx == null ? null : centerBlock.getToolModifiedState(ctx, act, false);
+		@Nullable BlockState modState = ctx == null ? null : centerBlock.getToolModifiedState(ctx, act, false);
 		if (modState != null) {
 			if (modState.getBlock() instanceof FarmBlock) {
 				modState.setValue(FarmBlock.MOISTURE, 7);
@@ -654,13 +656,13 @@ public class WaterRune extends ShapeRune {
 		}
 		
 		// remaining code is for till & path modes only
-		for (BlockPos pos : BoxUtil.allBlocksInBox(area)) {
+		for (@NotNull BlockPos pos : BoxUtil.allBlocksInBox(area)) {
 			if (pos.equals(center))
 				continue; // we already did the center block
-			BlockState above = level.getBlockState(pos.above());
+			@NotNull BlockState above = level.getBlockState(pos.above());
 			if ( above.isAir()
 					|| (operation == HypersickleMode.PATH && above.is(BlockTP.HYPERSICKLE_PATHUNDER)) ) {
-				BlockState state = level.getBlockState(pos); // makes a new context for this interaction
+				@NotNull BlockState state = level.getBlockState(pos); // makes a new context for this interaction
 				UseOnContext modCtx = new UseOnContext(level, ctx.getPlayer(), ctx.getHand(), ctx.getItemInHand(), new BlockHitResult(
 						ctx.getClickLocation().add(pos.getX() - center.getX(), pos.getY() - center.getY(), pos.getZ() - center.getZ()),
 						ctx.getClickedFace(), pos, ctx.isInside()));
@@ -676,7 +678,7 @@ public class WaterRune extends ShapeRune {
 		return true;
 	}
 	
-	private static boolean isEffectivelySameState(BlockState s1, BlockState s2) {
+	private static boolean isEffectivelySameState(@Nullable BlockState s1, @Nullable BlockState s2) {
 		if (s1 == null || s2 == null)
 			return false;
 		if (s1 == s2)
@@ -746,7 +748,7 @@ public class WaterRune extends ShapeRune {
 		NBTUtil.setFloat(stack, TK_SLASHING, power);
 	}
 	
-	public static void ceaseSlashing(ItemStack stack) {
+	public static void ceaseSlashing(@NotNull ItemStack stack) {
 		NBTUtil.setFloat(stack, TK_SLASHING, 0);
 	}
 	
@@ -758,7 +760,7 @@ public class WaterRune extends ShapeRune {
 		return NBTUtil.getFloat(stack, TK_SLASHING, 0);
 	}
 	
-	public static boolean isValidAutoslashTarget(LivingEntity victim, Entity culprit) {
+	public static boolean isValidAutoslashTarget(@Nullable LivingEntity victim, Entity culprit) {
 		return victim != null
 				&& !victim.is(culprit)
 				&& canHit(victim)

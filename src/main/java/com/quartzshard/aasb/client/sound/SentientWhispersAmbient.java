@@ -7,6 +7,7 @@ import com.quartzshard.aasb.init.FxInit;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * spooooooky
@@ -27,7 +28,7 @@ public class SentientWhispersAmbient extends AbstractTickableSoundInstance {
 		this.delay = 0;
 	}
 
-	public SentientWhispersAmbient(Entity entity, int maxPitchChangeTime) {
+	public SentientWhispersAmbient(@NotNull Entity entity, int maxPitchChangeTime) {
 		super(FxInit.SND_SENTIENT_WHISPERS.get(), SoundSource.NEUTRAL, entity.level().random);
 		this.entity = entity;
 		this.looping = true;

@@ -12,6 +12,7 @@ import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
+import org.jetbrains.annotations.NotNull;
 
 public class NetInit {
 
@@ -95,8 +96,8 @@ public class NetInit {
 	 * @param sendRange max distace, in blocks
 	 * @param message
 	 */
-	public static <PKT> void toNearbyClients(PKT message, ServerLevel level, Vec3 sendPos, double sendRange) {
-		for (ServerPlayer player : level.players()) {
+	public static <PKT> void toNearbyClients(PKT message, ServerLevel level, @NotNull Vec3 sendPos, double sendRange) {
+		for (@NotNull ServerPlayer player : level.players()) {
 			if (player.position().closerThan(sendPos, sendRange)) {
 				toClient(message, player);
 			}
@@ -126,7 +127,7 @@ public class NetInit {
 	 * @param level
 	 * @param message
 	 */
-	public static <PKT> void toAllClients(ServerLevel level, PKT message) {
+	public static <PKT> void toAllClients(@NotNull ServerLevel level, PKT message) {
 		for (ServerPlayer player : level.players()) {
 			toClient(message, player);
 		}
@@ -138,7 +139,7 @@ public class NetInit {
 	 * @param message
 	 * @param players
 	 */
-	public static <PKT> void toClients(PKT message, ServerPlayer... players) {
+	public static <PKT> void toClients(PKT message, ServerPlayer @NotNull ... players) {
 		for (ServerPlayer player : players) {
 			toClient(message, player);
 		}

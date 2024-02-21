@@ -16,6 +16,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import net.minecraftforge.network.NetworkEvent;
+import org.jetbrains.annotations.Nullable;
 
 public record DrawParticleAABBPacket(Vec3 cMin, Vec3 cMax, AABBParticlePreset preset) {
 	
@@ -54,7 +55,7 @@ public record DrawParticleAABBPacket(Vec3 cMin, Vec3 cMax, AABBParticlePreset pr
 	public boolean handle(Supplier<NetworkEvent.Context> sup) {
 		NetworkEvent.Context ctx = sup.get();
 		ctx.enqueueWork(() -> {
-			@SuppressWarnings("resource")
+			@SuppressWarnings("resource") @Nullable
 			ClientLevel level = ClientUtil.mc().level;
 			AABB box = new AABB(cMin, cMax);
 			Vec3 cent = box.getCenter();

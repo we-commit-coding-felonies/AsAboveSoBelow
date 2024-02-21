@@ -48,6 +48,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
+import org.jetbrains.annotations.NotNull;
 
 public class EarthRune extends ShapeRune {
 	public static final String
@@ -62,7 +63,7 @@ public class EarthRune extends ShapeRune {
 	 * Strong: Destruction catalyst
 	 */
 	@Override
-	public boolean combatAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
+	public boolean combatAbility(ItemStack stack, @NotNull ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
 		if (state == BindState.PRESSED) {
 			BlockHitResult hitRes = PlayerUtil.getTargetedBlock(player, strong ? player.getBlockReach()-0.5 : 32);
 			if (hitRes.getType() != HitResult.Type.MISS) {
@@ -78,7 +79,7 @@ public class EarthRune extends ShapeRune {
 					if (PlayerUtil.hasBreakPermission(player, bPos)) {
 						BlockState bstate = level.getBlockState(bPos);
 						if (!bstate.is(BlockTP.WAYBLAST_RESIST) && !bstate.is(BlockTP.WAYBLAST_IMMUNE) && bstate.getDestroySpeed(level, bPos) >= 0) {
-							ItemStack breakerStack = new ItemStack(ItemInit.THE_PHILOSOPHERS_STONE.get());
+							@NotNull ItemStack breakerStack = new ItemStack(ItemInit.THE_PHILOSOPHERS_STONE.get());
 							breakerStack.enchant(Enchantments.SILK_TOUCH, 1);
 							List<ItemStack> drops = Block.getDrops(level.getBlockState(bPos), level, bPos, WorldUtil.getBlockEntity(level, bPos), player, breakerStack);
 							if (!drops.isEmpty()) LootBallItem.dropBalls(player, drops);
@@ -100,7 +101,7 @@ public class EarthRune extends ShapeRune {
 	 * Strong: Conjure temp angel block
 	 */
 	@Override
-	public boolean utilityAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
+	public boolean utilityAbility(ItemStack stack, @NotNull ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
 		if (state == BindState.PRESSED && WayUtil.hasWay(player)) {
 			BlockHitResult hitRes = PlayerUtil.getTargetedBlock(player, strong ? player.getBlockReach()-0.5 : 32);
 			boolean didDo = false;
@@ -137,9 +138,9 @@ public class EarthRune extends ShapeRune {
 	//	return false;
 	//}
 	@Override
-	public void tickPassive(ItemStack stack, ServerPlayer player, ServerLevel level, boolean strong, boolean unequipped) {
+	public void tickPassive(ItemStack stack, @NotNull ServerPlayer player, ServerLevel level, boolean strong, boolean unequipped) {
 		if (this.passiveEnabled(stack)) {
-			FoodData hunger = player.getFoodData();
+			@NotNull FoodData hunger = player.getFoodData();
 			long held = WayUtil.getAvaliableWay(player),
 					toConsume = 0;
 			if (held-toConsume >= 1 && hunger.getFoodLevel() < 20) {
@@ -178,7 +179,7 @@ public class EarthRune extends ShapeRune {
 				//	 hunger.eat(0, 1);
 				//	 toConsume += 8;
 				//}
-				for (MobEffectInstance effect : player.getActiveEffects().stream().filter(this::canHandle).toList()) {
+				for (@NotNull MobEffectInstance effect : player.getActiveEffects().stream().filter(this::canHandle).toList()) {
 					if (held-toConsume >= 16) {
 						speedupEffect(player, effect);
 						toConsume += 16;
@@ -198,11 +199,11 @@ public class EarthRune extends ShapeRune {
 			speedUpEffectSafely(player, effect);
 		}
 	}
-	private boolean canHandle(MobEffectInstance effect) {
+	private boolean canHandle(@NotNull MobEffectInstance effect) {
 		return effect.getEffect() == EntityInit.BUFF_TRANSMUTING.get()
 				|| effect.getEffect().getCategory() != MobEffectCategory.BENEFICIAL;
 	}
-	private static void speedUpEffectSafely(LivingEntity entity, MobEffectInstance effectInstance) {
+	private static void speedUpEffectSafely(@NotNull LivingEntity entity, MobEffectInstance effectInstance) {
 		if (effectInstance.getDuration() > 0) {
 			int remainingDuration = effectInstance.tickDownDuration();
 			if (remainingDuration == 0 && effectInstance.hiddenEffect != null) {
@@ -212,7 +213,7 @@ public class EarthRune extends ShapeRune {
 			}
 		}
 	}
-	private static void onChangedPotionEffect(LivingEntity entity, MobEffectInstance effectInstance, boolean reapply) {
+	private static void onChangedPotionEffect(LivingEntity entity, @NotNull MobEffectInstance effectInstance, boolean reapply) {
 		entity.effectsDirty = true;
 		if (reapply && !entity.level().isClientSide) {
 			MobEffect effect = effectInstance.getEffect();
@@ -226,7 +227,7 @@ public class EarthRune extends ShapeRune {
 	}
 	
 	// https://github.com/sinkillerj/ProjectE/blob/68fbb2dea0cf8a6394fa6c7c084063046d94cee5/src/main/java/moze_intel/projecte/gameObjs/items/DestructionCatalyst.java#L33
-	private static int destructionCatalyst(ServerPlayer player, ServerLevel level, BlockPos clickPos, Direction face, int depth) {
+	private static int destructionCatalyst(ServerPlayer player, ServerLevel level, @NotNull BlockPos clickPos, Direction face, int depth) {
 		List<ItemStack> drops = new ArrayList<>();
 		ItemStack breakerStack = new ItemStack(ItemInit.THE_PHILOSOPHERS_STONE.get());
 		int ops = 0;
@@ -234,7 +235,7 @@ public class EarthRune extends ShapeRune {
 			if (level.isEmptyBlock(bPos)) {
 				continue;
 			}
-			BlockState state = level.getBlockState(bPos);
+			@NotNull BlockState state = level.getBlockState(bPos);
 			float hardness = state.getDestroySpeed(level, bPos);
 			if (state.is(BlockTP.WAYBLAST_RESIST) || state.is(BlockTP.WAYBLAST_IMMUNE)) {
 				continue;
@@ -243,7 +244,7 @@ public class EarthRune extends ShapeRune {
 			//Ensure we are immutable so that changing blocks doesn't act weird
 			bPos = bPos.immutable();
 			if (PlayerUtil.hasBreakPermission(player, bPos)) {
-				List<ItemStack> list = Block.getDrops(state, level, bPos, WorldUtil.getBlockEntity(level, bPos), player, breakerStack);
+				@NotNull List<ItemStack> list = Block.getDrops(state, level, bPos, WorldUtil.getBlockEntity(level, bPos), player, breakerStack);
 				drops.addAll(list);
 				level.removeBlock(bPos, false);
 				if (level.random.nextInt(8) == 0) {
@@ -259,7 +260,7 @@ public class EarthRune extends ShapeRune {
 	/**
 	 * Returns in AABB that is always 3x3 orthogonal to the side hit, but varies in depth in the direction of the side hit
 	 */
-	private static AABB getDeepBox(BlockPos pos, Direction direction, int depth) {
+	private static AABB getDeepBox(BlockPos pos, @NotNull Direction direction, int depth) {
 		return switch (direction) {
 			case EAST -> new AABB(pos.getX() - depth, pos.getY() - 1, pos.getZ() - 1, pos.getX(), pos.getY() + 1, pos.getZ() + 1);
 			case WEST -> new AABB(pos.getX(), pos.getY() - 1, pos.getZ() - 1, pos.getX() + depth, pos.getY() + 1, pos.getZ() + 1);
@@ -355,7 +356,7 @@ public class EarthRune extends ShapeRune {
 			return this.test;
 		}
 		
-		public static KillMode byID(byte id) {
+		public static @NotNull KillMode byID(byte id) {
 			switch (id) {
 			default:
 			case 0:

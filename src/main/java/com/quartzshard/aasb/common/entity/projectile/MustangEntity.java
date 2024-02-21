@@ -54,6 +54,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * flies straight, creates a fiery explosion when expiring <br>
@@ -100,7 +101,7 @@ public class MustangEntity extends Projectile {
 			expire();
 			return;
 		}
-		FluidState liquid = level().getFluidState(blockPosition());
+		@NotNull FluidState liquid = level().getFluidState(blockPosition());
 		if ( (!liquid.is(Fluids.WATER) && isWater())
 			|| (!liquid.is(Fluids.EMPTY) && !isWater()) ) {
 			expire();
@@ -108,12 +109,12 @@ public class MustangEntity extends Projectile {
 		// Useful variables
 		Vec3 curVel = getDeltaMovement(),
 			nextVel = curVel;
-		Vec3 curPos = position(),
+		@NotNull Vec3 curPos = position(),
 			oldPos = position().subtract(curVel),
 			nextPos = curPos;
 		
 		// Logic
-		AABB assistBox = AABB.ofSize(position(), 4, 4, 4);
+		@NotNull AABB assistBox = AABB.ofSize(position(), 4, 4, 4);
 		for (LivingEntity living : level().getEntitiesOfClass(LivingEntity.class, assistBox, this::canHitEntity)) {
 			if (living.hurtTime == 0) {
 				expire();
@@ -144,7 +145,7 @@ public class MustangEntity extends Projectile {
 
 	@Override
 	protected void updateRotation() {
-		Vec3 vel = this.getDeltaMovement();
+		@NotNull Vec3 vel = this.getDeltaMovement();
 		double horizVel = vel.horizontalDistance();
 		this.setXRot( (float)(Mth.atan2(vel.y, horizVel) * (180d / Math.PI)) );
 		this.setYRot( (float)(Mth.atan2(vel.x, vel.z) * (180d / Math.PI)) );
@@ -181,7 +182,7 @@ public class MustangEntity extends Projectile {
 	
 	private void expire() {
 		if (level() instanceof ServerLevel lvl) {
-			AABB burnArea = AABB.ofSize( Vec3.atCenterOf(blockPosition()), 6, 6, 6 );
+			@NotNull AABB burnArea = AABB.ofSize( Vec3.atCenterOf(blockPosition()), 6, 6, 6 );
 			superCoolHugeFireExplosionOfUnlimitedCarnage(lvl, getOwner(), burnArea);
 		}
 		discard();
@@ -195,7 +196,7 @@ public class MustangEntity extends Projectile {
 	 * @param culprit the entity that caused this kaboom
 	 * @param box the AABB to deal stupid amounts of damage in (to entities)
 	 */
-	public void superCoolHugeFireExplosionOfUnlimitedCarnage(ServerLevel level, Entity culprit, AABB box) {
+	public void superCoolHugeFireExplosionOfUnlimitedCarnage(@NotNull ServerLevel level, Entity culprit, AABB box) {
 		RandomSource rand = level.getRandom();
 		Vec3 cent = box.getCenter();
 		BlockPos bCent = BlockPos.containing(cent);
@@ -253,7 +254,7 @@ public class MustangEntity extends Projectile {
 		
 		// screwing with blocks
 		// we keep track of things in these stacks to do particles later
-		Stack<BlockPos>
+		@NotNull Stack<BlockPos>
 			vaporized = new Stack<>(), // water that gets instantly turned to steam
 			incinerated = new Stack<>(); // blocks that get instantly turned to ash
 		BlockPos.betweenClosedStream(box).forEach(bPos -> {
@@ -274,7 +275,7 @@ public class MustangEntity extends Projectile {
 				
 				// check if this fluid vaporizes when too hot (like in nether)
 				if (fState.is(FluidTags.WATER)) {//.getAttributes().doesVaporize(level, bPos, new FluidStack(fState.getType(), 1000))) {
-					BlockState bState = level.getBlockState(bPos);
+					@NotNull BlockState bState = level.getBlockState(bPos);
 					
 					// just vaporize
 					if (bState.is(BlockTP.MUSTANG_VAPORIZES)) {

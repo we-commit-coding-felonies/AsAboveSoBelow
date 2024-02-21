@@ -1,5 +1,6 @@
 package com.quartzshard.aasb.api.alchemy.rune.form;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.quartzshard.aasb.AASB;
@@ -35,8 +36,8 @@ public class MateriaRune extends FormRune {
 		if (state == BindState.PRESSED && stack.getItem() instanceof IRuneable item) {
 			@Nullable Item morphTarget = item.getMateriaRuneTarget(stack);
 			if (morphTarget != null) {
-				ItemStack newStack = new ItemStack(morphTarget);
-				CompoundTag nbt = stack.getOrCreateTag();
+				@NotNull ItemStack newStack = new ItemStack(morphTarget);
+				@NotNull CompoundTag nbt = stack.getOrCreateTag();
 				if (!nbt.isEmpty())
 					newStack.setTag(nbt);
 				PlayerUtil.forceSetCurio(player, slot, slotIdx(slot, player), newStack);
@@ -50,7 +51,7 @@ public class MateriaRune extends FormRune {
 	 * Transform into Charm
 	 */
 	@Override
-	public boolean utilityAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
+	public boolean utilityAbility(@NotNull ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
 		if (state == BindState.PRESSED && stack.getItem() instanceof IRuneable item) {
 			@Nullable Item morphTarget = item.getMateriaRuneTarget(stack);
 			if (morphTarget != null) {
@@ -73,8 +74,8 @@ public class MateriaRune extends FormRune {
 		if (state == BindState.PRESSED && stack.getItem() instanceof IRuneable item) {
 			@Nullable Item morphTarget = item.getMateriaRuneTarget(stack);
 			if (morphTarget != null) {
-				ItemStack newStack = new ItemStack(morphTarget);
-				CompoundTag nbt = stack.getOrCreateTag();
+				@NotNull ItemStack newStack = new ItemStack(morphTarget);
+				@NotNull CompoundTag nbt = stack.getOrCreateTag();
 				if (!nbt.isEmpty())
 					newStack.setTag(nbt);
 				PlayerUtil.forceSetCurio(player, slot, slotIdx(slot, player), newStack);

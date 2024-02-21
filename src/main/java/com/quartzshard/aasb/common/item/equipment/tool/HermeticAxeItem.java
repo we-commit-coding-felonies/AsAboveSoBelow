@@ -3,6 +3,7 @@ package com.quartzshard.aasb.common.item.equipment.tool;
 import java.util.List;
 import java.util.function.Consumer;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.google.common.collect.Multimap;
@@ -30,7 +31,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class HermeticAxeItem extends AxeItem implements IHermeticTool {
-	public HermeticAxeItem(int damage, float speed, Properties props) {
+	public HermeticAxeItem(int damage, float speed, @NotNull Properties props) {
 		super(Tier.HERMETIC, damage, speed, props);
 	}
 
@@ -85,7 +86,7 @@ public class HermeticAxeItem extends AxeItem implements IHermeticTool {
     }
 	
 	@Override
-	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
+	public boolean shouldCauseReequipAnimation(@NotNull ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
 		if (slotChanged) return true;
 		return stacksDifferentIgnoreWay(oldStack, newStack);
 	}

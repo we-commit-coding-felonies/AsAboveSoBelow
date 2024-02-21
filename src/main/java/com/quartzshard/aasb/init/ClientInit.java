@@ -36,6 +36,7 @@ import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import org.jetbrains.annotations.NotNull;
 
 @Mod.EventBusSubscriber(modid = AASB.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ClientInit {
@@ -138,7 +139,7 @@ public class ClientInit {
 		//}
 		return 0;
 	}
-	private static float getMiniumVariant(ItemStack stack, ClientLevel level, LivingEntity entity, int seed) {
+	private static float getMiniumVariant(@NotNull ItemStack stack, ClientLevel level, LivingEntity entity, int seed) {
 		if (stack.getItem() instanceof MiniumStoneItem item) {
 			byte b = item.getVariant(stack);
 			return b >= 0 ? b : 0;

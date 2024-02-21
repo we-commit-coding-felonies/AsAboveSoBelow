@@ -1,5 +1,6 @@
 package com.quartzshard.aasb.api.alchemy.aspect;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -31,7 +32,7 @@ public enum ComplexityAspect implements IAspect<ComplexityAspect> {
 	}
 
 	@Override
-	public boolean flowsFrom(ComplexityAspect other) {
+	public boolean flowsFrom(@NotNull ComplexityAspect other) {
 		return other.flowsTo(this);
 	}
 
@@ -41,7 +42,7 @@ public enum ComplexityAspect implements IAspect<ComplexityAspect> {
 	}
 
 	@Override
-	public float violationFrom(ComplexityAspect other) {
+	public float violationFrom(@NotNull ComplexityAspect other) {
 		return other.violationTo(this);
 	}
 	
@@ -62,7 +63,7 @@ public enum ComplexityAspect implements IAspect<ComplexityAspect> {
 	 * @return 
 	 */
 	@Nullable
-	public static ComplexityAspect deserialize(String dat) {
+	public static ComplexityAspect deserialize(@NotNull String dat) {
 		if (dat != "" && dat.startsWith("Complexity.")) {
 			try {
 				return ComplexityAspect.valueOf(dat.replace("Complexity.", "").toUpperCase());

@@ -17,9 +17,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.data.LanguageProvider;
+import org.jetbrains.annotations.NotNull;
 
 public class LangData extends LanguageProvider {
-	public LangData(PackOutput out) {
+	public LangData(@NotNull PackOutput out) {
 		super(out, AASB.MODID, "en_us");
 	}
 	

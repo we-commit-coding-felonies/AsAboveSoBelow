@@ -1,5 +1,6 @@
 package com.quartzshard.aasb.mixin;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -20,7 +21,7 @@ import net.minecraft.world.item.enchantment.ProtectionEnchantment;
 public abstract class ProtectionEnchantmentMixin {
 	
 	@Inject(method = "getDamageProtection", at = @At("RETURN"), cancellable = true)
-	protected void onGetDamageProtection(int enchLevel, DamageSource dmgSrc, CallbackInfoReturnable<Integer> cir) {
+	protected void onGetDamageProtection(int enchLevel, @NotNull DamageSource dmgSrc, CallbackInfoReturnable<Integer> cir) {
 		if (this.type == ProtectionEnchantment.Type.FIRE && dmgSrc.is(DmgTP.IS_STRONG_FIRE)) {
 			cir.setReturnValue(enchLevel * 2);
 		}

@@ -4,6 +4,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Abstracted rendering code, drawing things using particles, fun stuff like that <br>
@@ -19,7 +20,7 @@ public class RenderUtil {
 	 * @param stepSize lower = more particles
 	 * @param level world/level particles are in
 	 */
-	public static void drawVectorWithParticles(Vec3 start, Vec3 end, ParticleOptions particle, double stepSize, ClientLevel level) {
+	public static void drawVectorWithParticles(Vec3 start, Vec3 end, ParticleOptions particle, double stepSize, @NotNull ClientLevel level) {
 		Vec3 line = end.subtract(start);
 		Vec3 step = line.normalize().scale(stepSize);
 		int numSteps = (int) (line.length() / step.length());
@@ -44,7 +45,7 @@ public class RenderUtil {
 	 * @param level the level to put particles in
 	 * @param fill if true, draws a solid box (filled with particles), instead of just an outline
 	 */
-	public static void drawAABBWithParticles(AABB box, ParticleOptions particle, double stepSize, ClientLevel level, boolean fill, boolean infRange) {
+	public static void drawAABBWithParticles(@NotNull AABB box, ParticleOptions particle, double stepSize, ClientLevel level, boolean fill, boolean infRange) {
 		if (fill) {
 			for (double i = box.minX; i < box.maxX; i += stepSize) {
 	    		for (double j = box.minY; j < box.maxY; j += stepSize) {

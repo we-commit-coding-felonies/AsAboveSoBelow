@@ -1,5 +1,6 @@
 package com.quartzshard.aasb.mixin;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -36,7 +37,7 @@ public abstract class MultiPlayerGameModeClientMixin {
 
 	// Prevents interacting with entities when allowInteract is disabled, and prevents interacting with self.
 	@Inject(method = "interact", at = @At("HEAD"), cancellable = true)
-	private void onInteract(Player player, Entity entity, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
+	private void onInteract(Player player, @NotNull Entity entity, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
 		if (entity.equals(ClientUtil.mc().player) || AstralProjection.isEnabled()) {
 			cir.setReturnValue(InteractionResult.PASS);
 		}
@@ -52,7 +53,7 @@ public abstract class MultiPlayerGameModeClientMixin {
 
 	// Prevents attacking self.
 	@Inject(method = "attack", at = @At("HEAD"), cancellable = true)
-	private void onAttack(Player player, Entity target, CallbackInfo ci) {
+	private void onAttack(Player player, Entity target, @NotNull CallbackInfo ci) {
 		if (target.equals(ClientUtil.mc().player)) {
 			ci.cancel();
 		}

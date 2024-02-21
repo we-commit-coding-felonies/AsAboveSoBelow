@@ -16,6 +16,8 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Random;
 
 @Mod(AASB.MODID)
@@ -81,7 +83,7 @@ public class AASB {
 		event.addListener((ResourceManagerReloadListener) manager -> Phil.stashReloadData(event.getServerResources(), event.getRegistryAccess(), manager));
 	}
 	
-	public static ResourceLocation rl(String path) {
+	public static @NotNull ResourceLocation rl(String path) {
 		return new ResourceLocation(MODID, path);
 	}
 }

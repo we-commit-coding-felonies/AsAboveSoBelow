@@ -69,7 +69,7 @@ public class AlchInit {
 				MIND = makeForm("mind", ETHEREAL, 0x90c060),				//			XP-related
 				SOUL = makeForm("soul", ETHEREAL, 0x8899ee);				//			Spirit Stuff
 	
-	private static RegistryObject<FormAspect> makeForm(String name, RegistryObject<FormAspect> parent, int color) {
+	private static RegistryObject<FormAspect> makeForm(String name, @Nullable RegistryObject<FormAspect> parent, int color) {
 		return FORMS.register(name, () -> new FormAspect(AASB.rl(name), parent == null ? null : parent.get(), color));
 	}
 

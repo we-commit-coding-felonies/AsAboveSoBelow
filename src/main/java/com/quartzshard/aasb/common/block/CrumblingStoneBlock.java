@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import org.jetbrains.annotations.NotNull;
 
 public class CrumblingStoneBlock extends Block {
 	public static final IntegerProperty AGE = BlockStateProperties.AGE_3;
@@ -18,7 +19,7 @@ public class CrumblingStoneBlock extends Block {
 	}
 	
 	@Override
-	public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource rand) {
+	public void randomTick(@NotNull BlockState state, ServerLevel level, BlockPos pos, RandomSource rand) {
 		int i = state.getValue(AGE);
 		if (i < 2) {
 			level.setBlock(pos, state.setValue(AGE, Integer.valueOf(i + 1)), 2);

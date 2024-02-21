@@ -13,11 +13,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 public class WayGrenadeItem extends Item {
 	public static final String TK_DETPOWER = "DetPower";
 
-	public WayGrenadeItem(Properties props) {
+	public WayGrenadeItem(@NotNull Properties props) {
 		super(props);
 	}
 
@@ -30,7 +31,7 @@ public class WayGrenadeItem extends Item {
 		ItemStack stack = player.getItemInHand(hand);
 		level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.SNOWBALL_THROW, SoundSource.NEUTRAL, 0.5f, 0.4f / (AASB.RNG.nextFloat() * 0.4f + 0.8f));
 		if (!level.isClientSide) {
-			WayGrenadeEntity thrown = new WayGrenadeEntity(level, player, stack);
+			@NotNull WayGrenadeEntity thrown = new WayGrenadeEntity(level, player, stack);
 			thrown.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0f, 1.5f, 1.0f);
 			level.addFreshEntity(thrown);
 		}
@@ -53,7 +54,7 @@ public class WayGrenadeItem extends Item {
 	 * @param way
 	 * @return
 	 */
-	public long setDetPower(ItemStack stack, long way) {
+	public long setDetPower(@NotNull ItemStack stack, long way) {
 		int exp = 0;
 		long rem = 0;
 		for (int i = 0; i < 63; i++) {

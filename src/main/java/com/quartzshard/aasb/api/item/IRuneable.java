@@ -3,6 +3,7 @@ package com.quartzshard.aasb.api.item;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.quartzshard.aasb.AASB;
@@ -87,15 +88,15 @@ public interface IRuneable extends IHandleKeybind {
 		return false;
 	}
 
-	default void tickRunes(ItemStack stack, ServerPlayer player, ServerLevel level, boolean unequip) {
-		for (Rune rune : getInscribedRunes(stack)) {
+	default void tickRunes(@NotNull ItemStack stack, ServerPlayer player, ServerLevel level, boolean unequip) {
+		for (@Nullable Rune rune : getInscribedRunes(stack)) {
 			if (rune != null) {
 				rune.tickPassive(stack, player, level, runesAreStrong(stack), unequip);
 			}
 		}
 	}
 	default void tickRunesClient(ItemStack stack, Player player, Level level, boolean unequip) {
-		for (Rune rune : getInscribedRunes(stack)) {
+		for (@Nullable Rune rune : getInscribedRunes(stack)) {
 			if (rune != null) {
 				rune.tickPassiveClient(stack, player, level, runesAreStrong(stack), unequip);
 			}
@@ -120,14 +121,14 @@ public interface IRuneable extends IHandleKeybind {
 	 * @return List of Runes
 	 */
 	default List<Rune> getInscribedRunes(ItemStack stack) {
-		ListTag tags = NBTUtil.getList(stack, TK_RUNES, 8, false);
+		@Nullable ListTag tags = NBTUtil.getList(stack, TK_RUNES, 8, false);
 		if (tags.isEmpty()) {
 			for (int i = 0; i < getMaxRunes(stack); i++) {
 				tags.add(StringTag.valueOf("null"));
 			}
 			NBTUtil.setList(stack, TK_RUNES, tags);
 		}
-		List<Rune> runes = new ArrayList<>(getMaxRunes(stack));
+		@NotNull List<Rune> runes = new ArrayList<>(getMaxRunes(stack));
 		for (Tag tag : tags) {
 			runes.add(Rune.deserialize(tag.getAsString()));
 		}
@@ -136,7 +137,7 @@ public interface IRuneable extends IHandleKeybind {
 	
 	@Nullable
 	default Rune getRune(ItemStack stack, int slot) {
-		List<Rune> runes = getInscribedRunes(stack);
+		@NotNull List<Rune> runes = getInscribedRunes(stack);
 		if (runes.size() == 0) return null;
 		return runes.get(slot);
 	}
@@ -151,9 +152,9 @@ public interface IRuneable extends IHandleKeybind {
 		return false;
 	}
 	
-	default boolean canInscribeRune(Rune rune, ItemStack stack, int slot) {
+	default boolean canInscribeRune(Rune rune, @NotNull ItemStack stack, int slot) {
 		if (slot+1 <= getMaxRunes(stack)) {
-			Rune currentRune = getRune(stack, slot);
+			@Nullable Rune currentRune = getRune(stack, slot);
 			if (currentRune == null) {
 				return true;
 			}

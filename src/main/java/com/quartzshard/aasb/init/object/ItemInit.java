@@ -22,6 +22,7 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import org.jetbrains.annotations.NotNull;
 
 // Deals with setting up items, how exciting
 public class ItemInit {
@@ -58,7 +59,7 @@ public class ItemInit {
 		;
 	
 	/** these are used for the creative tabs, and are emptied once the tabs are filled out */
-	public static List<RegistryObject<? extends Item>>
+	public static @NotNull List<RegistryObject<? extends Item>>
 		ALL_NATURAL_ITEMS = new ArrayList<>(),
 		ALL_SYNTHETIC_ITEMS = new ArrayList<>();
 	
@@ -174,12 +175,12 @@ public class ItemInit {
 	private static final RegistryObject<Item> unstack(String name, Tab tab) {
 		return reg(name, PROPS_GENERIC_1, tab);
 	}
-	public static <B extends Block> RegistryObject<BlockItem> fromBlock(RegistryObject<B> block, Tab tab) {
+	public static <B extends Block> RegistryObject<BlockItem> fromBlock(RegistryObject<B> block, @NotNull Tab tab) {
 		return reg(block.getId().getPath(), () -> new BlockItem(block.get(), PROPS_GENERIC_64), tab);
 	}
 	
 	private static RegistryObject<Item> materia(String name, int tier) {
-		Item.Properties props = PROPS_GENERIC_64;
+		Item.@NotNull Properties props = PROPS_GENERIC_64;
 		switch (tier) {
 			case -2:
 				props = PROPS_MATERIA_NEG2;
@@ -215,7 +216,7 @@ public class ItemInit {
 		return reg(name, props, tier < 1 ? Tab.SYN : Tab.NAT);
 	}
 	private static RegistryObject<Item> impossible(String name, boolean stacks) {
-		Item.Properties props = stacks ? PROPS_IMPOSSIBLE_64 : PROPS_IMPOSSIBLE_1;
+		Item.@NotNull Properties props = stacks ? PROPS_IMPOSSIBLE_64 : PROPS_IMPOSSIBLE_1;
 		return reg(name, props, Tab.NAT);
 	}
 	private static RegistryObject<Item> nulled(String name) {

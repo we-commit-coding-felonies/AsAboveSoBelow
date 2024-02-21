@@ -23,6 +23,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A combination of multiple other item-related interfaces, use this if you want to make a new kind of Hermetic Tool with minimal differences
@@ -53,14 +54,14 @@ public interface IHermeticTool extends IDigStabilizer, IEmpowerable, IEnchantBoo
 	
 	public static final UUID BASE_DAMAGE_UUID = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A33DB5CF");
 	public static final UUID BASE_SPEED_UUID = UUID.fromString("FA233E1C-4180-4865-B01B-BCCE9785ACA3");
-	default Multimap<Attribute,AttributeModifier> enchAttribMods(EquipmentSlot slot, ItemStack stack, Multimap<Attribute,AttributeModifier> attribs) {
+	default Multimap<Attribute,AttributeModifier> enchAttribMods(EquipmentSlot slot, ItemStack stack, @NotNull Multimap<Attribute,AttributeModifier> attribs) {
 		double bonusDamage = calculateBonus(stack);
 		if (bonusDamage > 0 && shouldApplyBonus(stack) && slot == EquipmentSlot.MAINHAND) {
 			double bonusSpeed = bonusDamage/10d;
 			double baseDamage = 0;
 			double baseSpeed = 0;
 			// we filter out base damage & attack speed, which we modify then apply later
-			ImmutableMultimap.Builder<Attribute,AttributeModifier> extra = ImmutableMultimap.builder();
+			ImmutableMultimap.@NotNull Builder<Attribute,AttributeModifier> extra = ImmutableMultimap.builder();
 			for (Entry<Attribute,Collection<AttributeModifier>> attr : attribs.asMap().entrySet()) {
 				if (attr.getKey() == Attributes.ATTACK_DAMAGE) {
 					for (AttributeModifier mod : attr.getValue()) {
@@ -71,7 +72,7 @@ public interface IHermeticTool extends IDigStabilizer, IEmpowerable, IEnchantBoo
 						}
 					}
 				} else if (attr.getKey() == Attributes.ATTACK_SPEED) {
-					for (AttributeModifier mod : attr.getValue()) {
+					for (@NotNull AttributeModifier mod : attr.getValue()) {
 						if (mod.getOperation() == AttributeModifier.Operation.ADDITION) {
 							baseSpeed += mod.getAmount();
 						} else {
@@ -93,7 +94,7 @@ public interface IHermeticTool extends IDigStabilizer, IEmpowerable, IEnchantBoo
 		return attribs;
 	}
 	
-	default float calcDestroySpeed(ItemStack stack, float baseSpeed) {
+	default float calcDestroySpeed(@NotNull ItemStack stack, float baseSpeed) {
 		float speed = baseSpeed;
 		if (speed > 1) {
 			double bonus = calculateBonus(stack) / 10d;
@@ -111,7 +112,7 @@ public interface IHermeticTool extends IDigStabilizer, IEmpowerable, IEnchantBoo
 	 */
 	public static int getRunesVal(ItemStack stack) {
 		if (stack.getItem() instanceof IRuneable item) {
-			List<Rune> runes = item.getInscribedRunes(stack);
+			@NotNull List<Rune> runes = item.getInscribedRunes(stack);
 			int runeVal = 0;
 			for (Rune rune : runes) {
 				if (rune instanceof WaterRune) {

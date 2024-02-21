@@ -16,6 +16,7 @@ import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class JewelleryArmorItem extends ArmorItem {
 	public JewelleryArmorItem(Type slot, Properties props) {
@@ -34,8 +35,8 @@ public abstract class JewelleryArmorItem extends ArmorItem {
 	 * @param player The player with the armor
 	 * @return Info about the set's current state
 	 */
-	public static JewellerySetInfo getArmorSetInfo(ItemStack stack, Level level, Player player) {
-		JewelleryInfo head = getInfo(player, EquipmentSlot.HEAD),
+	public static @NotNull JewellerySetInfo getArmorSetInfo(ItemStack stack, Level level, Player player) {
+		@NotNull JewelleryInfo head = getInfo(player, EquipmentSlot.HEAD),
 				chest = getInfo(player, EquipmentSlot.CHEST),
 				legs = getInfo(player, EquipmentSlot.LEGS),
 				feet = getInfo(player, EquipmentSlot.FEET);
@@ -44,7 +45,7 @@ public abstract class JewelleryArmorItem extends ArmorItem {
 	}
 	
 	public static boolean fullSet(Player player) {
-		for (ItemStack stack : player.getArmorSlots()) {
+		for (@NotNull ItemStack stack : player.getArmorSlots()) {
 			if (stack.getItem() instanceof JewelleryArmorItem)
 				continue;
 			return false;
@@ -52,7 +53,7 @@ public abstract class JewelleryArmorItem extends ArmorItem {
 		return true;
 	}
 	
-	public static JewelleryInfo getInfo(Player player, EquipmentSlot slot) {
+	public static JewelleryInfo getInfo(@NotNull Player player, EquipmentSlot slot) {
 		ItemStack stack = player.getItemBySlot(slot);
 		if ( stack.isEmpty() || !(stack.getItem() instanceof JewelleryArmorItem) ) {
 			return JewelleryInfo.MISSING;

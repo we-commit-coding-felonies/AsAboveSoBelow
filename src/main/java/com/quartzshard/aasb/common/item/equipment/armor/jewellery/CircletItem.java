@@ -24,6 +24,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 public class CircletItem extends JewelleryArmorItem implements ICanHeadMode {
 	public CircletItem(Properties props) {
@@ -33,7 +34,7 @@ public class CircletItem extends JewelleryArmorItem implements ICanHeadMode {
 	public static final String TAG_SIGHT = "ClairvoyanceEnabled";
 	
 	@Override
-	public void onArmorTick(ItemStack stack, Level level, Player player) {
+	public void onArmorTick(ItemStack stack, @NotNull Level level, Player player) {
 		// TODO: COST
 		if (sightEnabled(stack)) {
 			
@@ -101,7 +102,7 @@ public class CircletItem extends JewelleryArmorItem implements ICanHeadMode {
 			LivingEntity target = man.getTarget();
 			if (!(player.isCreative() || player.isSpectator())
 					&& (target == null || !target.is(player))) {
-				Vec3 lookVec = player.getLookAngle();
+				@NotNull Vec3 lookVec = player.getLookAngle();
 				Vec3 betweenVec = man.position().subtract(player.position()).normalize();
 				return MathUtil.angleBetweenDeg(lookVec, betweenVec) < (player.isScoping() ? 11 : 110);
 			}
@@ -121,7 +122,7 @@ public class CircletItem extends JewelleryArmorItem implements ICanHeadMode {
 	}
 	
 	@Override
-	public boolean onPressedHeadMode(ItemStack stack, ServerPlayer player, ServerLevel level) {
+	public boolean onPressedHeadMode(ItemStack stack, @NotNull ServerPlayer player, ServerLevel level) {
 		boolean see = sightEnabled(stack);
 		setSight(stack, !see);
 		if (see) {

@@ -11,11 +11,12 @@ import net.minecraft.Util;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 public class AASBRenderType extends RenderType {
 
 	// sorry nothing
-	private AASBRenderType(String name, VertexFormat format, Mode mode, int bufferSize, boolean affectsCrumbling, boolean sortOnUpload, Runnable setupState, Runnable clearState) {
+	private AASBRenderType(String name, @NotNull VertexFormat format, Mode mode, int bufferSize, boolean affectsCrumbling, boolean sortOnUpload, Runnable setupState, Runnable clearState) {
 		super(name, format, mode, bufferSize, affectsCrumbling, sortOnUpload, setupState, clearState);
 	}
 	
@@ -40,7 +41,7 @@ public class AASBRenderType extends RenderType {
 	 * @return
 	 */
 	private static CompositeState lineState(double width, boolean direct, boolean noDepth) {
-		var builder = RenderType.CompositeState.builder()
+		@NotNull var builder = RenderType.CompositeState.builder()
 				.setShaderState(RENDERTYPE_LINES_SHADER)
 				.setLineState(new RenderStateShard.LineStateShard(OptionalDouble.of(width)))
 				.setLayeringState(VIEW_OFFSET_Z_LAYERING)

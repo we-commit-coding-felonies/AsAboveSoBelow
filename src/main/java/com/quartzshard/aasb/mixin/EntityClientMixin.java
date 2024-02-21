@@ -1,5 +1,6 @@
 package com.quartzshard.aasb.mixin;
 
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -31,7 +32,7 @@ public abstract class EntityClientMixin {
 
 	// Prevents FreeCamera from pushing/getting pushed by entities.
 	@Inject(method = "push", at = @At("HEAD"), cancellable = true)
-	private void onPush(Entity entity, CallbackInfo ci) {
+	private void onPush(Entity entity, @NotNull CallbackInfo ci) {
 		if (AstralProjection.isEnabled() && (entity.equals(AstralProjection.getCamera()) || this.equals(AstralProjection.getCamera()))) {
 			ci.cancel();
 		}

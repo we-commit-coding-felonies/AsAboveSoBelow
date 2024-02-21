@@ -33,8 +33,8 @@ public class RecipeData {
 		int
 			numIngredients = recipe.getIngredients().size(),
 			totalCombos = 1;
-		List<Ingredient> ings = new ArrayList<>();
-		for (Ingredient ing : recipe.getIngredients()) if (!ing.isEmpty()) {
+		@NotNull List<Ingredient> ings = new ArrayList<>();
+		for (@NotNull Ingredient ing : recipe.getIngredients()) if (!ing.isEmpty()) {
 			ings.add(ing); // makes a pseudocopy of the ingredients list with anything empty taken out
 		}
 		if (!ings.isEmpty()) {
@@ -124,7 +124,7 @@ public class RecipeData {
 
 	@SuppressWarnings("null") // If an item has a null ResourceLocation, that seems very bad and its probably OK to crash
 	public boolean containsInOutput(ItemData dat) {
-		ResourceLocation searchRl = ForgeRegistries.ITEMS.getKey(dat.getItem()),
+		@Nullable ResourceLocation searchRl = ForgeRegistries.ITEMS.getKey(dat.getItem()),
 						testRl = ForgeRegistries.ITEMS.getKey(output.getA().getItem());
 		if (searchRl.equals(testRl)) {
 			CompoundTag datNbt = dat.getNBT(),
@@ -139,13 +139,13 @@ public class RecipeData {
 
 	@SuppressWarnings("null") // If an item has a null ResourceLocation, that seems very bad and its probably OK to crash
 	public boolean containsInInput(ItemData dat) {
-		ResourceLocation searchRl = ForgeRegistries.ITEMS.getKey(dat.getItem()),
+		@Nullable ResourceLocation searchRl = ForgeRegistries.ITEMS.getKey(dat.getItem()),
 						testRl = null;
 		for (Ingredient ing : inputs) {
 			for (ItemStack ingStack : ing.getItems()) {
 				testRl = ForgeRegistries.ITEMS.getKey(ingStack.getItem());
 				if (searchRl.equals(testRl)) {
-					CompoundTag datNbt = dat.getNBT(),
+					@Nullable CompoundTag datNbt = dat.getNBT(),
 								outNbt = ingStack.getTag();
 					if ( (datNbt == null && outNbt == null)
 						|| (datNbt != null && outNbt != null && Phil.matchesNbtForMapper(datNbt, outNbt, searchRl)) ) {
@@ -158,7 +158,7 @@ public class RecipeData {
 	}
 	
 	@Override
-	public String toString() {
+	public @NotNull String toString() {
 		String str = "[";
 		boolean first = true;
 		for (Ingredient ing : inputs) {

@@ -11,6 +11,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
 import net.minecraftforge.network.NetworkEvent;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * tells the server to update velocity and reset fall distance <br>
@@ -23,16 +25,16 @@ public record SlowFallPacket(double newY) {
 		buffer.writeDouble(newY);
 	}
 
-	public static SlowFallPacket dec(FriendlyByteBuf buffer) {
+	public static @NotNull SlowFallPacket dec(FriendlyByteBuf buffer) {
 		return new SlowFallPacket(buffer.readDouble());
 	}
 	
 	public boolean handle(Supplier<NetworkEvent.Context> sup) {
         NetworkEvent.Context ctx = sup.get();
         ctx.enqueueWork(() -> {
-    		ServerPlayer player = ctx.getSender();
+    		@Nullable ServerPlayer player = ctx.getSender();
     		if (player != null) {
-    			Vec3 oldVel = player.getDeltaMovement();
+    			@NotNull Vec3 oldVel = player.getDeltaMovement();
     			ItemStack stack = player.getItemBySlot(EquipmentSlot.FEET);
     			if (oldVel.y < newY && newY < -0.5
     					&& !stack.isEmpty()

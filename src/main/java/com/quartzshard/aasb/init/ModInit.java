@@ -21,6 +21,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Deals with initializing some misc core parts of the mod, and the creative tabs <br>
@@ -31,7 +32,7 @@ public class ModInit {
 
 	public static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, AASB.MODID);
 
-	public static void init(IEventBus bus) {
+	public static void init(@NotNull IEventBus bus) {
 		TABS.register(bus);
 		NetInit.register();
 		bus.addListener(ModInit::commonSetup);
@@ -46,7 +47,7 @@ public class ModInit {
 			.withTabsBefore(CreativeModeTabs.COMBAT)
 			.icon(() -> ItemInit.THE_PHILOSOPHERS_STONE.get().getDefaultInstance())
 			.displayItems((parameters, tab) -> {
-				for (RegistryObject<? extends Item> ro : ItemInit.ALL_NATURAL_ITEMS) {
+				for (@NotNull RegistryObject<? extends Item> ro : ItemInit.ALL_NATURAL_ITEMS) {
 					tab.accept(ro.get());
 				}
 			}).build()),

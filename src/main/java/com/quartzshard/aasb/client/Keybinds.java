@@ -30,7 +30,7 @@ import net.minecraftforge.fml.common.Mod;
 public class Keybinds {
 	public static final String CATEGORY = "key.categories."+AASB.MODID;
 	
-	public static Component fLoc(KeyMapping key) {
+	public static Component fLoc(@NotNull KeyMapping key) {
 		return Component.translatable("[%s]", key.getTranslatedKeyMessage().copy().withStyle(ChatFormatting.AQUA));
 	}
 	
@@ -73,7 +73,7 @@ public class Keybinds {
 		 * gets the server-friendly version of this (no client-only code references)
 		 * @return corresponding ServerBind
 		 */
-		public ServerBind packetFriendly() {
+		public @NotNull ServerBind packetFriendly() {
 			return valueOf(ServerBind.class, this.name());
 		}
 	}
@@ -125,7 +125,7 @@ public class Keybinds {
 					}
 					break;
 				}
-				KeybindPacket packet = new KeybindPacket(bind.getKey().packetFriendly(), state);
+				@NotNull KeybindPacket packet = new KeybindPacket(bind.getKey().packetFriendly(), state);
 				for (; toSend > 0; toSend--) {
 					NetInit.toServer(packet);
 				}

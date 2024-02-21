@@ -2,6 +2,7 @@ package com.quartzshard.aasb.util;
 
 import java.util.UUID;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -106,7 +107,7 @@ public class ClientUtil {
 		try {
 			Camera camera = mc.gameRenderer.getMainCamera();
 			if (camera.isInitialized() && engine != null) {
-				ParticleStatus status = calculateParticleLevel(level, decreased);
+				@NotNull ParticleStatus status = calculateParticleLevel(level, decreased);
 				if (alwaysRender) {
 					return engine.createParticle(particle, x, y, z, vx, vy, vz);
 				} else if (camera.getPosition().distanceToSqr(x, y, z) > 1024) {
@@ -222,7 +223,7 @@ public class ClientUtil {
 				input = new KeyboardInput(mc().options);
 			}
 		
-			public void applyPosition(FreecamPosition position) {
+			public void applyPosition(@NotNull FreecamPosition position) {
 				super.setPose(position.pose);
 				moveTo(position.x, position.y, position.z, position.yaw, position.pitch);
 				xBob = getXRot();
@@ -344,7 +345,7 @@ public class ClientUtil {
 		
 			// Prevents pistons from moving FreeCamera when collision.ignoreAll is enabled.
 			@Override
-			public PushReaction getPistonPushReaction() {
+			public @NotNull PushReaction getPistonPushReaction() {
 				return PushReaction.IGNORE;
 			}
 		
@@ -452,7 +453,7 @@ public class ClientUtil {
 			}
 		
 			public static FreecamPosition getSwimmingPosition(Entity entity) {
-				FreecamPosition position = new FreecamPosition(entity);
+				@NotNull FreecamPosition position = new FreecamPosition(entity);
 		
 				// Set pose to swimming, adjusting y position so eye-height doesn't change
 				if (position.pose != Pose.SWIMMING) {
@@ -463,7 +464,7 @@ public class ClientUtil {
 				return position;
 			}
 		
-			public ChunkPos getChunkPos() {
+			public @NotNull ChunkPos getChunkPos() {
 				return new ChunkPos((int) (x / 16), (int) (z / 16));
 			}
 		}

@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.google.common.collect.Maps;
@@ -62,7 +63,7 @@ public class Phil {
 	public static void regenMapperNbts() {
 		regenMapperNbts(AlchemyCfg.MAPPER_NBTS_STR.get());
 	}
-	public static void regenMapperNbts(String dat) {
+	public static void regenMapperNbts(@NotNull String dat) {
 		if (!MAPPER_NBTS.isEmpty())
 			MAPPER_NBTS.clear();
 		String[] strs = dat.split(",");
@@ -74,7 +75,7 @@ public class Phil {
 	public static void regenLivingItems() {
 		regenLivingItems(AlchemyCfg.LIVING_ITEMS_STR.get());
 	}
-	public static void regenLivingItems(String dat) {
+	public static void regenLivingItems(@NotNull String dat) {
 		if (!LIVING_ITEMS.isEmpty())
 			LIVING_ITEMS.clear();
 		String[] strs = dat.split(",");
@@ -90,7 +91,7 @@ public class Phil {
 	 * @param iiq "item in question", used with the item-specific tag matching 
 	 * @return if the test matched the search for all whitelisted tags
 	 */
-	public static boolean matchesNbtForMapper(CompoundTag search, CompoundTag test, ResourceLocation iiq) {
+	public static boolean matchesNbtForMapper(CompoundTag search, CompoundTag test, @NotNull ResourceLocation iiq) {
 		for (NbtWhitelistData w : MAPPER_NBTS) {
 			if (w.matches(iiq)) {
 				Tag searchTag = search.get(w.tag()),
@@ -137,7 +138,7 @@ public class Phil {
 			return rl.equals("*");
 		}
 		
-		public static NbtWhitelistData fromString(String str) {
+		public static NbtWhitelistData fromString(@NotNull String str) {
 			int sepIdx = str.indexOf("|");
 			return new NbtWhitelistData(str.substring(0, sepIdx), str.substring(sepIdx + 1));
 		}
@@ -160,7 +161,7 @@ public class Phil {
 			return tag.equals("*");
 		}
 		
-		public static LivingItemData fromString(String str) {
+		public static LivingItemData fromString(@NotNull String str) {
 			int sepIdx = str.indexOf("|");
 			return new LivingItemData(str.substring(0, sepIdx), str.substring(sepIdx + 1));
 		}
@@ -174,7 +175,7 @@ public class Phil {
 		if (RELOAD_DAT != null) {
 			long start = System.currentTimeMillis();
 			try {
-				@SuppressWarnings("null") // eclipse is stupid
+				@SuppressWarnings("null") @NotNull // eclipse is stupid
 				Map<ResourceLocation, RecipeData> allRecipes = getAllRecipes(RELOAD_DAT.svRes());
 				/*
 				Map<ResourceLocation, RecipeData> searchResults = PhilosophersStone.searchRecipesFor(ItemData.fromItem(Items.DEBUG_STICK), allRecipes);
@@ -205,7 +206,7 @@ public class Phil {
 	 * @param level
 	 * @return the current aspects of The Philosopher's Stone
 	 */
-	public static AlchData getPhilAspects(ServerLevel level) {
+	public static AlchData getPhilAspects(@NotNull ServerLevel level) {
 		return getPhilAspects(level.getSeed());
 	}
 
@@ -214,7 +215,7 @@ public class Phil {
 	 * @param seed The seed to use for generating aspects
 	 * @return the aspects of The Philosopher's Stone for the given seed
 	 */
-	public static AlchData getPhilAspects(long seed) {
+	public static @NotNull AlchData getPhilAspects(long seed) {
 		MessageDigest d;
 		try {
 			d = MessageDigest.getInstance("SHA-256");
@@ -242,7 +243,7 @@ public class Phil {
 	 * @param uuid UUID in int array format
 	 * @return Corresponding AlchData with ComplexityAspect SEEDGEN
 	 */
-	public static AlchData getUUIDAspects(int[] uuid) {
+	public static @NotNull AlchData getUUIDAspects(int[] uuid) {
 		return AlchData.fromSeeds(uuid[0],uuid[1],uuid[2]);
 	}
 	public static AlchData getUUIDAspects(UUID uuid) {
@@ -251,7 +252,7 @@ public class Phil {
 	public static AlchData getUUIDAspects(String uuid) {
 		return getUUIDAspects(UUID.fromString(uuid));
 	}
-	public static AlchData getUUIDAspects(IntArrayTag uuid) {
+	public static AlchData getUUIDAspects(@NotNull IntArrayTag uuid) {
 		return getUUIDAspects(uuid.getAsIntArray());
 	}
 
@@ -337,7 +338,7 @@ public class Phil {
 		return getAspects(item).way();
 	}
 	@Nullable
-	public static WayAspect getWay(RegistryObject<? extends Item> item) {
+	public static WayAspect getWay(@NotNull RegistryObject<? extends Item> item) {
 		return getAspects(item).way();
 	}
 	/**
@@ -388,7 +389,7 @@ public class Phil {
 		return getAspects(item).shape();
 	}
 	@Nullable
-	public static ShapeAspect getShape(RegistryObject<? extends Item> item) {
+	public static ShapeAspect getShape(@NotNull RegistryObject<? extends Item> item) {
 		return getAspects(item).shape();
 	}
 	/**
@@ -425,7 +426,7 @@ public class Phil {
 	 * @return FormAspect
 	 */
 	@Nullable
-	public static FormAspect getForm(ItemStack item) {
+	public static FormAspect getForm(@NotNull ItemStack item) {
 		return getAspects(item).form();
 	}
 
@@ -441,7 +442,7 @@ public class Phil {
 	public static boolean flows(ItemLike from, ItemLike to) {
 		return getAspects(from).flowsTo(getAspects(to));
 	}
-	public static boolean flows(RegistryObject<? extends Item> from, RegistryObject<? extends Item> to) {
+	public static boolean flows(RegistryObject<? extends Item> from, @NotNull RegistryObject<? extends Item> to) {
 		return getAspects(from).flowsTo(getAspects(to));
 	}
 	public static boolean flows(ItemStack from, ItemStack to) {
@@ -475,9 +476,9 @@ public class Phil {
 	 * @param from Input aspects
 	 * @return List
 	 */
-	public static List<Tuple<ItemData,Float>> getTransmutationTargets(AlchData from) {
+	public static @NotNull List<Tuple<ItemData,Float>> getTransmutationTargets(AlchData from) {
 		//Map<ItemData,AlchData> fmap = Maps.filterEntries(alchMap, (to) -> from.violationTo(to.getValue()) < 1);
-		List<Tuple<ItemData,Float>> flowList = new ArrayList<>();
+		@NotNull List<Tuple<ItemData,Float>> flowList = new ArrayList<>();
 		for (Entry<ItemData,AlchData> entry : alchMap.entrySet()) {
 			flowList.add(new Tuple<>(entry.getKey(), from.violationTo(entry.getValue())));
 		}
@@ -503,8 +504,8 @@ public class Phil {
 	}
 	
 	public static Map<ResourceLocation,ItemData> getAllItems() {
-		Map<ResourceLocation,ItemData> allItems = new HashMap<>();
-		for (Map.Entry<ResourceKey<Item>,Item> ri : ForgeRegistries.ITEMS.getEntries()) {
+		@NotNull Map<ResourceLocation,ItemData> allItems = new HashMap<>();
+		for (Map.@NotNull Entry<ResourceKey<Item>,Item> ri : ForgeRegistries.ITEMS.getEntries()) {
 			Logger.debug("getAllItems()", "DiscoveredItem", ri.getKey().location().toString());
 			allItems.put(ri.getKey().location(), ItemData.fromItem(ri.getValue()));
 		}
@@ -512,12 +513,12 @@ public class Phil {
 	}
 	
 	@SuppressWarnings("null") // if there are null recipes, then i think crashing is fine
-	public static Map<ResourceLocation, RecipeData> getAllRecipes(ReloadableServerResources resources) {
+	public static Map<ResourceLocation, RecipeData> getAllRecipes(@NotNull ReloadableServerResources resources) {
 		Map<ResourceLocation, RecipeData> allRecipes = new HashMap<>();
 		for (RecipeType<?> recipeType : ForgeRegistries.RECIPE_TYPES) {
 			List<? extends Recipe<?>> recipes = resources.getRecipeManager().getAllRecipesFor((RecipeType) recipeType);
 			for (Recipe<?> recipe : recipes) {
-				RecipeData got = RecipeData.fromRecipe(recipe, RELOAD_DAT.regAccess());
+				@Nullable RecipeData got = RecipeData.fromRecipe(recipe, RELOAD_DAT.regAccess());
 				if (got == null) {
 					// TODO find an actual proper fix for this. the issue is with special recipes that arent properly data driven (such as suspicious stew or map cloning)
 					// the janky fix here is to just ingore them but it would be good to actually map some of them
@@ -540,7 +541,7 @@ public class Phil {
 	@Nullable
 	public static Map<ResourceLocation, RecipeData> searchRecipesFor(ItemData search, Map<ResourceLocation, RecipeData> allRecipes) {
 		Map<ResourceLocation, RecipeData> matches = new HashMap<>();
-		for (Map.Entry<ResourceLocation, RecipeData> entry : allRecipes.entrySet()) {
+		for (Map.@NotNull Entry<ResourceLocation, RecipeData> entry : allRecipes.entrySet()) {
 			if (entry.getValue() == null) {
 				System.out.println(entry.getKey().toString());
 			}
@@ -559,7 +560,7 @@ public class Phil {
 	@Nullable
 	public static Map<ResourceLocation, RecipeData> searchRecipesForInput(ItemData search, Map<ResourceLocation, RecipeData> allRecipes) {
 		Map<ResourceLocation, RecipeData> matches = new HashMap<>();
-		for (Map.Entry<ResourceLocation, RecipeData> entry : allRecipes.entrySet()) {
+		for (Map.@NotNull Entry<ResourceLocation, RecipeData> entry : allRecipes.entrySet()) {
 			if (entry.getValue().containsInInput(search))
 				matches.put(entry.getKey(), entry.getValue());
 		}
@@ -572,7 +573,7 @@ public class Phil {
 		throw new RuntimeException("Not yet implemented: PhilosophersStone.searchRecipesForOutput(ItemData)");
 	}
 	@Nullable
-	public static Map<ResourceLocation, RecipeData> searchRecipesForOutput(ItemData search, Map<ResourceLocation, RecipeData> allRecipes) {
+	public static Map<ResourceLocation, RecipeData> searchRecipesForOutput(@NotNull ItemData search, Map<ResourceLocation, RecipeData> allRecipes) {
 		Map<ResourceLocation, RecipeData> matches = new HashMap<>();
 		for (Map.Entry<ResourceLocation, RecipeData> entry : allRecipes.entrySet()) {
 			if (entry.getValue().containsInOutput(search))

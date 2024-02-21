@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Random;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.quartzshard.aasb.AASB;
@@ -28,7 +29,7 @@ public class FormAspect implements IAspect<FormAspect> {
 	private FormAspect[] children;
 	private ResourceLocation name;
 	private final int distance, color;
-	private final Component loc, fLoc;
+	private final @NotNull Component loc, fLoc;
 	
 	/**
 	 * Creates a new form node on the tree. Will throw an exception if you try to assign multiple parents, don't make cycles!
@@ -37,7 +38,7 @@ public class FormAspect implements IAspect<FormAspect> {
 	 * @param children
 	 * @throws FormTreeException 
 	 */
-	public FormAspect(ResourceLocation name, String langKey, @Nullable FormAspect parent, FormAspect[] children, int color) {
+	public FormAspect(@NotNull ResourceLocation name, String langKey, @Nullable FormAspect parent, FormAspect[] children, int color) {
 		if((!name.equals(AASB.rl("materia")) && parent == null) || (name.equals(AASB.rl("materia")) && parent != null)) {
 			throw new FormTreeException("Bad root node specified. Don't try to assign parents to materia, or make a node with no parents.");
 		}
@@ -84,7 +85,7 @@ public class FormAspect implements IAspect<FormAspect> {
 	public MutableComponent loc() {
 		return loc.copy();
 	}
-	public MutableComponent fLoc() {
+	public @NotNull MutableComponent fLoc() {
 		return fLoc.copy();
 	}
 	
@@ -99,7 +100,7 @@ public class FormAspect implements IAspect<FormAspect> {
 	 * @return
 	 */
 	public boolean checkChildrenAgree() {
-		for (FormAspect child: this.children) {
+		for (@NotNull FormAspect child: this.children) {
 			if (child.getParent() != this) {
 				return false;
 			}
@@ -167,7 +168,7 @@ public class FormAspect implements IAspect<FormAspect> {
 	}
 
 	@Override
-	public boolean flowsFrom(FormAspect other) {
+	public boolean flowsFrom(@NotNull FormAspect other) {
 		return other.flowsTo(this);
 	}
 
@@ -182,12 +183,12 @@ public class FormAspect implements IAspect<FormAspect> {
 	}
 
 	@Override
-	public float violationFrom(FormAspect other) {
+	public float violationFrom(@NotNull FormAspect other) {
 		return other.violationTo(this);
 	}
 
 	@Override
-	public String toString() {
+	public @NotNull String toString() {
 		return "Form."+getName().toString();
 	}
 
@@ -203,7 +204,7 @@ public class FormAspect implements IAspect<FormAspect> {
 	 * @return 
 	 */
 	@Nullable
-	public static FormAspect deserialize(String dat) {
+	public static FormAspect deserialize(@NotNull String dat) {
 		if (dat != "" && dat.startsWith("Form.")) {
 			return AlchInit.getForm(ResourceLocation.tryParse(dat.replace("Form.", "")));
 		}
@@ -211,7 +212,7 @@ public class FormAspect implements IAspect<FormAspect> {
 	}
 	
 	public static FormAspect fromSeed(long seed) {
-		Collection<FormAspect> reg = AlchInit.FORMS_SUPPLIER.get().getValues();
+		@NotNull Collection<FormAspect> reg = AlchInit.FORMS_SUPPLIER.get().getValues();
 		return reg.toArray(new FormAspect[0])[new Random(seed).nextInt(reg.size())];
 	}
 }

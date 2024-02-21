@@ -115,10 +115,10 @@ public class ItemModelData extends ItemModelProvider {
 		singleTexture(ro.getId().getPath(), mcLoc("item/generated"), "layer0", modLoc("placeholder"));
 	}
 
-	private void basic(RegistryObject<? extends Item> ro) {
+	private void basic(@NotNull RegistryObject<? extends Item> ro) {
 		basic(ro, "item/"+ro.getId().getPath());
 	}
-	private void basic(RegistryObject<? extends Item> ro, String tex) {
+	private void basic(@NotNull RegistryObject<? extends Item> ro, String tex) {
 		basic(ro, modLoc(tex));
 	}
 	private void basic(RegistryObject<? extends Item> ro, ResourceLocation tex) {
@@ -129,7 +129,7 @@ public class ItemModelData extends ItemModelProvider {
 		basic(ro, "item/materia/"+tier);
 	}
 	
-	private ItemModelBuilder miniumStone(RegistryObject<? extends Item> ro) {
+	private @NotNull ItemModelBuilder miniumStone(@NotNull RegistryObject<? extends Item> ro) {
 		ItemModelBuilder builder = getBuilder(ro.getId().getPath());
 		if (!(ro.get() instanceof MiniumStoneItem item)) throw new IllegalArgumentException(ro + " is not a minium stone");
 		for (int i = 0; i < 8; i++) {
@@ -143,7 +143,7 @@ public class ItemModelData extends ItemModelProvider {
 		return builder;
 	}
 	
-	private ItemModelBuilder simpleWayHolder(RegistryObject<? extends Item> ro) {
+	private @NotNull ItemModelBuilder simpleWayHolder(RegistryObject<? extends Item> ro) {
 		String name = ro.getId().getPath();
 		ItemModelBuilder builder = getBuilder(name);
 		if (!(ro.get() instanceof IWayHolder item)) throw new IllegalArgumentException(ro + " is not a way holder");
@@ -174,7 +174,7 @@ public class ItemModelData extends ItemModelProvider {
 		return builder;
 	}
 	
-	private ItemModelBuilder runeCurio(RegistryObject<? extends Item> ro, CurioType slot, boolean tier2) {
+	private ItemModelBuilder runeCurio(@NotNull RegistryObject<? extends Item> ro, CurioType slot, boolean tier2) {
 		String name = ro.getId().getPath();
 		ItemModelBuilder builder = getBuilder(name);
 		String path = "item/"+name;
@@ -191,7 +191,7 @@ public class ItemModelData extends ItemModelProvider {
 		GLOVE, BRACELET, CHARM;
 		
 		@Override
-		public String toString() {
+		public @NotNull String toString() {
 			return name().toLowerCase();
 		}
 	}
@@ -253,7 +253,7 @@ public class ItemModelData extends ItemModelProvider {
 		if (!(reg.get() instanceof IHermeticTool item)) throw new IllegalArgumentException(reg + " is not a hermetic tool");
 		for (int i = 0; i < 13; i++) {
 			if (!IHermeticTool.validateRunesVal(i)) continue;
-			String name = folder+"off/"+i;
+			@NotNull String name = folder+"off/"+i;
 			builder.override()
 			.predicate(ClientInit.PRED_RUNES, i)
 			.predicate(ClientInit.PRED_WAY_HOLDER, 0)
