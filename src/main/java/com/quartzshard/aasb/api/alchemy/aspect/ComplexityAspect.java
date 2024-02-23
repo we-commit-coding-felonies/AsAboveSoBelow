@@ -1,5 +1,7 @@
 package com.quartzshard.aasb.api.alchemy.aspect;
 
+import com.quartzshard.aasb.AASB;
+import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,6 +20,12 @@ public enum ComplexityAspect implements IAspect<ComplexityAspect> {
 	SEEDGEN, // Marks aspects as ones generated from some seed value. Generally treated like UNKNOWN.
 	PHIL, // Marks aspects as those of Phil. Any transmutation with this as its output will do Impossible Object crafting instead. Otherwise, acts like UNKNOWN
 	;
+
+	private final ResourceLocation symbol;
+
+	ComplexityAspect() {
+		symbol = AASB.rl("symbol/aspect/complexity/"+this.name().toLowerCase());
+	}
 
 	@Override
 	public boolean flowsTo(ComplexityAspect other) {
@@ -55,7 +63,12 @@ public enum ComplexityAspect implements IAspect<ComplexityAspect> {
 	public String serialize() {
 		return toString();
 	}
-	
+
+	@Override
+	public ResourceLocation symbolTexture() {
+		return symbol;
+	}
+
 	/**
 	 * Deserializes a ShapeAspect from a String <br>
 	 * Expected format is "Shape.earth", returns null if it fails

@@ -13,7 +13,6 @@ import java.util.UUID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.google.common.collect.Maps;
 import com.google.common.primitives.Longs;
 import com.quartzshard.aasb.api.alchemy.aspect.*;
 import com.quartzshard.aasb.config.AlchemyCfg;
@@ -358,7 +357,7 @@ public class Phil {
 	 */
 	public static long getWaySimple(ItemData item) {
 		WayAspect way = getWay(item);
-		return way == null ? -1 : way.getValue();
+		return way == null ? -1 : way.value();
 	}
 	public static long getWaySimple(ItemLike item) {
 		return getWaySimple(ItemData.fromItem(item));

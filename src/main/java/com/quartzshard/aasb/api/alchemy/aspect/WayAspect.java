@@ -2,6 +2,8 @@ package com.quartzshard.aasb.api.alchemy.aspect;
 
 import java.util.Random;
 
+import com.quartzshard.aasb.AASB;
+import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,22 +14,14 @@ import org.jetbrains.annotations.Nullable;
  * <p>
  * <b><i><u>UNDER NO CIRCUMSTANCES SHOULD WAY FLOW EVER BE VIOLATED IN TRANSMUTATION, UNLESS YOU THOROUGHLY UNDERSTAND THE CONSEQUENCES!!!
  */
-public class WayAspect implements IAspect<WayAspect> {
+public record WayAspect(long value) implements IAspect<WayAspect> {
 	public static final WayAspect ZERO = new WayAspect(0);
-	
-	private final long value;
-	
-	public WayAspect(long value) {
-		this.value = value;
-	}
-	
-	public long getValue() {
-		return value;
-	}
+	public static final ResourceLocation SYMBOL = AASB.rl("symbol/aspect/way");
+
 
 	@Override
 	public boolean flowsTo(WayAspect other) {
-		return other.getValue() == this.value;
+		return other.value() == this.value;
 	}
 
 	@Override
@@ -47,40 +41,47 @@ public class WayAspect implements IAspect<WayAspect> {
 		//	return ((float)value - (float)oVal) / (value - bound);
 		//}
 		//return flowsTo(other) ? 0 : 1;
-		
+
 	}
 
 	@Override
 	public float violationFrom(WayAspect other) {
 		return other.violationTo(this);
 	}
-	
+
 	@Override
 	public @NotNull String toString() {
-		return "Way."+value;
+		return "Way." + value;
 	}
 
 	@Override
 	public String serialize() {
 		return toString();
 	}
-	
+
+	@Override
+	public ResourceLocation symbolTexture() {
+		return SYMBOL;
+	}
+
 	/**
 	 * Deserializes a WayAspect from a string <br>
 	 * Expected format is "Way.11", returns null if it fails
+	 *
 	 * @param dat
-	 * @return 
+	 * @return
 	 */
 	@Nullable
 	public static WayAspect deserialize(String dat) {
 		if (dat != "" && dat.startsWith("Way.")) {
 			try {
 				return new WayAspect(Long.parseLong(dat.replace("Way.", "")));
-			} catch (NumberFormatException e) {}
+			} catch (NumberFormatException e) {
+			}
 		}
 		return null;
 	}
-	
+
 	public static WayAspect fromSeed(long seed) {
 		return new WayAspect(new Random(seed).nextLong(1048576, 2097152));
 	}

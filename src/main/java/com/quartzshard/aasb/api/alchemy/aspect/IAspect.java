@@ -1,5 +1,7 @@
 package com.quartzshard.aasb.api.alchemy.aspect;
 
+import net.minecraft.resources.ResourceLocation;
+
 /**
  * Shared stuff between all 3 different aspect types
  */
@@ -39,4 +41,10 @@ public interface IAspect<A extends IAspect<A>> {
 	 * @return String representing this IAspect
 	 */
 	String serialize();
+
+	/**
+	 * Gets the ResourceLocation for this aspects symbol texture
+	 * @return
+	 */
+	ResourceLocation symbolTexture();
 }

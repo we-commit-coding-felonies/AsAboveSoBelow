@@ -2,6 +2,8 @@ package com.quartzshard.aasb.api.alchemy.aspect;
 
 import java.util.Random;
 
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.Resource;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,6 +32,7 @@ public enum ShapeAspect implements IAspect<ShapeAspect> {
 	public final int color;
 	public final String lang;
 	private final @NotNull Component loc, fLoc;
+	private final ResourceLocation symbol;
 
 	// duplicate code because cant call name() from within constructor
 	ShapeAspect(int color) {
@@ -38,12 +41,14 @@ public enum ShapeAspect implements IAspect<ShapeAspect> {
 		this.lang = lang;
 		loc = LangData.tc(lang);
 		fLoc = loc.copy().withStyle(Style.EMPTY.withColor(color));
+		symbol = AASB.rl("symbol/aspect/shape/"+this.name().toLowerCase());
 	}
 	ShapeAspect(String lang, int color) {
 		this.color = color;
 		this.lang = lang;
 		loc = LangData.tc(lang);
 		fLoc = loc.copy().withStyle(Style.EMPTY.withColor(color));
+		symbol = AASB.rl("symbol/aspect/shape/"+this.name().toLowerCase());
 	}
 	
 	private String autoLangKey() {
@@ -116,7 +121,12 @@ public enum ShapeAspect implements IAspect<ShapeAspect> {
 	public String serialize() {
 		return toString();
 	}
-	
+
+	@Override
+	public ResourceLocation symbolTexture() {
+		return symbol;
+	}
+
 	/**
 	 * Deserializes a ShapeAspect from a String <br>
 	 * Expected format is "Shape.earth", returns null if it fails

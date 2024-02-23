@@ -30,6 +30,7 @@ public class FormAspect implements IAspect<FormAspect> {
 	private ResourceLocation name;
 	private final int distance, color;
 	private final @NotNull Component loc, fLoc;
+	private final ResourceLocation symbol;
 	
 	/**
 	 * Creates a new form node on the tree. Will throw an exception if you try to assign multiple parents, don't make cycles!
@@ -59,6 +60,8 @@ public class FormAspect implements IAspect<FormAspect> {
 		
 		loc = LangData.tc(langKey);
 		fLoc = loc.copy().withStyle(Style.EMPTY.withColor(color));
+
+		symbol = new ResourceLocation(name.getNamespace(), "symbol/aspect/form/"+name.getPath());
 	}
 
 	/**
@@ -195,6 +198,11 @@ public class FormAspect implements IAspect<FormAspect> {
 	@Override
 	public String serialize() {
 		return toString();
+	}
+
+	@Override
+	public ResourceLocation symbolTexture() {
+		return symbol;
 	}
 
 	/**
