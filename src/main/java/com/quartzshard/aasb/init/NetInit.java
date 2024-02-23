@@ -61,7 +61,6 @@ public class NetInit {
 				.decoder(DrawParticleAABBPacket::dec)
 				.consumerMainThread(DrawParticleAABBPacket::handle)
 				.add();
-		System.out.println("crash time");
 		//CHANNEL.messageBuilder(CreateLoopingSoundPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
 		//		.encoder(CreateLoopingSoundPacket::enc)
 		//		.decoder(CreateLoopingSoundPacket::dec)

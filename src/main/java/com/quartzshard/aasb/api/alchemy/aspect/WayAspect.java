@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public record WayAspect(long value) implements IAspect<WayAspect> {
 	public static final WayAspect ZERO = new WayAspect(0);
-	public static final ResourceLocation SYMBOL = AASB.rl("symbol/aspect/way");
+	public static final ResourceLocation SYMBOL = AASB.rl("textures/symbol/aspect/way.png");
 
 
 	@Override

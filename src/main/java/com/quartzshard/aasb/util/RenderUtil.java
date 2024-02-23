@@ -1,10 +1,16 @@
 package com.quartzshard.aasb.util;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.quartzshard.aasb.client.render.AASBRenderType;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Matrix4f;
 
 /**
  * Abstracted rendering code, drawing things using particles, fun stuff like that <br>
@@ -80,5 +86,15 @@ public class RenderUtil {
 			level.addParticle(particle, infRange, box.maxX, box.maxY, i, 0, 0, 0);
 			level.addParticle(particle, infRange, box.maxX, box.minY, i, 0, 0, 0);
 		}
+	}
+
+	public static void drawAspectSymbol(PoseStack pose, MultiBufferSource.BufferSource bufferSource, ResourceLocation symbol,
+			float x, float y, float zLevel, float widthIn, float heightIn, float minU, float minV, float maxU, float maxV) {
+		Matrix4f matrix4f = pose.last().pose();
+		VertexConsumer buffer = bufferSource.getBuffer(AASBRenderType.ASPECT_TOOLTIP.apply(symbol));
+		buffer.vertex(matrix4f, x + 0, y + 0, zLevel).uv(minU, minV).endVertex();
+		buffer.vertex(matrix4f, x + 0, y + heightIn, zLevel).uv(minU, maxV).endVertex();
+		buffer.vertex(matrix4f, x + widthIn, y + heightIn, zLevel).uv(maxU, maxV).endVertex();
+		buffer.vertex(matrix4f, x + widthIn, y + 0, zLevel).uv(maxU, minV).endVertex();
 	}
 }

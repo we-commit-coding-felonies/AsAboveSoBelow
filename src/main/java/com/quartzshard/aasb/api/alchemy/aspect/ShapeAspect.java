@@ -41,14 +41,14 @@ public enum ShapeAspect implements IAspect<ShapeAspect> {
 		this.lang = lang;
 		loc = LangData.tc(lang);
 		fLoc = loc.copy().withStyle(Style.EMPTY.withColor(color));
-		symbol = AASB.rl("symbol/aspect/shape/"+this.name().toLowerCase());
+		symbol = AASB.rl("textures/symbol/aspect/shape/"+this.name().toLowerCase()+".png");
 	}
 	ShapeAspect(String lang, int color) {
 		this.color = color;
 		this.lang = lang;
 		loc = LangData.tc(lang);
 		fLoc = loc.copy().withStyle(Style.EMPTY.withColor(color));
-		symbol = AASB.rl("symbol/aspect/shape/"+this.name().toLowerCase());
+		symbol = AASB.rl("textures/symbol/aspect/shape/"+this.name().toLowerCase()+".png");
 	}
 	
 	private String autoLangKey() {

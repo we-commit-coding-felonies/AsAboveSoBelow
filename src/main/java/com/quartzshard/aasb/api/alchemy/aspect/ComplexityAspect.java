@@ -26,7 +26,7 @@ public enum ComplexityAspect implements IAspect<ComplexityAspect> {
 	private final ResourceLocation symbol;
 
 	ComplexityAspect() {
-		symbol = AASB.rl("symbol/aspect/complexity/"+this.name().toLowerCase());
+		symbol = AASB.rl("textures/symbol/aspect/complexity/"+this.name().toLowerCase()+".png");
 	}
 
 	@Override

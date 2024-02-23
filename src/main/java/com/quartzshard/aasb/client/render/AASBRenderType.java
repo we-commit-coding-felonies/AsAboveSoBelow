@@ -21,16 +21,30 @@ public class AASBRenderType extends RenderType {
 	}
 	
 
-	public static final Function<ResourceLocation, RenderType> MAGNUM_OPUS_HALO = Util.memoize(rl -> {
-		RenderType.CompositeState state = RenderType.CompositeState.builder()
-				.setShaderState(RenderStateShard.POSITION_COLOR_TEX_SHADER)
+	public static final Function<ResourceLocation, RenderType>
+		MAGNUM_OPUS_HALO = Util.memoize(rl -> {
+			RenderType.CompositeState state = RenderType.CompositeState.builder()
+					.setShaderState(RenderStateShard.POSITION_COLOR_TEX_SHADER)
+					.setTextureState(new RenderStateShard.TextureStateShard(rl, false, false))
+					.setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+					.setCullState(NO_CULL)
+					.createCompositeState(true);
+			return create("magnum_opus_halo", DefaultVertexFormat.POSITION_COLOR_TEX, Mode.QUADS, 256, true, false, state);
+		}),
+		ASPECT_TOOLTIP = Util.memoize(rl -> {
+			RenderType.CompositeState state = RenderType.CompositeState.builder()
+				.setShaderState(POSITION_TEX_SHADER)
 				.setTextureState(new RenderStateShard.TextureStateShard(rl, false, false))
-				.setTransparencyState(TRANSLUCENT_TRANSPARENCY)
-				.setCullState(NO_CULL)
-				.createCompositeState(true);
-		return create("magnum_opus_halo", DefaultVertexFormat.POSITION_COLOR_TEX, Mode.QUADS, 256, true, false, state);
-	});
-	public static final RenderType MUSTANG_LINES = create("mustang_lines", DefaultVertexFormat.POSITION_COLOR_NORMAL, Mode.LINES, 128, false, false, lineState(3, false, false));
+				.setTransparencyState(NO_TRANSPARENCY)
+				.setDepthTestState(LEQUAL_DEPTH_TEST)
+				.createCompositeState(false);
+			return create("aspect_tooltip", DefaultVertexFormat.POSITION_TEX, VertexFormat.Mode.QUADS, 256, false, false, state);
+		});
+	public static final RenderType
+		MUSTANG_LINES = create("mustang_lines",
+			DefaultVertexFormat.POSITION_COLOR_NORMAL, Mode.LINES, 128,false, false,
+			lineState(3, false, false));
+
 
 	/**
 	 * vanilla LINES layer with line width defined (and optionally depth disabled)
@@ -48,6 +62,23 @@ public class AASBRenderType extends RenderType {
 				.setTransparencyState(TRANSLUCENT_TRANSPARENCY)
 				.setWriteMaskState(noDepth ? COLOR_WRITE : COLOR_DEPTH_WRITE)
 				.setCullState(NO_CULL);
+		if (!direct) {
+			builder = builder.setOutputState(ITEM_ENTITY_TARGET);
+		}
+		if (noDepth) {
+			builder = builder.setDepthTestState(NO_DEPTH_TEST);
+		}
+		return builder.createCompositeState(false);
+	}
+
+	private static CompositeState texTipState(double width, boolean direct, boolean noDepth) {
+		@NotNull var builder = RenderType.CompositeState.builder()
+			.setShaderState(RENDERTYPE_LINES_SHADER)
+			.setLineState(new RenderStateShard.LineStateShard(OptionalDouble.of(width)))
+			.setLayeringState(VIEW_OFFSET_Z_LAYERING)
+			.setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+			.setWriteMaskState(noDepth ? COLOR_WRITE : COLOR_DEPTH_WRITE)
+			.setCullState(NO_CULL);
 		if (!direct) {
 			builder = builder.setOutputState(ITEM_ENTITY_TARGET);
 		}

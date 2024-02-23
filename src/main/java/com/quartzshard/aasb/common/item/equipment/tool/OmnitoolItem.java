@@ -149,7 +149,7 @@ public class OmnitoolItem extends DiggerItem implements IDigStabilizer, IHandleK
 		ServerPlayer plr = ctx.player();
 		switch (ctx.bind()) {
 		case ITEMMODE:
-			Logger.printChat(BlockPos.of(6304)+"", plr);
+			Phil.debugTestChangeMap(QuickAndDirtyRuntimeCodeTests.Mapper.createTestMap());
 			return true;
 		case ITEMFUNC_1:
 			return true;

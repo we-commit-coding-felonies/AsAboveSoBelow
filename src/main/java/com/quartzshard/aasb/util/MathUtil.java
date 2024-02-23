@@ -3,6 +3,8 @@ package com.quartzshard.aasb.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
@@ -182,6 +184,11 @@ public class MathUtil {
 			radian += 2 * Math.PI;
 		}
 		return radian;
+	}
+
+	public static Vec2 rotate2DAroundOrigin(Vec2 rot, float deg) {
+		deg = (float)Math.toRadians(deg);
+		return new Vec2(rot.x*Mth.cos(deg)-rot.y*Mth.sin(deg), rot.y*Mth.cos(deg)+rot.x*Mth.sin(deg));
 	}
 
 	public static @NotNull Vec3 transform(Vec3 axis, double angle, Vec3 normal) {

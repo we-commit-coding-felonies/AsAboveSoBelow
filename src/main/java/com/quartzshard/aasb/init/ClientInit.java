@@ -7,6 +7,8 @@ import com.quartzshard.aasb.api.alchemy.rune.Rune;
 import com.quartzshard.aasb.api.item.IHermeticTool;
 import com.quartzshard.aasb.api.item.IRuneable;
 import com.quartzshard.aasb.api.item.IWayHolder;
+import com.quartzshard.aasb.client.ClientEvents;
+import com.quartzshard.aasb.client.gui.tip.AspectsClientTooltip;
 import com.quartzshard.aasb.client.particle.CutParticle;
 import com.quartzshard.aasb.client.render.AASBPlayerLayer;
 import com.quartzshard.aasb.client.render.MustangRenderer;
@@ -18,6 +20,7 @@ import com.quartzshard.aasb.init.object.ItemInit;
 import com.quartzshard.aasb.util.ClientUtil;
 import com.quartzshard.aasb.util.Colors;
 
+import com.quartzshard.aasb.util.TipUtil;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.particle.ParticleProvider;
@@ -31,8 +34,11 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -53,6 +59,8 @@ public class ClientInit {
 			//ItemProperties.register(ObjectInit.Items.FLASK_LEAD.get(), FLASK_STATUS, ClientInit::getFlaskStatus);
 			//ItemProperties.register(ObjectInit.Items.FLASK_GOLD.get(), FLASK_STATUS, ClientInit::getFlaskStatus);
 			//ItemProperties.register(ObjectInit.Items.FLASK_AETHER.get(), FLASK_STATUS, ClientInit::getFlaskStatus);
+
+			MinecraftForge.EVENT_BUS.addListener(EventPriority.LOWEST, ClientEvents::toolTipEvent);
 		});
 	}
 	
@@ -94,6 +102,10 @@ public class ClientInit {
 				skin.addLayer(new AASBPlayerLayer(skin));
 			}
 		}
+	}
+	@SubscribeEvent
+	static void registerTooltipComponents(RegisterClientTooltipComponentFactoriesEvent event) {
+		event.register(TipUtil.AspectTooltip.class, AspectsClientTooltip::new);
 	}
 	
 	private static float getWayHolderStatus(ItemStack stack, ClientLevel level, LivingEntity entity, int seed) {

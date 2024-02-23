@@ -61,7 +61,7 @@ public class FormAspect implements IAspect<FormAspect> {
 		loc = LangData.tc(langKey);
 		fLoc = loc.copy().withStyle(Style.EMPTY.withColor(color));
 
-		symbol = new ResourceLocation(name.getNamespace(), "symbol/aspect/form/"+name.getPath());
+		symbol = new ResourceLocation(name.getNamespace(), "textures/symbol/aspect/form/"+name.getPath()+".png");
 	}
 
 	/**
