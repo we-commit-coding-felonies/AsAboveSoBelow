@@ -18,7 +18,9 @@ public enum ComplexityAspect implements IAspect<ComplexityAspect> {
 	UNKNOWN, // Things that were not mapped (either not found or mapping failed), and cannot be used for any alchemical processes
 	
 	SEEDGEN, // Marks aspects as ones generated from some seed value. Generally treated like UNKNOWN.
+	
 	PHIL, // Marks aspects as those of Phil. Any transmutation with this as its output will do Impossible Object crafting instead. Otherwise, acts like UNKNOWN
+	IMPOSSIBLE, // Marks aspects as those of an Impossible Object. Anything with this is considered a valid output for Impossible Object crafting
 	;
 
 	private final ResourceLocation symbol;
