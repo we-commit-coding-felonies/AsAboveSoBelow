@@ -8,6 +8,8 @@ import com.quartzshard.aasb.init.AlchInit;
 
 import net.minecraft.resources.ResourceLocation;
 
+import java.util.Locale;
+
 public record AlchData(
 		@Nullable WayAspect way,
 		@Nullable ShapeAspect shape,
@@ -31,6 +33,10 @@ public record AlchData(
 	public AlchData(long way, ShapeAspect shape, String form, ComplexityAspect complexity) {
 		this(way, shape, AlchInit.getForm(ResourceLocation.tryParse(form)), complexity);
 	}
+
+	//public AlchData(String str) {
+	//	// TODO alchdata from serialized string
+	//}
 	
 	/**
 	 * Generates AlchData from seeds
@@ -83,5 +89,18 @@ public record AlchData(
 			return way.violationTo(other.way()) + shape.violationTo(other.shape()) + form.violationTo(other.form());
 		}
 		return 1;
+	}
+
+	@Override
+	public String toString() {
+		String str = "(";
+		str += way == null ? "null" : way.value();
+		str += ",";
+		str += shape == null ? "null" : shape.name().toLowerCase();
+		str += ",";
+		str += form == null ? "null" : form.getName().toString();
+		str += ",";
+		str += complexity.name().toLowerCase();
+		return str + ")";
 	}
 }
