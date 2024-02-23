@@ -3,10 +3,10 @@
   "priority": 6304,
   "package": "com.quartzshard.aasb.mixin",
   "compatibilityLevel": "JAVA_16",
-  "refmap": "aasb.refmap.json",
+  "refmap": "mixins.aasb.refmap.json",
   "mixins": [
 	"ProtectionEnchantmentMixin",
-	"ArmorDyeRecipeMixin",
+	"ArmorDyeRecipeMixin"
   ],
   "client": [
 	"MinecraftClientMixin",
@@ -18,7 +18,7 @@
 	"ClientPacketListenerClientMixin",
 	"OptionsClientMixin",
 	"GameRendererClientMixin",
-	"GuiClientMixin",
+	"GuiClientMixin"
   ],
   "injectors": {
     "defaultRequire": 1

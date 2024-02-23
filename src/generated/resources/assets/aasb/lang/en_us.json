@@ -56,6 +56,8 @@
   "death.attack.aasb.transmute_env.player": "%s became unrecognizable whilst fighting %s",
   "death.attack.aasb.waybomb": "%s was aspectually atomized due to %s",
   "death.attack.aasb.waybomb.item": "%s underwent alchemical fission because of %s whilst wielding %s",
+  "death.attack.aasb.waybomb_env": "%s was disintegrated by a catastrophic ventilation of Way",
+  "death.attack.aasb.waybomb_env.player": "%s was totally obliterated because of %s",
   "item.aasb.aether": "Aether",
   "item.aasb.aetherchalk": "Aetherchalk",
   "item.aasb.aetherglass_flask": "Aetherglass Flask",

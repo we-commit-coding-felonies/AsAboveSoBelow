@@ -29,7 +29,7 @@ public record DrawParticleAABBPacket(Vec3 cMin, Vec3 cMax, AABBParticlePreset pr
 		DEBUG_TICK,
 		DEBUG_TICK_FILL,
 		
-		SENTIENT_ARROW_TARGET_LOST;
+		SENTIENT_ARROW_TARGET_LOST
 	}
 	
 	public void enc(FriendlyByteBuf buffer) {
@@ -67,7 +67,7 @@ public record DrawParticleAABBPacket(Vec3 cMin, Vec3 cMax, AABBParticlePreset pr
 			case DEBUG_FILL: // debug fill
 				RenderUtil.drawAABBWithParticles(box, ParticleTypes.DRIPPING_WATER, stepSize, level, true, true);
 			case DEBUG: // debug outline
-				particle = ParticleTypes.DRIPPING_LAVA;
+				particle = ParticleTypes.DRIPPING_HONEY;
 				infRange = true;
 				break;
 				

@@ -138,7 +138,6 @@ public class WorldUtil {
 		
 		/**
 		 * Translates the given relative Side to absolute Direction
-		 * @param rel The relative side to be translated to absolute
 		 * @param facing The direction that BACK corresponds to (the "local north")
 		 * @return The corresponding Direction
 		 */

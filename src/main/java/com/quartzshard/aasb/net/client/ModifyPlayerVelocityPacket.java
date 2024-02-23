@@ -67,7 +67,6 @@ public record ModifyPlayerVelocityPacket(Vec3 mod, VecOp op) {
 	public boolean handle(Supplier<NetworkEvent.Context> sup) {
 		NetworkEvent.Context ctx = sup.get();
 		ctx.enqueueWork(() -> {
-			@SuppressWarnings("resource")
 			LocalPlayer player = Minecraft.getInstance().player;
 			
 			player.setDeltaMovement( op.perform(player.getDeltaMovement(), mod) );

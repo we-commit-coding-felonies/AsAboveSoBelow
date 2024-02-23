@@ -15,8 +15,6 @@ import com.quartzshard.aasb.data.tags.EntityTP;
 import com.quartzshard.aasb.init.FxInit;
 import com.quartzshard.aasb.init.NetInit;
 import com.quartzshard.aasb.init.object.EntityInit;
-import com.quartzshard.aasb.net.client.CreateLoopingSoundPacket;
-import com.quartzshard.aasb.net.client.CreateLoopingSoundPacket.LoopingSound;
 import com.quartzshard.aasb.net.client.DrawParticleLinePacket;
 import com.quartzshard.aasb.net.client.DrawParticleLinePacket.LineParticlePreset;
 import com.quartzshard.aasb.util.EntUtil;
@@ -600,7 +598,7 @@ public class SentientArrowEntity extends AbstractArrow {
 	}
 	
 	/**
-	 * @param target
+	 * @param ent
 	 * @return if pathfinding was unsuccessfull
 	 */
 	private void pathTo(Entity ent) {
@@ -821,9 +819,9 @@ public class SentientArrowEntity extends AbstractArrow {
 		debugLog("ManualTargetAttempt");
 		if (isInert()) {
 			setState(ArrowState.DIRECT);
-			for (ServerPlayer plr : ((ServerLevel)level()).players()) {
-				NetInit.toClient(new CreateLoopingSoundPacket(LoopingSound.SENTIENT_WHISPERS, this.getId()), plr);
-			}
+			//for (ServerPlayer plr : ((ServerLevel)level()).players()) {
+			//	NetInit.toClient(new CreateLoopingSoundPacket(LoopingSound.SENTIENT_WHISPERS, this.getId()), plr);
+			//}
 		}
 		Entity owner = getOwner();
 		if (owner == null) return false;

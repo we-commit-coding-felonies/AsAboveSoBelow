@@ -82,7 +82,8 @@ public class EntityInit {
 		
 		// "Environmental" (generally dont have a killer)
 		DMG_TRANSMUTE_ENV = regDmg("transmute_env"),
-		DMG_SURFACE_TENSION_ENV = regDmg("surface_tension_env");
+		DMG_SURFACE_TENSION_ENV = regDmg("surface_tension_env"),
+		DMG_WAYBOMB_ENV = regDmg("waybomb_env");
 	
 
 	public static final RegistryObject<MobEffect>
@@ -149,6 +150,7 @@ public class EntityInit {
 		// "Environmental" (generally dont have a killer)
 		new DmgBuilder(DMG_TRANSMUTE_ENV).exhaust(5).scales(false).reg(ctx);
 		new DmgBuilder(DMG_SURFACE_TENSION_ENV).scales(false).reg(ctx);
+		new DmgBuilder(DMG_WAYBOMB_ENV).reg(ctx);
 	}
 	
 	/**

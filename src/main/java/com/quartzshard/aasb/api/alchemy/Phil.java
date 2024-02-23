@@ -300,7 +300,7 @@ public class Phil {
 	}
 	/**
 	 * Queries the alchemy map for the aspects of an ItemLike
-	 * @param ro the ItemLike
+	 * @param item the ItemLike
 	 * @return Aspects for the item, or UNMAPPED if they couldn't be found
 	 */
 	public static AlchData getAspects(ItemLike item) {

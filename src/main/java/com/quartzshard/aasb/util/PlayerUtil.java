@@ -336,15 +336,16 @@ public class PlayerUtil {
 			for (int i = 0; i < inv.getSlots(); i++) {
 				int todo = toConsume-consumed;
 				if (todo <= 0) break;
-				@NotNull ItemStack f = inv.getStackInSlot(i);
-				if (!f.isEmpty() && f.equals(stack, false)) {
-					int fc = f.getCount();
+				@NotNull ItemStack found = inv.getStackInSlot(i), foundClone = found.copy();
+				foundClone.setCount(stack.getCount()); // we do this so that the equals check later ignores stack count
+				if (!found.isEmpty() && foundClone.equals(stack, false)) {
+					int fc = found.getCount();
 					if (fc >= todo) {
 						consumed += todo;
-						f.shrink(todo);
+						found.shrink(todo);
 					} else {
 						consumed += fc;
-						f.setCount(0);
+						found.setCount(0);
 					}
 				}
 			}

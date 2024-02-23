@@ -3,6 +3,9 @@ package com.quartzshard.aasb.api.item;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.TooltipFlag;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -201,12 +204,41 @@ public interface IRuneable extends IHandleKeybind {
 		COMBAT(LangData.ITEM_GLOVE_RUNED),
 		UTILITY(LangData.ITEM_BRACELET_RUNED),
 		PASSIVE(LangData.ITEM_CHARM_RUNED),
-		TOOL(null); // :troled:
+		TOOL(null), // :troled:
+		NONE(null); // :troled: 2 electric boogaloo
 		
 		@Nullable
 		public final String runedLang;
 		ItemAbility(String runedLang) {
 			this.runedLang = runedLang;
 		}
+	}
+
+	/**
+	 * Appends rune information to the tooltip
+	 * @param stack
+	 * @param level
+	 * @param tips
+	 * @param flags
+	 */
+	default void appendRuneText(ItemStack stack, Level level, List<Component> tips, TooltipFlag flags) {
+		@Nullable Component runeText = null;
+		@Nullable Rune major = getRune(stack, 0), minor = getRune(stack, 1);
+		boolean hasNull = major == null || minor == null,
+				didDo = false;
+		if (hasNull && major != minor) {
+			// only one is null, only 1 rune
+			runeText = LangData.tc(LangData.TIP_RUNE, major == null ? minor.fLoc() : major.fLoc()).copy().withStyle(ChatFormatting.GRAY);
+			didDo = true;
+		} else if (!hasNull) {
+			// neither is null, we have both
+			runeText = LangData.tc(LangData.TIP_RUNE_MULTI,
+					major.fLoc(),
+					minor.fLoc()
+			).copy().withStyle(ChatFormatting.GRAY);
+			didDo = true;
+		}
+		if (didDo)
+			tips.add(runeText);
 	}
 }

@@ -9,12 +9,14 @@ import com.quartzshard.aasb.common.item.*;
 import com.quartzshard.aasb.common.item.ItemTraits.Rarity;
 import com.quartzshard.aasb.common.item.ItemTraits.Tier;
 import com.quartzshard.aasb.common.item.equipment.*;
+import com.quartzshard.aasb.common.item.equipment.armor.HermeticArmorItem;
 import com.quartzshard.aasb.common.item.equipment.armor.jewellery.*;
 import com.quartzshard.aasb.common.item.equipment.curio.*;
 import com.quartzshard.aasb.common.item.equipment.tool.*;
 
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -129,10 +131,10 @@ public class ItemInit {
 		CHARM2 = reg("hermeticized_charm", () -> new CharmItem(2, PROPS_CURIO_2), Tab.SYN),
 		
 		// Armor
-		HELMET = unstack("hermetic_armet", Tab.SYN),
-		CHESTPLATE = unstack("hermetic_cuirass", Tab.SYN),
-		LEGGINGS = unstack("hermetic_greaves", Tab.SYN),
-		BOOTS = unstack("hermetic_sabatons", Tab.SYN),
+		HELMET = reg("hermetic_armet", () -> new HermeticArmorItem(HermeticArmorItem.Type.HELMET, PROPS_GENERIC_TOOL), Tab.SYN),
+		CHESTPLATE = reg("hermetic_cuirass", () -> new HermeticArmorItem(HermeticArmorItem.Type.CHESTPLATE, PROPS_GENERIC_TOOL), Tab.SYN),
+		LEGGINGS = reg("hermetic_greaves", () -> new HermeticArmorItem(HermeticArmorItem.Type.LEGGINGS, PROPS_GENERIC_TOOL), Tab.SYN),
+		BOOTS = reg("hermetic_sabatons", () -> new HermeticArmorItem(HermeticArmorItem.Type.BOOTS, PROPS_GENERIC_TOOL), Tab.SYN),
 		CIRCLET = reg("circlet_of_the_seer", () -> new CircletItem(PROPS_IMPOSSIBLE_1), Tab.NAT),
 		AMULET = reg("amulet_of_the_philosopher", () -> new AmuletItem(PROPS_IMPOSSIBLE_1), Tab.NAT),
 		POCKETWATCH = reg("watch_of_the_astrologer", () -> new PocketwatchItem(PROPS_IMPOSSIBLE_1), Tab.NAT),

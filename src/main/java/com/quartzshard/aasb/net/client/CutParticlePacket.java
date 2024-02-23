@@ -34,7 +34,6 @@ public record CutParticlePacket(int amount, AABB area) {
 	public boolean handle(Supplier<NetworkEvent.Context> sup) {
         NetworkEvent.Context ctx = sup.get();
         ctx.enqueueWork(() -> {
-			@SuppressWarnings("resource")
 			ClientLevel level = Minecraft.getInstance().level;
 			Random r = AASB.RNG;
 			for (int i = 0; i < amount; i++) {

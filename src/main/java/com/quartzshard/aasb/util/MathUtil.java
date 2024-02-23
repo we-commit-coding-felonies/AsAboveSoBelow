@@ -124,7 +124,7 @@ public class MathUtil {
 	
 	/**
 	 * Converts the given amount of ticks to Hours, Minutes, Seconds, Milliseconds
-	 * @param t ticks
+	 * @param ticks ticks
 	 * @return 
 	 */
 	public static long[] ticksToTime(long ticks) {

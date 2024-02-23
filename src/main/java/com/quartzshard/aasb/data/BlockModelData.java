@@ -41,7 +41,7 @@ public class BlockModelData extends BlockStateProvider {
 	 * @deprecated
 	 * Gives an item a placeholder texture
 	 * This should not be used outside of a development environment
-	 * @param ro
+	 * @param block
 	 */
 	@Deprecated
 	private void placeholder(Block block) {

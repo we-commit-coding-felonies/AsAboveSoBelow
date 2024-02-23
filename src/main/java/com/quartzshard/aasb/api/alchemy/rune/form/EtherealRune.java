@@ -9,14 +9,10 @@ import com.quartzshard.aasb.AASB;
 import com.quartzshard.aasb.common.entity.projectile.SentientArrowEntity;
 import com.quartzshard.aasb.init.FxInit;
 import com.quartzshard.aasb.init.NetInit;
-import com.quartzshard.aasb.net.client.CreateLoopingSoundPacket;
-import com.quartzshard.aasb.net.client.CreateLoopingSoundPacket.LoopingSound;
 import com.quartzshard.aasb.net.client.DrawParticleLinePacket;
 import com.quartzshard.aasb.net.client.DrawParticleLinePacket.LineParticlePreset;
 import com.quartzshard.aasb.net.client.FreecamPacket;
 import com.quartzshard.aasb.net.server.KeybindPacket.BindState;
-import com.quartzshard.aasb.util.ClientUtil;
-import com.quartzshard.aasb.util.EntUtil;
 import com.quartzshard.aasb.util.EntUtil.Projectiles;
 import com.quartzshard.aasb.util.EntUtil.Projectiles.ArrowOptions;
 import com.quartzshard.aasb.util.EntUtil.Projectiles.ArrowType;
@@ -76,9 +72,9 @@ public class EtherealRune extends FormRune {
 						new ShootContext(player.level(), player),
 						new ArrowOptions(1, 1, 0, (byte)0, false, Pickup.DISALLOWED)).get(0);
 				changeTrackedArrow(stack, arrow);
-				for (ServerPlayer plr : ((ServerLevel)player.level()).players()) {
-					NetInit.toClient(new CreateLoopingSoundPacket(LoopingSound.SENTIENT_WHISPERS, arrow.getId()), plr);
-				}
+				//for (ServerPlayer plr : ((ServerLevel)player.level()).players()) {
+				//	NetInit.toClient(new CreateLoopingSoundPacket(LoopingSound.SENTIENT_WHISPERS, arrow.getId()), plr);
+				//}
 				//EmcHelper.consumeAvaliableEmc(player, Archangel.HOMING.get());
 				PlayerUtil.coolDown(player, stack.getItem(), 15);
 			//}

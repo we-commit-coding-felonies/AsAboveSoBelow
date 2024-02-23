@@ -213,7 +213,7 @@ public class Logger {
 	 * @param name A name for what is printing this
 	 * @param label A label for this, meant for searching
 	 * @param msg A short message describing the error
-	 * @param playet The player to send the message to
+	 * @param player The player to send the message to
 	 */
 	public static void chat(String name, String label, @NotNull String msg, @NotNull Player player) {
 		player.sendSystemMessage(Component.literal("|"+ label +"| - Message from ["+ name +"]:"));
@@ -227,7 +227,7 @@ public class Logger {
 	 * @param name A name for what is printing this
 	 * @param label A label for this, meant for searching
 	 * @param msg A short message describing the error
-	 * @param playet The player to send the message to
+	 * @param player The player to send the message to
 	 */
 	public static void chat(String name, String label, String msg, Player player, Map<String,String> data) {
 		player.sendSystemMessage(Component.literal("|"+ label +"| - Message from ["+ name +"]:"));
@@ -244,7 +244,7 @@ public class Logger {
 	 * @param name A name for what is printing this
 	 * @param label A label for this, meant for searching
 	 * @param msg A short message describing the error
-	 * @param playet The player to send the message to
+	 * @param player The player to send the message to
 	 */
 	public static void chat(String name, String label, String msg, Player player, String... data) {
 		Map<String,String> dm = new LinkedHashMap<>();

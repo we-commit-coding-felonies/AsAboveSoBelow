@@ -229,6 +229,7 @@ public class LangData extends LanguageProvider {
 		DIE_TRANSMUTE = "transmute",
 		DIE_TRANSMUTE_ENV = "transmute_env",
 		DIE_WAYBOMB = "waybomb",
+		DIE_WAYBOMB_ENV = "waybomb_env",
 		DIE_ARROWSWARM = "arrow_swarm",
 		DIE_YONDU = "sentient_arrow";
 		
@@ -463,6 +464,8 @@ public class LangData extends LanguageProvider {
 		add(edm(DIE_TRANSMUTE_ENV, true), "%s became unrecognizable whilst fighting %s");
 		add(dm(DIE_WAYBOMB), "%s was aspectually atomized due to %s");
 		add(dm(DIE_WAYBOMB, true), "%s underwent alchemical fission because of %s whilst wielding %s");
+		add(edm(DIE_WAYBOMB_ENV), "%s was disintegrated by a catastrophic ventilation of Way");
+		add(edm(DIE_WAYBOMB_ENV, true), "%s was totally obliterated because of %s");
 		add(dm(DIE_ARROWSWARM), "%s is more arrow than flesh thanks to %s");
 		add(dm(DIE_ARROWSWARM, true), "%s got turned into a pincushion by %s using %s");
 		add(dm(DIE_YONDU), "%s was skewered by Sentient Arrow, with a bit of help from %s");

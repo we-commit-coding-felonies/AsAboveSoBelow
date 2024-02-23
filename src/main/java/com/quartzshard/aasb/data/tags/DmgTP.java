@@ -67,7 +67,8 @@ public class DmgTP extends TagsProvider<DamageType> {
 			.add(EntityInit.DMG_MUSTANG)
 			.add(EntityInit.DMG_SENTIENT_ARROW)
 			.add(DamageTypes.ON_FIRE)
-			.add(DamageTypes.SONIC_BOOM);
+			.add(DamageTypes.SONIC_BOOM)
+			.add(EntityInit.DMG_WAYBOMB_ENV);
 		
 		tag(BYPASSES_MAGICAL)
 			.addTag(UNSTOPPABLE_FORCE)
@@ -77,6 +78,7 @@ public class DmgTP extends TagsProvider<DamageType> {
 		tag(BYPASSES_PHYSICAL)
 			.addTag(UNSTOPPABLE_FORCE)
 			.add(EntityInit.DMG_WAYBOMB)
+			.add(EntityInit.DMG_WAYBOMB_ENV)
 			.add(EntityInit.DMG_SENTIENT_ARROW)
 			.add(EntityInit.DMG_AUTOSLASH);
 		
@@ -91,7 +93,8 @@ public class DmgTP extends TagsProvider<DamageType> {
 			.add(EntityInit.DMG_TRANSMUTE)
 			.add(EntityInit.DMG_TRANSMUTE_ENV)
 			.add(EntityInit.DMG_SENTIENT_ARROW)
-			.add(EntityInit.DMG_ARROW_SWARM);
+			.add(EntityInit.DMG_ARROW_SWARM)
+			.add(EntityInit.DMG_WAYBOMB_ENV);
 		
 
 		// IS SECTION
@@ -101,13 +104,15 @@ public class DmgTP extends TagsProvider<DamageType> {
 			.add(EntityInit.DMG_SENTIENT_ARROW)
 			.add(EntityInit.DMG_TRANSMUTE)
 			.add(EntityInit.DMG_TRANSMUTE_ENV)
-			.add(EntityInit.DMG_WAYBOMB);
+			.add(EntityInit.DMG_WAYBOMB)
+			.add(EntityInit.DMG_WAYBOMB_ENV);
 		tag(IS_STRONG_FIRE)
 			.add(EntityInit.DMG_MUSTANG);
 
 		tag(DamageTypeTags.IS_EXPLOSION)
 			.add(EntityInit.DMG_MUSTANG)
-			.add(EntityInit.DMG_WAYBOMB);
+			.add(EntityInit.DMG_WAYBOMB)
+			.add(EntityInit.DMG_WAYBOMB_ENV);
 		tag(DamageTypeTags.IS_FALL)
 			.add(EntityInit.DMG_SURFACE_TENSION_ENV);
 		//tag(DamageTypeTags.IS_FIRE)
@@ -123,7 +128,8 @@ public class DmgTP extends TagsProvider<DamageType> {
 			.add(EntityInit.DMG_SENTIENT_ARROW)
 			.add(EntityInit.DMG_TRANSMUTE)
 			.add(EntityInit.DMG_TRANSMUTE_ENV)
-			.add(EntityInit.DMG_WAYBOMB);
+			.add(EntityInit.DMG_WAYBOMB)
+			.add(EntityInit.DMG_WAYBOMB_ENV);
 		tag(DamageTypeTags.BURNS_ARMOR_STANDS)
 			.add(EntityInit.DMG_MUSTANG);
 		tag(DamageTypeTags.IGNITES_ARMOR_STANDS)

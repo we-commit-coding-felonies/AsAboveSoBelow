@@ -4,6 +4,7 @@
     "aasb:mustang",
     "aasb:sentient_arrow",
     "minecraft:on_fire",
-    "minecraft:sonic_boom"
+    "minecraft:sonic_boom",
+    "aasb:waybomb_env"
   ]
 }

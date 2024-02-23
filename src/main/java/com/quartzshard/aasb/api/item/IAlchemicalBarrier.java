@@ -87,7 +87,7 @@ public interface IAlchemicalBarrier {
 		boolean doDebug = false;
 		if (doDebug) {
 			long storedWay = WayUtil.getAvaliableWay(player);
-			@NotNull LinkedHashMap<String,String> info = new LinkedHashMap<String,String>();
+			@NotNull LinkedHashMap<String,String> info = new LinkedHashMap<>();
 			info.put("Player Name", player.getName().getString());
 			info.put("Player UUID", player.getStringUUID());
 			info.put("Held Way", storedWay+"");
@@ -106,7 +106,6 @@ public interface IAlchemicalBarrier {
 			info.put("Will try shield", shieldCondition(player, damage, source, stack)+"");
 			info.put("Way Cost", calcShieldingCost(player, damage, source, stack)+"");
 			info.put("Affordable damage", calcAffordableDamage(player, damage, source, stack, storedWay)+"");
-			
 			Logger.debug("IAlchemicalBarrier", "ShieldingDebug", "Attempting to shieldWithWay", info);
 		}
 		

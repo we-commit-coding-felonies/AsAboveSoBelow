@@ -133,7 +133,7 @@ public class BoxUtil {
 	/**
 	 * gets the specified corner
 	 * @param box
-	 * @param index a 3 bit int flag, defining if X, Y, and Z are their min (0) or max (1), respectively
+	 * @param id a 3 bit int flag, defining if X, Y, and Z are their min (0) or max (1), respectively
 	 * @return
 	 */
 	public static Vec3 getCorner(AABB box, int id) {

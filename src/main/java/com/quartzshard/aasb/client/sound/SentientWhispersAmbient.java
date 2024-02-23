@@ -19,7 +19,8 @@ public class SentientWhispersAmbient extends AbstractTickableSoundInstance {
 	private float step = 0;
 	private float nextPitch = 1;
 	private int maxPitchChangeTime = 0;
-	private int ceaseTimer = 0;
+	private float ogVolume = 0;
+	boolean firstTick = true;
 
 	public SentientWhispersAmbient(Entity entity) {
 		super(FxInit.SND_SENTIENT_WHISPERS.get(), SoundSource.NEUTRAL, entity.level().random);
@@ -38,6 +39,9 @@ public class SentientWhispersAmbient extends AbstractTickableSoundInstance {
 
 	@Override
 	public void tick() {
+		if (firstTick)
+			ogVolume = volume;
+		firstTick = false;
 		if (mustCease()) cease();
 		else {
 			// borked
@@ -76,9 +80,9 @@ public class SentientWhispersAmbient extends AbstractTickableSoundInstance {
 	
 	protected boolean mustCease() {
 		if (entity instanceof SentientArrowEntity arrow && arrow.isInert()) {
-			if (arrow.isInert()) ceaseTimer++;
-			else ceaseTimer = 0;
+			if (arrow.isInert()) volume = 0;
+			else volume = ogVolume;
 		}
-		return entity.isRemoved() || ceaseTimer > 6;
+		return entity.isRemoved();
 	}
 }

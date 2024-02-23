@@ -276,7 +276,7 @@ public class WaterRune extends ShapeRune {
 	public boolean toolAbility(ItemStack stack, @NotNull ToolStyle style, @NotNull ServerPlayer player, ServerLevel level, BindState state, boolean strong) {
 		if (state != BindState.PRESSED) return false;
 		// TODO make this less specific to hermetic stuff somehow
-		// also make it NOT ACTUAL REAL SATAN
+		// 	also make it NOT ACTUAL REAL SATAN
 		Item item = stack.getItem();
 		if (item instanceof IHermeticTool tool) {
 			long charge = tool.getStoredWay(stack);

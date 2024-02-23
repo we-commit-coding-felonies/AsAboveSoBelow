@@ -60,9 +60,8 @@ public record DrawParticleLinePacket(Vec3 start, Vec3 end, LineParticlePreset pr
 	public boolean handle(Supplier<NetworkEvent.Context> sup) {
 		NetworkEvent.Context ctx = sup.get();
 		ctx.enqueueWork(() -> {
-			@SuppressWarnings("resource")
 			ClientLevel level = Minecraft.getInstance().level;
-			/** particle, stepSize */
+			/* particle, stepSize */
 			Map<ParticleOptions, Double> particles = new HashMap<>();
 			switch (preset) {
 			

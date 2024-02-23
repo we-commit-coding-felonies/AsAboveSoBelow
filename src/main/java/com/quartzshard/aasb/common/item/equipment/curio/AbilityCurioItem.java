@@ -65,7 +65,7 @@ public abstract class AbilityCurioItem extends Item implements IRuneable, ICurio
 	 * where the ItemStack may not be in a curio slot, such as when retrieving item tooltips, the
 	 * index is -1 and the wearer may be null.
 	 *
-	 * @param slotContext Context about the slot that the ItemStack is in
+	 * @param ctx Context about the slot that the ItemStack is in
 	 * @param uuid        Slot-unique UUID
 	 * @return A map of attribute modifiers to apply
 	 */
