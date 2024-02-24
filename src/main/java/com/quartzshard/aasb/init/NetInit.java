@@ -61,11 +61,11 @@ public class NetInit {
 				.decoder(DrawParticleAABBPacket::dec)
 				.consumerMainThread(DrawParticleAABBPacket::handle)
 				.add();
-		//CHANNEL.messageBuilder(CreateLoopingSoundPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
-		//		.encoder(CreateLoopingSoundPacket::enc)
-		//		.decoder(CreateLoopingSoundPacket::dec)
-		//		.consumerMainThread(CreateLoopingSoundPacket::handle)
-		//		.add();
+		CHANNEL.messageBuilder(MapperPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
+				.encoder(MapperPacket::enc)
+				.decoder(MapperPacket::dec)
+				.consumerMainThread(MapperPacket::handle)
+				.add();
 		CHANNEL.messageBuilder(ModifyPlayerVelocityPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
 				.encoder(ModifyPlayerVelocityPacket::enc)
 				.decoder(ModifyPlayerVelocityPacket::dec)

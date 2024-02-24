@@ -88,13 +88,15 @@ public class RenderUtil {
 		}
 	}
 
-	public static void drawAspectSymbol(PoseStack pose, MultiBufferSource.BufferSource bufferSource, ResourceLocation symbol,
+	public static void drawAspectSymbol(PoseStack pose, MultiBufferSource.BufferSource bufferSource, ResourceLocation symbol, int color,
 			float x, float y, float zLevel, float widthIn, float heightIn, float minU, float minV, float maxU, float maxV) {
 		Matrix4f matrix4f = pose.last().pose();
 		VertexConsumer buffer = bufferSource.getBuffer(AASBRenderType.ASPECT_TOOLTIP.apply(symbol));
-		buffer.vertex(matrix4f, x + 0, y + 0, zLevel).uv(minU, minV).endVertex();
-		buffer.vertex(matrix4f, x + 0, y + heightIn, zLevel).uv(minU, maxV).endVertex();
-		buffer.vertex(matrix4f, x + widthIn, y + heightIn, zLevel).uv(maxU, maxV).endVertex();
-		buffer.vertex(matrix4f, x + widthIn, y + 0, zLevel).uv(maxU, minV).endVertex();
+		int[] rgb = Colors.rgbFromInt(color);
+		int a = 255;
+		buffer.vertex(matrix4f, x + 0, y + 0, zLevel).color(rgb[0],rgb[1],rgb[2],a).uv(minU, minV).endVertex();
+		buffer.vertex(matrix4f, x + 0, y + heightIn, zLevel).color(rgb[0],rgb[1],rgb[2],a).uv(minU, maxV).endVertex();
+		buffer.vertex(matrix4f, x + widthIn, y + heightIn, zLevel).color(rgb[0],rgb[1],rgb[2],a).uv(maxU, maxV).endVertex();
+		buffer.vertex(matrix4f, x + widthIn, y + 0, zLevel).color(rgb[0],rgb[1],rgb[2],a).uv(maxU, minV).endVertex();
 	}
 }

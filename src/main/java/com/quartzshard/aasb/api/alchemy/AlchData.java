@@ -1,5 +1,6 @@
 package com.quartzshard.aasb.api.alchemy;
 
+import net.minecraft.nbt.CompoundTag;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,6 +16,11 @@ public record AlchData(
 		@Nullable ShapeAspect shape,
 		@Nullable FormAspect form,
 		ComplexityAspect complexity) {
+	public static final String
+		TK_SERWAY = "Way",
+		TK_SERSHAPE = "Shape",
+		TK_SERFORM = "Form",
+		TK_SERCPLX = "Complexity";
 
 	public AlchData(long way, ShapeAspect shape, FormAspect form, ComplexityAspect complexity) {
 		this(new WayAspect(way), shape, form, complexity);
@@ -34,9 +40,12 @@ public record AlchData(
 		this(way, shape, AlchInit.getForm(ResourceLocation.tryParse(form)), complexity);
 	}
 
-	//public AlchData(String str) {
-	//	// TODO alchdata from serialized string
-	//}
+	public AlchData(CompoundTag tag) {
+		this(tag.getLong(TK_SERWAY),
+			ShapeAspect.values()[tag.getByte(TK_SERSHAPE)],
+			AlchInit.getForm(ResourceLocation.tryParse(tag.getString(TK_SERFORM))),
+			ComplexityAspect.values()[tag.getByte(TK_SERCPLX)]);
+	}
 	
 	/**
 	 * Generates AlchData from seeds
@@ -102,5 +111,14 @@ public record AlchData(
 		str += ",";
 		str += complexity.name().toLowerCase();
 		return str + ")";
+	}
+
+	public CompoundTag serialize() {
+		CompoundTag tag = new CompoundTag();
+		tag.putLong(TK_SERWAY, way == null ? -1 : way.value());
+		tag.putByte(TK_SERSHAPE, shape == null ? (byte)-1 : (byte)shape.ordinal());
+		tag.putString(TK_SERFORM, form == null ? "null" : form.getName().toString());
+		tag.putByte(TK_SERCPLX, (byte)complexity.ordinal());
+		return tag;
 	}
 }

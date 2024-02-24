@@ -36,38 +36,38 @@ public class AlchInit {
 	
 	public static final RegistryObject<FormAspect> 
 		MATERIA = makeForm("materia", null, Colors.PHILOSOPHERS.I),			//	Matter
-			TERRAIN = makeForm("terrain", MATERIA, 0xff8000),				//		Basic Blocks
+			TERRAIN = makeForm("terrain", MATERIA, 0xff8000),					//		Basic Blocks
 				SOIL = makeForm("soil", TERRAIN, 0x804000),					//			Dirt & Sand
 				ROCK = makeForm("rock", TERRAIN, 0x404040),					//			Stone
-					ROUGH = makeForm("rough", ROCK, 0x605040),				//				Bumpy / Cobble
-					SMOOTH = makeForm("smooth", ROCK, 0x405060),			//				Smooth / Stone
-			MINERAL = makeForm("mineral", MATERIA, 0x8080c0),				//		Ores & Similar
-				METAL = makeForm("metal", MINERAL, 0x808080),				//			Pure Metal / Mercury
-					SUN = makeForm("aurum", METAL, 0xd4af37),				//				Radiant / Gold
-					MOON = makeForm("argentum", METAL, 0xc0c0c0),			//				Reflective / Silver
-					VENUS = makeForm("cuprum", METAL, 0xda8a67),			//				Beautiful / Copper
-					MARS = makeForm("ferrum", METAL, 0x606060),				//				Sturdy / Iron
-					JUPITER = makeForm("stannum", METAL, 0xc0c0b0),			//				Improvable / Tin
-					SATURN = makeForm("plumbum", METAL, 0x555a63),			//				Malleable / Lead
-				CRYSTAL = makeForm("crystal", MINERAL, 0xbbbbbb),			//			Gems & Crystals
-					BRILLIANT = makeForm("brilliant", CRYSTAL, 0xccccdd),	//				Perfect / Diamond, Amethyst
+					ROUGH = makeForm("rough", ROCK, 0x605040),					//				Bumpy / Cobble
+					SMOOTH = makeForm("smooth", ROCK, 0x405060),				//				Smooth / Stone
+			MINERAL = makeForm("mineral", MATERIA, 0x8080c0),					//		Ores & Similar
+				METAL = makeForm("metal", MINERAL, 0x808080),					//			Pure Metal / Mercury
+					AURUM = makeForm("aurum", METAL, 0xd4af37),				//				Radiant / Gold / Sun
+					ARGENTUM = makeForm("argentum", METAL, 0xc0c0c0),			//				Reflective / Silver / Moon
+					CUPRUM = makeForm("cuprum", METAL, 0xda8a67),				//				Beautiful / Copper / Venus
+					FERRUM = makeForm("ferrum", METAL, 0x606060),				//				Sturdy / Iron / Mars
+					STANNUM = makeForm("stannum", METAL, 0xc0c0b0),			//				Improvable / Tin / Jupiter
+					PLUMBUM = makeForm("plumbum", METAL, 0x555a63),			//				Malleable / Lead / Saturn
+				CRYSTAL = makeForm("crystal", MINERAL, 0xbbbbbb),				//			Gems & Crystals
+					BRILLIANT = makeForm("brilliant", CRYSTAL, 0xccccdd),		//				Perfect / Diamond, Amethyst
 					DULL = makeForm("dull", CRYSTAL, 0xaa9999),				//				Flawed / Quartz, Coal
-			ORGANIC = makeForm("organic", MATERIA, 0x889988),				//		Carbony Stuff
-				DEAD = makeForm("inanimate", ORGANIC, 0x222222),			//			Nonliving / Charcoal
-				ALIVE = makeForm("living", ORGANIC, 0xcc4444),				//			Biological
+			ORGANIC = makeForm("organic", MATERIA, 0x889988),					//		Carbony Stuff
+				DEAD = makeForm("inanimate", ORGANIC, 0x222222),				//			Nonliving / Charcoal
+				ALIVE = makeForm("living", ORGANIC, 0xcc4444),					//			Biological
 					PLANT = makeForm("plant", ALIVE, 0xc5deb3),				//				Plantlife / Wood, Flowers
 						FOLIAGE = makeForm("foliage", PLANT, 0x40c040),		//					Greenery / Leaves
 					BEAST = makeForm("beast", ALIVE, 0x9a614d),				//				Creatures
-						ANIMAL = makeForm("animal", BEAST, 0xff8080),		//					Friendly
-						MONSTER = makeForm("monster", BEAST, 0x66000),		//					Aggressive
+						ANIMAL = makeForm("animal", BEAST, 0xff8080),			//					Friendly
+						MONSTER = makeForm("monster", BEAST, 0x66000),			//					Aggressive
 				IMMORTAL = makeForm("immortal", ORGANIC, 0xd4af77),			//			Divine / Minium Stone
 			ARCANE = makeForm("arcane", MATERIA, 0x8866aa),					//		Magical
-				ALCHEMY = makeForm("alchemy", ARCANE, 0xff0044),			//			As Above, So Below
-				ENCHANTING = makeForm("enchanting", ARCANE, 0xa152ff),		//			Vanilla Enchantments
-				WITCHCRAFT = makeForm("witchcraft", ARCANE, 0x246658),		//			Vanilla Potions
+				ALCHEMY = makeForm("alchemy", ARCANE, 0xff0044),				//			As Above, So Below
+				ENCHANTING = makeForm("enchanting", ARCANE, 0xa152ff),			//			Vanilla Enchantments
+				WITCHCRAFT = makeForm("witchcraft", ARCANE, 0x246658),			//			Vanilla Potions
 			ETHEREAL = makeForm("ethereal", MATERIA, 0xa0c0c0),				//		Intangible
-				MIND = makeForm("mind", ETHEREAL, 0x90c060),				//			XP-related
-				SOUL = makeForm("soul", ETHEREAL, 0x8899ee);				//			Spirit Stuff
+				MIND = makeForm("mind", ETHEREAL, 0x90c060),					//			XP-related
+				SOUL = makeForm("soul", ETHEREAL, 0x8899ee);					//			Spirit Stuff
 	
 	private static RegistryObject<FormAspect> makeForm(String name, @Nullable RegistryObject<FormAspect> parent, int color) {
 		return FORMS.register(name, () -> new FormAspect(AASB.rl(name), parent == null ? null : parent.get(), color));

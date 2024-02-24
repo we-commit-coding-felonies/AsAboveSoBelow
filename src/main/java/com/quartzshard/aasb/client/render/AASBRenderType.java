@@ -33,12 +33,12 @@ public class AASBRenderType extends RenderType {
 		}),
 		ASPECT_TOOLTIP = Util.memoize(rl -> {
 			RenderType.CompositeState state = RenderType.CompositeState.builder()
-				.setShaderState(POSITION_TEX_SHADER)
+				.setShaderState(POSITION_COLOR_TEX_SHADER)
 				.setTextureState(new RenderStateShard.TextureStateShard(rl, false, false))
 				.setTransparencyState(NO_TRANSPARENCY)
 				.setDepthTestState(LEQUAL_DEPTH_TEST)
 				.createCompositeState(false);
-			return create("aspect_tooltip", DefaultVertexFormat.POSITION_TEX, VertexFormat.Mode.QUADS, 256, false, false, state);
+			return create("aspect_tooltip", DefaultVertexFormat.POSITION_COLOR_TEX, VertexFormat.Mode.QUADS, 256, false, false, state);
 		});
 	public static final RenderType
 		MUSTANG_LINES = create("mustang_lines",

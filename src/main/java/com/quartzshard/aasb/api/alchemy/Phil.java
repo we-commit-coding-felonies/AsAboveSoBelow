@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 
+import com.quartzshard.aasb.init.NetInit;
+import com.quartzshard.aasb.net.client.MapperPacket;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -194,12 +196,39 @@ public class Phil {
 			RELOAD_DAT = null;
 		}
 	}
-	
-	// FIXME this must be removed!!!!!
-	public static void debugTestChangeMap(Map<ItemData,AlchData> newMap) {
+
+	public static void debugTestChangeMap(Map<ItemData,AlchData> newMap, ServerLevel level) {
+		// troled
 		alchMap = newMap;
+		NetInit.toAllClients(level, new MapperPacket(serializeMap()));
 	}
-	
+	public static CompoundTag serializeMap() {
+		CompoundTag tag = new CompoundTag();
+		int i = 0;
+		for (Map.Entry<ItemData,AlchData> entry : alchMap.entrySet()) {
+			CompoundTag entryTag = new CompoundTag();
+			CompoundTag itemTag = new CompoundTag();
+			itemTag.putString("I", ForgeRegistries.ITEMS.getKey(entry.getKey().getItem()).toString());
+			itemTag.put("N", entry.getKey().getNBT());
+			entryTag.put("K", itemTag);
+			entryTag.put("V", entry.getValue().serialize());
+			tag.put(""+i, entryTag);
+			i++;
+		}
+		return tag;
+	}
+	public static void deserializeMap(CompoundTag nbt) {
+		Map<ItemData,AlchData> map = new HashMap<>();
+		for (String str : nbt.getAllKeys()) {
+			CompoundTag entryTag = nbt.getCompound(str);
+			map.put(
+				ItemData.fromItem(ForgeRegistries.ITEMS.getValue(ResourceLocation.tryParse(entryTag.getCompound("K").getString("I")))),
+				new AlchData(entryTag.getCompound("V"))
+			);
+		}
+		alchMap = map;
+	}
+
 	/**
 	 * Gets aspects for The Philosopher's Stone from world seed
 	 * @param level
