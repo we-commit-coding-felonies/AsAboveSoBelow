@@ -4,15 +4,22 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import com.quartzshard.aasb.AASB;
+import com.quartzshard.aasb.api.alchemy.AlchData;
+import com.quartzshard.aasb.api.alchemy.aspect.IAspect;
 import com.quartzshard.aasb.client.Keybinds;
 import com.quartzshard.aasb.init.FxInit;
 import com.quartzshard.aasb.init.object.ItemInit;
 import com.quartzshard.aasb.util.ClientUtil;
 
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTextTooltip;
 import net.minecraft.data.PackOutput;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentContents;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
@@ -136,6 +143,9 @@ public class LangData extends LanguageProvider {
 		LAB_SOLUTION = l("solution"),
 		LAB_DIGESTION = l("digestion"),
 		LAB_MULTIPLICATION = l("multiplication"),
+
+		KEYCAT_INGAME = "key.categories.%s.inGame",
+		KEYCAT_GUI = "key.categories.%s.gui",
 		
 		KEY_HEAD = id("key.%s.headMode"),
 		KEY_CHEST = id("key.%s.chestMode"),
@@ -149,6 +159,7 @@ public class LangData extends LanguageProvider {
 		KEY_GLOVE = id("key.%s.trinket.triggerGlove"),
 		KEY_BRACELET = id("key.%s.trinket.triggerBracelet"),
 		KEY_CHARM = id("key.%s.trinket.triggerCharm"),
+		KEY_SEE_ASPECTS = id("key.%s.client.seeAspects"),
 		
 		ITEM_GLOVE_RUNED = id("item.%s.runed.glove"),
 		ITEM_BRACELET_RUNED = id("item.%s.runed.bracelet"),
@@ -221,6 +232,10 @@ public class LangData extends LanguageProvider {
 		TIP_PHIL_3 = id("toolTip.%s.phil.3"),
 		TIP_PHIL_4 = id("toolTip.%s.phil.4"),
 		TIP_PHIL_5 = id("toolTip.%s.phil.5"),
+
+		TIP_ASPECTS = id("toolTip.%s.aspects"),
+		TIP_ASPECTS_UNMAPPED_1 = id("toolTip.%s.aspects.unmapped.1"),
+		TIP_ASPECTS_UNMAPPED_2 = id("toolTip.%s.aspects.unmapped.2"),
 		
 		// Death Messages
 		DIE_AUTOSLASH = "autoslash",
@@ -450,6 +465,11 @@ public class LangData extends LanguageProvider {
 		add(TIP_PHIL_3, "It is intended for testing / debugging by devs,");
 		add(TIP_PHIL_4, "and may cause strange effects, crashes, or worse!");
 		add(TIP_PHIL_5, "BUG REPORTS RELATED TO THIS ITEM WILL BE IGNORED, YOU HAVE BEEN WARNED");
+
+		add(TIP_ASPECTS_UNMAPPED_1, "This item cannot be");
+		add(TIP_ASPECTS_UNMAPPED_2, "described by alchemy");
+
+		add(TIP_ASPECTS, "Aspects of %s:");
 		
 		// Death Messages
 		add(dm(DIE_AUTOSLASH), "%s was decimated by %s");
@@ -518,4 +538,7 @@ public class LangData extends LanguageProvider {
 		Component shiftKeyText = Keybinds.fLoc(ClientUtil.mc().options.keyShift);
 		tips.add(tc(TIP_GENERIC_MOREINFO, shiftKeyText)); // Key help
 	}
+
+	public record AspectTooltip(AlchData alchData) implements TooltipComponent {}
+	public record AspectTextComponent(IAspect<?> aspect) {}
 }

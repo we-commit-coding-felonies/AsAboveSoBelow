@@ -166,7 +166,6 @@ public interface IRuneable extends IHandleKeybind {
 	}
 	
 	default void inscribeRune(Rune rune, ItemStack stack, int slot) {
-		// FIXME doesnt work
 		if (canInscribeRune(rune, stack, slot)) {
 			ListTag tags = NBTUtil.getList(stack, TK_RUNES, 8, false);
 			if (tags.isEmpty()) {

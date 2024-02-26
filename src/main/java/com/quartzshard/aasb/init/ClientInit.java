@@ -14,21 +14,15 @@ import com.quartzshard.aasb.client.render.AASBPlayerLayer;
 import com.quartzshard.aasb.client.render.MustangRenderer;
 import com.quartzshard.aasb.client.render.SentientArrowRenderer;
 import com.quartzshard.aasb.common.item.MiniumStoneItem;
-import com.quartzshard.aasb.common.item.equipment.WaystoneItem;
+import com.quartzshard.aasb.data.LangData;
 import com.quartzshard.aasb.init.object.EntityInit;
 import com.quartzshard.aasb.init.object.ItemInit;
-import com.quartzshard.aasb.util.ClientUtil;
 import com.quartzshard.aasb.util.Colors;
 
-import com.quartzshard.aasb.util.TipUtil;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.ParticleEngine;
-import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
-import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -105,7 +99,7 @@ public class ClientInit {
 	}
 	@SubscribeEvent
 	static void registerTooltipComponents(RegisterClientTooltipComponentFactoriesEvent event) {
-		event.register(TipUtil.AspectTooltip.class, AspectsClientTooltip::new);
+		event.register(LangData.AspectTooltip.class, AspectsClientTooltip::new);
 	}
 	
 	private static float getWayHolderStatus(ItemStack stack, ClientLevel level, LivingEntity entity, int seed) {

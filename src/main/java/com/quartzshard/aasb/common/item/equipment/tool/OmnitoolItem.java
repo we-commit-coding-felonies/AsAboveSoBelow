@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.quartzshard.aasb.api.item.IRuneable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -152,6 +153,11 @@ public class OmnitoolItem extends DiggerItem implements IDigStabilizer, IHandleK
 			Phil.debugTestChangeMap(QuickAndDirtyRuntimeCodeTests.Mapper.createTestMap(), ctx.level());
 			return true;
 		case ITEMFUNC_1:
+			ItemStack stack = ctx.player().getOffhandItem();
+			if (ctx.player().getOffhandItem().getItem() instanceof IRuneable item) {
+				item.inscribeRune(AlchInit.RUNE_WATER.get(), stack, 0);
+				//item.inscribeRune(AlchInit.RUNE_QUINTESSENCE.get(), stack, 1);
+			}
 			return true;
 		case ITEMFUNC_2:
 			return true;

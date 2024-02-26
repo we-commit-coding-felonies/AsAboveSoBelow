@@ -1,13 +1,10 @@
 package com.quartzshard.aasb.client.gui.tip;
 
+import com.quartzshard.aasb.api.alchemy.AlchData;
 import com.quartzshard.aasb.api.alchemy.aspect.ComplexityAspect;
-import com.quartzshard.aasb.api.alchemy.aspect.ShapeAspect;
-import com.quartzshard.aasb.api.alchemy.aspect.WayAspect;
-import com.quartzshard.aasb.init.AlchInit;
-import com.quartzshard.aasb.util.Colors;
+import com.quartzshard.aasb.data.LangData;
 import com.quartzshard.aasb.util.MathUtil;
 import com.quartzshard.aasb.util.RenderUtil;
-import com.quartzshard.aasb.util.TipUtil;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
@@ -18,10 +15,10 @@ import org.joml.Matrix4f;
 
 public class AspectsClientTooltip implements ClientTooltipComponent {
 
-	TipUtil.AspectTooltip dat;
+	AlchData dat;
 
-	public AspectsClientTooltip(TipUtil.AspectTooltip dat) {
-		this.dat = dat;
+	public AspectsClientTooltip(LangData.AspectTooltip dat) {
+		this.dat = dat.alchData();
 	}
 
 	@Override
@@ -43,10 +40,10 @@ public class AspectsClientTooltip implements ClientTooltipComponent {
 	public void renderImage(Font font, int x, int y, GuiGraphics graphics) {
 		x += 32;
 		float size = 64;
-		RenderUtil.drawAspectSymbol(graphics.pose(), graphics.bufferSource(), dat.alchData().complexity().symbolTexture(), 0xffffff,
+		RenderUtil.drawAspectSymbol(graphics.pose(), graphics.bufferSource(), dat.complexity().symbolTexture(), 0xffffff,
 			x, y, 0, size, size, 0, 0, 1, 1);
 		Vec2 pos = new Vec2(0,48);
-		if (dat.alchData().complexity() == ComplexityAspect.UNKNOWN) {
+		if (dat.complexity() == ComplexityAspect.UNKNOWN) {
 			// TODO make actually query player knowledge
 			// player has not learned this item so we just do question marks
 			for (int i = 0; i < 3; i++) {
@@ -57,18 +54,18 @@ public class AspectsClientTooltip implements ClientTooltipComponent {
 		} else {
 			ResourceLocation nullTex = ComplexityAspect.NULLED.symbolTexture();
 			ResourceLocation
-				way = dat.alchData().way() == null ? nullTex : dat.alchData().way().symbolTexture(),
-				shape = dat.alchData().shape() == null ? nullTex : dat.alchData().shape().symbolTexture(),
-				form = dat.alchData().form() == null ? nullTex : dat.alchData().form().symbolTexture();
+				way = dat.way() == null ? nullTex : dat.way().symbolTexture(),
+				shape = dat.shape() == null ? nullTex : dat.shape().symbolTexture(),
+				form = dat.form() == null ? nullTex : dat.form().symbolTexture();
 			int nullColor = 0x8e9e99, color = way == nullTex ? nullColor : 0xffff99;
 			RenderUtil.drawAspectSymbol(graphics.pose(), graphics.bufferSource(), way, color,
 				x+pos.x, y+pos.y, 0, size, size, 0, 0, 1, 1);
 			pos = MathUtil.rotate2DAroundOrigin(pos, 120);
-			color = shape == nullTex ? nullColor : dat.alchData().shape().color;
+			color = shape == nullTex ? nullColor : dat.shape().color;
 			RenderUtil.drawAspectSymbol(graphics.pose(), graphics.bufferSource(), shape, color,
 				x+pos.x, y+pos.y, 0, size, size, 0, 0, 1, 1);
 			pos = MathUtil.rotate2DAroundOrigin(pos, 120);
-			color = form == nullTex ? nullColor : dat.alchData().form().getColor();
+			color = form == nullTex ? nullColor : dat.form().getColor();
 			RenderUtil.drawAspectSymbol(graphics.pose(), graphics.bufferSource(), form, color,
 				x+pos.x, y+pos.y, 0, size, size, 0, 0, 1, 1);
 		}
