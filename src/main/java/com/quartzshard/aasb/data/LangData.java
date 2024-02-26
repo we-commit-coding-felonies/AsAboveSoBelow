@@ -540,5 +540,5 @@ public class LangData extends LanguageProvider {
 	}
 
 	public record AspectTooltip(AlchData alchData) implements TooltipComponent {}
-	public record AspectTextComponent(IAspect<?> aspect) {}
+	public record AspectTextComponent(IAspect<?> aspect) implements TooltipComponent {}
 }

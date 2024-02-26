@@ -8,6 +8,7 @@ import com.quartzshard.aasb.api.item.IHermeticTool;
 import com.quartzshard.aasb.api.item.IRuneable;
 import com.quartzshard.aasb.api.item.IWayHolder;
 import com.quartzshard.aasb.client.ClientEvents;
+import com.quartzshard.aasb.client.gui.tip.AspectClientTextComponent;
 import com.quartzshard.aasb.client.gui.tip.AspectsClientTooltip;
 import com.quartzshard.aasb.client.particle.CutParticle;
 import com.quartzshard.aasb.client.render.AASBPlayerLayer;
@@ -100,6 +101,7 @@ public class ClientInit {
 	@SubscribeEvent
 	static void registerTooltipComponents(RegisterClientTooltipComponentFactoriesEvent event) {
 		event.register(LangData.AspectTooltip.class, AspectsClientTooltip::new);
+		event.register(LangData.AspectTextComponent.class, AspectClientTextComponent::new);
 	}
 	
 	private static float getWayHolderStatus(ItemStack stack, ClientLevel level, LivingEntity entity, int seed) {

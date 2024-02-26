@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Either;
 import com.quartzshard.aasb.AASB;
 import com.quartzshard.aasb.api.alchemy.AlchData;
 import com.quartzshard.aasb.api.alchemy.Phil;
+import com.quartzshard.aasb.api.alchemy.aspect.ShapeAspect;
 import com.quartzshard.aasb.client.sound.SentientWhispersAmbient;
 import com.quartzshard.aasb.common.entity.projectile.SentientArrowEntity;
 import com.quartzshard.aasb.data.LangData;
@@ -50,6 +51,8 @@ public class ClientEvents {
 			} else {
 				tips.add(Either.right(new LangData.AspectTooltip(aspects)));
 			}
+		} else {
+			event.getTooltipElements().add(Either.right(new LangData.AspectTextComponent(ShapeAspect.QUINTESSENCE)));
 		}
 	}
 }
