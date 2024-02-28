@@ -64,6 +64,11 @@ public record WayAspect(long value) implements IAspect<WayAspect> {
 		return SYMBOL;
 	}
 
+	@Override
+	public int getColor() {
+		return 0xffff99;
+	}
+
 	/**
 	 * Deserializes a WayAspect from a string <br>
 	 * Expected format is "Way.11", returns null if it fails

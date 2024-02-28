@@ -10,6 +10,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import org.jetbrains.annotations.NotNull;
 
 public class WaystoneItem extends Item implements IWayHolder {
@@ -21,17 +22,21 @@ public class WaystoneItem extends Item implements IWayHolder {
 	
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level level, @NotNull Player player, InteractionHand hand) {
-		ItemStack stack = player.getItemInHand(hand);
-		long todo = player.isShiftKeyDown() ? Long.MAX_VALUE : player.getItemInHand(hand == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND).getCount();
-		long did;
-		boolean insert = canInsertWay(stack);
-		if (canInsertWay(stack)) {
-			did = insertWay(stack, todo);
-		} else {
-			did = extractWay(stack, todo);
+		if (!FMLEnvironment.production) {
+			// debug code to give lots of way
+			ItemStack stack = player.getItemInHand(hand);
+			long todo = player.isShiftKeyDown() ? Long.MAX_VALUE : player.getItemInHand(hand == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND).getCount();
+			long did;
+			boolean insert = canInsertWay(stack);
+			if (canInsertWay(stack)) {
+				did = insertWay(stack, todo);
+			} else {
+				did = extractWay(stack, todo);
+			}
+			Logger.chat("WaystoneItem.use()", "WayOperationValue", did+" Way was " + (insert ? "INSERTED" : "EXTRACTED"), player);
+			return InteractionResultHolder.consume(stack);
 		}
-		Logger.chat("WaystoneItem.use()", "WayOperationValue", did+" Way was " + (insert ? "INSERTED" : "EXTRACTED"), player);
-		return InteractionResultHolder.consume(stack);
+		return super.use(level, player, hand);
 	}
 
 	@Override

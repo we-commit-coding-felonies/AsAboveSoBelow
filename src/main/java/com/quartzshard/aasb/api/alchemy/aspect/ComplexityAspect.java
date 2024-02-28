@@ -1,6 +1,7 @@
 package com.quartzshard.aasb.api.alchemy.aspect;
 
 import com.quartzshard.aasb.AASB;
+import com.quartzshard.aasb.util.Colors;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -12,21 +13,23 @@ import org.jetbrains.annotations.Nullable;
  * Violation is absolute. Everything that doesnt flow violates 100%
  */
 public enum ComplexityAspect implements IAspect<ComplexityAspect> {
-	SIMPLE, // Anything that is mapped properly and is able to be used as input and output for transmutation with no issues
-	COMPLEX, // For things that were mapped, but aspect resolution could not flow, so it cannot be an output of transmutation
-	NULLED, // Anything that *explicitly* has null as at least one of it's aspects. Cannot be used in transmutation circles at all
-	UNKNOWN, // Things that were not mapped (either not found or mapping failed), and cannot be used for any alchemical processes
+	SIMPLE(0xffffff), // Anything that is mapped properly and is able to be used as input and output for transmutation with no issues
+	COMPLEX(0xeeffee), // For things that were mapped, but aspect resolution could not flow, so it cannot be an output of transmutation
+	NULLED(0x8e9e99), // Anything that *explicitly* has null as at least one of it's aspects. Cannot be used in transmutation circles at all
+	UNKNOWN(0xffffff), // Things that were not mapped (either not found or mapping failed), and cannot be used for any alchemical processes
 	
-	SEEDGEN, // Marks aspects as ones generated from some seed value. Generally treated like UNKNOWN.
+	SEEDGEN(0xeeffee), // Marks aspects as ones generated from some seed value. Generally treated like UNKNOWN.
 
-	PHIL, // Marks aspects as those of Phil. Any transmutation with this as its output will do Impossible Object crafting instead. Otherwise, acts like UNKNOWN
-	IMPOSSIBLE, // Marks aspects as those of an Impossible Object. Anything with this is considered a valid output for Impossible Object crafting
+	PHIL(Colors.PHILOSOPHERS.I), // Marks aspects as those of Phil. Any transmutation with this as its output will do Impossible Object crafting instead. Otherwise, acts like UNKNOWN
+	IMPOSSIBLE(Colors.PHILOSOPHERS.I), // Marks aspects as those of an Impossible Object. Anything with this is considered a valid output for Impossible Object crafting
 	;
 
 	private final ResourceLocation symbol;
+	private final int color;
 
-	ComplexityAspect() {
+	ComplexityAspect(int color) {
 		symbol = AASB.rl("textures/symbol/aspect/complexity/"+this.name().toLowerCase()+".png");
+		this.color = color;
 	}
 
 	@Override
@@ -69,6 +72,11 @@ public enum ComplexityAspect implements IAspect<ComplexityAspect> {
 	@Override
 	public ResourceLocation symbolTexture() {
 		return symbol;
+	}
+
+	@Override
+	public int getColor() {
+		return color;
 	}
 
 	/**

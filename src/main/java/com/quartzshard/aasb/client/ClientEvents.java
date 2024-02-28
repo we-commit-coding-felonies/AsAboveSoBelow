@@ -9,10 +9,10 @@ import com.quartzshard.aasb.client.sound.SentientWhispersAmbient;
 import com.quartzshard.aasb.common.entity.projectile.SentientArrowEntity;
 import com.quartzshard.aasb.data.LangData;
 import com.quartzshard.aasb.util.ClientUtil;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -32,8 +32,7 @@ public class ClientEvents {
 		}
 	}
 
-	//@SubscribeEvent
-	public static void toolTipEvent(RenderTooltipEvent.GatherComponents event) {
+	public static void onDisplayTooltip(RenderTooltipEvent.GatherComponents event) {
 		if (Screen.hasAltDown()) { // TODO convert this to actual keybind. doing it the same way as the normal ones wasnt working
 			ItemStack stack = event.getItemStack();
 			if (stack.isEmpty())
@@ -52,7 +51,9 @@ public class ClientEvents {
 				tips.add(Either.right(new LangData.AspectTooltip(aspects)));
 			}
 		} else {
-			event.getTooltipElements().add(Either.right(new LangData.AspectTextComponent(ShapeAspect.QUINTESSENCE)));
+			TooltipComponent cpt = new LangData.AspectTextComponent(Component.literal("test test test |\uD83D\uDF06| test test test").withStyle(ChatFormatting.AQUA), ShapeAspect.QUINTESSENCE);
+			event.getTooltipElements().add(Either.right(cpt));
+			event.getTooltipElements().add(Either.right(cpt));
 		}
 	}
 }

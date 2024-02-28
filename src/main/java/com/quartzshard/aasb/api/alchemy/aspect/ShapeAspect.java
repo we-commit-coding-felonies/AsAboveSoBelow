@@ -127,6 +127,11 @@ public enum ShapeAspect implements IAspect<ShapeAspect> {
 		return symbol;
 	}
 
+	@Override
+	public int getColor() {
+		return color;
+	}
+
 	/**
 	 * Deserializes a ShapeAspect from a String <br>
 	 * Expected format is "Shape.earth", returns null if it fails

@@ -47,4 +47,10 @@ public interface IAspect<A extends IAspect<A>> {
 	 * @return
 	 */
 	ResourceLocation symbolTexture();
+
+	/**
+	 * Gets the integer color of this aspect
+	 * @return int color
+	 */
+	int getColor();
 }

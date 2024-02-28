@@ -2,7 +2,10 @@ package com.quartzshard.aasb.util;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.quartzshard.aasb.api.alchemy.aspect.IAspect;
 import com.quartzshard.aasb.client.render.AASBRenderType;
+import net.minecraft.client.gui.layouts.LayoutElement;
+import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.particles.ParticleOptions;
@@ -11,6 +14,8 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
+import org.joml.Vector2fc;
+import org.joml.Vector2i;
 
 /**
  * Abstracted rendering code, drawing things using particles, fun stuff like that <br>

@@ -1,8 +1,14 @@
 package com.quartzshard.aasb.init;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import com.quartzshard.aasb.AASB;
+import com.quartzshard.aasb.api.alchemy.aspect.FormAspect;
+import com.quartzshard.aasb.api.alchemy.aspect.IAspect;
+import com.quartzshard.aasb.api.alchemy.aspect.ShapeAspect;
+import com.quartzshard.aasb.api.alchemy.aspect.WayAspect;
 import com.quartzshard.aasb.api.alchemy.rune.Rune;
 import com.quartzshard.aasb.api.item.IHermeticTool;
 import com.quartzshard.aasb.api.item.IRuneable;
@@ -14,12 +20,15 @@ import com.quartzshard.aasb.client.particle.CutParticle;
 import com.quartzshard.aasb.client.render.AASBPlayerLayer;
 import com.quartzshard.aasb.client.render.MustangRenderer;
 import com.quartzshard.aasb.client.render.SentientArrowRenderer;
+import com.quartzshard.aasb.client.render.text.AspectFont;
 import com.quartzshard.aasb.common.item.MiniumStoneItem;
 import com.quartzshard.aasb.data.LangData;
 import com.quartzshard.aasb.init.object.EntityInit;
 import com.quartzshard.aasb.init.object.ItemInit;
+import com.quartzshard.aasb.util.ClientUtil;
 import com.quartzshard.aasb.util.Colors;
 
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
@@ -38,6 +47,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 @Mod.EventBusSubscriber(modid = AASB.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ClientInit {
@@ -45,6 +55,9 @@ public class ClientInit {
 	public static final ResourceLocation PRED_MINIUM = AASB.rl("minium_variant");
 	public static final ResourceLocation PRED_WAY_HOLDER = AASB.rl("way_holder_status");
 	//public static final ResourceLocation FLASK_STATUS = AASB.rl("flask_status");
+
+	private static final Map<Integer,IAspect<?>> ASPECT_UNICODE_MAP = new HashMap<>();
+	public static Font ASPECT_FONT;
 	
 	public static void init(final FMLClientSetupEvent event) {
 		event.enqueueWork(() -> {
@@ -54,9 +67,33 @@ public class ClientInit {
 			//ItemProperties.register(ObjectInit.Items.FLASK_LEAD.get(), FLASK_STATUS, ClientInit::getFlaskStatus);
 			//ItemProperties.register(ObjectInit.Items.FLASK_GOLD.get(), FLASK_STATUS, ClientInit::getFlaskStatus);
 			//ItemProperties.register(ObjectInit.Items.FLASK_AETHER.get(), FLASK_STATUS, ClientInit::getFlaskStatus);
+			createAspectUnicodeMap();
+			ASPECT_FONT = new AspectFont(ClientUtil.mc().font);
 
-			MinecraftForge.EVENT_BUS.addListener(EventPriority.LOWEST, ClientEvents::toolTipEvent);
+			MinecraftForge.EVENT_BUS.addListener(EventPriority.LOWEST, ClientEvents::onDisplayTooltip);
 		});
+	}
+
+	private static void createAspectUnicodeMap() {
+		// These unicode values are within the "alchemical symbol" block.
+		// If theres too many forms, it will overflow and start assigning
+		// forms to stuff outside the block. I don't care.
+		ASPECT_UNICODE_MAP.put(0x1f700, ShapeAspect.QUINTESSENCE); // Quintessence
+		ASPECT_UNICODE_MAP.put(0x1f701, ShapeAspect.AIR); // Air
+		ASPECT_UNICODE_MAP.put(0x1f702, ShapeAspect.FIRE); // Fire
+		ASPECT_UNICODE_MAP.put(0x1f703, ShapeAspect.EARTH); // Earth
+		ASPECT_UNICODE_MAP.put(0x1f704, ShapeAspect.WATER); // Water
+		ASPECT_UNICODE_MAP.put(0x1f705, WayAspect.ZERO); // Nitric Acid :troled:
+		int i = 0x1f706;
+		for (FormAspect aspect : AlchInit.getFormReg()) {
+			ASPECT_UNICODE_MAP.put(i, aspect);
+			i++;
+		}
+	}
+
+	@Nullable
+	public static IAspect<?> getAspectForUnicode(int id) {
+		return ASPECT_UNICODE_MAP.get(id);
 	}
 	
 	@SubscribeEvent

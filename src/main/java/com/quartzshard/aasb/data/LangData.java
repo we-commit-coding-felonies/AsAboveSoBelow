@@ -13,10 +13,7 @@ import com.quartzshard.aasb.util.ClientUtil;
 
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTextTooltip;
 import net.minecraft.data.PackOutput;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.ComponentContents;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.*;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
@@ -540,5 +537,5 @@ public class LangData extends LanguageProvider {
 	}
 
 	public record AspectTooltip(AlchData alchData) implements TooltipComponent {}
-	public record AspectTextComponent(IAspect<?> aspect) implements TooltipComponent {}
+	public record AspectTextComponent(Component txt, IAspect<?>... aspects) implements TooltipComponent {}
 }

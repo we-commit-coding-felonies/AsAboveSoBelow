@@ -8,6 +8,7 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat.Mode;
 
 import net.minecraft.Util;
+import net.minecraft.client.gui.font.GlyphRenderTypes;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
@@ -23,27 +24,30 @@ public class AASBRenderType extends RenderType {
 
 	public static final Function<ResourceLocation, RenderType>
 		MAGNUM_OPUS_HALO = Util.memoize(rl -> {
-			RenderType.CompositeState state = RenderType.CompositeState.builder()
-					.setShaderState(RenderStateShard.POSITION_COLOR_TEX_SHADER)
-					.setTextureState(new RenderStateShard.TextureStateShard(rl, false, false))
+			CompositeState state = RenderType.CompositeState.builder()
+					.setShaderState(POSITION_COLOR_TEX_SHADER)
+					.setTextureState(new TextureStateShard(rl, false, false))
 					.setTransparencyState(TRANSLUCENT_TRANSPARENCY)
 					.setCullState(NO_CULL)
 					.createCompositeState(true);
 			return create("magnum_opus_halo", DefaultVertexFormat.POSITION_COLOR_TEX, Mode.QUADS, 256, true, false, state);
 		}),
 		ASPECT_TOOLTIP = Util.memoize(rl -> {
-			RenderType.CompositeState state = RenderType.CompositeState.builder()
+			CompositeState state = CompositeState.builder()
 				.setShaderState(POSITION_COLOR_TEX_SHADER)
-				.setTextureState(new RenderStateShard.TextureStateShard(rl, false, false))
+				.setTextureState(new TextureStateShard(rl, false, false))
 				.setTransparencyState(NO_TRANSPARENCY)
 				.setDepthTestState(LEQUAL_DEPTH_TEST)
 				.createCompositeState(false);
-			return create("aspect_tooltip", DefaultVertexFormat.POSITION_COLOR_TEX, VertexFormat.Mode.QUADS, 256, false, false, state);
+			return create("aspect_tooltip", DefaultVertexFormat.POSITION_COLOR_TEX, Mode.QUADS, 256, false, false, state);
 		});
+	public static final Function<ResourceLocation, GlyphRenderTypes>
+		ASPECT_GLYPH = Util.memoize(rl -> txtGlyph("aspect_glyph", Mode.QUADS, RENDERTYPE_TEXT_SHADER, RENDERTYPE_TEXT_SEE_THROUGH_SHADER, rl));
 	public static final RenderType
 		MUSTANG_LINES = create("mustang_lines",
 			DefaultVertexFormat.POSITION_COLOR_NORMAL, Mode.LINES, 128,false, false,
 			lineState(3, false, false));
+
 
 
 	/**
@@ -55,9 +59,9 @@ public class AASBRenderType extends RenderType {
 	 * @return
 	 */
 	private static CompositeState lineState(double width, boolean direct, boolean noDepth) {
-		@NotNull var builder = RenderType.CompositeState.builder()
+		@NotNull var builder = CompositeState.builder()
 				.setShaderState(RENDERTYPE_LINES_SHADER)
-				.setLineState(new RenderStateShard.LineStateShard(OptionalDouble.of(width)))
+				.setLineState(new LineStateShard(OptionalDouble.of(width)))
 				.setLayeringState(VIEW_OFFSET_Z_LAYERING)
 				.setTransparencyState(TRANSLUCENT_TRANSPARENCY)
 				.setWriteMaskState(noDepth ? COLOR_WRITE : COLOR_DEPTH_WRITE)
@@ -71,21 +75,43 @@ public class AASBRenderType extends RenderType {
 		return builder.createCompositeState(false);
 	}
 
-	private static CompositeState texTipState(double width, boolean direct, boolean noDepth) {
-		@NotNull var builder = RenderType.CompositeState.builder()
-			.setShaderState(RENDERTYPE_LINES_SHADER)
-			.setLineState(new RenderStateShard.LineStateShard(OptionalDouble.of(width)))
-			.setLayeringState(VIEW_OFFSET_Z_LAYERING)
+	private static GlyphRenderTypes txtGlyph(String name, Mode mode, ShaderStateShard shader, ShaderStateShard shaderTrans, ResourceLocation rl) {
+		return new GlyphRenderTypes(
+			txtType(name, mode, shader, rl),
+			txtTypeTrans(name, mode, shaderTrans, rl),
+			txtTypePoly(name, mode, shader, rl)
+		);
+	}
+
+	private static RenderType txtType(String name, Mode vertexMode, ShaderStateShard shader, ResourceLocation texture) {
+		return create(name, DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP,
+			vertexMode,256, false, true,
+			txtBuild(shader, texture).createCompositeState(false));
+	}
+
+	private static RenderType txtTypeTrans(String name, Mode vertexMode, ShaderStateShard shader, ResourceLocation texture) {
+		return create(name + "_see_through", DefaultVertexFormat.POSITION_COLOR_TEX,
+			vertexMode, 256, false, true,
+			txtBuild(shader, texture)
+				.setDepthTestState(NO_DEPTH_TEST)
+				.setWriteMaskState(COLOR_WRITE)
+				.createCompositeState(false));
+	}
+
+	private static RenderType txtTypePoly(String name, Mode vertexMode, ShaderStateShard shader, ResourceLocation texture) {
+		return create(name + "_polygon_offset", DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP,
+			vertexMode, 256, false, true,
+			txtBuild(shader, texture)
+				.setLayeringState(POLYGON_OFFSET_LAYERING)
+				.createCompositeState(false));
+	}
+
+	private static CompositeState.CompositeStateBuilder txtBuild(ShaderStateShard shader, ResourceLocation texture) {
+		return CompositeState.builder()
+			.setShaderState(shader)
+			.setTextureState(new TextureStateShard(texture, true, false))
 			.setTransparencyState(TRANSLUCENT_TRANSPARENCY)
-			.setWriteMaskState(noDepth ? COLOR_WRITE : COLOR_DEPTH_WRITE)
-			.setCullState(NO_CULL);
-		if (!direct) {
-			builder = builder.setOutputState(ITEM_ENTITY_TARGET);
-		}
-		if (noDepth) {
-			builder = builder.setDepthTestState(NO_DEPTH_TEST);
-		}
-		return builder.createCompositeState(false);
+			.setLightmapState(LIGHTMAP);
 	}
 
 }
