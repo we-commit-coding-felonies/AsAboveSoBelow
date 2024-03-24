@@ -90,14 +90,14 @@ public record AlchData(
 	/**
 	 * Gets the flow violation value of a given transmutation
 	 * @param other
-	 * @return total % flow violation
+	 * @return total flow violation
 	 */
 	@SuppressWarnings("null") // Assuming the AlchData is correct, the complexity check should also filter out nulls 
 	public float violationTo(AlchData other) {
-		if (complexity.violationTo(other.complexity()) < 1) {
+		if (complexity.violationTo(other.complexity()) != Float.POSITIVE_INFINITY) {
 			return way.violationTo(other.way()) + shape.violationTo(other.shape()) + form.violationTo(other.form());
 		}
-		return 1;
+		return Float.POSITIVE_INFINITY;
 	}
 
 	@Override

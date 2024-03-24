@@ -1,4 +1,4 @@
-package com.quartzshard.aasb.client.gui.menu;
+package com.quartzshard.aasb.common.gui.menu;
 
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;

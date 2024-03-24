@@ -5,9 +5,13 @@ import com.quartzshard.aasb.AASB;
 import com.quartzshard.aasb.api.alchemy.AlchData;
 import com.quartzshard.aasb.api.alchemy.Phil;
 import com.quartzshard.aasb.api.alchemy.aspect.ShapeAspect;
+import com.quartzshard.aasb.api.alchemy.aspect.WayAspect;
+import com.quartzshard.aasb.api.item.IWayHolder;
 import com.quartzshard.aasb.client.sound.SentientWhispersAmbient;
 import com.quartzshard.aasb.common.entity.projectile.SentientArrowEntity;
 import com.quartzshard.aasb.data.LangData;
+import com.quartzshard.aasb.init.AlchInit;
+import com.quartzshard.aasb.init.ClientInit;
 import com.quartzshard.aasb.util.ClientUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
@@ -34,6 +38,7 @@ public class ClientEvents {
 
 	public static void onDisplayTooltip(RenderTooltipEvent.GatherComponents event) {
 		if (Screen.hasAltDown()) { // TODO convert this to actual keybind. doing it the same way as the normal ones wasnt working
+			// Holding down ALT, display aspects
 			ItemStack stack = event.getItemStack();
 			if (stack.isEmpty())
 				return;
@@ -41,19 +46,23 @@ public class ClientEvents {
 			List<Either<FormattedText,TooltipComponent>> tips = event.getTooltipElements();
 			tips.get(0).ifLeft(txt -> {
 				tips.clear(); // clear other tooltips, restore name with some extra text
-				tips.add(Either.left(LangData.tc(LangData.TIP_ASPECTS, txt)));
-				tips.add(Either.left(Component.empty())); // newline so render doesnt overlap
+				if (Screen.hasShiftDown() && stack.getItem() instanceof IWayHolder waystone && waystone.getStoredWay(stack) > 0) {
+					// Also holding SHIFT, and we have stored way. display that
+					tips.add(Either.left(LangData.tc(LangData.TIP_ASPECTJAR, txt)));
+					//tips.add(Either.left(Component.empty())); // newline so render doesnt overlap
+					tips.add(Either.right(new LangData.WayTooltip(waystone.getStoredWay(stack))));
+				} else {
+					tips.add(Either.left(LangData.tc(LangData.TIP_ASPECTS, txt)));
+					tips.add(Either.left(Component.empty())); // newline so render doesnt overlap
+					// TODO query player knowledge
+					if (aspects == Phil.UNMAPPED) {
+						tips.add(Either.left(LangData.tc(LangData.TIP_ASPECTS_UNMAPPED_1)));
+						tips.add(Either.left(LangData.tc(LangData.TIP_ASPECTS_UNMAPPED_2)));
+					} else {
+						tips.add(Either.right(new LangData.AspectTooltip(aspects)));
+					}
+				}
 			});
-			if (aspects == Phil.UNMAPPED) {
-				tips.add(Either.left(LangData.tc(LangData.TIP_ASPECTS_UNMAPPED_1)));
-				tips.add(Either.left(LangData.tc(LangData.TIP_ASPECTS_UNMAPPED_2)));
-			} else {
-				tips.add(Either.right(new LangData.AspectTooltip(aspects)));
-			}
-		} else {
-			TooltipComponent cpt = new LangData.AspectTextComponent(Component.literal("test test test |\uD83D\uDF06| test test test").withStyle(ChatFormatting.AQUA), ShapeAspect.QUINTESSENCE);
-			event.getTooltipElements().add(Either.right(cpt));
-			event.getTooltipElements().add(Either.right(cpt));
 		}
 	}
 }

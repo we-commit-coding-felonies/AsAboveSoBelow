@@ -3,15 +3,12 @@ package com.quartzshard.aasb.api.alchemy;
 import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.UUID;
+import java.util.*;
 
 import com.quartzshard.aasb.init.NetInit;
 import com.quartzshard.aasb.net.client.MapperPacket;
+import com.quartzshard.aasb.util.ListUtil;
+import net.minecraft.core.RegistryAccess;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,7 +18,6 @@ import com.quartzshard.aasb.config.AlchemyCfg;
 import com.quartzshard.aasb.util.Logger;
 
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntArrayTag;
@@ -31,7 +27,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.ReloadableServerResources;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.util.Tuple;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
@@ -176,7 +171,6 @@ public class Phil {
 		if (RELOAD_DAT != null) {
 			long start = System.currentTimeMillis();
 			try {
-				@SuppressWarnings("null") @NotNull // eclipse is stupid
 				Map<ResourceLocation, RecipeData> allRecipes = getAllRecipes(RELOAD_DAT.svRes());
 				/*
 				Map<ResourceLocation, RecipeData> searchResults = PhilosophersStone.searchRecipesFor(ItemData.fromItem(Items.DEBUG_STICK), allRecipes);
@@ -351,7 +345,7 @@ public class Phil {
 	public static AlchData getAspects(ItemStack item) {
 		return getAspects(ItemData.fromStack(item));
 	}
-	
+
 	/**
 	 * Gets the WayAspect of an item
 	 * @param item
@@ -378,6 +372,20 @@ public class Phil {
 	public static WayAspect getWay(ItemStack item) {
 		return getAspects(item).way();
 	}
+
+	/**
+	 * Gets the WayAspect of an item multiplied by stack size <br>
+	 * Capped at Long.MAX_VALUE
+	 * @param stack the ItemStack
+	 * @return WayAspect
+	 */
+	@Nullable
+	public static WayAspect getWayTotal(ItemStack stack) {
+		WayAspect base = getWay(stack);
+		if (base != null)
+			return new WayAspect(base.value() * stack.getCount());
+		return null;
+	}
 	
 	/**
 	 * Gets the raw numerical value of the item's Way.
@@ -395,12 +403,18 @@ public class Phil {
 		return getWaySimple(item.get());
 	}
 	/**
-	 * Gets the raw numerical value of the item's Way. Does not take stack size into consideration
+	 * Gets the raw numerical value of the item's Way.
 	 * @param item
 	 * @return Numerical value of Way, or -1 if null
+	 * @apiNote Does not take stack size into consideration
 	 */
 	public static long getWaySimple(ItemStack item) {
 		return getWaySimple(ItemData.fromStack(item));
+	}
+
+	public static long getWayTotalSimple(ItemStack stack) {
+		long way = getWaySimple(stack);
+		return way == -1 ? -1 : way * stack.getCount();
 	}
 
 	/**
@@ -421,9 +435,10 @@ public class Phil {
 		return getAspects(item).shape();
 	}
 	/**
-	 * Gets the ShapeAspect of an item. Does not take stack size into consideration
+	 * Gets the ShapeAspect of an item.
 	 * @param item
 	 * @return ShapeAspect
+	 * @apiNote Does not take stack size into consideration
 	 */
 	@Nullable
 	public static ShapeAspect getShape(ItemStack item) {
@@ -449,9 +464,10 @@ public class Phil {
 		return getAspects(item).form();
 	}
 	/**
-	 * Gets the FormAspect of the item. Does not take stack size into consideration
+	 * Gets the FormAspect of the item.
 	 * @param item
 	 * @return FormAspect
+	 * @apiNote Does not take stack size into consideration
 	 */
 	@Nullable
 	public static FormAspect getForm(@NotNull ItemStack item) {
@@ -476,6 +492,18 @@ public class Phil {
 	public static boolean flows(ItemStack from, ItemStack to) {
 		return getAspects(from).flowsTo(getAspects(to));
 	}
+
+	public static boolean flowsIgnoreWay(AlchData from, AlchData to) {
+		if (!from.complexity().allowsNull() && !to.complexity().allowsNull()) {
+			assert from.way() != null && to.way() != null
+				&& from.shape() != null && to.shape() != null
+				&& from.form() != null && to.form() != null
+				: String.format("FROM|%s|, TO|%s|", from, to);
+			return from.shape().flowsTo(to.shape())
+				&& from.form().flowsTo(to.form());
+		}
+		return false;
+	}
 	
 
 	/**
@@ -496,39 +524,172 @@ public class Phil {
 	public static float violation(ItemStack from, ItemStack to) {
 		return getAspects(from).violationTo(getAspects(to));
 	}
-	
+
+	public record TransmutationData(AlchData input, List<FlowData> targets) {}
+
+	public record FlowData(ItemStack stack, float shapeVio, float formVio) {}
+
+	public static AlchData resolveToAspects(List<ItemStack> stacks) {
+		List<AlchData> dats = new ArrayList<>();
+		for (ItemStack stack : stacks) {
+			if (stack.isEmpty()) continue;
+			AlchData aspects = getAspects(stack);
+			if (aspects.complexity().allowsNull()) {
+				return UNMAPPED; // we dont deal with nulls round these parts
+			}
+			assert aspects.way() != null;
+			aspects = new AlchData(aspects.way().value()*stack.getCount(), aspects.shape(), aspects.form(), aspects.complexity());
+			assert aspects.way() != null
+				&& aspects.shape() != null
+				&& aspects.form() != null
+				: aspects;
+			if (dats.isEmpty())
+				dats.add(aspects);
+			else {
+				boolean exists = false;
+				for (int i = 0; i < dats.size(); i++) {
+					AlchData dat = dats.get(i);
+					if (aspects.shape() == dat.shape()
+							&& aspects.form() == dat.form()
+							&& aspects.complexity() == dat.complexity()) {
+						assert dat.way() != null : dat;
+						dats.set(i, new AlchData(dat.way().value()+aspects.way().value(), dat.shape(), dat.form(), dat.complexity()));
+						exists = true;
+						break; // found a match, were done
+					}
+				}
+				if (!exists) {
+					dats.add(aspects);
+				}
+			}
+		}
+		if (!dats.isEmpty()) {
+			if (dats.size() > 1) {
+				AlchData biggest = getBiggest(dats);
+				CompoundTag alchTag = biggest.serialize();
+				List<AlchData> paths = new ArrayList<>(),
+					next = new ArrayList<>();
+				paths.add(biggest);
+				dats.remove(biggest);
+				while (!dats.isEmpty()) {
+					for (int i = 0; i < dats.size(); i++) {
+						AlchData dat = dats.get(i);
+						if (dat == null) continue;
+						assert dat.way() != null;
+						for (AlchData path : paths) {
+							if (flowsIgnoreWay(dat, path)) {
+								if (dat.complexity() == ComplexityAspect.SIMPLE)
+									next.add(dat);
+								alchTag.putLong(AlchData.TK_SERWAY, alchTag.getLong(AlchData.TK_SERWAY) + dat.way().value());
+								dats.set(i, null);
+								break;
+							}
+						}
+					}
+					ListUtil.purgeNulls(dats);
+					if (dats.isEmpty()) {
+						// everything has found a flow path :D
+						return new AlchData(alchTag);
+					} else if (!next.isEmpty()) {
+						// some things have not found a flow path, but we have new paths to check
+						// we clear the old paths and swap in the new paths
+						paths.clear();
+						List<AlchData> tmp = paths;
+						paths = next;
+						next = tmp;
+					} else {
+						// no new paths, but we still have stuff left to resolve
+						// this is a dead end so we stop immediately and return UNMAPPED
+						break;
+					}
+				}
+			} else return dats.get(0); // size of 1 means only 1 option
+		}
+		return UNMAPPED;
+	}
+
+	@NotNull
+	private static AlchData getBiggest(List<AlchData> dats) {
+		AlchData biggest = null;
+		for (AlchData dat : dats) {
+			if (!dat.complexity().allowsNull()) {
+				assert dat.way() != null && dat.shape() != null && dat.form() != null;
+				if (biggest != null && biggest.way().value() >= dat.way().value()) {
+					continue;
+				}
+				biggest = dat;
+			}
+		}
+		return biggest == null ? UNMAPPED : biggest;
+		/*CompoundTag bigTag = null;
+		for (AlchData dat : dats) {
+			if (!dat.complexity().allowsNull()) {
+				assert dat.way() != null && dat.shape() != null && dat.form() != null;
+				if (bigTag != null) {
+					long oldVal = bigTag.getLong(AlchData.TK_SERWAY),
+						way = dat.way().value();
+					bigTag.putLong(AlchData.TK_SERWAY, oldVal + way);
+					if (oldVal >= way) {
+						continue;
+					}
+				}
+				bigTag = dat.serialize();
+			}
+		}
+		return bigTag == null ? UNMAPPED : new AlchData(bigTag);*/
+	}
+
 	/**
-	 * Gets a list of possible targets for transmutation from the given input, sorted from least violating to most violating <br>
+	 * Gets a the possible targets for transmutation from the given input, sorted from least violating to most violating <br>
 	 * Specifically, the list is of Tuple(ItemData,Float). ItemData is the target item, Float is the violation. <br>
 	 * If the list is empty, there were no targets.
-	 * @param from Input aspects
+	 * @param input Input aspects
+	 * @param maxStack The maximum stack size of the outputs (how
 	 * @return List
 	 */
-	public static @NotNull List<Tuple<ItemData,Float>> getTransmutationTargets(AlchData from) {
-		//Map<ItemData,AlchData> fmap = Maps.filterEntries(alchMap, (to) -> from.violationTo(to.getValue()) < 1);
-		@NotNull List<Tuple<ItemData,Float>> flowList = new ArrayList<>();
-		for (Entry<ItemData,AlchData> entry : alchMap.entrySet()) {
-			flowList.add(new Tuple<>(entry.getKey(), from.violationTo(entry.getValue())));
+	public static TransmutationData getTransmutationTargets(AlchData input, int maxStack) {
+		List<FlowData> targets = new ArrayList<>();
+		int size = 1;
+		// attempting calculation of transmutation targets for null aspects should never happen
+		assert input.way() != null
+			&& input.shape() != null
+			&& input.form() != null
+			: input;
+		long way = input.way().value();
+		while (size <= maxStack) {
+			AlchData checkDat;
+			for (Map.Entry<ItemData,AlchData> entry : alchMap.entrySet()) {
+				ItemData outItem = entry.getKey();
+				if (size > outItem.createStack().getMaxStackSize())
+					continue;
+				AlchData outAlch = entry.getValue();
+				float shapeVio = input.shape().violationTo(outAlch.shape()),
+					formVio = input.form().violationTo(outAlch.form());
+				double fWay = (double)way * (1d - (shapeVio + formVio));
+				long realWay = (long) Math.floor(fWay);
+				if (realWay > 0 && realWay % size == 0) {
+					checkDat = new AlchData(realWay/size, input.shape(), input.form(), input.complexity());
+					if (checkDat.violationTo(outAlch) < Float.POSITIVE_INFINITY) {
+						ItemStack stack = new ItemStack(outItem.getItem());
+						stack.setCount(size);
+						if (outItem.hasNBT()) {
+							stack.setTag(outItem.getNBT().copy());
+						}
+						targets.add(new FlowData(stack, shapeVio, formVio));
+					}
+				}
+			}
+			size++;
 		}
-		flowList.sort((t1,t2) -> {
-			float a = t1.getB(), b = t2.getB();
-			if (a < b) return -1;
-			if (a > b) return 1;
-			return 0;
+		targets.sort((a, b) -> {
+			float av = a.shapeVio+a.formVio, bv = b.shapeVio+b.formVio;
+			if (av < bv)
+				return -1;
+			else if (av == bv)
+				return 0;
+			return 1;
 		});
-		return flowList;
-	}
-	public static List<Tuple<ItemData,Float>> getTransmutationTargets(ItemData from) {
-		return getTransmutationTargets(getAspects(from));
-	}
-	public static List<Tuple<ItemData,Float>> getTransmutationTargets(ItemLike from) {
-		return getTransmutationTargets(getAspects(from));
-	}
-	public static List<Tuple<ItemData,Float>> getTransmutationTargets(RegistryObject<? extends Item> from) {
-		return getTransmutationTargets(getAspects(from));
-	}
-	public static List<Tuple<ItemData,Float>> getTransmutationTargets(ItemStack from) {
-		return getTransmutationTargets(getAspects(from));
+		return new TransmutationData(input, targets);
 	}
 	
 	public static Map<ResourceLocation,ItemData> getAllItems() {

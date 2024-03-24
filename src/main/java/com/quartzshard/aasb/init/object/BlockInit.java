@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 import com.quartzshard.aasb.AASB;
 import com.quartzshard.aasb.common.block.CrumblingStoneBlock;
 
+import com.quartzshard.aasb.common.block.TransmutationBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -33,20 +34,25 @@ public class BlockInit {
 	// Generic blocks
 	public static final RegistryObject<Block>
 		// Basic / Decor
-		ASHEN_STONE = reg("ashen_stone", PROPS_GENERIC_STONE),
+		BLOCK_ASHEN_STONE = regBlock("ashen_stone", PROPS_GENERIC_STONE),
 		
 		
 		// Misc
-		CRUMBLING_STONE = reg("crumbling_stone", () -> new CrumblingStoneBlock(BlockBehaviour.Properties.of().randomTicks().instabreak().noLootTable().sound(SoundType.NETHERRACK)));
+		BLOCK_CRUMBLING_STONE = regBlock("crumbling_stone", () -> new CrumblingStoneBlock(BlockBehaviour.Properties.of().randomTicks().instabreak().noLootTable().sound(SoundType.NETHERRACK)));
 
+	// TE Blocks
+	public static final RegistryObject<Block>
+		BLOCK_TEST = regBlock("test", () -> new TransmutationBlock(BlockBehaviour.Properties.of()));
+
+	// Tile Entities
 	
-	private static final <B extends Block> RegistryObject<B> reg(String name, Supplier<B> sup) {
+	private static <B extends Block> RegistryObject<B> regBlock(String name, Supplier<B> sup) {
 		return BLOCKS.register(name, sup);
 	}
-	private static final RegistryObject<Block> reg(String name, BlockBehaviour.Properties props) {
-		return reg(name, () -> new Block(props));
+	private static RegistryObject<Block> regBlock(String name, BlockBehaviour.Properties props) {
+		return regBlock(name, () -> new Block(props));
 	}
-	private static final RegistryObject<Block> reg(String name) {
-		return reg(name, PROPS_GENERIC);
+	private static RegistryObject<Block> regBlock(String name) {
+		return regBlock(name, PROPS_GENERIC);
 	}
 }

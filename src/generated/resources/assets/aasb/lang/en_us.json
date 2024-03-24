@@ -173,6 +173,7 @@
   "toolTip.aasb.armor.desc.3": "Will violently release all stored energy at once if overloaded",
   "toolTip.aasb.armor.flavor": "Become a living fortress with the infalliable Ultrashield",
   "toolTip.aasb.armor.saturation": "Saturation: %s/%s",
+  "toolTip.aasb.aspectContainer": "%s contains:",
   "toolTip.aasb.aspects": "Aspects of %s:",
   "toolTip.aasb.aspects.unmapped.1": "This item cannot be",
   "toolTip.aasb.aspects.unmapped.2": "described by alchemy",

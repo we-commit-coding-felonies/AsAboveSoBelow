@@ -39,7 +39,7 @@ public class AspectClientTextComponent implements ClientTooltipComponent {
 		int extra = 0;
 		for (int i = 0; i < strInt.length; i++) {
 			if (ClientInit.getAspectForUnicode(strInt[i]) != null)
-				extra += 12;
+				extra += 13;
 			else
 				str.appendCodePoint(strInt[i]);
 		}

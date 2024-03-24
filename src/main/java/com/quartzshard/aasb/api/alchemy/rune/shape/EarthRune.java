@@ -34,7 +34,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
@@ -109,13 +108,13 @@ public class EarthRune extends ShapeRune {
 			if (strong && hitRes.getType() == HitResult.Type.MISS) {
 				bPos = BlockPos.containing(player.getEyePosition().add(player.getLookAngle().scale(player.getBlockReach()-0.5)));
 				if (level.getBlockState(bPos).isAir()) {
-					level.setBlockAndUpdate(bPos, BlockInit.CRUMBLING_STONE.get().defaultBlockState());
+					level.setBlockAndUpdate(bPos, BlockInit.BLOCK_CRUMBLING_STONE.get().defaultBlockState());
 					didDo = true;
 				}
 			} else if (!didDo && hitRes.getType() == HitResult.Type.BLOCK) {
 				bPos = hitRes.getBlockPos().relative(hitRes.getDirection());
 				if (level.getBlockState(bPos).canBeReplaced()) {
-					level.setBlockAndUpdate(bPos, BlockInit.CRUMBLING_STONE.get().defaultBlockState());
+					level.setBlockAndUpdate(bPos, BlockInit.BLOCK_CRUMBLING_STONE.get().defaultBlockState());
 					didDo = true;
 				}
 			}

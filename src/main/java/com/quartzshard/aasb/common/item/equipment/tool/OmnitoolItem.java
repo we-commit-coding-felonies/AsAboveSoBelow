@@ -1,9 +1,6 @@
 package com.quartzshard.aasb.common.item.equipment.tool;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.quartzshard.aasb.api.item.IRuneable;
 import org.jetbrains.annotations.NotNull;
@@ -148,18 +145,30 @@ public class OmnitoolItem extends DiggerItem implements IDigStabilizer, IHandleK
 	@Override
 	public boolean handle(@NotNull PressContext ctx) {
 		ServerPlayer plr = ctx.player();
+		ItemStack
+			mainStack = ctx.player().getMainHandItem(),
+			offStack = ctx.player().getOffhandItem();
 		switch (ctx.bind()) {
 		case ITEMMODE:
 			Phil.debugTestChangeMap(QuickAndDirtyRuntimeCodeTests.Mapper.createTestMap(), ctx.level());
 			return true;
 		case ITEMFUNC_1:
-			ItemStack stack = ctx.player().getOffhandItem();
 			if (ctx.player().getOffhandItem().getItem() instanceof IRuneable item) {
-				item.inscribeRune(AlchInit.RUNE_WATER.get(), stack, 0);
+				item.inscribeRune(AlchInit.RUNE_WATER.get(), offStack, 0);
 				//item.inscribeRune(AlchInit.RUNE_QUINTESSENCE.get(), stack, 1);
 			}
 			return true;
 		case ITEMFUNC_2:
+			List<ItemStack> stacks = new ArrayList<>();
+			stacks.add(new ItemStack(ItemInit.SILVER_INGOT.get(), 2));
+			stacks.add(new ItemStack(ItemInit.MERCURY_BOTTLE.get(), 2));
+			//Phil.resolveToAspects(stacks)
+			Phil.TransmutationData data = Phil.getTransmutationTargets(Phil.resolveToAspects(stacks), 64);
+			List<String> strs = new ArrayList<>();
+			for (Phil.FlowData dat : data.targets()) {
+				strs.add(String.format("%s: S=%s, F=%s", dat.stack(), dat.shapeVio(), dat.formVio()));
+			}
+			Logger.chat("OmnitoolItem.handle()", "TransmuteTest", "Outputs are as follows:", plr, strs.toArray(new String[]{}));
 			return true;
 			
 			
@@ -246,7 +255,7 @@ public class OmnitoolItem extends DiggerItem implements IDigStabilizer, IHandleK
 						new AlchData(128, ShapeAspect.EARTH, "aasb:plumbum", ComplexityAspect.SIMPLE));
 				map.put(
 						ItemData.fromItem(ItemInit.MERCURY_BOTTLE.get()),
-						new AlchData(512, ShapeAspect.WATER, "aasb:metal", ComplexityAspect.SIMPLE));
+						new AlchData(512, ShapeAspect.WATER, "aasb:metal", ComplexityAspect.COMPLEX));
 				map.put(
 						ItemData.fromItem(ItemInit.SOOT.get()),
 						new AlchData(1, ShapeAspect.FIRE, (FormAspect)null, ComplexityAspect.NULLED));
@@ -257,26 +266,50 @@ public class OmnitoolItem extends DiggerItem implements IDigStabilizer, IHandleK
 						ItemData.fromItem(ItemInit.SPUT.get()),
 						new AlchData(null, ShapeAspect.FIRE, "aasb:organic", ComplexityAspect.NULLED));
 				map.put(
+						ItemData.fromItem(ItemInit.ASH.get()),
+						new AlchData(1, ShapeAspect.FIRE, "aasb:alchemy", ComplexityAspect.COMPLEX));
+				map.put(
 						ItemData.fromItem(ItemInit.MATERIA_NEG2.get()),
 						new AlchData(1, ShapeAspect.QUINTESSENCE, "aasb:materia", ComplexityAspect.SIMPLE));
 				map.put(
 						ItemData.fromItem(ItemInit.MATERIA_NEG1.get()),
-						new AlchData(2, ShapeAspect.QUINTESSENCE, "aasb:materia", ComplexityAspect.SIMPLE));
+						new AlchData(8, ShapeAspect.QUINTESSENCE, "aasb:materia", ComplexityAspect.SIMPLE));
 				map.put(
 						ItemData.fromItem(ItemInit.MATERIA_1.get()),
 						new AlchData(64, ShapeAspect.QUINTESSENCE, "aasb:materia", ComplexityAspect.SIMPLE));
 				map.put(
 						ItemData.fromItem(ItemInit.MATERIA_2.get()),
-						new AlchData(128, ShapeAspect.QUINTESSENCE, "aasb:materia", ComplexityAspect.SIMPLE));
-				map.put(
-						ItemData.fromItem(ItemInit.MATERIA_3.get()),
-						new AlchData(256, ShapeAspect.QUINTESSENCE, "aasb:materia", ComplexityAspect.SIMPLE));
-				map.put(
-						ItemData.fromItem(ItemInit.MATERIA_4.get()),
 						new AlchData(512, ShapeAspect.QUINTESSENCE, "aasb:materia", ComplexityAspect.SIMPLE));
 				map.put(
+						ItemData.fromItem(ItemInit.MATERIA_3.get()),
+						new AlchData(4096, ShapeAspect.QUINTESSENCE, "aasb:materia", ComplexityAspect.SIMPLE));
+				map.put(
+						ItemData.fromItem(ItemInit.MATERIA_4.get()),
+						new AlchData(32768, ShapeAspect.QUINTESSENCE, "aasb:materia", ComplexityAspect.SIMPLE));
+				map.put(
 						ItemData.fromItem(ItemInit.MATERIA_5.get()),
-						new AlchData(1024, ShapeAspect.QUINTESSENCE, "aasb:materia", ComplexityAspect.SIMPLE));
+						new AlchData(262144, ShapeAspect.QUINTESSENCE, "aasb:materia", ComplexityAspect.SIMPLE));
+				map.put(
+					ItemData.fromItem(Items.ENDER_PEARL),
+					new AlchData(1, ShapeAspect.AIR, "aasb:monster", ComplexityAspect.SIMPLE));
+				map.put(
+					ItemData.fromItem(Items.DIAMOND),
+					new AlchData(8192, ShapeAspect.EARTH, "aasb:brilliant", ComplexityAspect.SIMPLE));
+				map.put(
+					ItemData.fromItem(Items.QUARTZ),
+					new AlchData(512, ShapeAspect.FIRE, "aasb:dull", ComplexityAspect.SIMPLE));
+				map.put(
+					ItemData.fromItem(Items.AMETHYST_SHARD),
+					new AlchData(512, ShapeAspect.EARTH, "aasb:brilliant", ComplexityAspect.SIMPLE));
+				map.put(
+					ItemData.fromItem(Items.EMERALD),
+					new AlchData(1024, ShapeAspect.AIR, "aasb:brilliant", ComplexityAspect.SIMPLE));
+				map.put(
+					ItemData.fromItem(Items.REDSTONE),
+					new AlchData(1, ShapeAspect.EARTH, "aasb:materia", ComplexityAspect.SIMPLE));
+				map.put(
+					ItemData.fromItem(Items.GLOWSTONE_DUST),
+					new AlchData(8, ShapeAspect.QUINTESSENCE, "aasb:mineral", ComplexityAspect.SIMPLE));
 				
 				return map;
 			}

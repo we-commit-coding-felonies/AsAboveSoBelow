@@ -14,13 +14,16 @@ import com.quartzshard.aasb.api.item.IHermeticTool;
 import com.quartzshard.aasb.api.item.IRuneable;
 import com.quartzshard.aasb.api.item.IWayHolder;
 import com.quartzshard.aasb.client.ClientEvents;
+import com.quartzshard.aasb.client.gui.screen.TransmutationScreen;
 import com.quartzshard.aasb.client.gui.tip.AspectClientTextComponent;
 import com.quartzshard.aasb.client.gui.tip.AspectsClientTooltip;
+import com.quartzshard.aasb.client.gui.tip.WayClientTooltip;
 import com.quartzshard.aasb.client.particle.CutParticle;
-import com.quartzshard.aasb.client.render.AASBPlayerLayer;
+import com.quartzshard.aasb.client.render.HaloPlayerLayer;
 import com.quartzshard.aasb.client.render.MustangRenderer;
 import com.quartzshard.aasb.client.render.SentientArrowRenderer;
 import com.quartzshard.aasb.client.render.text.AspectFont;
+import com.quartzshard.aasb.common.gui.menu.TransmutationMenu;
 import com.quartzshard.aasb.common.item.MiniumStoneItem;
 import com.quartzshard.aasb.data.LangData;
 import com.quartzshard.aasb.init.object.EntityInit;
@@ -29,6 +32,7 @@ import com.quartzshard.aasb.util.ClientUtil;
 import com.quartzshard.aasb.util.Colors;
 
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
@@ -57,16 +61,24 @@ public class ClientInit {
 	//public static final ResourceLocation FLASK_STATUS = AASB.rl("flask_status");
 
 	private static final Map<Integer,IAspect<?>> ASPECT_UNICODE_MAP = new HashMap<>();
+	private static final Map<IAspect<?>,Integer> ASPECT_UNICODE_MAP_REVERSE = new HashMap<>();
 	public static Font ASPECT_FONT;
 	
 	public static void init(final FMLClientSetupEvent event) {
 		event.enqueueWork(() -> {
+
+			// Item model properties
 			ItemProperties.registerGeneric(PRED_WAY_HOLDER, ClientInit::getWayHolderStatus);
 			ItemProperties.registerGeneric(PRED_RUNES, ClientInit::getHermeticRunes);
 			ItemProperties.register(ItemInit.MINIUM_STONE.get(), PRED_MINIUM, ClientInit::getMiniumVariant);
 			//ItemProperties.register(ObjectInit.Items.FLASK_LEAD.get(), FLASK_STATUS, ClientInit::getFlaskStatus);
 			//ItemProperties.register(ObjectInit.Items.FLASK_GOLD.get(), FLASK_STATUS, ClientInit::getFlaskStatus);
 			//ItemProperties.register(ObjectInit.Items.FLASK_AETHER.get(), FLASK_STATUS, ClientInit::getFlaskStatus);
+
+			// Screens
+			MenuScreens.register(ModInit.MENU_TRANSTAB.get(), TransmutationScreen::new);
+
+			// Font :3
 			createAspectUnicodeMap();
 			ASPECT_FONT = new AspectFont(ClientUtil.mc().font);
 
@@ -89,11 +101,25 @@ public class ClientInit {
 			ASPECT_UNICODE_MAP.put(i, aspect);
 			i++;
 		}
+
+		// TODO surely theres a better way to do this? used for reverse lookup
+		for (Map.Entry<Integer,IAspect<?>> entry : ASPECT_UNICODE_MAP.entrySet()) {
+			ASPECT_UNICODE_MAP_REVERSE.put(entry.getValue(), entry.getKey());
+		}
 	}
 
 	@Nullable
 	public static IAspect<?> getAspectForUnicode(int id) {
 		return ASPECT_UNICODE_MAP.get(id);
+	}
+	public static int getUnicodeForAspect(IAspect<?> aspect) {
+		Integer i = ASPECT_UNICODE_MAP_REVERSE.get(aspect);
+		if (i != null)
+			return i;
+		return -1;
+	}
+	public static String aspectChar(IAspect<?> aspect) {
+		return Character.toString(getUnicodeForAspect(aspect));
 	}
 	
 	@SubscribeEvent
@@ -131,7 +157,7 @@ public class ClientInit {
 		for (String skinName : event.getSkins()) {
 			PlayerRenderer skin = event.getSkin(skinName);
 			if (skin != null) {
-				skin.addLayer(new AASBPlayerLayer(skin));
+				skin.addLayer(new HaloPlayerLayer(skin));
 			}
 		}
 	}
@@ -139,6 +165,7 @@ public class ClientInit {
 	static void registerTooltipComponents(RegisterClientTooltipComponentFactoriesEvent event) {
 		event.register(LangData.AspectTooltip.class, AspectsClientTooltip::new);
 		event.register(LangData.AspectTextComponent.class, AspectClientTextComponent::new);
+		event.register(LangData.WayTooltip.class, WayClientTooltip::new);
 	}
 	
 	private static float getWayHolderStatus(ItemStack stack, ClientLevel level, LivingEntity entity, int seed) {

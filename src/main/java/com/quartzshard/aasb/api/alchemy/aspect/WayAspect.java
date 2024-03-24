@@ -16,37 +16,29 @@ import org.jetbrains.annotations.Nullable;
  */
 public record WayAspect(long value) implements IAspect<WayAspect> {
 	public static final WayAspect ZERO = new WayAspect(0);
-	public static final ResourceLocation SYMBOL = AASB.rl("textures/symbol/aspect/way.png");
+	public static final ResourceLocation SYMBOL = AASB.rl("textures/symbol/aspect/way/way.png");
+	public static final ResourceLocation SYMBOL_1K = AASB.rl("textures/symbol/aspect/way/kiloway.png");
 
 
 	@Override
-	public boolean flowsTo(WayAspect other) {
-		return other.value() == this.value;
+	public boolean flowsTo(@Nullable WayAspect other) {
+		return other != null && other.value() == this.value;
 	}
 
 	@Override
-	public boolean flowsFrom(@NotNull WayAspect other) {
-		return other.flowsTo(this);
+	public boolean flowsFrom(@Nullable WayAspect other) {
+		return flowsTo(other); // this is fine because way flow is symmetrical
 	}
 
 	@Override
-	public float violationTo(WayAspect other) {
-		return flowsTo(other) ? 0 : 1;
-		//long oVal = other.getValue();
-		//if (oVal > value) {
-		//	float bound = value * 2f;
-		//	return ((float)oVal - (float)value) / (bound - value);
-		//} else if (oVal < value) {
-		//	float bound = value / 2f;
-		//	return ((float)value - (float)oVal) / (value - bound);
-		//}
-		//return flowsTo(other) ? 0 : 1;
+	public float violationTo(@Nullable WayAspect other) {
+		return flowsTo(other) ? 0 : Float.POSITIVE_INFINITY;
 
 	}
 
 	@Override
-	public float violationFrom(WayAspect other) {
-		return other.violationTo(this);
+	public float violationFrom(@Nullable WayAspect other) {
+		return violationTo(other); // this is fine because way flow is symmetrical
 	}
 
 	@Override
@@ -61,7 +53,7 @@ public record WayAspect(long value) implements IAspect<WayAspect> {
 
 	@Override
 	public ResourceLocation symbolTexture() {
-		return SYMBOL;
+		return value() < 1000 ? SYMBOL : SYMBOL_1K;
 	}
 
 	@Override

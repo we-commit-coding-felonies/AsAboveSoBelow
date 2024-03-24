@@ -51,20 +51,24 @@ public class AspectFont extends Font {
 				int i = 3;
 				float
 					left = 0,
-					right = 19,
+					right = 12,//19,
 					up = 0,
-					down = 19;
-				float x1 = this.x + (left-4f);
-				float x2 = this.x + (right-4f);
-				float y1 = this.y + (up-5.5f);
-				float y2 = this.y + (down-5.5f);
+					down = 12;//19;
+				float
+					xo = 1f,//4f,
+					yo = 2.5f;//5.5f;
+				float
+					x1 = this.x + (left-xo),
+					x2 = this.x + (right-xo),
+					y1 = this.y + (up-yo),
+					y2 = this.y + (down-yo);
 				int[] rgb = Colors.rgbFromInt(aspect.getColor());
 				int a = 255;
 				buffer.vertex(this.pose, x1, y1, 0.0F).color(rgb[0],rgb[1],rgb[2],a).uv(0, 0).uv2(this.packedLightCoords).endVertex();
 				buffer.vertex(this.pose, x1, y2, 0.0F).color(rgb[0],rgb[1],rgb[2],a).uv(0, 1).uv2(this.packedLightCoords).endVertex();
 				buffer.vertex(this.pose, x2, y2, 0.0F).color(rgb[0],rgb[1],rgb[2],a).uv(1, 1).uv2(this.packedLightCoords).endVertex();
 				buffer.vertex(this.pose, x2, y1, 0.0F).color(rgb[0],rgb[1],rgb[2],a).uv(1, 0).uv2(this.packedLightCoords).endVertex();
-				this.x += right-7f;
+				this.x += right-1.5f;
 				return true;
 			}
 			return super.accept(stringPos, style, unicodeIdx);

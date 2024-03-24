@@ -53,11 +53,11 @@ public class AlchInit {
 					BRILLIANT = makeForm("brilliant", CRYSTAL, 0xccccdd),		//				Perfect / Diamond, Amethyst
 					DULL = makeForm("dull", CRYSTAL, 0xaa9999),				//				Flawed / Quartz, Coal
 			ORGANIC = makeForm("organic", MATERIA, 0x889988),					//		Carbony Stuff
-				DEAD = makeForm("inanimate", ORGANIC, 0x222222),				//			Nonliving / Charcoal
-				ALIVE = makeForm("living", ORGANIC, 0xcc4444),					//			Biological
-					PLANT = makeForm("plant", ALIVE, 0xc5deb3),				//				Plantlife / Wood, Flowers
+				INANIMATE = makeForm("inanimate", ORGANIC, 0x222222),				//			Nonliving / Charcoal
+				LIVING = makeForm("living", ORGANIC, 0xcc4444),					//			Biological
+					PLANT = makeForm("plant", LIVING, 0xc5deb3),				//				Plantlife / Wood, Flowers
 						FOLIAGE = makeForm("foliage", PLANT, 0x40c040),		//					Greenery / Leaves
-					BEAST = makeForm("beast", ALIVE, 0x9a614d),				//				Creatures
+					BEAST = makeForm("beast", LIVING, 0x9a614d),				//				Creatures
 						ANIMAL = makeForm("animal", BEAST, 0xff8080),			//					Friendly
 						MONSTER = makeForm("monster", BEAST, 0x66000),			//					Aggressive
 				IMMORTAL = makeForm("immortal", ORGANIC, 0xd4af77),			//			Divine / Minium Stone

@@ -16,7 +16,6 @@ import com.quartzshard.aasb.common.item.equipment.tool.*;
 
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -166,7 +165,7 @@ public class ItemInit {
 
 	// BlockItems
 	public static final RegistryObject<BlockItem>
-		TEST_BLOCK_ITEM = fromBlock(BlockInit.CRUMBLING_STONE, Tab.SYN);
+		TEST_BLOCK_ITEM = fromBlock(BlockInit.BLOCK_CRUMBLING_STONE, Tab.SYN);
 	
 	private static final RegistryObject<Item> basic(String name, Tab tab) {
 		return reg(name, PROPS_GENERIC_64, tab);

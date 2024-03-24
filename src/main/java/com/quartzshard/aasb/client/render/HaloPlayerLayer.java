@@ -7,15 +7,11 @@ import java.util.UUID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
-import org.joml.Vector3f;
 
 import com.quartzshard.aasb.AASB;
-import com.quartzshard.aasb.client.render.AASBRenderType;
 import com.quartzshard.aasb.common.item.equipment.armor.jewellery.AmuletItem;
-import com.quartzshard.aasb.common.item.equipment.armor.jewellery.CircletItem;
 import com.quartzshard.aasb.common.item.equipment.armor.jewellery.JewelleryArmorItem;
 import com.quartzshard.aasb.util.Colors;
-import com.quartzshard.aasb.util.WayUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -27,14 +23,13 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 
 import net.minecraftforge.fml.loading.FMLEnvironment;
 
-public class AASBPlayerLayer extends RenderLayer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> {
+public class HaloPlayerLayer extends RenderLayer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> {
 
-	public AASBPlayerLayer(@NotNull PlayerRenderer renderer) {
+	public HaloPlayerLayer(@NotNull PlayerRenderer renderer) {
 		super(renderer);
 		this.renderer = renderer;
 
@@ -55,15 +50,15 @@ public class AASBPlayerLayer extends RenderLayer<AbstractClientPlayer, PlayerMod
 
 		// ShowdownFreddy (Some textures, friend)
 		SPECIAL_HALOS.put(FRED_UUID,
-				new MagnumOpusHaloData(AASB.rl(HALOS+"fred.png"), Colors.WHITE, Colors.WHITE, HaloFadeType.NONE, 2000, 50));
+				new MagnumOpusHaloData(AASB.rl(HALOS+"fred.png"), Colors.WHITE, Colors.WHITE, HaloFadeType.NONE, 1, 1));
 
 		// sinkillerj (Inspiration, lots of borrowed code)
 		SPECIAL_HALOS.put(SIN_UUID,
-				new MagnumOpusHaloData(AASB.rl(HALOS + "yue.png"), Colors.MATERIA_INFIRMA, Colors.MATERIA_INFIRMA, HaloFadeType.NONE, 2000, 50));
+				new MagnumOpusHaloData(AASB.rl(HALOS + "yue.png"), Colors.MATERIA_INFIRMA, Colors.MATERIA_INFIRMA, HaloFadeType.NONE, 1, 1));
 
 		// Clarissa (Because I feel like being nice)
 		SPECIAL_HALOS.put(CLAR_UUID,
-				new MagnumOpusHaloData(AASB.rl(HALOS + "heart.png"), Colors.PHILOSOPHERS, Colors.PHILOSOPHERS, HaloFadeType.NONE, 2000, 50));
+				new MagnumOpusHaloData(AASB.rl(HALOS + "heart.png"), Colors.PHILOSOPHERS, Colors.PHILOSOPHERS, HaloFadeType.NONE, 1, 1));
 	}
 
 	private final PlayerRenderer renderer;
@@ -95,7 +90,7 @@ public class AASBPlayerLayer extends RenderLayer<AbstractClientPlayer, PlayerMod
 
 	/** for the alchemical barrier */
 	private void renderMagnumOpusHalo(PoseStack poseStack, MultiBufferSource renderBuffer, AbstractClientPlayer player, float ageInTicks) {
-		@NotNull String debugStr = "7c48a895-c35f-42c4-ab94-aeba35de0217";//DebugCfg.HALO_UUID.get();
+		@NotNull String debugStr = "nothing";//DebugCfg.HALO_UUID.get();
 		@Nullable UUID debugUUID = null;
 		if (!FMLEnvironment.production) {
 			try {

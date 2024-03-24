@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
  * Items that can contain Way, and possibly inserted to / extracted from
  */
 public interface IWayHolder {
-	public static final String TK_STOREDWAY = "StoredWay";
+	String TK_STOREDWAY = "StoredWay";
 
 	
 	/**
@@ -23,7 +23,7 @@ public interface IWayHolder {
 	 * @param stack The ItemStack to check storage of
 	 * @return Amount of Way stored
 	 */
-	public default long getStoredWay(ItemStack stack) {
+	default long getStoredWay(ItemStack stack) {
 		return NBTUtil.getLong(stack, TK_STOREDWAY, 0);
 	}
 	
@@ -32,14 +32,14 @@ public interface IWayHolder {
 	 * @param stack
 	 * @return the maximum amount of way the stack can store
 	 */
-	public long getMaxWay(ItemStack stack);
+	long getMaxWay(ItemStack stack);
 
 	/**
 	 * Checks if any amount of Way can be inserted
 	 * @param stack
 	 * @return if at least 1 Way can be inserted right now
 	 */
-	public default boolean canInsertWay(ItemStack stack) {
+	default boolean canInsertWay(ItemStack stack) {
 		return getStoredWay(stack) == 0;
 	}
 	
@@ -49,7 +49,7 @@ public interface IWayHolder {
 	 * @param query
 	 * @return If insertWay() called with the given query would totally succeed (partial insertions would mean false)
 	 */
-	public default boolean canInsertWay(ItemStack stack, long query) {
+	default boolean canInsertWay(ItemStack stack, long query) {
 		return canInsertWay(stack)
 			&& getStoredWay(stack) + query <= getMaxWay(stack);
 	}
@@ -61,7 +61,7 @@ public interface IWayHolder {
 	 * @return the amount that was actually inserted
 	 * @apiNote the default implementation here will never do partial insertions, and thus will always return either 0 or `amount`
 	 */
-	public default long insertWay(ItemStack stack, long amount) {
+	default long insertWay(ItemStack stack, long amount) {
 		if (canInsertWay(stack, amount)) {
 			long newWay = getStoredWay(stack) + amount;
 			setStoredWay(stack, newWay);
@@ -75,7 +75,7 @@ public interface IWayHolder {
 	 * @param stack
 	 * @return if at least 1 Way can be extracted right now
 	 */
-	public default boolean canExtractWay(ItemStack stack) {
+	default boolean canExtractWay(ItemStack stack) {
 		return getStoredWay(stack) > 0;
 	}
 	
@@ -85,7 +85,7 @@ public interface IWayHolder {
 	 * @param query
 	 * @return If extractWay() called with the given query would totally succeed (partial extractions would mean false)
 	 */
-	public default boolean canExtractWay(ItemStack stack, long query) {
+	default boolean canExtractWay(ItemStack stack, long query) {
 		return canExtractWay(stack) && getStoredWay(stack) >= query;
 	}
 
@@ -97,7 +97,7 @@ public interface IWayHolder {
 	 * @return the amount that was actually extracted
 	 * @apiNote the default implementation here will never do partial extractions, and thus will always return either 0 or `amount`
 	 */
-	public default long extractWay(ItemStack stack, long amount) {
+	default long extractWay(ItemStack stack, long amount) {
 		if (canExtractWay(stack, amount)) {
 			long newWay = getStoredWay(stack) - amount;
 			setStoredWay(stack, newWay);
@@ -112,7 +112,7 @@ public interface IWayHolder {
 	 * @param stack Stack to set storage of
 	 * @param newWay New Way value of the storage
 	 */
-	public default void setStoredWay(ItemStack stack, long newWay) {
+	default void setStoredWay(ItemStack stack, long newWay) {
 		NBTUtil.setLong(stack, TK_STOREDWAY, newWay);
 	}
 	

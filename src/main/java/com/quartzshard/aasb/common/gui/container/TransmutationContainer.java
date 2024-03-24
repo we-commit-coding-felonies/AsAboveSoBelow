@@ -1,4 +1,4 @@
-package com.quartzshard.aasb.common.misc;
+package com.quartzshard.aasb.common.gui.container;
 
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.Container;
@@ -12,8 +12,8 @@ import java.util.List;
 
 public class TransmutationContainer implements Container {
 
-	private final AbstractContainerMenu menu;
-	private final List<ItemStack> stacks;
+	protected final AbstractContainerMenu menu;
+	protected final List<ItemStack> stacks;
 
 	public TransmutationContainer(AbstractContainerMenu menu, int size) {
 		this.menu = menu;
@@ -73,5 +73,9 @@ public class TransmutationContainer implements Container {
 	@Override
 	public void clearContent() {
 		this.stacks.clear();
+	}
+
+	public List<ItemStack> getStacks() {
+		return List.copyOf(stacks);
 	}
 }
