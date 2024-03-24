@@ -49,17 +49,21 @@ public class AASBPlayerLayer extends RenderLayer<AbstractClientPlayer, PlayerMod
 		SPECIAL_HALOS.put(GANT_UUID,
 				new MagnumOpusHaloData(AASB.rl(HALOS + "gear_gant.png"), Colors.WHITE, Colors.MID_GRAY, HaloFadeType.VAL, 300, 75));
 
-		// quartzshard / craft_of_mining (Lead developer)
+		// quartzshard / craft_of_mining (Mapper nerd)
 		SPECIAL_HALOS.put(SHARD_UUID,
 				new MagnumOpusHaloData(AASB.rl(HALOS + "pentagonal.png"), Colors.MATERIA_MAJOR, Colors.PHILOSOPHERS, HaloFadeType.HUE, 2000, 50));
 
+		// ShowdownFreddy (Some textures, friend)
+		SPECIAL_HALOS.put(FRED_UUID,
+				new MagnumOpusHaloData(AASB.rl(HALOS+"fred.png"), Colors.WHITE, Colors.WHITE, HaloFadeType.NONE, 2000, 50));
+
 		// sinkillerj (Inspiration, lots of borrowed code)
 		SPECIAL_HALOS.put(SIN_UUID,
-				new MagnumOpusHaloData(AASB.rl(HALOS + "yue.png"), Colors.MATERIA_INFIRMA, Colors.MATERIA_INFIRMA, HaloFadeType.NONE, 1, 1));
+				new MagnumOpusHaloData(AASB.rl(HALOS + "yue.png"), Colors.MATERIA_INFIRMA, Colors.MATERIA_INFIRMA, HaloFadeType.NONE, 2000, 50));
 
 		// Clarissa (Because I feel like being nice)
 		SPECIAL_HALOS.put(CLAR_UUID,
-				new MagnumOpusHaloData(AASB.rl(HALOS + "heart.png"), Colors.PHILOSOPHERS, Colors.PHILOSOPHERS, HaloFadeType.NONE, 1, 1));
+				new MagnumOpusHaloData(AASB.rl(HALOS + "heart.png"), Colors.PHILOSOPHERS, Colors.PHILOSOPHERS, HaloFadeType.NONE, 2000, 50));
 	}
 
 	private final PlayerRenderer renderer;
@@ -68,13 +72,19 @@ public class AASBPlayerLayer extends RenderLayer<AbstractClientPlayer, PlayerMod
 	private static final ResourceLocation DEFAULT_HALO = AASB.rl(HALOS + "normal.png");
 	private static final MagnumOpusHaloData DEFAULT_HALO_DATA = new MagnumOpusHaloData(DEFAULT_HALO, Colors.MATERIA_INFIRMA, Colors.MATERIA_PRIMA, HaloFadeType.HUE, 2000, 50);
 
+	/**
+	 * This is used for silly people who ask to be given an offensive custom halo
+	 */
+	private static final MagnumOpusHaloData DOOFUS_HALO_DATA = new MagnumOpusHaloData(AASB.rl(HALOS+"doofus.png"), Colors.BROWN, Colors.BROWN, HaloFadeType.NONE, 1, 1);
+
 	// special people uuids
 	private static final UUID
-			SOL_UUID = UUID.fromString("89b9a7d2-daa3-48cc-903c-96d125106a6b"),
-			GANT_UUID = UUID.fromString("c6cea672-5842-4d85-b6a1-6060b0495c5c"),
-			SHARD_UUID = UUID.fromString("b9d0673f-51af-446e-a4d0-512eab478561"),
-			SIN_UUID = UUID.fromString("5f86012c-ca4b-451a-989c-8fab167af647"),
-			CLAR_UUID = UUID.fromString("e5c59746-9cf7-4940-a849-d09e1f1efc13");
+		SOL_UUID = UUID.fromString("89b9a7d2-daa3-48cc-903c-96d125106a6b"),
+		GANT_UUID = UUID.fromString("c6cea672-5842-4d85-b6a1-6060b0495c5c"),
+		SHARD_UUID = UUID.fromString("b9d0673f-51af-446e-a4d0-512eab478561"),
+		FRED_UUID = UUID.fromString("7c48a895-c35f-42c4-ab94-aeba35de0217"),
+		SIN_UUID = UUID.fromString("5f86012c-ca4b-451a-989c-8fab167af647"),
+		CLAR_UUID = UUID.fromString("e5c59746-9cf7-4940-a849-d09e1f1efc13");
 
 	@Override
 	public void render(PoseStack poseStack, MultiBufferSource renderBuffer, int bakedLight,
@@ -85,7 +95,7 @@ public class AASBPlayerLayer extends RenderLayer<AbstractClientPlayer, PlayerMod
 
 	/** for the alchemical barrier */
 	private void renderMagnumOpusHalo(PoseStack poseStack, MultiBufferSource renderBuffer, AbstractClientPlayer player, float ageInTicks) {
-		@NotNull String debugStr = "null";//DebugCfg.HALO_UUID.get();
+		@NotNull String debugStr = "7c48a895-c35f-42c4-ab94-aeba35de0217";//DebugCfg.HALO_UUID.get();
 		@Nullable UUID debugUUID = null;
 		if (!FMLEnvironment.production) {
 			try {
@@ -95,25 +105,20 @@ public class AASBPlayerLayer extends RenderLayer<AbstractClientPlayer, PlayerMod
 				debugUUID = null;
 			}
 		}
-		// in production, this should always be false, as debugUUID will never not be
-		// null
 		float chargeLevel = 0;
-		boolean isDev = debugUUID != null && player.getScoreboardName() == "Dev" && SPECIAL_HALOS.containsKey(debugUUID);
-		if (!isDev) {
-			// checks if the halo should render
-			boolean hasWay = false;
-			for (ItemStack stack : player.getArmorSlots()) {
-				if (!(stack.getItem() instanceof JewelleryArmorItem))
-					return;
-				if (stack.getItem() instanceof AmuletItem item) {
-					long stored = item.getStoredWay(stack);
-					hasWay = stored > 0;
-					chargeLevel = (float)stored/(float)item.getMaxWay(stack);
-				}
-			}
-			if (!hasWay)
+		boolean isDev = debugUUID != null && player.getScoreboardName().equals("Dev") && SPECIAL_HALOS.containsKey(debugUUID);
+		boolean hasWay = isDev;
+		for (ItemStack stack : player.getArmorSlots()) {
+			if (!(stack.getItem() instanceof JewelleryArmorItem))
 				return;
+			if (stack.getItem() instanceof AmuletItem item) {
+				long stored = item.getStoredWay(stack);
+				hasWay = stored > 0;
+				chargeLevel = (float)stored/(float)item.getMaxWay(stack);
+			}
 		}
+		if (!hasWay)
+			return;
 		int timer = Math.round(ageInTicks);
 		poseStack.pushPose();
 		renderer.getModel().jacket.translateAndRotate(poseStack);
@@ -200,17 +205,5 @@ public class AASBPlayerLayer extends RenderLayer<AbstractClientPlayer, PlayerMod
 	
 	private enum HaloFadeType {
 		HUE, SAT, VAL, NONE
-	}
-
-	/** for the circlet */
-	private void renderAllSeeingEye(PoseStack poseStack, MultiBufferSource renderBuffer, AbstractClientPlayer player, float ageInTicks) {
-		ItemStack circlet = player.getItemBySlot(EquipmentSlot.HEAD);
-		if (circlet.getItem() instanceof CircletItem ci) {
-			// nyi TODO this
-		}
-	}
-
-	private void renderAfterimage() {
-		// nyi TODO this
 	}
 }
