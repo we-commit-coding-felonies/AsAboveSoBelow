@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="1024"
+   height="1024"
+   viewBox="0 0 270.9333 270.9333"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.3.2 (091e20ef0f, 2023-11-25, custom)"
+   sodipodi:docname="philosymbol-white.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="px"
+     inkscape:zoom="0.5"
+     inkscape:cx="301"
+     inkscape:cy="236"
+     inkscape:window-width="1920"
+     inkscape:window-height="1008"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg1"
+     showgrid="false" />
+  <defs
+     id="defs1" />
+  <path
+     id="path31-4"
+     style="display:inline;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#ffffff;stroke-width:8.46668;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1;stop-color:#000000"
+     inkscape:transform-center-x="7.529026e-06"
+     inkscape:transform-center-y="-126.69782"
+     d="m 135.46664,4.8882212 113.08425,195.8676488 -226.16849,0 z"
+     inkscape:label="triangle" />
+  <path
+     id="path42"
+     style="display:inline;fill:none;fill-rule:evenodd;stroke:#ffffff;stroke-width:8.46668;stroke-dasharray:none;stop-color:#000000;stroke-opacity:1"
+     d="M 248.55088,200.75587 135.46665,266.04507 22.38241,200.75587 22.38242,70.177451 135.46665,4.8882312 248.55089,70.177451 Z"
+     inkscape:label="hex" />
+  <path
+     id="path43"
+     style="display:inline;fill:none;fill-rule:evenodd;stroke:#ffffff;stroke-width:8.46668;stroke-dasharray:none;stop-color:#000000;stroke-opacity:1"
+     d="m 200.75585,135.46666 a 65.289207,65.289207 0 0 1 -65.2892,65.28921 65.289207,65.289207 0 0 1 -65.28921,-65.28921 65.289207,65.289207 0 0 1 65.28921,-65.289209 65.289207,65.289207 0 0 1 65.2892,65.289209 z"
+     inkscape:label="circle" />
+  <path
+     id="rect43"
+     style="display:inline;fill:none;fill-rule:evenodd;stroke:#ffffff;stroke-width:8.46668;stroke-linejoin:bevel;stroke-dasharray:none;stop-color:#000000;stroke-opacity:1"
+     d="m 70.17744,135.46666 65.28921,-65.289209 65.2892,65.289209 -65.2892,65.2892 z"
+     inkscape:label="square" />
+</svg>

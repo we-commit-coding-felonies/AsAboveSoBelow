@@ -1,9 +1,21 @@
 package com.quartzshard.aasb.util;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.quartzshard.aasb.api.alchemy.aspect.IAspect;
+import com.quartzshard.aasb.client.render.AASBRenderType;
+import net.minecraft.client.gui.layouts.LayoutElement;
+import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
+import org.joml.Matrix4f;
+import org.joml.Vector2fc;
+import org.joml.Vector2i;
 
 /**
  * Abstracted rendering code, drawing things using particles, fun stuff like that <br>
@@ -19,7 +31,7 @@ public class RenderUtil {
 	 * @param stepSize lower = more particles
 	 * @param level world/level particles are in
 	 */
-	public static void drawVectorWithParticles(Vec3 start, Vec3 end, ParticleOptions particle, double stepSize, ClientLevel level) {
+	public static void drawVectorWithParticles(Vec3 start, Vec3 end, ParticleOptions particle, double stepSize, @NotNull ClientLevel level) {
 		Vec3 line = end.subtract(start);
 		Vec3 step = line.normalize().scale(stepSize);
 		int numSteps = (int) (line.length() / step.length());
@@ -44,7 +56,7 @@ public class RenderUtil {
 	 * @param level the level to put particles in
 	 * @param fill if true, draws a solid box (filled with particles), instead of just an outline
 	 */
-	public static void drawAABBWithParticles(AABB box, ParticleOptions particle, double stepSize, ClientLevel level, boolean fill, boolean infRange) {
+	public static void drawAABBWithParticles(@NotNull AABB box, ParticleOptions particle, double stepSize, ClientLevel level, boolean fill, boolean infRange) {
 		if (fill) {
 			for (double i = box.minX; i < box.maxX; i += stepSize) {
 	    		for (double j = box.minY; j < box.maxY; j += stepSize) {
@@ -79,5 +91,17 @@ public class RenderUtil {
 			level.addParticle(particle, infRange, box.maxX, box.maxY, i, 0, 0, 0);
 			level.addParticle(particle, infRange, box.maxX, box.minY, i, 0, 0, 0);
 		}
+	}
+
+	public static void drawAspectSymbol(PoseStack pose, MultiBufferSource.BufferSource bufferSource, ResourceLocation symbol, int color,
+			float x, float y, float zLevel, float widthIn, float heightIn, float minU, float minV, float maxU, float maxV) {
+		Matrix4f matrix4f = pose.last().pose();
+		VertexConsumer buffer = bufferSource.getBuffer(AASBRenderType.ASPECT_TOOLTIP.apply(symbol));
+		int[] rgb = Colors.rgbFromInt(color);
+		int a = 255;
+		buffer.vertex(matrix4f, x + 0, y + 0, zLevel).color(rgb[0],rgb[1],rgb[2],a).uv(minU, minV).endVertex();
+		buffer.vertex(matrix4f, x + 0, y + heightIn, zLevel).color(rgb[0],rgb[1],rgb[2],a).uv(minU, maxV).endVertex();
+		buffer.vertex(matrix4f, x + widthIn, y + heightIn, zLevel).color(rgb[0],rgb[1],rgb[2],a).uv(maxU, maxV).endVertex();
+		buffer.vertex(matrix4f, x + widthIn, y + 0, zLevel).color(rgb[0],rgb[1],rgb[2],a).uv(maxU, minV).endVertex();
 	}
 }

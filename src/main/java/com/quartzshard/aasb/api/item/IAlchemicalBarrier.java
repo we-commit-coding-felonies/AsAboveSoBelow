@@ -15,6 +15,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Block damage, similar to the Draconic Evolution shield <br>
@@ -51,7 +52,7 @@ public interface IAlchemicalBarrier {
 	 * @param event The LivingAttackEvent being shielded
 	 * @param stack The ItemStack doing the shielding
 	 */
-	default void tryShield(LivingAttackEvent event, ItemStack stack) {	
+	default void tryShield(@NotNull LivingAttackEvent event, ItemStack stack) {
 		Entity hurt = event.getEntity();
 		if (hurt.level().isClientSide || event.isCanceled()) return;
 		if (shieldWithWay((Player)hurt, event.getAmount(), event.getSource(), stack)) {
@@ -68,7 +69,7 @@ public interface IAlchemicalBarrier {
 	 * @param stack The ItemStack doing the shielding
 	 * @return If shielding was at all successful
 	 */
-	default boolean shieldForFree(Player player, float damage, DamageSource source, ItemStack stack) {
+	default boolean shieldForFree(Player player, float damage, @NotNull DamageSource source, ItemStack stack) {
 		return damage <= 0 || source.is(DmgTP.FORCEFIELD_EZBLOCK);
 	}
 
@@ -82,11 +83,11 @@ public interface IAlchemicalBarrier {
 	 * @param stack The ItemStack doing the shielding
 	 * @return If shielding was at all successful
 	 */
-	default boolean shieldWithWay(Player player, float damage, DamageSource source, ItemStack stack) {
+	default boolean shieldWithWay(@NotNull Player player, float damage, @NotNull DamageSource source, ItemStack stack) {
 		boolean doDebug = false;
 		if (doDebug) {
 			long storedWay = WayUtil.getAvaliableWay(player);
-			LinkedHashMap<String,String> info = new LinkedHashMap<String,String>();
+			@NotNull LinkedHashMap<String,String> info = new LinkedHashMap<>();
 			info.put("Player Name", player.getName().getString());
 			info.put("Player UUID", player.getStringUUID());
 			info.put("Held Way", storedWay+"");
@@ -105,7 +106,6 @@ public interface IAlchemicalBarrier {
 			info.put("Will try shield", shieldCondition(player, damage, source, stack)+"");
 			info.put("Way Cost", calcShieldingCost(player, damage, source, stack)+"");
 			info.put("Affordable damage", calcAffordableDamage(player, damage, source, stack, storedWay)+"");
-			
 			Logger.debug("IAlchemicalBarrier", "ShieldingDebug", "Attempting to shieldWithWay", info);
 		}
 		

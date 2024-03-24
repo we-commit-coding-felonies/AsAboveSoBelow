@@ -16,6 +16,7 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
@@ -64,12 +65,12 @@ public abstract class AbilityCurioItem extends Item implements IRuneable, ICurio
 	 * where the ItemStack may not be in a curio slot, such as when retrieving item tooltips, the
 	 * index is -1 and the wearer may be null.
 	 *
-	 * @param slotContext Context about the slot that the ItemStack is in
+	 * @param ctx Context about the slot that the ItemStack is in
 	 * @param uuid        Slot-unique UUID
 	 * @return A map of attribute modifiers to apply
 	 */
 	@Override
-	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(SlotContext ctx, UUID uuid, ItemStack stack) {
+	public @NotNull Multimap<Attribute, AttributeModifier> getAttributeModifiers(SlotContext ctx, UUID uuid, ItemStack stack) {
 		List<Multimap<Attribute, AttributeModifier>> maps = new ArrayList<>();
 		ImmutableMultimap.Builder<Attribute,AttributeModifier> builder = ImmutableMultimap.builder();
 		for (Rune rune : this.getInscribedRunes(stack)) {

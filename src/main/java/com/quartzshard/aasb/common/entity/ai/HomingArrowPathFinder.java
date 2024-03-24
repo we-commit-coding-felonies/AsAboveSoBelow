@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.google.common.collect.Lists;
@@ -41,8 +42,8 @@ public class HomingArrowPathFinder {
 	 * returns null if no path could be found within given accuracy
 	 */
 	@Nullable
-	public Path findPath(PathNavigationRegion region, AbstractArrow arrow, Set<BlockPos> targetPosSet, float maxRange, int accuracy,
-			float searchDepthMult) {
+	public Path findPath(PathNavigationRegion region, @NotNull AbstractArrow arrow, Set<BlockPos> targetPosSet, float maxRange, int accuracy,
+						 float searchDepthMult) {
 		this.nearbyNodes.clear();
 		this.nodeEval.prepare(region, arrow);
 		Node node = this.nodeEval.getStart();
@@ -55,8 +56,8 @@ public class HomingArrowPathFinder {
 	}
 
 	@Nullable
-	private Path findPath(ProfilerFiller profiler, Node startNode, Map<Target, BlockPos> targetPosSet, float maxRange,
-			int accuracy, float searchDepthMult) {
+	private Path findPath(ProfilerFiller profiler, Node startNode, @NotNull Map<Target, BlockPos> targetPosSet, float maxRange,
+						  int accuracy, float searchDepthMult) {
 		profiler.push("find_path");
 		profiler.markForCharting(MetricCategory.PATH_FINDING);
 		Set<Target> targets = targetPosSet.keySet();
@@ -136,7 +137,7 @@ public class HomingArrowPathFinder {
 	/**
 	 * Converts a recursive path point structure into a path
 	 */
-	private static Path reconstructPath(Node startNode, BlockPos targetPos, boolean complete) {
+	private static @NotNull Path reconstructPath(Node startNode, BlockPos targetPos, boolean complete) {
 		List<Node> nodes = Lists.newArrayList();
 		Node node = startNode;
 		nodes.add(0, startNode);

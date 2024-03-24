@@ -99,7 +99,7 @@ public class EntUtil {
 			HOMING,
 			SENTIENT;
 			
-			AbstractArrow make(ShootContext ctx, ArrowOptions opts) {
+			AbstractArrow make(@NotNull ShootContext ctx, ArrowOptions opts) {
 				AbstractArrow arrow;
 				switch (this) {
 				case STRAIGHT:
@@ -146,8 +146,8 @@ public class EntUtil {
 					float mx = -Mth.sin((float) (ctx.rot.y * (Math.PI / 180d))) * Mth.cos((float) (ctx.rot.x * (Math.PI / 180d)));
 					float my = -Mth.sin((float) ((ctx.rot.x + ctx.rot.z) * (Math.PI / 180d)));
 					float mz = Mth.cos((float) (ctx.rot.y * (Math.PI / 180d))) * Mth.cos((float) (ctx.rot.x * (Math.PI / 180d)));
-					RandomSource rand = ctx.level.random;
-					Vec3 m = new Vec3(mx, my, mz).normalize().add(rand.nextGaussian() * 0.0075d * opts.spread, rand.nextGaussian() * 0.0075d * opts.spread, rand.nextGaussian() * 0.0075d * opts.spread).scale(opts.velocity);
+					@NotNull RandomSource rand = ctx.level.random;
+					@NotNull Vec3 m = new Vec3(mx, my, mz).normalize().add(rand.nextGaussian() * 0.0075d * opts.spread, rand.nextGaussian() * 0.0075d * opts.spread, rand.nextGaussian() * 0.0075d * opts.spread).scale(opts.velocity);
 					arrow.setDeltaMovement(m);
 				}
 				arrow.setPierceLevel(opts.pierce);
@@ -166,7 +166,7 @@ public class EntUtil {
 		 * 
 		 * @return array of all arrows shot
 		 */
-		public static List<AbstractArrow> shootArrow(int amount, ArrowType type, ShootContext ctx, ArrowOptions opts) {
+		public static List<AbstractArrow> shootArrow(int amount, ArrowType type, ShootContext ctx, @NotNull ArrowOptions opts) {
 			List<AbstractArrow> arrows = new ArrayList<>(amount);
 			for (int i = 0; i < amount; i++) {
 				AbstractArrow a = type.make(ctx, opts);
@@ -181,13 +181,13 @@ public class EntUtil {
 
 		public static SmallFireball fireball(Level level, Vec3 pos, Vec3 target, @Nullable LivingEntity owner, double accMod) {
 	        double dist = pos.distanceToSqr(target);//owner.distanceToSqr(target);
-	        Vec3 shootVec = new Vec3(
+	        @NotNull Vec3 shootVec = new Vec3(
 	        	target.x - pos.x,
 	        	target.y - pos.y,
 	        	target.z - pos.z
 	        );
 	        double acc = Math.sqrt(Math.sqrt(dist)) * accMod;
-			SmallFireball fb = new SmallFireball(level, owner,
+			@NotNull SmallFireball fb = new SmallFireball(level, owner,
 					shootVec.x + owner.getRandom().nextGaussian() * acc,
 					shootVec.y + owner.getRandom().nextGaussian() * acc,
 					shootVec.z + owner.getRandom().nextGaussian() * acc);
@@ -195,7 +195,7 @@ public class EntUtil {
 			level.addFreshEntity(fb);
 			return fb;
 		}
-		public static SmallFireball fireball(Level level, Vec3 pos, Vec3 target, @Nullable LivingEntity owner) {
+		public static SmallFireball fireball(Level level, Vec3 pos, @NotNull Vec3 target, @Nullable LivingEntity owner) {
 			return fireball(level, pos, target, owner, 0.35);
 		}
 	}
@@ -208,8 +208,8 @@ public class EntUtil {
 	 */
 	public static boolean attemptRandomTeleport(LivingEntity ent) {
 		boolean didDo = false;
-		RandomSource rand = ent.getRandom();
-		Level level =  ent.level();
+		@NotNull RandomSource rand = ent.getRandom();
+		@NotNull Level level =  ent.level();
 		boolean shouldTry = !level.isClientSide() && ent.isAlive();
 		for (int i = 0; i < 64; ++i) {
 			if (shouldTry) {
@@ -217,7 +217,7 @@ public class EntUtil {
 				double tryY = ent.getY() + (rand.nextInt(64) - 32);
 				double tryZ = ent.getZ() + (rand.nextDouble() - 0.5D) * 64.0D;
 				if (true) {
-					BlockPos.MutableBlockPos mbPos = new BlockPos.MutableBlockPos(tryX, tryY, tryZ);
+					BlockPos.@NotNull MutableBlockPos mbPos = new BlockPos.MutableBlockPos(tryX, tryY, tryZ);
 					while (mbPos.getY() > level.getMinBuildHeight() && !level.getBlockState(mbPos).blocksMotion()) {
 						mbPos.move(Direction.DOWN);
 					}
@@ -227,7 +227,7 @@ public class EntUtil {
 					if (targetIsSolid && (!targetIsWater || !ent.isSensitiveToWater())) {
 						if (ent instanceof EnderMan man) {
 							// only send the enderman tele event if we are an enderman
-							net.minecraftforge.event.entity.EntityTeleportEvent.EnderEntity event = net.minecraftforge.event.ForgeEventFactory.onEnderTeleport(man, tryX, tryY, tryZ);
+							net.minecraftforge.event.entity.EntityTeleportEvent.@NotNull EnderEntity event = net.minecraftforge.event.ForgeEventFactory.onEnderTeleport(man, tryX, tryY, tryZ);
 							if (event.isCanceled()) return false;
 							didDo = ent.randomTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true);
 						} else {
@@ -258,7 +258,7 @@ public class EntUtil {
 	 * @param entity
 	 * @return if entity is invincible
 	 */
-	public static boolean isInvincible(Entity entity) {
+	public static boolean isInvincible(@NotNull Entity entity) {
 		boolean invincible = entity.isInvulnerable();
 		if (!invincible && entity instanceof Player plr) {
 			invincible = plr.isCreative() || plr.isSpectator();
@@ -291,7 +291,7 @@ public class EntUtil {
 	/**
 	 * player-specific
 	 */
-	public static boolean isTamedBy(Entity entity, Player player) {
+	public static boolean isTamedBy(Entity entity, @NotNull Player player) {
 		if (entity instanceof TamableAnimal animal) {
 			return animal.isOwnedBy(player);
 		}
@@ -328,7 +328,7 @@ public class EntUtil {
 		return isTamed(entity) || hasTrust(entity);
 	}
 	
-	public static boolean isTamedByOrTrusts(Entity entity, Player player) {
+	public static boolean isTamedByOrTrusts(Entity entity, @NotNull Player player) {
 		return isTamedBy(entity, player) || isTrustingOf(entity, player);
 	}
 

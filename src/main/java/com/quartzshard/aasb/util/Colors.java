@@ -143,7 +143,7 @@ public enum Colors {
 	 * Designed for use with {@link net.minecraft.world.item.Item#getBarColor} <br>
 	 * Fades from color 1 to color 2, then back to color 1
 	 * <p>
-	 * @deprecated Use {@link ColorsHelper#fadingValue(long, int, int, float, float)} instead, its less jank
+	 * @deprecated Use {@link Colors#loopFade(long, int, int, float, float)} instead, its less jank
 	 * 
 	 * @param timer An incrementing value that the cycle uses to fade, such as the world time
 	 * @param cycle How many timer ticks a full cycle takes, lower = faster fade

@@ -12,6 +12,7 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * AABB and related stuff
@@ -20,7 +21,7 @@ import net.minecraft.world.phys.Vec3;
  */
 public class BoxUtil {
 	
-	public static AABB getCubeForAoeInFront(BlockPos pos, Direction direction, float o) {
+	public static AABB getCubeForAoeInFront(@NotNull BlockPos pos, Direction direction, float o) {
 		float x = pos.getX()+0.5f;
 		float y = pos.getY()+0.5f;
 		float z = pos.getZ()+0.5f;
@@ -39,7 +40,7 @@ public class BoxUtil {
 	 * @param box
 	 * @return
 	 */
-	public static AABB growToCube(AABB box) {
+	public static @NotNull AABB growToCube(@NotNull AABB box) {
 		double x = box.getXsize();
 		double y = box.getYsize();
 		double z = box.getZsize();
@@ -52,7 +53,7 @@ public class BoxUtil {
 	 * @param box
 	 * @return
 	 */
-	public static AABB shrinkToCube(AABB box) {
+	public static AABB shrinkToCube(@NotNull AABB box) {
 		double x = box.getXsize();
 		double y = box.getYsize();
 		double z = box.getZsize();
@@ -70,10 +71,10 @@ public class BoxUtil {
 		return AABB.ofSize(box.getCenter(), s,s,s);
 	}
 
-	public static AABB moveBoxTo(AABB box, BlockPos pos) {
+	public static @NotNull AABB moveBoxTo(AABB box, BlockPos pos) {
 		return moveBoxTo(box, Vec3.atCenterOf(pos));
 	}
-	public static AABB moveBoxTo(AABB box, Vec3 pos) {
+	public static AABB moveBoxTo(@NotNull AABB box, @NotNull Vec3 pos) {
 		double x = box.getXsize();
 		double y = box.getYsize();
 		double z = box.getZsize();
@@ -86,7 +87,7 @@ public class BoxUtil {
 	 * @param rand
 	 * @return
 	 */
-	public static Vec3 randomPointInBox(AABB box, Random rand) {
+	public static @NotNull Vec3 randomPointInBox(AABB box, Random rand) {
 		return new Vec3(
 			rand.nextDouble(box.minX, box.maxX),
 			rand.nextDouble(box.minY, box.maxY),
@@ -95,17 +96,17 @@ public class BoxUtil {
 	}
 	
 	// https://github.com/sinkillerj/ProjectE/blob/mc1.18.x/src/main/java/moze_intel/projecte/utils/WorldHelper.java
-	public static Iterable<BlockPos> allBlocksInBox(AABB box) {
+	public static Iterable<BlockPos> allBlocksInBox(@NotNull AABB box) {
 		return allBlocksInBounds(BlockPos.containing(box.minX, box.minY, box.minZ), BlockPos.containing(box.maxX, box.maxY, box.maxZ));
 	}
-	public static Iterable<BlockPos> allBlocksInBounds(BlockPos corner1, BlockPos corner2) {
+	public static Iterable<BlockPos> allBlocksInBounds(@NotNull BlockPos corner1, @NotNull BlockPos corner2) {
 		return () -> BlockPos.betweenClosedStream(corner1, corner2).iterator();
 	}
 
-	public static Vec3 getMin(AABB box) {
+	public static @NotNull Vec3 getMin(@NotNull AABB box) {
 		return new Vec3(box.minX, box.minY, box.minZ);
 	}
-	public static Vec3 getMax(AABB box) {
+	public static @NotNull Vec3 getMax(AABB box) {
 		return new Vec3(box.maxX, box.maxY, box.maxZ);
 	}
 	
@@ -126,13 +127,13 @@ public class BoxUtil {
 	}
 	
 
-	public static Vec3 getCorner(AABB box, Corner corner) {
+	public static Vec3 getCorner(@NotNull AABB box, Corner corner) {
 		return getCorner(box, corner.index);
 	}
 	/**
 	 * gets the specified corner
 	 * @param box
-	 * @param index a 3 bit int flag, defining if X, Y, and Z are their min (0) or max (1), respectively
+	 * @param id a 3 bit int flag, defining if X, Y, and Z are their min (0) or max (1), respectively
 	 * @return
 	 */
 	public static Vec3 getCorner(AABB box, int id) {
@@ -164,7 +165,7 @@ public class BoxUtil {
 	 * @param side
 	 * @return
 	 */
-	public static Tuple<Vec3,Vec3> getSide(AABB box, Direction side) {
+	public static @NotNull Tuple<Vec3,Vec3> getSide(AABB box, @NotNull Direction side) {
 		int corner; // a 3 bit index value for a corner
 		boolean positive = side.getAxisDirection() == Direction.AxisDirection.POSITIVE;
 		switch (side.getAxis()) {
@@ -188,7 +189,7 @@ public class BoxUtil {
 		return new Tuple<>(getCorner(box, min), getCorner(box, max));
 	}
 	
-	public static Map<Direction, Tuple<Vec3,Vec3>> getAllSides(AABB box) {
+	public static @NotNull Map<Direction, Tuple<Vec3,Vec3>> getAllSides(AABB box) {
 		Map<Direction, Tuple<Vec3,Vec3>> sides = new HashMap<>();
 		for (Direction side : Direction.values()) {
 			sides.put(side, getSide(box, side));
@@ -211,7 +212,7 @@ public class BoxUtil {
 	public static double surfaceArea(AABB box) {
 		double sa = 0;
 		for (Entry<Direction, Tuple<Vec3,Vec3>> side : getAllSides(box).entrySet()) {
-			Direction.Axis axis = side.getKey().getAxis();
+			Direction.@NotNull Axis axis = side.getKey().getAxis();
 			Vec3 min = side.getValue().getA();
 			Vec3 max = side.getValue().getB();
 			switch (axis) {
@@ -227,6 +228,14 @@ public class BoxUtil {
 			}
 		}
 		return sa;
+	}
+	
+	/**
+	 * @param box
+	 * @return perimeter length of the box in meters
+	 */
+	public static double perimeter(AABB box) {
+		return box.getXsize()*4 + box.getYsize()*4 + box.getZsize()*4;
 	}
 
 }

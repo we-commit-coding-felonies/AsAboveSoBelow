@@ -12,6 +12,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandler;
+import org.jetbrains.annotations.NotNull;
 
 public class WayUtil {
 	
@@ -77,7 +78,7 @@ public class WayUtil {
 		// Inventory last
 		Optional<IItemHandler> oiih = player.getCapability(ForgeCapabilities.ITEM_HANDLER).resolve();
 		if (oiih.isPresent()) {
-			IItemHandler inv = oiih.get();			
+			@NotNull IItemHandler inv = oiih.get();
 			for (int i = 0; i < inv.getSlots(); i++) {
 				if (i == 40) continue; // offhand, was already checked
 				ItemStack stack = inv.getStackInSlot(i);

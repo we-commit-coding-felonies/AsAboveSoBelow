@@ -7,6 +7,7 @@ import com.mojang.logging.LogUtils;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * because outputting text is very challenging
@@ -90,7 +91,7 @@ public class Logger {
 	public static void info(String name, String label, String msg, Map<String,String> data) {
 		LOG.info("|"+ label +"| - Message from ["+ name +"]:");
 		LOG.info(msg);
-		for (Map.Entry<String,String> entry : data.entrySet()) {
+		for (Map.@NotNull Entry<String,String> entry : data.entrySet()) {
 			LOG.info(entry.getKey() +" : "+ entry.getValue());
 		}
 	}
@@ -104,7 +105,7 @@ public class Logger {
 	 * @param data Strings of information that should also be printed, each on its own line
 	 */
 	public static void info(String name, String label, String msg, String... data) {
-		Map<String,String> dm = new LinkedHashMap<>();
+		@NotNull Map<String,String> dm = new LinkedHashMap<>();
 		for (int i = 0; i < data.length; i++) {
 			dm.put("("+i+")", data[i]);
 		}
@@ -147,7 +148,7 @@ public class Logger {
 	 * @param msg A short message describing things
 	 * @param data Strings of information that should also be printed, each on its own line
 	 */
-	public static void warn(String name, String label, String msg, String... data) {
+	public static void warn(String name, String label, String msg, String @NotNull ... data) {
 		Map<String,String> dm = new LinkedHashMap<>();
 		for (int i = 0; i < data.length; i++) {
 			dm.put("("+i+")", data[i]);
@@ -200,14 +201,21 @@ public class Logger {
 	}
 	
 	/**
+	 * For use in testing, treat like println()
+	 */
+	public static void printChat(String msg, Player player) {
+		player.sendSystemMessage(Component.literal(msg));
+	}
+	
+	/**
 	 * Prints a standardized message to a player's chat
 	 * 
 	 * @param name A name for what is printing this
 	 * @param label A label for this, meant for searching
 	 * @param msg A short message describing the error
-	 * @param playet The player to send the message to
+	 * @param player The player to send the message to
 	 */
-	public static void chat(String name, String label, String msg, Player player) {
+	public static void chat(String name, String label, @NotNull String msg, @NotNull Player player) {
 		player.sendSystemMessage(Component.literal("|"+ label +"| - Message from ["+ name +"]:"));
 		player.sendSystemMessage(Component.literal(msg));
 	}
@@ -219,7 +227,7 @@ public class Logger {
 	 * @param name A name for what is printing this
 	 * @param label A label for this, meant for searching
 	 * @param msg A short message describing the error
-	 * @param playet The player to send the message to
+	 * @param player The player to send the message to
 	 */
 	public static void chat(String name, String label, String msg, Player player, Map<String,String> data) {
 		player.sendSystemMessage(Component.literal("|"+ label +"| - Message from ["+ name +"]:"));
@@ -236,7 +244,7 @@ public class Logger {
 	 * @param name A name for what is printing this
 	 * @param label A label for this, meant for searching
 	 * @param msg A short message describing the error
-	 * @param playet The player to send the message to
+	 * @param player The player to send the message to
 	 */
 	public static void chat(String name, String label, String msg, Player player, String... data) {
 		Map<String,String> dm = new LinkedHashMap<>();

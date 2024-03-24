@@ -1,5 +1,6 @@
 package com.quartzshard.aasb.common.item;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.quartzshard.aasb.AASB;
@@ -49,7 +50,7 @@ public class ElixirOfLifeItem extends Item {
 	}
 	
 	@Override
-	public UseAnim getUseAnimation(ItemStack stack) {
+	public @NotNull UseAnim getUseAnimation(ItemStack stack) {
 		return UseAnim.DRINK;
 	}
 	
@@ -115,7 +116,7 @@ public class ElixirOfLifeItem extends Item {
 		}
 	}
 	
-	public static void grantImmortality(LivingEntity entity) {
+	public static void grantImmortality(@NotNull LivingEntity entity) {
 		if (!entity.level().isClientSide) {
 			entity.level().playSound(null, entity.blockPosition(), SoundEvents.TOTEM_USE, entity.getSoundSource());
 			entity.addEffect(new MobEffectInstance(MobEffects.HEALTH_BOOST, 1200, 9)); // really healthy...

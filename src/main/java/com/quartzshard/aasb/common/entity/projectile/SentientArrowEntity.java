@@ -15,8 +15,6 @@ import com.quartzshard.aasb.data.tags.EntityTP;
 import com.quartzshard.aasb.init.FxInit;
 import com.quartzshard.aasb.init.NetInit;
 import com.quartzshard.aasb.init.object.EntityInit;
-import com.quartzshard.aasb.net.client.CreateLoopingSoundPacket;
-import com.quartzshard.aasb.net.client.CreateLoopingSoundPacket.LoopingSound;
 import com.quartzshard.aasb.net.client.DrawParticleLinePacket;
 import com.quartzshard.aasb.net.client.DrawParticleLinePacket.LineParticlePreset;
 import com.quartzshard.aasb.util.EntUtil;
@@ -189,7 +187,7 @@ public class SentientArrowEntity extends AbstractArrow {
 	}
 	
 	@Override
-	protected void onHitBlock(BlockHitResult hitRes) {
+	protected void onHitBlock(@NotNull BlockHitResult hitRes) {
 		debugLog("OnHitBlock");
 		BlockPos pos = hitRes.getBlockPos();
 		BlockState hit = level().getBlockState(hitRes.getBlockPos());
@@ -254,7 +252,7 @@ public class SentientArrowEntity extends AbstractArrow {
 		debugLog("MoveAndCollide");
 		boolean noClip = !isInert() || this.isNoPhysics();
 		Vec3 curPos = this.position();
-		Vec3 motion = getDeltaMovement();
+		@NotNull Vec3 motion = getDeltaMovement();
 		double horizVel = motion.horizontalDistance();
 		if (!level().isClientSide && this.xRotO == 0.0F && this.yRotO == 0.0F) {
 			this.setXRot((float)(Mth.atan2(motion.y, horizVel) * (180F / (float)Math.PI)));
@@ -263,8 +261,8 @@ public class SentientArrowEntity extends AbstractArrow {
 			this.yRotO = this.getYRot();
 		}
 
-		BlockPos curBlockPos = this.blockPosition();
-		BlockState blockInside = this.level().getBlockState(curBlockPos);
+		@NotNull BlockPos curBlockPos = this.blockPosition();
+		@NotNull BlockState blockInside = this.level().getBlockState(curBlockPos);
 		if (!blockInside.isAir()) {
 			/*if (blockInside.is(BlockTP.ARROW_ANNIHILATE)) {
 				if (transmuteBlockIntoCovDust(curBlockPos)) {
@@ -275,7 +273,7 @@ public class SentientArrowEntity extends AbstractArrow {
 				VoxelShape blockShape = blockInside.getCollisionShape(this.level(), curBlockPos);
 				if (!blockShape.isEmpty()) {
 
-					for(AABB aabb : blockShape.toAabbs()) {
+					for(@NotNull AABB aabb : blockShape.toAabbs()) {
 						debugLog("BlockAABBCollisionLoop");
 						if (aabb.move(curBlockPos).contains(curPos)) {
 							this.inGround = true;
@@ -315,14 +313,14 @@ public class SentientArrowEntity extends AbstractArrow {
 			boolean didHit = false;
 			while(!this.isRemoved()) {
 				debugLog("EntCollisionLoop");
-				EntityHitResult entHitRes = this.findHitEntity(curPos, nextPos);
+				@Nullable EntityHitResult entHitRes = this.findHitEntity(curPos, nextPos);
 				if (entHitRes != null) {
 					hitRes = entHitRes;
 				}
 
 				if (hitRes != null && hitRes.getType() == HitResult.Type.ENTITY) {
 					Entity victim = ((EntityHitResult)hitRes).getEntity();
-					Entity owner = this.getOwner();
+					@Nullable Entity owner = this.getOwner();
 					if (victim instanceof Player plrVictim && owner instanceof Player plrOwner && !plrOwner.canHarmPlayer(plrVictim)) {
 						hitRes = null;
 						entHitRes = null;
@@ -344,7 +342,7 @@ public class SentientArrowEntity extends AbstractArrow {
 				hitRes = null;
 			}
 			if (!didHit && isHoming()) {
-				Entity target = isReturningToOwner ? owner() : getTarget();
+				@Nullable Entity target = isReturningToOwner ? owner() : getTarget();
 				if (target != null && target.getBoundingBox().contains(position())) {
 					onHit(new EntityHitResult(target, position()));
 				}
@@ -396,7 +394,7 @@ public class SentientArrowEntity extends AbstractArrow {
 
 			this.setDeltaMovement(motion.scale(resistanceFactor));
 			if (!this.isNoGravity() && !noClip) {
-				Vec3 vec34 = this.getDeltaMovement();
+				@NotNull Vec3 vec34 = this.getDeltaMovement();
 				this.setDeltaMovement(vec34.x, vec34.y - 0.05, vec34.z);
 			}
 
@@ -524,8 +522,8 @@ public class SentientArrowEntity extends AbstractArrow {
 		//}
 		//return true;
 	}
-	private boolean isUnobstructed(Vec3 start, Vec3 end) {
-		BlockHitResult hitRes = this.level().clip(new ClipContext(start, end, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
+	private boolean isUnobstructed(Vec3 start, @NotNull Vec3 end) {
+		@NotNull BlockHitResult hitRes = this.level().clip(new ClipContext(start, end, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
 		if (hitRes != null && hitRes.getType() == HitResult.Type.BLOCK && !level().getBlockState(hitRes.getBlockPos()).is(BlockTP.ARROW_NOCLIP)) {
 			return false;
 		}
@@ -543,12 +541,12 @@ public class SentientArrowEntity extends AbstractArrow {
 	private void shootAt(Vec3 pos) {
 		shootAt(pos, 1);
 	}
-	private void shootAt(Vec3 pos, float vel) {
+	private void shootAt(@NotNull Vec3 pos, float vel) {
 		Vec3 between = pos.subtract(position());
 		if (between.length() < vel) {
 			vel = (float) between.length();
 		}
-		Vec3 heading = between.normalize();
+		@NotNull Vec3 heading = between.normalize();
 		Vec3 motion = heading.scale(vel);
 		shoot(heading.x, heading.y, heading.z, (float) motion.length(), 0);
 	}
@@ -561,8 +559,8 @@ public class SentientArrowEntity extends AbstractArrow {
 		return nav.createPath(pos, 0);
 	}
 	
-	private Path trimNodes(Path path) {
-		List<Node> nodes = Lists.newArrayList();
+	private Path trimNodes(@NotNull Path path) {
+		@NotNull List<Node> nodes = Lists.newArrayList();
 		nodes.add(path.getNode(0));
 		for (int i = 1; i < path.getNodeCount() - 1; i++) {
 			debugLog("NodeTrimLoop");
@@ -587,7 +585,7 @@ public class SentientArrowEntity extends AbstractArrow {
 		}
 		return isInsane;
 	}
-	private void changeTargetPos(Vec3 newPos, boolean particles) {
+	private void changeTargetPos(@NotNull Vec3 newPos, boolean particles) {
 		if (particles && level() instanceof ServerLevel lvl) {
 			for (ServerPlayer plr : lvl.players()) {
 				BlockPos pos = plr.blockPosition();
@@ -600,7 +598,7 @@ public class SentientArrowEntity extends AbstractArrow {
 	}
 	
 	/**
-	 * @param target
+	 * @param ent
 	 * @return if pathfinding was unsuccessfull
 	 */
 	private void pathTo(Entity ent) {
@@ -646,8 +644,8 @@ public class SentientArrowEntity extends AbstractArrow {
 			if (node == null) {
 				node = currentPath.getNode(0);
 			}
-			Node nextNode = currentPath.getNextNode();
-			Vec3 nextTargetPos = Vec3.atCenterOf(nextNode.asBlockPos());
+			@NotNull Node nextNode = currentPath.getNextNode();
+			@NotNull Vec3 nextTargetPos = Vec3.atCenterOf(nextNode.asBlockPos());
 			if (nextTargetPos != null) {
 				if (targetPos == null || !nextTargetPos.closerThan(targetPos, 0.5)) {
 					targetPos = nextTargetPos;
@@ -667,7 +665,7 @@ public class SentientArrowEntity extends AbstractArrow {
 		switch (type) {
 		case 0: // tracer
 			for (ServerPlayer plr : ((ServerLevel) level()).players()) {
-				BlockPos pos = plr.blockPosition();
+				@NotNull BlockPos pos = plr.blockPosition();
 				if (pos.closerToCenterThan(this.getBoundingBox().getCenter(), 64) || pos.closerToCenterThan(targetPos, 64)) {
 					NetInit.toClient(new DrawParticleLinePacket(this.getBoundingBox().getCenter(), targetPos, LineParticlePreset.SENTIENT_RETARGET), plr);
 				}
@@ -681,7 +679,7 @@ public class SentientArrowEntity extends AbstractArrow {
 				level().playSound(null, this.blockPosition(), FxInit.SND_TARGETLOCK.get(), this.getSoundSource(), 1f, 1);
 				level().playSound(null, target.blockPosition(), FxInit.SND_TARGETLOCK.get(), this.getSoundSource(), 1f, 0.5f);
 				for (ServerPlayer plr : ((ServerLevel) level()).players()) {
-					Vec3 pos = plr.position();
+					@NotNull Vec3 pos = plr.position();
 					if (pos.closerThan(this.getBoundingBox().getCenter(), 128) || pos.closerThan(target.getBoundingBox().getCenter(), 128)) {
 						NetInit.toClient(new DrawParticleLinePacket(this.getBoundingBox().getCenter(), target.getBoundingBox().getCenter(), LineParticlePreset.SENTIENT_RETARGET), plr);
 					}
@@ -758,13 +756,13 @@ public class SentientArrowEntity extends AbstractArrow {
 		}
 	}
 	
-	protected void drawDebugPath(Path path) {
+	protected void drawDebugPath(@NotNull Path path) {
 		if (this.level().isClientSide) return;
 		Node lastNode = null;
-		Node thisNode = null;
+		@Nullable Node thisNode = null;
 		for (int i = 0; i < path.getNodeCount() - 1; i++) {
 			debugLog("DebugPathLoop");
-			Node node = path.getNode(i);
+			@NotNull Node node = path.getNode(i);
 			lastNode = thisNode;
 			thisNode = node;
 			if (lastNode == null) {
@@ -806,7 +804,7 @@ public class SentientArrowEntity extends AbstractArrow {
 	}
 	private boolean attemptAutoRetarget() {
 		debugLog("AutoTargetAttempt");
-		LivingEntity newTarget = findTargetNear(this.getBoundingBox().getCenter());
+		@Nullable LivingEntity newTarget = findTargetNear(this.getBoundingBox().getCenter());
 		if ( newTarget != null && (!newTarget.is(getTarget()) || canSee(newTarget)) ) {
 			setTarget(newTarget.getId());
 			debugLog("AutoChangeTargetTo", ForgeRegistries.ENTITY_TYPES.getKey(newTarget.getType()).toString() + " @ " + newTarget.blockPosition().toString());
@@ -821,9 +819,9 @@ public class SentientArrowEntity extends AbstractArrow {
 		debugLog("ManualTargetAttempt");
 		if (isInert()) {
 			setState(ArrowState.DIRECT);
-			for (ServerPlayer plr : ((ServerLevel)level()).players()) {
-				NetInit.toClient(new CreateLoopingSoundPacket(LoopingSound.SENTIENT_WHISPERS, this.getId()), plr);
-			}
+			//for (ServerPlayer plr : ((ServerLevel)level()).players()) {
+			//	NetInit.toClient(new CreateLoopingSoundPacket(LoopingSound.SENTIENT_WHISPERS, this.getId()), plr);
+			//}
 		}
 		Entity owner = getOwner();
 		if (owner == null) return false;
@@ -848,7 +846,7 @@ public class SentientArrowEntity extends AbstractArrow {
 		return false;
 	}
 	
-	public void recallToPlayer(Player owner) {
+	public void recallToPlayer(@NotNull Player owner) {
 		long teleCost = (long) position().distanceTo(owner.position()) * (maxLife - tickCount);
 		if (WayUtil.getAvaliableWay(owner) >= teleCost) {
 			inGround = false;
@@ -913,7 +911,7 @@ public class SentientArrowEntity extends AbstractArrow {
 	 * @param ent
 	 * @return
 	 */
-	protected boolean canTheoreticallyHitEntity(Entity ent) {
+	protected boolean canTheoreticallyHitEntity(@NotNull Entity ent) {
 		boolean canHit = !ent.is(getOwner()) && !EntUtil.isInvincible(ent);
 		return canHit && super.canHitEntity(ent);
 	}

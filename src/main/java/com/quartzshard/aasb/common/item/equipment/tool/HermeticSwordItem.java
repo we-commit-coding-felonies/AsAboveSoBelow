@@ -3,6 +3,7 @@ package com.quartzshard.aasb.common.item.equipment.tool;
 import java.util.List;
 import java.util.function.Consumer;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.google.common.collect.Multimap;
@@ -90,12 +91,12 @@ public class HermeticSwordItem extends SwordItem implements IHermeticTool {
 	}
 	
 	@Override
-	public boolean shouldCauseBlockBreakReset(ItemStack oldStack, ItemStack newStack) {
+	public boolean shouldCauseBlockBreakReset(@NotNull ItemStack oldStack, ItemStack newStack) {
 		return stacksDifferentIgnoreWay(oldStack, newStack);
     }
 	
 	@Override
-	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
+	public boolean shouldCauseReequipAnimation(ItemStack oldStack, @NotNull ItemStack newStack, boolean slotChanged) {
 		if (slotChanged) return true;
 		return stacksDifferentIgnoreWay(oldStack, newStack);
 	}
@@ -106,7 +107,7 @@ public class HermeticSwordItem extends SwordItem implements IHermeticTool {
 		if (!level.isClientSide) {
 			if (entity instanceof ServerPlayer plr && WaterRune.isCurrentlySlashing(stack)) { // cost: 15 air, 13 otherwise
 				boolean strong = this.runesAreStrong(stack);
-				InteractionHand hand = plr.getOffhandItem() == stack ?
+				@NotNull InteractionHand hand = plr.getOffhandItem() == stack ?
 						InteractionHand.OFF_HAND :
 						InteractionHand.MAIN_HAND;
 				long toConsume = strong ? 15 : 10;

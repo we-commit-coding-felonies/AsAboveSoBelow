@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Random;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.quartzshard.aasb.AASB;
@@ -19,7 +20,7 @@ import net.minecraft.resources.ResourceLocation;
 /**
  * Form is an arbitrary size tree <br>
  * It's flow branches out from the root, going towards its children <br>
- * Flow violation is 10% staying the same (unless it is a leaf, in which case it is 0%), 1/(distance from root) going to its parent, 100% everything else <br>
+ * Flow violation is 25% staying the same (unless it is a leaf, in which case it is 0%), 1/(distance from root) going to its parent, 100% everything else <br>
  * The root is special, it flows to anything else on the tree, but violates 100% towards itself
  */
 public class FormAspect implements IAspect<FormAspect> {
@@ -28,7 +29,8 @@ public class FormAspect implements IAspect<FormAspect> {
 	private FormAspect[] children;
 	private ResourceLocation name;
 	private final int distance, color;
-	private final Component loc, fLoc;
+	private final @NotNull Component loc, fLoc;
+	private final ResourceLocation symbol;
 	
 	/**
 	 * Creates a new form node on the tree. Will throw an exception if you try to assign multiple parents, don't make cycles!
@@ -37,7 +39,7 @@ public class FormAspect implements IAspect<FormAspect> {
 	 * @param children
 	 * @throws FormTreeException 
 	 */
-	public FormAspect(ResourceLocation name, String langKey, @Nullable FormAspect parent, FormAspect[] children, int color) {
+	public FormAspect(@NotNull ResourceLocation name, String langKey, @Nullable FormAspect parent, FormAspect[] children, int color) {
 		if((!name.equals(AASB.rl("materia")) && parent == null) || (name.equals(AASB.rl("materia")) && parent != null)) {
 			throw new FormTreeException("Bad root node specified. Don't try to assign parents to materia, or make a node with no parents.");
 		}
@@ -58,6 +60,8 @@ public class FormAspect implements IAspect<FormAspect> {
 		
 		loc = LangData.tc(langKey);
 		fLoc = loc.copy().withStyle(Style.EMPTY.withColor(color));
+
+		symbol = new ResourceLocation(name.getNamespace(), "textures/symbol/aspect/form/"+name.getPath()+".png");
 	}
 
 	/**
@@ -84,7 +88,7 @@ public class FormAspect implements IAspect<FormAspect> {
 	public MutableComponent loc() {
 		return loc.copy();
 	}
-	public MutableComponent fLoc() {
+	public @NotNull MutableComponent fLoc() {
 		return fLoc.copy();
 	}
 	
@@ -99,7 +103,7 @@ public class FormAspect implements IAspect<FormAspect> {
 	 * @return
 	 */
 	public boolean checkChildrenAgree() {
-		for (FormAspect child: this.children) {
+		for (@NotNull FormAspect child: this.children) {
 			if (child.getParent() != this) {
 				return false;
 			}
@@ -161,39 +165,51 @@ public class FormAspect implements IAspect<FormAspect> {
 	}
 
 	@Override
-	public boolean flowsTo(FormAspect other) {
+	public boolean flowsTo(@Nullable FormAspect other) {
+		if (other == null) return false;
 		return other.getParent() == this
 				|| this == AlchInit.MATERIA.get() && other != this;
 	}
 
 	@Override
-	public boolean flowsFrom(FormAspect other) {
-		return other.flowsTo(this);
+	public boolean flowsFrom(@Nullable FormAspect other) {
+		return other != null && other.flowsTo(this);
 	}
 
 	@Override
-	public float violationTo(FormAspect other) {
+	public float violationTo(@Nullable FormAspect other) {
+		if (other == null || other == AlchInit.MATERIA.get()) return Float.POSITIVE_INFINITY;
 		if (!flowsTo(other)) {
 			if (this == other && this != AlchInit.MATERIA.get())
-				return this.children.length == 0 ? 0 : 0.1f;
-			return this.getParent() == other ? 1f/rootDistance() : 1;
+				return this.children.length == 0 ? 0 : 0.25f;
+			int dist = rootDistance();
+			return this.getParent() == other ?
+				dist != 1 ?
+					1f/rootDistance():
+					Float.POSITIVE_INFINITY:
+				Float.POSITIVE_INFINITY;
 		}
 		return 0;
 	}
 
 	@Override
-	public float violationFrom(FormAspect other) {
-		return other.violationTo(this);
+	public float violationFrom(@Nullable FormAspect other) {
+		return other == null ? Float.POSITIVE_INFINITY : other.violationTo(this);
 	}
 
 	@Override
-	public String toString() {
+	public @NotNull String toString() {
 		return "Form."+getName().toString();
 	}
 
 	@Override
 	public String serialize() {
 		return toString();
+	}
+
+	@Override
+	public ResourceLocation symbolTexture() {
+		return symbol;
 	}
 
 	/**
@@ -203,7 +219,7 @@ public class FormAspect implements IAspect<FormAspect> {
 	 * @return 
 	 */
 	@Nullable
-	public static FormAspect deserialize(String dat) {
+	public static FormAspect deserialize(@NotNull String dat) {
 		if (dat != "" && dat.startsWith("Form.")) {
 			return AlchInit.getForm(ResourceLocation.tryParse(dat.replace("Form.", "")));
 		}
@@ -211,7 +227,7 @@ public class FormAspect implements IAspect<FormAspect> {
 	}
 	
 	public static FormAspect fromSeed(long seed) {
-		Collection<FormAspect> reg = AlchInit.FORMS_SUPPLIER.get().getValues();
+		@NotNull Collection<FormAspect> reg = AlchInit.FORMS_SUPPLIER.get().getValues();
 		return reg.toArray(new FormAspect[0])[new Random(seed).nextInt(reg.size())];
 	}
 }

@@ -1,6 +1,7 @@
 {
   "values": [
     "aasb:mustang",
-    "aasb:waybomb"
+    "aasb:waybomb",
+    "aasb:waybomb_env"
   ]
 }

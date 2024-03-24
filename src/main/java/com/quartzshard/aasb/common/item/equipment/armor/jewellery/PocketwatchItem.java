@@ -23,6 +23,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import org.jetbrains.annotations.NotNull;
 
 @Mod.EventBusSubscriber(modid = AASB.MODID)
 public class PocketwatchItem extends JewelleryArmorItem implements ICanLegsMode {
@@ -46,7 +47,7 @@ public class PocketwatchItem extends JewelleryArmorItem implements ICanLegsMode 
 	}
 	
 	@Override
-	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
+	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, @NotNull ItemStack stack) {
 		Multimap<Attribute, AttributeModifier> supMods = super.getAttributeModifiers(slot, stack);
 		if (slot != this.getEquipmentSlot() || !speedEnabled(stack))
 			return supMods;
@@ -83,7 +84,7 @@ public class PocketwatchItem extends JewelleryArmorItem implements ICanLegsMode 
 		}
 	}
 	
-	private static void fastDescend(Player player, Level level) {
+	private static void fastDescend(Player player, @NotNull Level level) {
 		if (level.isClientSide) {
 			Vec3 vel = player.getDeltaMovement();
 			if (!player.onGround() && vel.y() > -8) {

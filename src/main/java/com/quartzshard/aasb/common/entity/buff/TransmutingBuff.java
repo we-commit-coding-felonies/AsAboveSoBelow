@@ -16,6 +16,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import org.jetbrains.annotations.Nullable;
 
 public class TransmutingBuff extends MobEffect {
 	
@@ -65,7 +66,7 @@ public class TransmutingBuff extends MobEffect {
 	@Override
 	public void applyEffectTick(LivingEntity entity, int amplifier) {
 		entity.invulnerableTime = 0;
-		MobEffectInstance effect = entity.getEffect(EntityInit.BUFF_TRANSMUTING.get());
+		@Nullable MobEffectInstance effect = entity.getEffect(EntityInit.BUFF_TRANSMUTING.get());
 		if (effect != null && entity.isAlive() && isDurationEffectTick(effect.getDuration(), amplifier)) {
 			if (amplifier > 0) {
 				//entity.addEffect(new MobEffectInstance(EFFECTS_OF_DOOM[3]));

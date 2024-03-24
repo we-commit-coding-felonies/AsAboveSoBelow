@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import org.jetbrains.annotations.NotNull;
 
 public class BlockTP extends BlockTagsProvider {
 	
@@ -145,11 +146,11 @@ public class BlockTP extends BlockTagsProvider {
 		//	.addTag(BlockTags.WITHER_IMMUNE);
 	}
 	
-	private static TagKey<Block> c(String name) {
+	private static @NotNull TagKey<Block> c(String name) {
 		return TagKey.create(Registries.BLOCK, AASB.rl(name));
 	}
 	@Override
-	public String getName() {
+	public @NotNull String getName() {
 		return AASB.MODID.toUpperCase() + " | Block Tags";
 	}
 }

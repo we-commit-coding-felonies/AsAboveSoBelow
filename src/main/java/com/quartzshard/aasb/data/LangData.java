@@ -4,22 +4,25 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import com.quartzshard.aasb.AASB;
+import com.quartzshard.aasb.api.alchemy.AlchData;
+import com.quartzshard.aasb.api.alchemy.aspect.IAspect;
 import com.quartzshard.aasb.client.Keybinds;
 import com.quartzshard.aasb.init.FxInit;
 import com.quartzshard.aasb.init.object.ItemInit;
 import com.quartzshard.aasb.util.ClientUtil;
 
 import net.minecraft.data.PackOutput;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.*;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.data.LanguageProvider;
+import org.jetbrains.annotations.NotNull;
 
 public class LangData extends LanguageProvider {
-	public LangData(PackOutput out) {
+	public LangData(@NotNull PackOutput out) {
 		super(out, AASB.MODID, "en_us");
 	}
 	
@@ -31,6 +34,9 @@ public class LangData extends LanguageProvider {
 	}
 	private static String l(String processName) {
 		return id("alchemy.%s.labProcess."+processName);
+	}
+	private static String c(String circleName) {
+		return id("alchemy.%s.circle."+circleName);
 	}
 	
 	private static String dm(String template) {
@@ -135,6 +141,18 @@ public class LangData extends LanguageProvider {
 		LAB_SOLUTION = l("solution"),
 		LAB_DIGESTION = l("digestion"),
 		LAB_MULTIPLICATION = l("multiplication"),
+
+		CIRCLE_1_BASIC = c("1.basic"),
+		CIRCLE_1_SHAPE = c("1.shape"),
+		CIRCLE_1_FORM = c("1.form"),
+		CIRCLE_3_BASIC = c("3.basic"),
+		CIRCLE_3_SHAPE = c("3.shape"),
+		CIRCLE_3_FORM = c("3.form"),
+		CIRCLE_3_MINIUM = c("3.minium"),
+		CIRCLE_5_GREAT = c("5.great"),
+
+		KEYCAT_INGAME = "key.categories.%s.inGame",
+		KEYCAT_GUI = "key.categories.%s.gui",
 		
 		KEY_HEAD = id("key.%s.headMode"),
 		KEY_CHEST = id("key.%s.chestMode"),
@@ -148,6 +166,7 @@ public class LangData extends LanguageProvider {
 		KEY_GLOVE = id("key.%s.trinket.triggerGlove"),
 		KEY_BRACELET = id("key.%s.trinket.triggerBracelet"),
 		KEY_CHARM = id("key.%s.trinket.triggerCharm"),
+		KEY_SEE_ASPECTS = id("key.%s.client.seeAspects"),
 		
 		ITEM_GLOVE_RUNED = id("item.%s.runed.glove"),
 		ITEM_BRACELET_RUNED = id("item.%s.runed.bracelet"),
@@ -220,6 +239,11 @@ public class LangData extends LanguageProvider {
 		TIP_PHIL_3 = id("toolTip.%s.phil.3"),
 		TIP_PHIL_4 = id("toolTip.%s.phil.4"),
 		TIP_PHIL_5 = id("toolTip.%s.phil.5"),
+
+		TIP_ASPECTS = id("toolTip.%s.aspects"),
+		TIP_ASPECTS_UNMAPPED_1 = id("toolTip.%s.aspects.unmapped.1"),
+		TIP_ASPECTS_UNMAPPED_2 = id("toolTip.%s.aspects.unmapped.2"),
+		TIP_ASPECTJAR = id("toolTip.%s.aspectContainer"),
 		
 		// Death Messages
 		DIE_AUTOSLASH = "autoslash",
@@ -228,6 +252,7 @@ public class LangData extends LanguageProvider {
 		DIE_TRANSMUTE = "transmute",
 		DIE_TRANSMUTE_ENV = "transmute_env",
 		DIE_WAYBOMB = "waybomb",
+		DIE_WAYBOMB_ENV = "waybomb_env",
 		DIE_ARROWSWARM = "arrow_swarm",
 		DIE_YONDU = "sentient_arrow";
 		
@@ -239,7 +264,8 @@ public class LangData extends LanguageProvider {
 		add(CTAB_SYNTHETIC, "Synthetic Alchemy");
 		
 		add(ASPECT_WAY, "Way");
-		
+
+		// Shape
 		add(ASPECT_SHAPE, "Shape");
 		add(SHAPE_WATER, "Water");
 		add(SHAPE_EARTH, "Earth");
@@ -247,6 +273,7 @@ public class LangData extends LanguageProvider {
 		add(SHAPE_AIR, "Air");
 		add(SHAPE_QUINTESSENCE, "Quintessence");
 
+		// Form
 		add(ASPECT_FORM, "Form");
 		add(FORM_MATERIA, "Materia");
 			add(FORM_TERRAIN, "Terrain");
@@ -281,8 +308,46 @@ public class LangData extends LanguageProvider {
 			add(FORM_ETHEREAL, "Ethereal");
 				add(FORM_MIND, "Mind");
 				add(FORM_SOUL, "Soul");
+
+		// Lab
+		add(LAB_EVAPORATION, "Evaporation");
+		add(LAB_FIXATION, "Fixation");
+		add(LAB_AMALGAMATION, "Amalgamation");
+		add(LAB_HOMOGENIZATION, "Homogenization");
+		add(LAB_DESICCATION, "Desiccation");
+		add(LAB_OXIDATION, "Oxidation");
+		add(LAB_CONGELATION, "Amalgamation");
+		add(LAB_CERATION, "Homogenization");
+		add(LAB_DEHYDRATION, "Dehydration");
+		add(LAB_EXALTATION, "Exaltation");
+		add(LAB_CONDEMNATION, "Condemnation");
+		add(LAB_SUBLIMATION, "Sublimation");
+		add(LAB_CONJUNCTION, "Conjunction");
+		add(LAB_STAGNATION, "Stagnation");
+		add(LAB_SEPARATION, "Separation");
+		add(LAB_FILTRATION, "Filtration");
+		add(LAB_PROJECTION, "Projection");
+		add(LAB_CONDENSATION, "Condensation");
+		add(LAB_DISTILLATION, "Distillation");
+		add(LAB_COHOBATION, "Cohobation");
+		add(LAB_SOLUTION, "Solution");
+		add(LAB_DIGESTION, "Digestion");
+		add(LAB_MULTIPLICATION, "Multiplication");
+
+		// Circles
+		add(CIRCLE_1_BASIC, "Crude Alchemy Pattern");
+		add(CIRCLE_1_SHAPE, "Shape-Sympathetic Pattern");
+		add(CIRCLE_1_FORM, "Form-Sympathetic Pattern");
+		add(CIRCLE_3_BASIC, "Basic Alchemy Array");
+		add(CIRCLE_3_SHAPE, "Shape-Resonant Array");
+		add(CIRCLE_3_FORM, "Form-Resonant Array");
+		add(CIRCLE_3_MINIUM, "Treacherous Array");
+		add(CIRCLE_5_GREAT, "The Great Circle");
 		
 		// Keybinds
+		add(KEYCAT_GUI, "As Above So Below: GUI");
+		add(KEYCAT_INGAME, "As Above So Below: In-Game");
+
 		add(KEY_HEAD, "Circlet mode");
 		add(KEY_CHEST, "Amulet mode");
 		add(KEY_LEGS, "Timepiece mode");
@@ -378,9 +443,7 @@ public class LangData extends LanguageProvider {
 		add(ItemInit.COS_TRINKET2.get(), "Hermetic Trinket");
 		
 		// Blocks
-		/*add(ObjectInit.Blocks.ASH_STONE.get(), "Ashen Stone");
-		add(ObjectInit.Blocks.WAYSTONE.get(), "Waystone");
-		add(ObjectInit.Blocks.AIR_ICE.get(), "Frozen Air");*/
+		// TODO block translations
 		
 		// Tooltips
 		add(TIP_GENERIC_ON, "Enabled");
@@ -448,6 +511,12 @@ public class LangData extends LanguageProvider {
 		add(TIP_PHIL_3, "It is intended for testing / debugging by devs,");
 		add(TIP_PHIL_4, "and may cause strange effects, crashes, or worse!");
 		add(TIP_PHIL_5, "BUG REPORTS RELATED TO THIS ITEM WILL BE IGNORED, YOU HAVE BEEN WARNED");
+
+		add(TIP_ASPECTS_UNMAPPED_1, "This item cannot be");
+		add(TIP_ASPECTS_UNMAPPED_2, "described by alchemy");
+
+		add(TIP_ASPECTS, "Aspects of %s:");
+		add(TIP_ASPECTJAR, "%s contains:");
 		
 		// Death Messages
 		add(dm(DIE_AUTOSLASH), "%s was decimated by %s");
@@ -462,6 +531,8 @@ public class LangData extends LanguageProvider {
 		add(edm(DIE_TRANSMUTE_ENV, true), "%s became unrecognizable whilst fighting %s");
 		add(dm(DIE_WAYBOMB), "%s was aspectually atomized due to %s");
 		add(dm(DIE_WAYBOMB, true), "%s underwent alchemical fission because of %s whilst wielding %s");
+		add(edm(DIE_WAYBOMB_ENV), "%s was disintegrated by a catastrophic ventilation of Way");
+		add(edm(DIE_WAYBOMB_ENV, true), "%s was totally obliterated because of %s");
 		add(dm(DIE_ARROWSWARM), "%s is more arrow than flesh thanks to %s");
 		add(dm(DIE_ARROWSWARM, true), "%s got turned into a pincushion by %s using %s");
 		add(dm(DIE_YONDU), "%s was skewered by Sentient Arrow, with a bit of help from %s");
@@ -514,4 +585,8 @@ public class LangData extends LanguageProvider {
 		Component shiftKeyText = Keybinds.fLoc(ClientUtil.mc().options.keyShift);
 		tips.add(tc(TIP_GENERIC_MOREINFO, shiftKeyText)); // Key help
 	}
+
+	public record AspectTooltip(AlchData alchData) implements TooltipComponent {}
+	public record WayTooltip(long way) implements TooltipComponent {}
+	public record AspectTextComponent(Component txt, IAspect<?>... aspects) implements TooltipComponent {}
 }

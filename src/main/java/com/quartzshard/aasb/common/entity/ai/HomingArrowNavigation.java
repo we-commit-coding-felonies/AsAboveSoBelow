@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.Util;
@@ -47,7 +48,7 @@ public class HomingArrowNavigation {
 	/** Distance in which a path point counts as target-reaching */
 	private int reachRange;
 	private float maxVisitedNodesMultiplier = 6.0F;
-	private final HomingArrowPathFinder pathFinder;
+	private final @NotNull HomingArrowPathFinder pathFinder;
 	private boolean isStuck;
 	private static float FOLLOW_RANGE = 64;
 
@@ -119,7 +120,7 @@ public class HomingArrowNavigation {
 	}
 
 	@Nullable
-	public Path createPath(Set<BlockPos> pPositions, int pDistance) {
+	public Path createPath(@NotNull Set<BlockPos> pPositions, int pDistance) {
 		return createPath(pPositions, 8, false, pDistance);
 	}
 
@@ -140,7 +141,7 @@ public class HomingArrowNavigation {
 	 * Returns a path to the given entity or null
 	 */
 	@Nullable
-	public Path createPath(Entity pEntity, int pAccuracy) {
+	public Path createPath(@NotNull Entity pEntity, int pAccuracy) {
 		return createPath(ImmutableSet.of(pEntity.blockPosition()), 16, true, pAccuracy);
 	}
 
@@ -153,7 +154,7 @@ public class HomingArrowNavigation {
 	}
 
 	@Nullable
-	protected Path createPath(Set<BlockPos> pTargets, int pRegionOffset, boolean pOffsetUpward, int pAccuracy, float pFollowRange) {
+	protected Path createPath(@NotNull Set<BlockPos> pTargets, int pRegionOffset, boolean pOffsetUpward, int pAccuracy, float pFollowRange) {
 		if (pTargets.isEmpty()) {
 			return null;
 		} else if (arrow.getY() < level.getMinBuildHeight()) {
@@ -189,7 +190,7 @@ public class HomingArrowNavigation {
 	/**
 	 * Try to find and set a path to EntityLiving. Returns true if successful. Args : entity, speed
 	 */
-	public boolean moveTo(Entity entity, double speed) {
+	public boolean moveTo(@NotNull Entity entity, double speed) {
 		Path path = createPath(entity, 1);
 		return path != null && moveTo(path, speed);
 	}
@@ -215,7 +216,7 @@ public class HomingArrowNavigation {
 			return false;
 		}
 		speedModifier = speed;
-		Vec3 tmpPos = getTempArrowPos();
+		@NotNull Vec3 tmpPos = getTempArrowPos();
 		lastStuckCheck = tick;
 		lastStuckCheckPos = tmpPos;
 		return true;
@@ -239,7 +240,7 @@ public class HomingArrowNavigation {
 			if (canUpdatePath()) {
 				followThePath();
 			} else if (path != null && !path.isDone()) {
-				Vec3 tmpPos = getTempArrowPos();
+				@NotNull Vec3 tmpPos = getTempArrowPos();
 				Vec3 nextPos = path.getNextEntityPos(arrow);
 				if (tmpPos.y > nextPos.y && !arrow.onGround() && Mth.floor(tmpPos.x) == Mth.floor(nextPos.x) && Mth.floor(tmpPos.z) == Mth.floor(nextPos.z)) {
 					path.advance();
@@ -254,7 +255,7 @@ public class HomingArrowNavigation {
 		}
 	}
 
-	protected double getGroundY(Vec3 testPos) {
+	protected double getGroundY(@NotNull Vec3 testPos) {
 		BlockPos pos = BlockPos.containing(testPos);
 		return level.getBlockState(pos.below()).isAir() ? testPos.y : WalkNodeEvaluator.getFloorLevel(level, pos);
 	}
@@ -274,11 +275,11 @@ public class HomingArrowNavigation {
 		doStuckDetection(tmpPos);
 	}
 
-	private boolean shouldTargetNextNodeInDirection(Vec3 curPos) {
+	private boolean shouldTargetNextNodeInDirection(@NotNull Vec3 curPos) {
 		if (path.getNextNodeIndex() + 1 >= path.getNodeCount()) {
 			return false;
 		}
-		Vec3 nextNodePos = Vec3.atBottomCenterOf(path.getNextNodePos());
+		@NotNull Vec3 nextNodePos = Vec3.atBottomCenterOf(path.getNextNodePos());
 		if (!curPos.closerThan(nextNodePos, 2.0D)) {
 			return false;
 		} else if (canMoveDirectly(curPos, path.getNextEntityPos(arrow))) {
@@ -309,7 +310,7 @@ public class HomingArrowNavigation {
 		}
 
 		if (path != null && !path.isDone()) {
-			Vec3i nextNodePos = path.getNextNodePos();
+			@NotNull Vec3i nextNodePos = path.getNextNodePos();
 			if (nextNodePos.equals(timeoutCachedNode)) {
 				timeoutTimer += Util.getMillis() - lastTimeoutCheck;
 			} else {
@@ -383,7 +384,7 @@ public class HomingArrowNavigation {
 			for (int i = 0; i < path.getNodeCount(); ++i) {
 				Node node = path.getNode(i);
 				Node nextNode = i + 1 < path.getNodeCount() ? path.getNode(i + 1) : null;
-				BlockState state = level.getBlockState(new BlockPos(node.x, node.y, node.z));
+				@NotNull BlockState state = level.getBlockState(new BlockPos(node.x, node.y, node.z));
 				if (state.is(BlockTags.CAULDRONS)) {
 					path.replaceNode(i, node.cloneAndMove(node.x, node.y + 1, node.z));
 					if (nextNode != null && node.y >= nextNode.y) {
@@ -419,12 +420,12 @@ public class HomingArrowNavigation {
 		return nodeEvaluator.canFloat();
 	}
 
-	public boolean shouldRecomputePath(BlockPos pos) {
+	public boolean shouldRecomputePath(@NotNull BlockPos pos) {
 		if (hasDelayedRecomputation)
 			return false;
 		else if (path != null && !path.isDone() && path.getNodeCount() != 0) {
-			Node node = path.getEndNode();
-			Vec3 mid = new Vec3((node.x + arrow.getX()) / 2.0D, (node.y + arrow.getY()) / 2.0D, (node.z + arrow.getZ()) / 2.0D);
+			@Nullable Node node = path.getEndNode();
+			@NotNull Vec3 mid = new Vec3((node.x + arrow.getX()) / 2.0D, (node.y + arrow.getY()) / 2.0D, (node.z + arrow.getZ()) / 2.0D);
 			return pos.closerToCenterThan(mid, path.getNodeCount() - path.getNextNodeIndex());
 		} else
 			return false;

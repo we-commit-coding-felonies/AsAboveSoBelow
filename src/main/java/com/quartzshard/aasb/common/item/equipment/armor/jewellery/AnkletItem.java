@@ -34,6 +34,7 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.NotNull;
 
 public class AnkletItem extends JewelleryArmorItem implements ICanFeetMode {
 	public AnkletItem(Properties props) {
@@ -81,11 +82,11 @@ public class AnkletItem extends JewelleryArmorItem implements ICanFeetMode {
 		int y = (int)(player.getY() - player.getMyRidingOffset());
 		int z = (int)Math.floor(player.getZ());
 		BlockPos pos = new BlockPos(x, y, z);
-		Vec3 vel = player.getDeltaMovement();
+		@NotNull Vec3 vel = player.getDeltaMovement();
 		
 		// rewrite
 		AABB plrBox = player.getBoundingBox();
-		List<VoxelShape> list = level.getEntityCollisions(player, plrBox.expandTowards(vel));
+		@NotNull List<VoxelShape> list = level.getEntityCollisions(player, plrBox.expandTowards(vel));
 		Vec3 cVel = vel.lengthSqr() == 0.0D ? vel : Player.collideBoundingBox(player, vel, plrBox, level, list);
 		Vec3 nextPos = player.position().add(cVel);
 		BlockPos nextBlockPos = BlockPos.containing(nextPos.x, nextPos.y, nextPos.z);
@@ -106,7 +107,7 @@ public class AnkletItem extends JewelleryArmorItem implements ICanFeetMode {
 				boolean performJesus = surfacePos != nextBlockPos && level.isEmptyBlock(surfacePos);
 				if (performJesus) {
 					// we found a valid surface position
-					Vec3 old = player.position();
+					@NotNull Vec3 old = player.position();
 					// we set the players position to the surface of the water
 					player.setPos(new Vec3(old.x, surfacePos.getY()-0.11211, old.z));
 					player.setDeltaMovement(vel.multiply(1,0,1)); // make them stop moving down
@@ -147,7 +148,7 @@ public class AnkletItem extends JewelleryArmorItem implements ICanFeetMode {
 		return didDo;
 	}
 	
-	private static void jesusFX(Player player, Level level, BlockPos underPos, BlockState liquidUnder, boolean speed, Random r) {
+	private static void jesusFX(Player player, @NotNull Level level, BlockPos underPos, @NotNull BlockState liquidUnder, boolean speed, Random r) {
 		double bbw = player.getBbWidth();
 		boolean water = liquidUnder.is(Blocks.WATER);
 		boolean lava = liquidUnder.is(Blocks.LAVA);
@@ -197,7 +198,7 @@ public class AnkletItem extends JewelleryArmorItem implements ICanFeetMode {
 					// movement wake particles
 					if (speed || r.nextInt(3) == 0)
 						for (int j = 0; j < (speed ? 3 : 1); j++) {
-							Block p = lava ? Blocks.LAVA : water ? Blocks.WATER : liquidUnder.getBlock();
+							@NotNull Block p = lava ? Blocks.LAVA : water ? Blocks.WATER : liquidUnder.getBlock();
 							if (water || lava) // hardcoded fancier particles, we just use the blockstate for mod liquids
 								switch (r.nextInt(10)) {
 								default:
@@ -229,12 +230,12 @@ public class AnkletItem extends JewelleryArmorItem implements ICanFeetMode {
 	}
 	
 	@Override
-	public boolean onPressedFeetMode(ItemStack stack, ServerPlayer player, ServerLevel level) {
+	public boolean onPressedFeetMode(@NotNull ItemStack stack, ServerPlayer player, ServerLevel level) {
 		toggleUtils(stack);
 		return true;
 	}
 	
-	public boolean utilsEnabled(ItemStack stack) {
+	public boolean utilsEnabled(@NotNull ItemStack stack) {
 		return NBTUtil.getBoolean(stack, TAG_UTILS, true);
 	}
 	

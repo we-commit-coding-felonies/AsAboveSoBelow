@@ -15,6 +15,7 @@ import net.minecraft.util.Tuple;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.common.data.SoundDefinition;
 import net.minecraftforge.common.data.SoundDefinitionsProvider;
+import org.jetbrains.annotations.NotNull;
 
 public class SoundData extends SoundDefinitionsProvider {
 
@@ -58,7 +59,7 @@ public class SoundData extends SoundDefinitionsProvider {
 		
 		simple(FxInit.SND_TICK, "misc/tick");
 		
-		Map<ResourceLocation,Double> snds = new HashMap<>();
+		@NotNull Map<ResourceLocation,Double> snds = new HashMap<>();
 		snds.put(new ResourceLocation("item/bottle/drink_honey1"), 1.0);
 		snds.put(new ResourceLocation("item/bottle/drink_honey2"), 1.0);
 		snds.put(new ResourceLocation("item/bottle/drink_honey3"), 0.35);
@@ -66,17 +67,17 @@ public class SoundData extends SoundDefinitionsProvider {
 		multi(FxInit.SND_ELIXIR, snds);
 	}
 
-	private void simple(Supplier<SoundEvent> ro, String loc) {
+	private void simple(@NotNull Supplier<SoundEvent> ro, String loc) {
 		simple(ro, AASB.rl(loc));
 	}
-	private void simple(Supplier<SoundEvent> ro, ResourceLocation loc) {
+	private void simple(@NotNull Supplier<SoundEvent> ro, @NotNull ResourceLocation loc) {
 		add(ro, definition().with(sound(loc)).subtitle(subFor(ro)));
 	}
-	private void simple(Supplier<SoundEvent> ro, ResourceLocation loc, double pitch) {
+	private void simple(Supplier<SoundEvent> ro, @NotNull ResourceLocation loc, double pitch) {
 		add(ro, definition().with(sound(loc).pitch(pitch)).subtitle(subFor(ro)));
 	}
 	
-	private void multi(Supplier<SoundEvent> ro, String... locs) {
+	private void multi(Supplier<SoundEvent> ro, String @NotNull ... locs) {
 		ResourceLocation[] rlocs = new ResourceLocation[locs.length];
 		for (int i = 0; i < locs.length; i++) {
 			rlocs[i] = AASB.rl(locs[i]);
@@ -98,7 +99,7 @@ public class SoundData extends SoundDefinitionsProvider {
 		add(ro, def.subtitle(subFor(ro)));
 	}
 	
-	public static String subFor(Supplier<SoundEvent> ro) {
+	public static @NotNull String subFor(Supplier<SoundEvent> ro) {
 		return "subtitles." + ro.get().getLocation().toString().replace(':', '.').replace('/', '.');
 	}
 	

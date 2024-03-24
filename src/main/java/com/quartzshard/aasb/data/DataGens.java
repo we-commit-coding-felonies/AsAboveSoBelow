@@ -12,6 +12,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import org.jetbrains.annotations.NotNull;
 
 @Mod.EventBusSubscriber(modid = AASB.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class DataGens {
@@ -30,7 +31,7 @@ public class DataGens {
 		}
 		
 		if (event.includeServer()) {
-			GenProvider gp = new GenProvider(out, lp);
+			@NotNull GenProvider gp = new GenProvider(out, lp);
 			lp = gp.getRegistryProvider();
 			gen.addProvider(true, gp);
 			//gen.addProvider(new AASBRecipes(gen));

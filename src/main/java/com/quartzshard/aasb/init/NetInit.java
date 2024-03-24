@@ -12,6 +12,7 @@ import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
+import org.jetbrains.annotations.NotNull;
 
 public class NetInit {
 
@@ -60,15 +61,20 @@ public class NetInit {
 				.decoder(DrawParticleAABBPacket::dec)
 				.consumerMainThread(DrawParticleAABBPacket::handle)
 				.add();
-		CHANNEL.messageBuilder(CreateLoopingSoundPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
-				.encoder(CreateLoopingSoundPacket::enc)
-				.decoder(CreateLoopingSoundPacket::dec)
-				.consumerMainThread(CreateLoopingSoundPacket::handle)
+		CHANNEL.messageBuilder(MapperPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
+				.encoder(MapperPacket::enc)
+				.decoder(MapperPacket::dec)
+				.consumerMainThread(MapperPacket::handle)
 				.add();
 		CHANNEL.messageBuilder(ModifyPlayerVelocityPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
 				.encoder(ModifyPlayerVelocityPacket::enc)
 				.decoder(ModifyPlayerVelocityPacket::dec)
 				.consumerMainThread(ModifyPlayerVelocityPacket::handle)
+				.add();
+		CHANNEL.messageBuilder(FreecamPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
+				.encoder(FreecamPacket::enc)
+				.decoder(FreecamPacket::dec)
+				.consumerMainThread(FreecamPacket::handle)
 				.add();
 	}
 	
@@ -90,8 +96,8 @@ public class NetInit {
 	 * @param sendRange max distace, in blocks
 	 * @param message
 	 */
-	public static <PKT> void toNearbyClients(PKT message, ServerLevel level, Vec3 sendPos, double sendRange) {
-		for (ServerPlayer player : level.players()) {
+	public static <PKT> void toNearbyClients(PKT message, ServerLevel level, @NotNull Vec3 sendPos, double sendRange) {
+		for (@NotNull ServerPlayer player : level.players()) {
 			if (player.position().closerThan(sendPos, sendRange)) {
 				toClient(message, player);
 			}
@@ -121,7 +127,7 @@ public class NetInit {
 	 * @param level
 	 * @param message
 	 */
-	public static <PKT> void toAllClients(ServerLevel level, PKT message) {
+	public static <PKT> void toAllClients(@NotNull ServerLevel level, PKT message) {
 		for (ServerPlayer player : level.players()) {
 			toClient(message, player);
 		}
@@ -133,7 +139,7 @@ public class NetInit {
 	 * @param message
 	 * @param players
 	 */
-	public static <PKT> void toClients(PKT message, ServerPlayer... players) {
+	public static <PKT> void toClients(PKT message, ServerPlayer @NotNull ... players) {
 		for (ServerPlayer player : players) {
 			toClient(message, player);
 		}

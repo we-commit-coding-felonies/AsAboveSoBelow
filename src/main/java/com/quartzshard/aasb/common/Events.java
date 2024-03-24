@@ -24,6 +24,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.items.IItemHandler;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * some misc events that dont really have a better place to be
@@ -67,7 +68,7 @@ public class Events {
 		
 		if (ent instanceof Player player) {
 			if (dmgSrc.is(DamageTypeTags.IS_FIRE) && !dmgSrc.is(DmgTP.IS_STRONG_FIRE)) {
-				IItemHandler curioInv = PlayerUtil.getCuriosInv(player);
+				@Nullable IItemHandler curioInv = PlayerUtil.getCuriosInv(player);
 				if (curioInv != null) {
 					for (int i = 0; i < curioInv.getSlots(); i++) {
 						ItemStack stack = curioInv.getStackInSlot(i);

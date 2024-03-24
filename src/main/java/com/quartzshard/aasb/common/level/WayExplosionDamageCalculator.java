@@ -10,6 +10,7 @@ import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.ExplosionDamageCalculator;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
+import org.jetbrains.annotations.NotNull;
 
 public class WayExplosionDamageCalculator extends ExplosionDamageCalculator {
 	final float blockResist;
@@ -27,7 +28,7 @@ public class WayExplosionDamageCalculator extends ExplosionDamageCalculator {
 	}
 	
 	@Override
-	public boolean shouldBlockExplode(Explosion explosion, BlockGetter reader, BlockPos pos, BlockState state, float power) {
+	public boolean shouldBlockExplode(Explosion explosion, BlockGetter reader, BlockPos pos, @NotNull BlockState state, float power) {
 		return !state.is(BlockTP.WAYBLAST_IMMUNE);
 	}
 }

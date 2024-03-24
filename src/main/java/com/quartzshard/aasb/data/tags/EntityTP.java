@@ -2,6 +2,7 @@ package com.quartzshard.aasb.data.tags;
 
 import java.util.concurrent.CompletableFuture;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.quartzshard.aasb.AASB;
@@ -16,7 +17,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 
 public class EntityTP extends EntityTypeTagsProvider {
 
-	public EntityTP(PackOutput packOut, CompletableFuture<Provider> prov, @Nullable ExistingFileHelper help) {
+	public EntityTP(@NotNull PackOutput packOut, CompletableFuture<Provider> prov, @Nullable ExistingFileHelper help) {
 		super(packOut, prov, AASB.MODID, help);
 	}
 	
@@ -42,7 +43,7 @@ public class EntityTP extends EntityTypeTagsProvider {
 		return TagKey.create(Registries.ENTITY_TYPE, AASB.rl(name));
 	}
 	@Override
-	public String getName() {
+	public @NotNull String getName() {
 		return AASB.MODID.toUpperCase() + " | Entity Tags";
 	}
 

@@ -1,16 +1,24 @@
 {
   "required": true,
-  "priority": 1100,
+  "priority": 6304,
   "package": "com.quartzshard.aasb.mixin",
   "compatibilityLevel": "JAVA_16",
-  "refmap": "aasb.refmap.json",
+  "refmap": "mixins.aasb.refmap.json",
   "mixins": [
 	"ProtectionEnchantmentMixin",
-	"ArmorDyeRecipeMixin",
+	"ArmorDyeRecipeMixin"
   ],
   "client": [
-	"MinecraftMixin",
-	"MultiPlayerGameModeMixin",
+	"MinecraftClientMixin",
+	"MultiPlayerGameModeClientMixin",
+	"BlockStateBaseClientMixin",
+	"EntityClientMixin",
+	"CameraClientMixin",
+	"ConnectionClientMixin",
+	"ClientPacketListenerClientMixin",
+	"OptionsClientMixin",
+	"GameRendererClientMixin",
+	"GuiClientMixin"
   ],
   "injectors": {
     "defaultRequire": 1

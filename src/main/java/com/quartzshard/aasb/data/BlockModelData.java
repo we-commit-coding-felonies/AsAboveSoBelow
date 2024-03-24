@@ -12,6 +12,7 @@ import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
 
 public class BlockModelData extends BlockStateProvider {
 
@@ -21,9 +22,9 @@ public class BlockModelData extends BlockStateProvider {
 
 	@Override
 	protected void registerStatesAndModels() {
-		simpleBlock(BlockInit.ASHEN_STONE.get());
+		simpleBlock(BlockInit.BLOCK_ASHEN_STONE.get());
 
-		getVariantBuilder(BlockInit.CRUMBLING_STONE.get())
+		getVariantBuilder(BlockInit.BLOCK_CRUMBLING_STONE.get())
 			.partialState().with(CrumblingStoneBlock.AGE, 0).addModels(modelOf(Blocks.STONE, ""))
 			.partialState().with(CrumblingStoneBlock.AGE, 1).addModels(modelOf(Blocks.COBBLESTONE, ""))
 			.partialState().with(CrumblingStoneBlock.AGE, 2).addModels(modelOf(Blocks.GRAVEL, ""))
@@ -31,7 +32,7 @@ public class BlockModelData extends BlockStateProvider {
 		;
 	}
 	
-	private ConfiguredModel modelOf(Block block, String suffix) {
+	private ConfiguredModel modelOf(@NotNull Block block, String suffix) {
 		return new ConfiguredModel(models().getExistingFile(ModelLocationUtils.getModelLocation(block, suffix)));
 	}
 	
@@ -40,7 +41,7 @@ public class BlockModelData extends BlockStateProvider {
 	 * @deprecated
 	 * Gives an item a placeholder texture
 	 * This should not be used outside of a development environment
-	 * @param ro
+	 * @param block
 	 */
 	@Deprecated
 	private void placeholder(Block block) {

@@ -1,5 +1,6 @@
 package com.quartzshard.aasb.init.object;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.quartzshard.aasb.AASB;
@@ -81,7 +82,8 @@ public class EntityInit {
 		
 		// "Environmental" (generally dont have a killer)
 		DMG_TRANSMUTE_ENV = regDmg("transmute_env"),
-		DMG_SURFACE_TENSION_ENV = regDmg("surface_tension_env");
+		DMG_SURFACE_TENSION_ENV = regDmg("surface_tension_env"),
+		DMG_WAYBOMB_ENV = regDmg("waybomb_env");
 	
 
 	public static final RegistryObject<MobEffect>
@@ -100,8 +102,8 @@ public class EntityInit {
 	 * @param causePos where this damage is coming from in the world
 	 * @return DamageSource
 	 */
-	public static DamageSource dmg(ResourceKey<DamageType> type, LevelReader level, @Nullable Entity directCause, @Nullable Entity actualCulprit, @Nullable Vec3 causePos) {
-		Registry<DamageType> reg = level.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE);
+	public static DamageSource dmg(ResourceKey<DamageType> type, @NotNull LevelReader level, @Nullable Entity directCause, @Nullable Entity actualCulprit, @Nullable Vec3 causePos) {
+		@NotNull Registry<DamageType> reg = level.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE);
 		return new DamageSource(reg.getHolderOrThrow(type), directCause, actualCulprit, causePos);
 	}
 	/**
@@ -112,7 +114,7 @@ public class EntityInit {
 	 * @param actualCulprit what entity is the *original* cause of the damage: the Player who shot the Arrow 
 	 * @return DamageSource
 	 */
-	public static DamageSource dmg(ResourceKey<DamageType> type, LevelReader level, @Nullable Entity directCause, @Nullable Entity actualCulprit) {
+	public static @NotNull DamageSource dmg(ResourceKey<DamageType> type, @NotNull LevelReader level, @Nullable Entity directCause, @Nullable Entity actualCulprit) {
 		return dmg(type, level, directCause, actualCulprit, directCause != null ? directCause.position() : null);
 	}
 	/**
@@ -122,7 +124,7 @@ public class EntityInit {
 	 * @param directCause what entity caused this damage
 	 * @return DamageSource w/ attacker
 	 */
-	public static DamageSource dmg(ResourceKey<DamageType> type, LevelReader level, @Nullable Entity directCause) {
+	public static DamageSource dmg(@NotNull ResourceKey<DamageType> type, @NotNull LevelReader level, @Nullable Entity directCause) {
 		return dmg(type, level, directCause, directCause);
 	}
 	/**
@@ -131,12 +133,12 @@ public class EntityInit {
 	 * @param level
 	 * @return DamageSource
 	 */
-	public static DamageSource dmg(ResourceKey<DamageType> type, LevelReader level) {
+	public static @NotNull DamageSource dmg(ResourceKey<DamageType> type, @NotNull LevelReader level) {
 		return dmg(type, level, null);
 	}
 	
 	// I AM AT MY FUCKING LIMIT WHY IS IT TYPO
-	public static void bootstrapDmg(BootstapContext<DamageType> ctx) {
+	public static void bootstrapDmg(@NotNull BootstapContext<DamageType> ctx) {
 		// "Direct" (always have a killer)
 		new DmgBuilder(DMG_TRANSMUTE).exhaust(5).reg(ctx);
 		new DmgBuilder(DMG_MUSTANG).exhaust(1).reg(ctx);
@@ -148,6 +150,7 @@ public class EntityInit {
 		// "Environmental" (generally dont have a killer)
 		new DmgBuilder(DMG_TRANSMUTE_ENV).exhaust(5).scales(false).reg(ctx);
 		new DmgBuilder(DMG_SURFACE_TENSION_ENV).scales(false).reg(ctx);
+		new DmgBuilder(DMG_WAYBOMB_ENV).reg(ctx);
 	}
 	
 	/**
@@ -167,11 +170,11 @@ public class EntityInit {
 		@Nullable private DamageEffects fx;
 		@Nullable private DeathMessageType msg;
 		
-		protected DmgBuilder lang(String lang) {
+		protected @NotNull DmgBuilder lang(String lang) {
 			this.lang = lang;
 			return this;
 		}
-		protected DmgBuilder scales(boolean scales) {
+		protected @NotNull DmgBuilder scales(boolean scales) {
 			this.scales = scales;
 			return this;
 		}
@@ -183,7 +186,7 @@ public class EntityInit {
 			exhaust((float) exhaust);
 			return this;
 		}
-		protected DmgBuilder fx(DamageEffects fx) {
+		protected @NotNull DmgBuilder fx(DamageEffects fx) {
 			this.fx = fx;
 			return this;
 		}
@@ -192,7 +195,7 @@ public class EntityInit {
 			return this;
 		}
 		
-		private DamageType build() {
+		private @NotNull DamageType build() {
 			if (lang == null) {
 				lang(key.location().getNamespace()+"."+key.location().getPath());
 			}
@@ -207,7 +210,7 @@ public class EntityInit {
 		}
 		
 		protected DamageType reg(BootstapContext<DamageType> ctx) {
-			DamageType type = build();
+			@NotNull DamageType type = build();
 			ctx.register(key, type);
 			return type;
 		}

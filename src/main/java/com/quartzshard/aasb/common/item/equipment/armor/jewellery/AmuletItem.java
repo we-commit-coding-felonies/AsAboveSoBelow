@@ -23,6 +23,7 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import org.jetbrains.annotations.NotNull;
 
 public class AmuletItem extends JewelleryArmorItem implements IAlchemicalBarrier, IWayHolder, DyeableLeatherItem {
 	public AmuletItem(Properties props) {
@@ -30,7 +31,7 @@ public class AmuletItem extends JewelleryArmorItem implements IAlchemicalBarrier
 	}
 	
 	@Override
-	public void onArmorTick(ItemStack stack, Level level, Player player) {
+	public void onArmorTick(ItemStack stack, Level level, @NotNull Player player) {
 		JewellerySetInfo set = getArmorSetInfo(stack, level, player);
 		long plrWay = set.plrWay();
 		if (plrWay > 0) {
@@ -56,7 +57,7 @@ public class AmuletItem extends JewelleryArmorItem implements IAlchemicalBarrier
 	}
 	
 	@Override
-	public boolean shieldCondition(Player player, float damage, DamageSource source, ItemStack stack) {
+	public boolean shieldCondition(Player player, float damage, @NotNull DamageSource source, ItemStack stack) {
     	return IAlchemicalBarrier.super.shieldCondition(player, damage, source, stack) && isBarrierActive(player);
     }
 	

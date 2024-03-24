@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.quartzshard.aasb.AASB;
@@ -59,7 +60,7 @@ public class ItemTraits {
 		private final float speed, damage;
 		private final Supplier<Ingredient> repair;
 		
-		Tier(String name, int durability, float speed, float damage, int harvest, int ench, Supplier<Ingredient> repair, net.minecraft.world.item.Tier prev, @Nullable ResourceLocation next) {
+		Tier(String name, int durability, float speed, float damage, int harvest, int ench, Supplier<Ingredient> repair, net.minecraft.world.item.@NotNull Tier prev, @Nullable ResourceLocation next) {
 			this.name = name;
 			this.durability = durability;
 			this.speed = speed;

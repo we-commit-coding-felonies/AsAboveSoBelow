@@ -1,5 +1,6 @@
 package com.quartzshard.aasb.api.alchemy;
 
+import net.minecraft.nbt.CompoundTag;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -8,11 +9,18 @@ import com.quartzshard.aasb.init.AlchInit;
 
 import net.minecraft.resources.ResourceLocation;
 
+import java.util.Locale;
+
 public record AlchData(
 		@Nullable WayAspect way,
 		@Nullable ShapeAspect shape,
 		@Nullable FormAspect form,
 		ComplexityAspect complexity) {
+	public static final String
+		TK_SERWAY = "Way",
+		TK_SERSHAPE = "Shape",
+		TK_SERFORM = "Form",
+		TK_SERCPLX = "Complexity";
 
 	public AlchData(long way, ShapeAspect shape, FormAspect form, ComplexityAspect complexity) {
 		this(new WayAspect(way), shape, form, complexity);
@@ -30,6 +38,13 @@ public record AlchData(
 	}
 	public AlchData(long way, ShapeAspect shape, String form, ComplexityAspect complexity) {
 		this(way, shape, AlchInit.getForm(ResourceLocation.tryParse(form)), complexity);
+	}
+
+	public AlchData(CompoundTag tag) {
+		this(tag.getLong(TK_SERWAY),
+			ShapeAspect.values()[tag.getByte(TK_SERSHAPE)],
+			AlchInit.getForm(ResourceLocation.tryParse(tag.getString(TK_SERFORM))),
+			ComplexityAspect.values()[tag.getByte(TK_SERCPLX)]);
 	}
 	
 	/**
@@ -75,13 +90,35 @@ public record AlchData(
 	/**
 	 * Gets the flow violation value of a given transmutation
 	 * @param other
-	 * @return total % flow violation
+	 * @return total flow violation
 	 */
 	@SuppressWarnings("null") // Assuming the AlchData is correct, the complexity check should also filter out nulls 
 	public float violationTo(AlchData other) {
-		if (complexity.violationTo(other.complexity()) < 1) {
+		if (complexity.violationTo(other.complexity()) != Float.POSITIVE_INFINITY) {
 			return way.violationTo(other.way()) + shape.violationTo(other.shape()) + form.violationTo(other.form());
 		}
-		return 1;
+		return Float.POSITIVE_INFINITY;
+	}
+
+	@Override
+	public String toString() {
+		String str = "(";
+		str += way == null ? "null" : way.value();
+		str += ",";
+		str += shape == null ? "null" : shape.name().toLowerCase();
+		str += ",";
+		str += form == null ? "null" : form.getName().toString();
+		str += ",";
+		str += complexity.name().toLowerCase();
+		return str + ")";
+	}
+
+	public CompoundTag serialize() {
+		CompoundTag tag = new CompoundTag();
+		tag.putLong(TK_SERWAY, way == null ? -1 : way.value());
+		tag.putByte(TK_SERSHAPE, shape == null ? (byte)-1 : (byte)shape.ordinal());
+		tag.putString(TK_SERFORM, form == null ? "null" : form.getName().toString());
+		tag.putByte(TK_SERCPLX, (byte)complexity.ordinal());
+		return tag;
 	}
 }

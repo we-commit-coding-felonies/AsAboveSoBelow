@@ -16,6 +16,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import net.minecraftforge.network.NetworkEvent;
+import org.jetbrains.annotations.Nullable;
 
 public record DrawParticleAABBPacket(Vec3 cMin, Vec3 cMax, AABBParticlePreset preset) {
 	
@@ -28,7 +29,7 @@ public record DrawParticleAABBPacket(Vec3 cMin, Vec3 cMax, AABBParticlePreset pr
 		DEBUG_TICK,
 		DEBUG_TICK_FILL,
 		
-		SENTIENT_ARROW_TARGET_LOST;
+		SENTIENT_ARROW_TARGET_LOST
 	}
 	
 	public void enc(FriendlyByteBuf buffer) {
@@ -54,7 +55,7 @@ public record DrawParticleAABBPacket(Vec3 cMin, Vec3 cMax, AABBParticlePreset pr
 	public boolean handle(Supplier<NetworkEvent.Context> sup) {
 		NetworkEvent.Context ctx = sup.get();
 		ctx.enqueueWork(() -> {
-			@SuppressWarnings("resource")
+			@SuppressWarnings("resource") @Nullable
 			ClientLevel level = ClientUtil.mc().level;
 			AABB box = new AABB(cMin, cMax);
 			Vec3 cent = box.getCenter();
@@ -66,7 +67,7 @@ public record DrawParticleAABBPacket(Vec3 cMin, Vec3 cMax, AABBParticlePreset pr
 			case DEBUG_FILL: // debug fill
 				RenderUtil.drawAABBWithParticles(box, ParticleTypes.DRIPPING_WATER, stepSize, level, true, true);
 			case DEBUG: // debug outline
-				particle = ParticleTypes.DRIPPING_LAVA;
+				particle = ParticleTypes.DRIPPING_HONEY;
 				infRange = true;
 				break;
 				

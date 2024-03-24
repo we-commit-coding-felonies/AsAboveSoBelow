@@ -2,6 +2,7 @@ package com.quartzshard.aasb.util;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Optional;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -35,6 +36,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.BlockSnapshot;
 import net.minecraftforge.common.util.INBTSerializable;
@@ -59,7 +61,7 @@ public class PlayerUtil {
 		 * @param player
 		 * @return xp points player has
 		 */
-		public static long getXp(Player player) {
+		public static long getXp(@NotNull Player player) {
 			// levels (as points) + (experience progress * amount for next level)
 			return xpLvlToPoints(player.experienceLevel) + (long)(player.experienceProgress * player.getXpNeededForNextLevel());
 		}
@@ -70,7 +72,7 @@ public class PlayerUtil {
 		 * @param player
 		 * @param amount of xp in points to insert
 		 */
-		public static void insertXp(Player player, long amount) {
+		public static void insertXp(@NotNull Player player, long amount) {
 			long newXp = getXp(player) + amount;
 			if (newXp >= Constants.Xp.VANILLA_MAX_POINTS) {
 				player.experienceLevel = Constants.Xp.VANILLA_MAX_LVL;
@@ -257,13 +259,13 @@ public class PlayerUtil {
 		}
 	}
 	
-	public static void swingArm(Player player, Level level, InteractionHand hand) {
+	public static void swingArm(@NotNull Player player, Level level, InteractionHand hand) {
 		if (level instanceof ServerLevel lvl) {
 			lvl.getChunkSource().broadcastAndSend(player, new ClientboundAnimatePacket(player, hand == InteractionHand.MAIN_HAND ? 0 : 3));
 		}
 	}
 	
-	public static void doSweepAttackParticle(Player culprit, ServerLevel level) {
+	public static void doSweepAttackParticle(@NotNull Player culprit, ServerLevel level) {
 		double rot1 = (-Mth.sin(culprit.getYRot() * ((float)Math.PI / 180f)));
 		double rot2 = Mth.cos(culprit.getYRot() * ((float)Math.PI / 180f));
 		level.sendParticles(ParticleTypes.SWEEP_ATTACK, culprit.getX()+rot1, culprit.getY(0.5), culprit.getZ()+rot2, 1, 0, 0, 0, 0);
@@ -274,7 +276,7 @@ public class PlayerUtil {
 				&& ForgeHooks.onBlockBreakEvent(player.getCommandSenderWorld(), player.gameMode.getGameModeForPlayer(), player, pos) != -1;
 	}
 
-	public static boolean hasEditPermission(ServerPlayer player, BlockPos pos) {
+	public static boolean hasEditPermission(ServerPlayer player, @NotNull BlockPos pos) {
 		if (ServerLifecycleHooks.getCurrentServer().isUnderSpawnProtection((ServerLevel) player.getCommandSenderWorld(), pos, player))
 			return false;
 		return Arrays.stream(Direction.values()).allMatch(e -> player.mayUseItemAt(pos, e, ItemStack.EMPTY));
@@ -284,8 +286,71 @@ public class PlayerUtil {
 		player.getCooldowns().addCooldown(item, ticks);
 	}
 	
-	public static boolean onCooldown(Player player, Item item) {
+	public static boolean onCooldown(@NotNull Player player, @NotNull Item item) {
 		return player.getCooldowns().isOnCooldown(item);
+	}
+
+	/**
+	 * Gets the total amount of exact matches (Item and NBT) a player has in inventory
+	 * @param player
+	 * @param stack stack to match
+	 * @return total amount of items held
+	 */
+	public static int getTotalHeldCount(Player player, ItemStack stack) {
+		return getTotalHeldCount(player, stack, null);
+	}
+	/**
+	 * Gets the total amount of exact matches (Item and NBT) a player has in inventory
+	 * @param player
+	 * @param stack stack to match
+	 * @return total amount of items held
+	 */
+	public static int getTotalHeldCount(Player player, ItemStack stack, @Nullable InteractionHand ignoreHand) {
+		int count = 0;
+		@NotNull Optional<IItemHandler> itemHandlerCap = player.getCapability(ForgeCapabilities.ITEM_HANDLER).resolve();
+		if (itemHandlerCap.isPresent()) {
+			IItemHandler inv = itemHandlerCap.get();
+			for (int i = 0; i < inv.getSlots(); i++) {
+				ItemStack found = inv.getStackInSlot(i), foundClone = found.copy();
+				foundClone.setCount(stack.getCount()); // we do this so that the equals check later ignores stack count
+				if (ignoreHand != null && found == player.getItemInHand(ignoreHand)) continue;
+				if (!found.isEmpty() && foundClone.equals(stack, false)) {
+					count += found.getCount();
+				}
+			}
+		}
+		return count;
+	}
+	
+	/**
+	 * Eats items from a players inventory matching an itemstack
+	 * @param player
+	 * @param stack stack to match
+	 * @return amount actually consumed
+	 */
+	public static int consumeItems(Player player, ItemStack stack, int toConsume) {
+		int consumed = 0;
+		Optional<IItemHandler> itemHandlerCap = player.getCapability(ForgeCapabilities.ITEM_HANDLER).resolve();
+		if (itemHandlerCap.isPresent()) {
+			IItemHandler inv = itemHandlerCap.get();
+			for (int i = 0; i < inv.getSlots(); i++) {
+				int todo = toConsume-consumed;
+				if (todo <= 0) break;
+				@NotNull ItemStack found = inv.getStackInSlot(i), foundClone = found.copy();
+				foundClone.setCount(stack.getCount()); // we do this so that the equals check later ignores stack count
+				if (!found.isEmpty() && foundClone.equals(stack, false)) {
+					int fc = found.getCount();
+					if (fc >= todo) {
+						consumed += todo;
+						found.shrink(todo);
+					} else {
+						consumed += fc;
+						found.setCount(0);
+					}
+				}
+			}
+		}
+		return consumed;
 	}
 
 	/**
@@ -293,14 +358,14 @@ public class PlayerUtil {
 	 * https://github.com/sinkillerj/ProjectE/blob/mc1.18.x/src/main/java/moze_intel/projecte/utils/PlayerHelper.java#L52
 	 * @return Whether the block was successfully placed
 	 */
-	public static boolean checkedPlaceBlock(ServerPlayer player, BlockPos pos, BlockState state) {
+	public static boolean checkedPlaceBlock(@NotNull ServerPlayer player, @NotNull BlockPos pos, BlockState state) {
 		if (!hasEditPermission(player, pos)) {
 			return false;
 		}
-		Level level = player.getCommandSenderWorld();
-		BlockSnapshot before = BlockSnapshot.create(level.dimension(), level, pos);
+		@NotNull Level level = player.getCommandSenderWorld();
+		@NotNull BlockSnapshot before = BlockSnapshot.create(level.dimension(), level, pos);
 		level.setBlockAndUpdate(pos, state);
-		BlockEvent.EntityPlaceEvent evt = new BlockEvent.EntityPlaceEvent(before, Blocks.AIR.defaultBlockState(), player);
+		BlockEvent.@NotNull EntityPlaceEvent evt = new BlockEvent.EntityPlaceEvent(before, Blocks.AIR.defaultBlockState(), player);
 		MinecraftForge.EVENT_BUS.post(evt);
 		if (evt.isCanceled()) {
 			level.restoringBlockSnapshots = true;
@@ -337,7 +402,7 @@ public class PlayerUtil {
 	 * @return
 	 */
 	@Nullable
-	public static void forceSetCurio(Player player, String type, int idx, ItemStack stack) {
+	public static void forceSetCurio(Player player, String type, int idx, @NotNull ItemStack stack) {
 		CuriosApi.getCuriosInventory(player).ifPresent(handler -> {
 			Map<String,ICurioStacksHandler> curiosMap = handler.getCurios();
 			for (Map.Entry<String,ICurioStacksHandler> entry : curiosMap.entrySet()) {
@@ -351,7 +416,7 @@ public class PlayerUtil {
 
 	@Nullable
 	public static InteractionHand getActiveRuneHand(ServerPlayer player) {
-		Wrapper<InteractionHand> hand = new Wrapper<>();
+		@NotNull Wrapper<InteractionHand> hand = new Wrapper<>();
 		player.getCapability(PlayerUtil.PlayerSelectedHandProvider.PLAYER_SELECTED_HAND).ifPresent(cap -> {
 			hand.set(cap.getHand());
 		});
@@ -367,18 +432,24 @@ public class PlayerUtil {
 		Vec3 rayPos = eyePos.add(ray);
 		return player.level().clip(new ClipContext(eyePos, rayPos, ClipContext.Block.VISUAL, ClipContext.Fluid.NONE, player));
 	}
+	public static @NotNull BlockHitResult getTargetedBlockGrass(Player player, double distance) {
+		Vec3 eyePos = player.getEyePosition();
+		Vec3 ray = player.getLookAngle().scale(distance);
+		Vec3 rayPos = eyePos.add(ray);
+		return player.level().clip(new ClipContext(eyePos, rayPos, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, player));
+	}
 
 	// Next 2: https://github.com/sinkillerj/ProjectE/blob/68fbb2dea0cf8a6394fa6c7c084063046d94cee5/src/main/java/moze_intel/projecte/utils/PlayerHelper.java#L109C3-L127C3
 	public static BlockHitResult getBlockLookingAtPE(Player player, double maxDistance) {
 		Tuple<Vec3, Vec3> vecs = getLookVec(player, maxDistance);
-		ClipContext ctx = new ClipContext(vecs.getA(), vecs.getB(), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, player);
+		@NotNull ClipContext ctx = new ClipContext(vecs.getA(), vecs.getB(), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, player);
 		return player.level().clip(ctx);
 	}
 	public static Tuple<Vec3, Vec3> getLookVec(Player player, double maxDistance) {
 		// Thank you ForgeEssentials
 		Vec3 look = player.getViewVector(1.0F);
-		Vec3 playerPos = new Vec3(player.getX(), player.getY() + player.getEyeHeight(), player.getZ());
-		Vec3 src = playerPos.add(0, player.getEyeHeight(), 0);
+		@NotNull Vec3 playerPos = new Vec3(player.getX(), player.getY() + player.getEyeHeight(), player.getZ());
+		@NotNull Vec3 src = playerPos.add(0, player.getEyeHeight(), 0);
 		Vec3 dest = src.add(look.x * maxDistance, look.y * maxDistance, look.z * maxDistance);
 		return new Tuple<>(src, dest);
 	}
@@ -406,10 +477,10 @@ public class PlayerUtil {
 			hand = other.getHand();
 		}
 
-		public void serialize(CompoundTag tag) {
+		public void serialize(@NotNull CompoundTag tag) {
 			tag.putBoolean(TK_HAND, hand == InteractionHand.MAIN_HAND);
 		}
-		public void deserialize(CompoundTag tag) {
+		public void deserialize(@NotNull CompoundTag tag) {
 			hand = tag.getBoolean(TK_HAND) ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
 		}
 	}
@@ -423,7 +494,7 @@ public class PlayerUtil {
 		
 		private PlayerSelectedHand make() {
 			// fuck you
-			PlayerSelectedHand hand = new PlayerSelectedHand();
+			@NotNull PlayerSelectedHand hand = new PlayerSelectedHand();
 			if (this.hand == null) {
 				this.hand = hand;
 			}
@@ -432,7 +503,7 @@ public class PlayerUtil {
 		}
 		
 		@Override
-		public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap) {
+		public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap) {
 			if (cap == PLAYER_SELECTED_HAND) {
 				return lo.cast();
 			}
@@ -440,7 +511,7 @@ public class PlayerUtil {
 		}
 
 		@Override
-		public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+		public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
 			return getCapability(cap);
 		}
 		

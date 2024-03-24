@@ -33,7 +33,7 @@ public class TileTP extends TagsProvider<BlockEntityType<?>> {
     }
 
 	@Override
-	public String getName() {
+	public @NotNull String getName() {
 		return AASB.MODID.toLowerCase() + " | BlockEntity Tags";
 	}
 	

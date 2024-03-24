@@ -7,6 +7,7 @@ import com.quartzshard.aasb.init.FxInit;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * spooooooky
@@ -18,7 +19,8 @@ public class SentientWhispersAmbient extends AbstractTickableSoundInstance {
 	private float step = 0;
 	private float nextPitch = 1;
 	private int maxPitchChangeTime = 0;
-	private int ceaseTimer = 0;
+	private float ogVolume = 0;
+	boolean firstTick = true;
 
 	public SentientWhispersAmbient(Entity entity) {
 		super(FxInit.SND_SENTIENT_WHISPERS.get(), SoundSource.NEUTRAL, entity.level().random);
@@ -27,7 +29,7 @@ public class SentientWhispersAmbient extends AbstractTickableSoundInstance {
 		this.delay = 0;
 	}
 
-	public SentientWhispersAmbient(Entity entity, int maxPitchChangeTime) {
+	public SentientWhispersAmbient(@NotNull Entity entity, int maxPitchChangeTime) {
 		super(FxInit.SND_SENTIENT_WHISPERS.get(), SoundSource.NEUTRAL, entity.level().random);
 		this.entity = entity;
 		this.looping = true;
@@ -37,6 +39,9 @@ public class SentientWhispersAmbient extends AbstractTickableSoundInstance {
 
 	@Override
 	public void tick() {
+		if (firstTick)
+			ogVolume = volume;
+		firstTick = false;
 		if (mustCease()) cease();
 		else {
 			// borked
@@ -75,9 +80,9 @@ public class SentientWhispersAmbient extends AbstractTickableSoundInstance {
 	
 	protected boolean mustCease() {
 		if (entity instanceof SentientArrowEntity arrow && arrow.isInert()) {
-			if (arrow.isInert()) ceaseTimer++;
-			else ceaseTimer = 0;
+			if (arrow.isInert()) volume = 0;
+			else volume = ogVolume;
 		}
-		return entity.isRemoved() || ceaseTimer > 6;
+		return entity.isRemoved();
 	}
 }

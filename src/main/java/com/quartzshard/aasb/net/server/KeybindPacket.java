@@ -16,6 +16,8 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 
 import net.minecraftforge.network.NetworkEvent;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import top.theillusivec4.curios.api.SlotContext;
 
 /**
@@ -110,7 +112,7 @@ public record KeybindPacket(ServerBind bind, BindState state) {
 					case BRACELET:
 						player.getCapability(PlayerUtil.PlayerSelectedHandProvider.PLAYER_SELECTED_HAND).ifPresent(cap -> {
 							int idx = cap.getHand() == InteractionHand.MAIN_HAND ? 0 : 1;
-							Tuple<ItemStack,SlotContext> curio = PlayerUtil.getCurio(player, "bracelet", idx);
+							@Nullable Tuple<ItemStack,SlotContext> curio = PlayerUtil.getCurio(player, "bracelet", idx);
 							if (curio != null) {
 								ItemStack stack = curio.getA();
 								if (stack.getItem() instanceof IRuneable item && !PlayerUtil.onCooldown(player, stack.getItem())) {
@@ -124,7 +126,7 @@ public record KeybindPacket(ServerBind bind, BindState state) {
 					case CHARM:
 						Tuple<ItemStack,SlotContext> curio = PlayerUtil.getCurio(player, "charm", 0);
 						if (curio != null) {
-							ItemStack stack = curio.getA();
+							@NotNull ItemStack stack = curio.getA();
 							if (stack.getItem() instanceof IRuneable item && !PlayerUtil.onCooldown(player, stack.getItem())) {
 								item.handle(new PressContext(bind, state, stack, player, level));
 							}
@@ -148,7 +150,7 @@ public record KeybindPacket(ServerBind bind, BindState state) {
 	 */
 	private boolean passBindToVanillaSlots(ServerPlayer player, ServerLevel level, EquipmentSlot... slots) {
 		boolean didDo = false;
-		for (EquipmentSlot slot : slots) {
+		for (@NotNull EquipmentSlot slot : slots) {
 			ItemStack stack = player.getItemBySlot(slot);
 			if (stack != null && !stack.isEmpty() && stack.getItem() instanceof IHandleKeybind item) {
 				didDo = item.handle(new PressContext(bind, state, stack, player, level));

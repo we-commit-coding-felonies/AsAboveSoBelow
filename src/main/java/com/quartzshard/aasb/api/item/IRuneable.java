@@ -3,6 +3,10 @@ package com.quartzshard.aasb.api.item;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.TooltipFlag;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.quartzshard.aasb.AASB;
@@ -87,15 +91,15 @@ public interface IRuneable extends IHandleKeybind {
 		return false;
 	}
 
-	default void tickRunes(ItemStack stack, ServerPlayer player, ServerLevel level, boolean unequip) {
-		for (Rune rune : getInscribedRunes(stack)) {
+	default void tickRunes(@NotNull ItemStack stack, ServerPlayer player, ServerLevel level, boolean unequip) {
+		for (@Nullable Rune rune : getInscribedRunes(stack)) {
 			if (rune != null) {
 				rune.tickPassive(stack, player, level, runesAreStrong(stack), unequip);
 			}
 		}
 	}
 	default void tickRunesClient(ItemStack stack, Player player, Level level, boolean unequip) {
-		for (Rune rune : getInscribedRunes(stack)) {
+		for (@Nullable Rune rune : getInscribedRunes(stack)) {
 			if (rune != null) {
 				rune.tickPassiveClient(stack, player, level, runesAreStrong(stack), unequip);
 			}
@@ -120,14 +124,14 @@ public interface IRuneable extends IHandleKeybind {
 	 * @return List of Runes
 	 */
 	default List<Rune> getInscribedRunes(ItemStack stack) {
-		ListTag tags = NBTUtil.getList(stack, TK_RUNES, 8, false);
+		@Nullable ListTag tags = NBTUtil.getList(stack, TK_RUNES, 8, false);
 		if (tags.isEmpty()) {
 			for (int i = 0; i < getMaxRunes(stack); i++) {
 				tags.add(StringTag.valueOf("null"));
 			}
 			NBTUtil.setList(stack, TK_RUNES, tags);
 		}
-		List<Rune> runes = new ArrayList<>(getMaxRunes(stack));
+		@NotNull List<Rune> runes = new ArrayList<>(getMaxRunes(stack));
 		for (Tag tag : tags) {
 			runes.add(Rune.deserialize(tag.getAsString()));
 		}
@@ -136,7 +140,7 @@ public interface IRuneable extends IHandleKeybind {
 	
 	@Nullable
 	default Rune getRune(ItemStack stack, int slot) {
-		List<Rune> runes = getInscribedRunes(stack);
+		@NotNull List<Rune> runes = getInscribedRunes(stack);
 		if (runes.size() == 0) return null;
 		return runes.get(slot);
 	}
@@ -151,9 +155,9 @@ public interface IRuneable extends IHandleKeybind {
 		return false;
 	}
 	
-	default boolean canInscribeRune(Rune rune, ItemStack stack, int slot) {
+	default boolean canInscribeRune(Rune rune, @NotNull ItemStack stack, int slot) {
 		if (slot+1 <= getMaxRunes(stack)) {
-			Rune currentRune = getRune(stack, slot);
+			@Nullable Rune currentRune = getRune(stack, slot);
 			if (currentRune == null) {
 				return true;
 			}
@@ -162,7 +166,6 @@ public interface IRuneable extends IHandleKeybind {
 	}
 	
 	default void inscribeRune(Rune rune, ItemStack stack, int slot) {
-		// FIXME doesnt work
 		if (canInscribeRune(rune, stack, slot)) {
 			ListTag tags = NBTUtil.getList(stack, TK_RUNES, 8, false);
 			if (tags.isEmpty()) {
@@ -200,12 +203,41 @@ public interface IRuneable extends IHandleKeybind {
 		COMBAT(LangData.ITEM_GLOVE_RUNED),
 		UTILITY(LangData.ITEM_BRACELET_RUNED),
 		PASSIVE(LangData.ITEM_CHARM_RUNED),
-		TOOL(null); // :troled:
+		TOOL(null), // :troled:
+		NONE(null); // :troled: 2 electric boogaloo
 		
 		@Nullable
 		public final String runedLang;
 		ItemAbility(String runedLang) {
 			this.runedLang = runedLang;
 		}
+	}
+
+	/**
+	 * Appends rune information to the tooltip
+	 * @param stack
+	 * @param level
+	 * @param tips
+	 * @param flags
+	 */
+	default void appendRuneText(ItemStack stack, Level level, List<Component> tips, TooltipFlag flags) {
+		@Nullable Component runeText = null;
+		@Nullable Rune major = getRune(stack, 0), minor = getRune(stack, 1);
+		boolean hasNull = major == null || minor == null,
+				didDo = false;
+		if (hasNull && major != minor) {
+			// only one is null, only 1 rune
+			runeText = LangData.tc(LangData.TIP_RUNE, major == null ? minor.fLoc() : major.fLoc()).copy().withStyle(ChatFormatting.GRAY);
+			didDo = true;
+		} else if (!hasNull) {
+			// neither is null, we have both
+			runeText = LangData.tc(LangData.TIP_RUNE_MULTI,
+					major.fLoc(),
+					minor.fLoc()
+			).copy().withStyle(ChatFormatting.GRAY);
+			didDo = true;
+		}
+		if (didDo)
+			tips.add(runeText);
 	}
 }

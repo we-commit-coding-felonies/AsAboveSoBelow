@@ -21,6 +21,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Items that can be empowered on-demand with Way from the inventory
@@ -101,7 +102,7 @@ public interface IEmpowerable extends IWayHolder, IHandleKeybind {
 	 * Toggles whether this is empowering
 	 * @param stack
 	 */
-	default void toggleEmpowering(ItemStack stack) {
+	default void toggleEmpowering(@NotNull ItemStack stack) {
 		setEmpowering(stack, !isEmpowering(stack));
 	}
 	
@@ -120,7 +121,7 @@ public interface IEmpowerable extends IWayHolder, IHandleKeybind {
 	 * @param stack
 	 * @param entity
 	 */
-	default void tickEmpower(ItemStack stack, Entity entity) {
+	default void tickEmpower(@NotNull ItemStack stack, Entity entity) {
 		if (isEmpowering(stack) && shouldEmpower(stack)) {
 			// Charging!!!
 			if (entity instanceof Player plr) {
@@ -154,7 +155,7 @@ public interface IEmpowerable extends IWayHolder, IHandleKeybind {
 	}
 	
 	@Override
-	default boolean handle(PressContext ctx) {
+	default boolean handle(@NotNull PressContext ctx) {
 		if (ctx.bind() == ServerBind.EMPOWER) {
 			// Sets the empowering state to:
 			// state == PRESSED && shouldEmpower(stack)

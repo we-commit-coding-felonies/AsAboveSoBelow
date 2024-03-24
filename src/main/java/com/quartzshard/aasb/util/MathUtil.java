@@ -3,7 +3,10 @@ package com.quartzshard.aasb.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * generic math functions
@@ -66,7 +69,7 @@ public class MathUtil {
 	 * @param table
 	 * @return
 	 */
-	public static <T> List<List<T>> transpose(List<List<T>> table) {
+	public static <T> @NotNull List<List<T>> transpose(List<List<T>> table) {
 		List<List<T>> ret = new ArrayList<List<T>>();
 		final int N = table.get(0).size();
 		for (int i = 0; i < N; i++) {
@@ -79,7 +82,7 @@ public class MathUtil {
 		return ret;
 	}
 
-	public static <T> List<List<T>> getAllCombos(List<List<T>> inSets, List<T> compSet, List<List<T>> sets) {
+	public static <T> List<List<T>> getAllCombos(List<List<T>> inSets, List<T> compSet, @NotNull List<List<T>> sets) {
 		if (sets.size() == 1) {
 			// only 1 input list means we dont do anything
 			return sets;
@@ -87,7 +90,7 @@ public class MathUtil {
 		return actuallyGetAllCombos(inSets, compSet, sets);
 	}
 	
-	private static <T> List<List<T>> actuallyGetAllCombos(List<List<T>> inSets, List<T> compSet, List<List<T>> sets) {
+	private static <T> @NotNull List<List<T>> actuallyGetAllCombos(List<List<T>> inSets, List<T> compSet, List<List<T>> sets) {
 		// Mutable list for output
 		List<List<T>> outSets = new ArrayList<>();
 
@@ -105,7 +108,7 @@ public class MathUtil {
 
 		// combinations...
 		for (T elem : compSet) {
-			for (List<T> row : inSets) {
+			for (@NotNull List<T> row : inSets) {
 				List<T> newRow = new ArrayList<>(row);
 				newRow.add(0, elem);
 				outSets.add(newRow);
@@ -123,7 +126,7 @@ public class MathUtil {
 	
 	/**
 	 * Converts the given amount of ticks to Hours, Minutes, Seconds, Milliseconds
-	 * @param t ticks
+	 * @param ticks ticks
 	 * @return 
 	 */
 	public static long[] ticksToTime(long ticks) {
@@ -151,7 +154,7 @@ public class MathUtil {
 		return param;
 	}
 
-	public static double angleBetween(Vec3 v1, Vec3 v2) {
+	public static double angleBetween(@NotNull Vec3 v1, @NotNull Vec3 v2) {
 		double vDot = v1.dot(v2) / (v1.length() * v2.length());
 		if (vDot < -1.0) {
 			vDot = -1.0;
@@ -183,7 +186,12 @@ public class MathUtil {
 		return radian;
 	}
 
-	public static Vec3 transform(Vec3 axis, double angle, Vec3 normal) {
+	public static Vec2 rotate2DAroundOrigin(Vec2 rot, float deg) {
+		deg = (float)Math.toRadians(deg);
+		return new Vec2(rot.x*Mth.cos(deg)-rot.y*Mth.sin(deg), rot.y*Mth.cos(deg)+rot.x*Mth.sin(deg));
+	}
+
+	public static @NotNull Vec3 transform(Vec3 axis, double angle, Vec3 normal) {
 		//Trimmed down math of javax vecmath calculations, potentially should be rewritten at some point
 		double m00 = 1;
 		double m01 = 0;

@@ -1,5 +1,6 @@
 package com.quartzshard.aasb.common.entity.ai;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.quartzshard.aasb.data.tags.BlockTP;
@@ -25,7 +26,7 @@ public class HomingArrowNodeEvaluator extends NodeEvaluator {
 	public HomingArrowNodeEvaluator() {
 	}
 
-	public void prepare(PathNavigationRegion level, AbstractArrow arrow) {
+	public void prepare(@NotNull PathNavigationRegion level, AbstractArrow arrow) {
 		this.level = level;
 		this.arrow = arrow;
 		this.nodes.clear();
@@ -48,10 +49,10 @@ public class HomingArrowNodeEvaluator extends NodeEvaluator {
 	@Override
 	@Nullable
 	protected Node getNode(int x, int y, int z) {
-		Node node = super.getNode(x, y, z);
+		@NotNull Node node = super.getNode(x, y, z);
 
-		BlockPos.MutableBlockPos mBlockPos = new BlockPos.MutableBlockPos();
-		BlockPathTypes blockPathTypes = getBlockPathTypeRaw(this.level, mBlockPos.set(x, y, z));
+		BlockPos.@NotNull MutableBlockPos mBlockPos = new BlockPos.MutableBlockPos();
+		@NotNull BlockPathTypes blockPathTypes = getBlockPathTypeRaw(this.level, mBlockPos.set(x, y, z));
 		if (blockPathTypes != BlockPathTypes.OPEN) {
 			node.closed = true;
 		}
@@ -66,7 +67,7 @@ public class HomingArrowNodeEvaluator extends NodeEvaluator {
 			neighbours[i++] = south;
 		}
 
-		Node west = this.getNode(thisNode.x - 1, thisNode.y, thisNode.z);
+		@Nullable Node west = this.getNode(thisNode.x - 1, thisNode.y, thisNode.z);
 		if (HomingArrowNodeEvaluator.isOpen(west)) {
 			neighbours[i++] = west;
 		}
@@ -81,7 +82,7 @@ public class HomingArrowNodeEvaluator extends NodeEvaluator {
 			neighbours[i++] = north;
 		}
 
-		Node above = this.getNode(thisNode.x, thisNode.y + 1, thisNode.z);
+		@Nullable Node above = this.getNode(thisNode.x, thisNode.y + 1, thisNode.z);
 		if (HomingArrowNodeEvaluator.isOpen(above)) {
 			neighbours[i++] = above;
 		}
@@ -200,8 +201,8 @@ public class HomingArrowNodeEvaluator extends NodeEvaluator {
 		return node != null && !node.closed;
 	}
 
-	public static BlockPathTypes getBlockPathTypeRaw(BlockGetter level, BlockPos pos) {
-		BlockState state = level.getBlockState(pos);
+	public static @NotNull BlockPathTypes getBlockPathTypeRaw(@NotNull BlockGetter level, @NotNull BlockPos pos) {
+		@NotNull BlockState state = level.getBlockState(pos);
 		if (state.isAir() || state.is(BlockTP.ARROW_NOCLIP)) {
 			return BlockPathTypes.OPEN;
 		}

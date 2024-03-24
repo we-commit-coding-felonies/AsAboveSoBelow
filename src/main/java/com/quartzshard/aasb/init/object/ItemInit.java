@@ -9,6 +9,7 @@ import com.quartzshard.aasb.common.item.*;
 import com.quartzshard.aasb.common.item.ItemTraits.Rarity;
 import com.quartzshard.aasb.common.item.ItemTraits.Tier;
 import com.quartzshard.aasb.common.item.equipment.*;
+import com.quartzshard.aasb.common.item.equipment.armor.HermeticArmorItem;
 import com.quartzshard.aasb.common.item.equipment.armor.jewellery.*;
 import com.quartzshard.aasb.common.item.equipment.curio.*;
 import com.quartzshard.aasb.common.item.equipment.tool.*;
@@ -22,6 +23,7 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import org.jetbrains.annotations.NotNull;
 
 // Deals with setting up items, how exciting
 public class ItemInit {
@@ -58,7 +60,7 @@ public class ItemInit {
 		;
 	
 	/** these are used for the creative tabs, and are emptied once the tabs are filled out */
-	public static List<RegistryObject<? extends Item>>
+	public static @NotNull List<RegistryObject<? extends Item>>
 		ALL_NATURAL_ITEMS = new ArrayList<>(),
 		ALL_SYNTHETIC_ITEMS = new ArrayList<>();
 	
@@ -128,10 +130,10 @@ public class ItemInit {
 		CHARM2 = reg("hermeticized_charm", () -> new CharmItem(2, PROPS_CURIO_2), Tab.SYN),
 		
 		// Armor
-		HELMET = unstack("hermetic_armet", Tab.SYN),
-		CHESTPLATE = unstack("hermetic_cuirass", Tab.SYN),
-		LEGGINGS = unstack("hermetic_greaves", Tab.SYN),
-		BOOTS = unstack("hermetic_sabatons", Tab.SYN),
+		HELMET = reg("hermetic_armet", () -> new HermeticArmorItem(HermeticArmorItem.Type.HELMET, PROPS_GENERIC_TOOL), Tab.SYN),
+		CHESTPLATE = reg("hermetic_cuirass", () -> new HermeticArmorItem(HermeticArmorItem.Type.CHESTPLATE, PROPS_GENERIC_TOOL), Tab.SYN),
+		LEGGINGS = reg("hermetic_greaves", () -> new HermeticArmorItem(HermeticArmorItem.Type.LEGGINGS, PROPS_GENERIC_TOOL), Tab.SYN),
+		BOOTS = reg("hermetic_sabatons", () -> new HermeticArmorItem(HermeticArmorItem.Type.BOOTS, PROPS_GENERIC_TOOL), Tab.SYN),
 		CIRCLET = reg("circlet_of_the_seer", () -> new CircletItem(PROPS_IMPOSSIBLE_1), Tab.NAT),
 		AMULET = reg("amulet_of_the_philosopher", () -> new AmuletItem(PROPS_IMPOSSIBLE_1), Tab.NAT),
 		POCKETWATCH = reg("watch_of_the_astrologer", () -> new PocketwatchItem(PROPS_IMPOSSIBLE_1), Tab.NAT),
@@ -163,7 +165,7 @@ public class ItemInit {
 
 	// BlockItems
 	public static final RegistryObject<BlockItem>
-		TEST_BLOCK_ITEM = fromBlock(BlockInit.CRUMBLING_STONE, Tab.SYN);
+		TEST_BLOCK_ITEM = fromBlock(BlockInit.BLOCK_CRUMBLING_STONE, Tab.SYN);
 	
 	private static final RegistryObject<Item> basic(String name, Tab tab) {
 		return reg(name, PROPS_GENERIC_64, tab);
@@ -174,12 +176,12 @@ public class ItemInit {
 	private static final RegistryObject<Item> unstack(String name, Tab tab) {
 		return reg(name, PROPS_GENERIC_1, tab);
 	}
-	public static <B extends Block> RegistryObject<BlockItem> fromBlock(RegistryObject<B> block, Tab tab) {
+	public static <B extends Block> RegistryObject<BlockItem> fromBlock(RegistryObject<B> block, @NotNull Tab tab) {
 		return reg(block.getId().getPath(), () -> new BlockItem(block.get(), PROPS_GENERIC_64), tab);
 	}
 	
 	private static RegistryObject<Item> materia(String name, int tier) {
-		Item.Properties props = PROPS_GENERIC_64;
+		Item.@NotNull Properties props = PROPS_GENERIC_64;
 		switch (tier) {
 			case -2:
 				props = PROPS_MATERIA_NEG2;
@@ -215,7 +217,7 @@ public class ItemInit {
 		return reg(name, props, tier < 1 ? Tab.SYN : Tab.NAT);
 	}
 	private static RegistryObject<Item> impossible(String name, boolean stacks) {
-		Item.Properties props = stacks ? PROPS_IMPOSSIBLE_64 : PROPS_IMPOSSIBLE_1;
+		Item.@NotNull Properties props = stacks ? PROPS_IMPOSSIBLE_64 : PROPS_IMPOSSIBLE_1;
 		return reg(name, props, Tab.NAT);
 	}
 	private static RegistryObject<Item> nulled(String name) {

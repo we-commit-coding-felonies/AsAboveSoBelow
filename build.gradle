@@ -70,11 +70,24 @@ minecraft {
         }
 
         client {
+            // makes jetbrains stupid garbage do code swap
+            jvmArg "-XX:+AllowEnhancedClassRedefinition"
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
             property 'forge.enabledGameTestNamespaces', mod_id
         }
+        clientMpTest {
+            // FIXME currently this is broken and has to be manually created from existing runClient file
+            //  need it for testing multiplayer easily so its quite important
+            // makes jetbrains stupid garbage do code swap
+            jvmArg "-XX:+AllowEnhancedClassRedefinition"
+            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
+            property 'forge.enabledGameTestNamespaces', mod_id
+            args '--username', 'Client'
+        }
 
         server {
+            // makes jetbrains stupid garbage do code swap
+            jvmArg "-XX:+AllowEnhancedClassRedefinition"
             property 'forge.enabledGameTestNamespaces', mod_id
             args '--nogui'
         }

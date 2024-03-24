@@ -10,6 +10,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.phys.Vec3;
 
 import net.minecraftforge.network.NetworkEvent;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * allows changing player velocity serverside
@@ -30,7 +31,7 @@ public record ModifyPlayerVelocityPacket(Vec3 mod, VecOp op) {
 		 * @param mod the modifier
 		 * @return the modified output: in.x(mod)
 		 */
-		public Vec3 perform(Vec3 in, Vec3 mod) {
+		public Vec3 perform(@NotNull Vec3 in, Vec3 mod) {
 			switch (this) {
 			case ADD:
 				return in.add(mod);
@@ -49,7 +50,7 @@ public record ModifyPlayerVelocityPacket(Vec3 mod, VecOp op) {
 		}
 	}
 	
-	public void enc(FriendlyByteBuf buffer) {
+	public void enc(@NotNull FriendlyByteBuf buffer) {
 		buffer.writeDouble(mod.x);
 		buffer.writeDouble(mod.y);
 		buffer.writeDouble(mod.z);
@@ -66,7 +67,6 @@ public record ModifyPlayerVelocityPacket(Vec3 mod, VecOp op) {
 	public boolean handle(Supplier<NetworkEvent.Context> sup) {
 		NetworkEvent.Context ctx = sup.get();
 		ctx.enqueueWork(() -> {
-			@SuppressWarnings("resource")
 			LocalPlayer player = Minecraft.getInstance().player;
 			
 			player.setDeltaMovement( op.perform(player.getDeltaMovement(), mod) );

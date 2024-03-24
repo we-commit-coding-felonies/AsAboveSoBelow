@@ -11,6 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * item that breaks any block in a specific amount of ticks <br>
@@ -40,8 +41,8 @@ public interface IDigStabilizer {
 	 */
 	default void appendDigToggleText(ItemStack stack, Level level, List<Component> tips, TooltipFlag flags) {
 		tips.add(LangData.NL);
-		Component modeKeyText = Keybinds.Bind.ITEMMODE.fLoc();
-		Component stateText = LangData.tc(getDigState(stack) ? LangData.TIP_GENERIC_ON : LangData.TIP_GENERIC_OFF);
+		@NotNull Component modeKeyText = Keybinds.Bind.ITEMMODE.fLoc();
+		@NotNull Component stateText = LangData.tc(getDigState(stack) ? LangData.TIP_GENERIC_ON : LangData.TIP_GENERIC_OFF);
 		tips.add(LangData.tc(LangData.TIP_TOOL_STATICDIG_DESC)); // Info
 		tips.add(LangData.tc(LangData.TIP_TOOL_STATICDIG_STATE, stateText, modeKeyText)); // Key help
 	}
@@ -53,7 +54,7 @@ public interface IDigStabilizer {
 	default void setDigState(ItemStack stack, boolean state) {
 		NBTUtil.setBoolean(stack, TK_DIGSTATE, state);
 	}
-	default void toggleDigState(ItemStack stack) {
+	default void toggleDigState(@NotNull ItemStack stack) {
 		setDigState(stack, !getDigState(stack));
 	}
 	

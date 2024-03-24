@@ -1,5 +1,6 @@
 package com.quartzshard.aasb.mixin;
 
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -15,7 +16,7 @@ import net.minecraft.world.level.Level;
 public class ArmorDyeRecipeMixin {
 	
 	@Inject(method = "matches", at = @At("HEAD"), cancellable = true)
-	protected void onCheckMatch(CraftingContainer inv, Level level, CallbackInfoReturnable<Boolean> cir) {
+	protected void onCheckMatch(CraftingContainer inv, Level level, @NotNull CallbackInfoReturnable<Boolean> cir) {
 		for (ItemStack stack : inv.getItems()) {
 			if (stack.getItem() instanceof AmuletItem) {
 				cir.setReturnValue(false);

@@ -8,6 +8,7 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.mutable.MutableBoolean;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.quartzshard.aasb.AASB;
@@ -55,7 +56,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 @Mod.EventBusSubscriber(modid = AASB.MODID)
 public class LootBallItem extends Item {
 	private static final Supplier<ItemStack> EMPTY_BALL_SUPPLIER = () -> {
-		ItemStack ball = new ItemStack(ItemInit.LOOTBALL.get());
+		@NotNull ItemStack ball = new ItemStack(ItemInit.LOOTBALL.get());
 		CompoundTag tag = ball.getOrCreateTag();
 		if (!tag.contains("LootBallStorage")) {
 			tag.put("LootBallStorage", new ListTag());
@@ -69,7 +70,7 @@ public class LootBallItem extends Item {
 		super(props);
 	}
 
-	public static float getFullnessDisplay(ItemStack stack) {
+	public static float getFullnessDisplay(@NotNull ItemStack stack) {
 		return (float)storedItemCount(stack) / (float)MAX_ITEMS;
 	}
 
@@ -106,13 +107,13 @@ public class LootBallItem extends Item {
 		}).sum();
 	}
 
-	private static boolean dropContents(ItemStack stack, Player player) {
+	private static boolean dropContents(@NotNull ItemStack stack, Player player) {
 		CompoundTag tag = stack.getOrCreateTag();
 		if (!tag.contains(TAG_ITEMS)) {
 			return false;
 		}
 		if (player instanceof ServerPlayer) {
-			ListTag itemTags = tag.getList(TAG_ITEMS, 10);
+			@NotNull ListTag itemTags = tag.getList(TAG_ITEMS, 10);
 
 			for (int i = 0; i < itemTags.size(); ++i) {
 				CompoundTag tagItem = itemTags.getCompound(i);
@@ -125,7 +126,7 @@ public class LootBallItem extends Item {
 	}
 
 	private static Stream<ItemStack> getContents(ItemStack stack) {
-		CompoundTag compoundtag = stack.getTag();
+		@Nullable CompoundTag compoundtag = stack.getTag();
 		if (compoundtag == null) {
 			return Stream.empty();
 		}
@@ -135,7 +136,7 @@ public class LootBallItem extends Item {
 
 	@Override
 	public Optional<TooltipComponent> getTooltipImage(ItemStack stack) {
-		NonNullList<ItemStack> itemList = NonNullList.create();
+		@NotNull NonNullList<ItemStack> itemList = NonNullList.create();
 		getContents(stack).forEach(itemList::add);
 		return Optional.of(new BundleTooltip(itemList, storedItemCount(stack)));
 	}
@@ -163,7 +164,7 @@ public class LootBallItem extends Item {
 		if (item == ItemInit.LOOTBALL.get()) {
 			Player player = event.getEntity();
 			boolean didMerge = false;
-			Iterator<ItemStack> playerInv = player.getInventory().items.iterator();
+			@NotNull Iterator<ItemStack> playerInv = player.getInventory().items.iterator();
 			while (playerInv.hasNext() && !stack.isEmpty()) {
 				ItemStack heldStack = playerInv.next();
 				if (heldStack.getItem() == ItemInit.LOOTBALL.get() && storedItemCount(heldStack) < MAX_ITEMS) {
@@ -174,7 +175,7 @@ public class LootBallItem extends Item {
 			if (didMerge) {
 				if (!stack.isEmpty()) {
 					// there was leftovers, so lets spawn a new ball
-					ItemEntity newEnt = itemEnt.spawnAtLocation(stack);
+					@Nullable ItemEntity newEnt = itemEnt.spawnAtLocation(stack);
 					if (newEnt != null)
 						newEnt.setNoPickUpDelay();
 				}
@@ -191,7 +192,7 @@ public class LootBallItem extends Item {
 	 * @param sentStack the stack to try inserting
 	 * @return tuple with the leftover sentStack that couldnt be inserted (or EMPTY if all were inserted), and a boolean of if the receiverStack is full
 	 */
-	private static Tuple<ItemStack,Boolean> add(ItemStack receiverStack, ItemStack sentStack) {
+	private static @NotNull Tuple<ItemStack,Boolean> add(@NotNull ItemStack receiverStack, ItemStack sentStack) {
 		if (canBeStoredInLootBall(sentStack)) {
 			CompoundTag receiverTag = receiverStack.getOrCreateTag();
 			if (!receiverTag.contains(TAG_ITEMS)) {
@@ -204,10 +205,10 @@ public class LootBallItem extends Item {
 			if (numToInsert <= 0) {
 				return new Tuple<>(sentStack, sentCount > 0);
 			}
-			ListTag receiverInv = receiverTag.getList(TAG_ITEMS, 10);
-			Optional<CompoundTag> match = getMatchingItem(sentStack, receiverInv);
+			@NotNull ListTag receiverInv = receiverTag.getList(TAG_ITEMS, 10);
+			@NotNull Optional<CompoundTag> match = getMatchingItem(sentStack, receiverInv);
 			if (match.isPresent()) {
-				CompoundTag matchingStackTag = match.get();
+				@NotNull CompoundTag matchingStackTag = match.get();
 				ItemStack matchingStack = stackFromTag(matchingStackTag);
 				matchingStack.grow(numToInsert);
 				tagFromStack(matchingStack, matchingStackTag);
@@ -229,7 +230,7 @@ public class LootBallItem extends Item {
 		}
 		return new Tuple<>(sentStack, false);
 	}
-	private static Optional<CompoundTag> getMatchingItem(ItemStack pStack, ListTag pList) {
+	private static Optional<CompoundTag> getMatchingItem(ItemStack pStack, @NotNull ListTag pList) {
 		return pStack.is(Items.BUNDLE) ? Optional.empty() : pList.stream().filter(CompoundTag.class::isInstance).map(CompoundTag.class::cast).filter((tag) -> {
 			return ItemStack.isSameItemSameTags(stackFromTag(tag), pStack);
 		}).findFirst();
@@ -241,11 +242,11 @@ public class LootBallItem extends Item {
 	 * @param receiver
 	 * @return loot ball containing leftovers that couldnt be merged, or EMPTY if all was merged
 	 */
-	public static ItemStack combineLoot(ItemStack donor, ItemStack receiver) {
+	public static ItemStack combineLoot(ItemStack donor, @NotNull ItemStack receiver) {
 		if (!donor.is(ItemInit.LOOTBALL.get()) || !receiver.is(ItemInit.LOOTBALL.get()))
 			return donor;
-		List<ItemStack> leftoverInv = new ArrayList<>();
-		MutableBoolean full = new MutableBoolean(false);
+		@NotNull List<ItemStack> leftoverInv = new ArrayList<>();
+		@NotNull MutableBoolean full = new MutableBoolean(false);
 		getContents(donor).forEach((insertStack) -> {
 			if (insertStack.isEmpty()) return; // filters out any weird empty stacks
 			if (full.isTrue() || storedItemCount(receiver) >= MAX_ITEMS) {
@@ -254,7 +255,7 @@ public class LootBallItem extends Item {
 				return;
 			}
 			Tuple<ItemStack,Boolean> info = add(receiver, insertStack);
-			ItemStack leftover = info.getA();
+			@NotNull ItemStack leftover = info.getA();
 			if (!leftover.isEmpty()) {
 				leftoverInv.add(leftover);
 				if (info.getB()) {
@@ -274,15 +275,15 @@ public class LootBallItem extends Item {
 	 * @param contents
 	 * @return
 	 */
-	public static ItemStack makeLootBall(List<ItemStack> contents) {
+	public static ItemStack makeLootBall(@NotNull List<ItemStack> contents) {
 		ItemStack newBall = EMPTY_BALL_SUPPLIER.get();
 		if (!contents.isEmpty()) {
-			ListTag receiverInv = newBall.getOrCreateTag().getList(TAG_ITEMS, 10);
+			@NotNull ListTag receiverInv = newBall.getOrCreateTag().getList(TAG_ITEMS, 10);
 			for (ItemStack stackToInsert : contents) {
 				Optional<CompoundTag> match = getMatchingItem(stackToInsert, receiverInv);
 				if (match.isPresent()) {
 					CompoundTag matchingStackTag = match.get();
-					ItemStack matchingStack = stackFromTag(matchingStackTag);
+					@NotNull ItemStack matchingStack = stackFromTag(matchingStackTag);
 					matchingStack.grow(stackToInsert.getCount());
 					tagFromStack(matchingStack, matchingStackTag);
 					//matchingStack.save(matchingStackTag);
@@ -299,7 +300,7 @@ public class LootBallItem extends Item {
 		return newBall;
 	}
 	
-	public static List<ItemStack> makeValidLootBalls(List<ItemStack> contents) {
+	public static @NotNull List<ItemStack> makeValidLootBalls(List<ItemStack> contents) {
 		List<ItemStack> balls = new ArrayList<>();
 		if (!contents.isEmpty()) {
 			List<ItemStack> toInsert = new ArrayList<>();
@@ -325,7 +326,7 @@ public class LootBallItem extends Item {
 					// get an empty loot ball, we will store items in it
 					ItemStack newBall = EMPTY_BALL_SUPPLIER.get();
 					int inserted = 0;
-					List<ItemStack> remainingItems = new ArrayList<>();
+					@NotNull List<ItemStack> remainingItems = new ArrayList<>();
 					for (ItemStack s : toInsert) {
 						toInsert.add(s); // another duplicate so the for loop doesnt do weird shit
 					}
@@ -371,7 +372,7 @@ public class LootBallItem extends Item {
 	public boolean canFitInsideContainerItems() {
 		return false;
 	}
-	public static CompoundTag tagFromStack(ItemStack stack, CompoundTag tag) {
+	public static @NotNull CompoundTag tagFromStack(@NotNull ItemStack stack, CompoundTag tag) {
 		ResourceLocation resourcelocation = ForgeRegistries.ITEMS.getKey(stack.getItem());
 		tag.putString("id", resourcelocation == null ? "minecraft:air" : resourcelocation.toString());
 		tag.putInt("Count", stack.getCount());
@@ -389,7 +390,7 @@ public class LootBallItem extends Item {
 		try {
 			Item item = ForgeRegistries.ITEMS.getValue(ResourceLocation.tryParse(tag.getString("id")));
 			int amount = tag.getInt("Count");
-			CompoundTag nbt = tag.contains("tag", CompoundTag.TAG_COMPOUND) ? tag.getCompound("tag") : null;
+			@Nullable CompoundTag nbt = tag.contains("tag", CompoundTag.TAG_COMPOUND) ? tag.getCompound("tag") : null;
 			ItemStack tagStack = new ItemStack(item, amount);
 			if (nbt != null) {
 				tagStack.setTag(nbt);

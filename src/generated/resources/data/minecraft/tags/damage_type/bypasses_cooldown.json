@@ -4,6 +4,7 @@
     "aasb:transmute",
     "aasb:transmute_env",
     "aasb:sentient_arrow",
-    "aasb:arrow_swarm"
+    "aasb:arrow_swarm",
+    "aasb:waybomb_env"
   ]
 }

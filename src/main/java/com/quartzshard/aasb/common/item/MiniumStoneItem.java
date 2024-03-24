@@ -9,9 +9,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 public class MiniumStoneItem extends Item {
-	public MiniumStoneItem(Properties props) {
+	public MiniumStoneItem(@NotNull Properties props) {
 		super(props);
 	}
 	
@@ -25,7 +26,7 @@ public class MiniumStoneItem extends Item {
 		}
 	}
 	
-	public byte getVariant(ItemStack stack) {
+	public byte getVariant(@NotNull ItemStack stack) {
 		return NBTUtil.getByte(stack, "MiniumVariant", -1);
 	}
 

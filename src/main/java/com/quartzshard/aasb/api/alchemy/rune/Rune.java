@@ -2,6 +2,7 @@ package com.quartzshard.aasb.api.alchemy.rune;
 
 import java.util.UUID;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.google.common.collect.Multimap;
@@ -34,7 +35,7 @@ public abstract class Rune {
 	 * @return A string representing this Rune
 	 */
 	@SuppressWarnings("null") // Attempting to serialize an unregistered rune is bad
-	public String serialize() {
+	public @NotNull String serialize() {
 		return AlchInit.RUNES_SUPPLIER.get().getKey(this).toString();
 	}
 	
@@ -90,7 +91,7 @@ public abstract class Rune {
 	public boolean passiveEnabled(ItemStack stack) {
 		return NBTUtil.getBoolean(stack, TK_ACTIVATED, false);
 	}
-	public void togglePassive(ItemStack stack) {
+	public void togglePassive(@NotNull ItemStack stack) {
 		NBTUtil.setBoolean(stack, TK_ACTIVATED, !passiveEnabled(stack));
 	}
 	

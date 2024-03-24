@@ -61,7 +61,7 @@ public class CutParticle extends Particle {
 		points[1].add(lx2, ly2, lz2);
 		
 		// get the lines render buffer since thats what we will render to
-		VertexConsumer buffer = multisource.getBuffer(RenderType.lines());
+		@NotNull VertexConsumer buffer = multisource.getBuffer(RenderType.lines());
 		float alpha = 1f - (float)age/(float)lifetime; // fading out over time
 		float value = Math.max(0.75f, 1f - ((float)age/(float)lifetime)*2f); // grayscale value, darkens over time
 		
@@ -85,7 +85,7 @@ public class CutParticle extends Particle {
 	}
 
 	@Override
-	public ParticleRenderType getRenderType() {
+	public @NotNull ParticleRenderType getRenderType() {
 		return ParticleRenderType.CUSTOM;
 	}
 	

@@ -1,6 +1,7 @@
 package com.quartzshard.aasb.init;
 
 import com.quartzshard.aasb.AASB;
+import com.quartzshard.aasb.common.gui.menu.TransmutationMenu;
 import com.quartzshard.aasb.data.LangData;
 import com.quartzshard.aasb.init.object.ItemInit;
 import com.quartzshard.aasb.util.PlayerUtil;
@@ -10,17 +11,21 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
+import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Deals with initializing some misc core parts of the mod, and the creative tabs <br>
@@ -30,9 +35,11 @@ import net.minecraftforge.registries.RegistryObject;
 public class ModInit {
 
 	public static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, AASB.MODID);
+	public static final DeferredRegister<MenuType<?>> MENUS = DeferredRegister.create(ForgeRegistries.MENU_TYPES, AASB.MODID);
 
-	public static void init(IEventBus bus) {
+	public static void init(@NotNull IEventBus bus) {
 		TABS.register(bus);
+		MENUS.register(bus);
 		NetInit.register();
 		bus.addListener(ModInit::commonSetup);
 	}
@@ -41,24 +48,27 @@ public class ModInit {
 	}
 	
 	public static final RegistryObject<CreativeModeTab>
-		NATURAL = TABS.register("natural", () -> CreativeModeTab.builder()
+		TAB_NATURAL = TABS.register("natural", () -> CreativeModeTab.builder()
 			.title(Component.translatable(LangData.CTAB_NATURAL))
 			.withTabsBefore(CreativeModeTabs.COMBAT)
 			.icon(() -> ItemInit.THE_PHILOSOPHERS_STONE.get().getDefaultInstance())
 			.displayItems((parameters, tab) -> {
-				for (RegistryObject<? extends Item> ro : ItemInit.ALL_NATURAL_ITEMS) {
+				for (@NotNull RegistryObject<? extends Item> ro : ItemInit.ALL_NATURAL_ITEMS) {
 					tab.accept(ro.get());
 				}
 			}).build()),
-		SYNTHETIC = TABS.register("synthetic", () -> CreativeModeTab.builder()
+		TAB_SYNTHETIC = TABS.register("synthetic", () -> CreativeModeTab.builder()
 				.title(Component.translatable(LangData.CTAB_SYNTHETIC))
-				.withTabsBefore(NATURAL.getId())
+				.withTabsBefore(TAB_NATURAL.getId())
 				.icon(() -> ItemInit.ELIXIR_OF_LIFE.get().getDefaultInstance())
 				.displayItems((parameters, tab) -> {
 					for (RegistryObject<? extends Item> ro : ItemInit.ALL_SYNTHETIC_ITEMS) {
 						tab.accept(ro.get());
 					}
 				}).build());
+
+	public static final RegistryObject<MenuType<TransmutationMenu>>
+		MENU_TRANSTAB = MENUS.register("transtab", () -> IForgeMenuType.create((id, inv, data) -> new TransmutationMenu(id, inv)));
 	
 	public static void attachEntityCaps(AttachCapabilitiesEvent<Entity> event){
 		if (event.getObject() instanceof Player) {

@@ -4,12 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.quartzshard.aasb.AASB;
-import com.quartzshard.aasb.client.gui.menu.PortableCraftingMenu;
+import com.quartzshard.aasb.common.gui.menu.PortableCraftingMenu;
 import com.quartzshard.aasb.common.item.equipment.armor.jewellery.AmuletItem;
 import com.quartzshard.aasb.common.item.equipment.curio.AbilityCurioItem;
 import com.quartzshard.aasb.data.LangData;
@@ -37,7 +38,6 @@ import net.minecraft.nbt.StringTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.SimpleMenuProvider;
@@ -59,24 +59,18 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
-import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.EntityTeleportEvent;
 import top.theillusivec4.curios.api.SlotContext;
 
 
@@ -95,7 +89,7 @@ public class ArcaneRune extends FormRune {
 	 * strong: transmuting touch (itemizer)
 	 */
 	@Override
-	public boolean combatAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
+	public boolean combatAbility(@NotNull ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
 		double reach = player.getEntityReach();
 		Vec3 checkVec = player.getLookAngle().scale(reach); 
 		@Nullable EntityHitResult hitRes = ProjectileUtil.getEntityHitResult(
@@ -106,7 +100,7 @@ public class ArcaneRune extends FormRune {
 				player.getBoundingBox().expandTowards(checkVec).inflate(1),
 				ent -> ent instanceof LivingEntity && !EntUtil.isInvincible(ent) && ent.isAlive());
 		if (hitRes != null) {
-			LivingEntity victim = (LivingEntity) hitRes.getEntity();
+			@NotNull LivingEntity victim = (LivingEntity) hitRes.getEntity();
 			if (strong) {
 				if (victim.getHealth() <= victim.getMaxHealth()/3f || victim.getHealth() <= 10) {
 					if (entityItemizer(victim, player, player)) {
@@ -134,7 +128,7 @@ public class ArcaneRune extends FormRune {
 	 * strong: portable transmutation
 	 */
 	@Override
-	public boolean utilityAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
+	public boolean utilityAbility(@NotNull ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
 		if (strong) {
 			// TODO transmutation tablet
 		}
@@ -159,7 +153,7 @@ public class ArcaneRune extends FormRune {
 	}
 
 	@Override
-	public void tickPassive(ItemStack stack, ServerPlayer player, ServerLevel level, boolean strong, boolean unequipped) {
+	public void tickPassive(ItemStack stack, @NotNull ServerPlayer player, ServerLevel level, boolean strong, boolean unequipped) {
 		if (unequipped) { // FIXME cannot for the life of me get this thing to reset the time accel when its unequipped. fix later
 			//System.out.println(stack.isEmpty());
 			resetAccel(player, stack);
@@ -200,7 +194,7 @@ public class ArcaneRune extends FormRune {
 		return NBTUtil.getInt(stack, TK_TICKTIME, 0);
 	}
 	
-	private static void resetAccel(Player player, ItemStack stack) {
+	private static void resetAccel(Player player, @NotNull ItemStack stack) {
 		NBTUtil.setBoolean(stack, TK_ACTIVATED, false);
 		NBTUtil.setInt(stack, TK_TICKTIME, 0);
 		resetTimeAccelSpeed(player);
@@ -234,7 +228,7 @@ public class ArcaneRune extends FormRune {
 	 * @param size side length of the AOE box. if <= 0 will disable all AOE effects
 	 */
 	public void jojoReference(Player player, ItemStack stack, double potency, int tick, int max, int size, long plrEmc) {
-		for (Attribute attribute : getTimeAccelAttributes()) {
+		for (@NotNull Attribute attribute : getTimeAccelAttributes()) {
 			player.getAttribute(attribute).removeModifier(UUID_TIMEACCEL);
 		} // clearing old modifiers to make room for updated ones
 		double curPow = Math.min(1d, (double)tick/(double)max);
@@ -278,7 +272,7 @@ public class ArcaneRune extends FormRune {
 				for (BlockEntity te : WorldUtil.allTEInBox(level, aoe)) {
 					if (toConsume > plrEmc) break;
 					else if (!te.isRemoved() && !TileTP.L_NO_TICKACCEL.contains(te.getType())) {
-						BlockPos pos = te.getBlockPos();
+						@NotNull BlockPos pos = te.getBlockPos();
 						if (level.shouldTickBlocksAt(ChunkPos.asLong(pos))) {
 							LevelChunk chunk = level.getChunkAt(pos);
 							LevelChunk.RebindableTickingBlockEntityWrapper tickingWrapper = chunk.tickersInLevel.get(pos);
@@ -287,7 +281,7 @@ public class ArcaneRune extends FormRune {
 									//In general this should always be the case, so we inline some of the logic
 									// to optimize the calls to try and make extra ticks as cheap as possible
 									if (chunk.isTicking(pos)) {
-										ProfilerFiller profiler = level.getProfiler();
+										@NotNull ProfilerFiller profiler = level.getProfiler();
 										profiler.push(tickingWrapper::getType);
 										BlockState state = chunk.getBlockState(pos);
 										if (te.getType().isValid(state)) {
@@ -313,10 +307,10 @@ public class ArcaneRune extends FormRune {
 				toConsume = 0;
 				
 				// random ticks brr
-				for (BlockPos pos : BoxUtil.allBlocksInBox(aoe)) {
+				for (@NotNull BlockPos pos : BoxUtil.allBlocksInBox(aoe)) {
 					if (plrEmc < 64) break;
 					else if (WorldUtil.isBlockLoaded(level, pos)) {
-						BlockState state = level.getBlockState(pos);
+						@NotNull BlockState state = level.getBlockState(pos);
 						Block block = state.getBlock();
 						if (state.isRandomlyTicking() && !state.is(BlockTP.NO_TICKACCEL)
 							&& !(block instanceof LiquidBlock)) { // Don't speed non-source fluid blocks - dupe issues
@@ -411,7 +405,7 @@ public class ArcaneRune extends FormRune {
 						.withParameter(LootContextParams.LAST_DAMAGE_PLAYER, player)
 						.withLuck(player.getLuck() + 2);
 			}
-			LootParams lootparams = lootcontext$builder.create(LootContextParamSets.ENTITY);
+			@NotNull LootParams lootparams = lootcontext$builder.create(LootContextParamSets.ENTITY);
 			loottable.getRandomItems(lootparams, entity.getLootTableSeed());
 			for (ItemStack stack : loottable.getRandomItems(lootparams, entity.getLootTableSeed())) {
 				stack.setCount(1);
@@ -435,10 +429,10 @@ public class ArcaneRune extends FormRune {
 
 			//////////
 			// ported from Bookshelf 1.12 code
-			final ListTag loreList = new ListTag();
-			String type = LangData.tc(entity.getType().toString()).getString();
+			final @NotNull ListTag loreList = new ListTag();
+			@NotNull String type = LangData.tc(entity.getType().toString()).getString();
 			if (entity instanceof Player || entity.hasCustomName() && !resultItem.is(Items.NAME_TAG)) {
-				String name = entity.getDisplayName().getString();
+				@NotNull String name = entity.getDisplayName().getString();
 				loreList.addTag(0, StringTag.valueOf("{\"text\":\"Formerly '"+name+"' ("+type+")\"}"));
 			} else {
 				loreList.addTag(0, StringTag.valueOf("{\"text\":\"Formerly "+type+"\"}"));

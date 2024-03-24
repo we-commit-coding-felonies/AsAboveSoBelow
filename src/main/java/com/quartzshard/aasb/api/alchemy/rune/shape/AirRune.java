@@ -1,5 +1,6 @@
 package com.quartzshard.aasb.api.alchemy.rune.shape;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.quartzshard.aasb.api.alchemy.aspect.ShapeAspect;
@@ -47,7 +48,7 @@ public class AirRune extends ShapeRune {
 	 * Strong: UNNNNLIMITED POWWWEERRRRR (chain lightning)
 	 */
 	@Override
-	public boolean combatAbility(ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
+	public boolean combatAbility(@NotNull ItemStack stack, ServerPlayer player, ServerLevel level, BindState state, boolean strong, String slot) {
 		if (state == BindState.PRESSED) {
 			long wayHeld = WayUtil.getAvaliableWay(player);
 			if (wayHeld >= 32) {
@@ -91,12 +92,12 @@ public class AirRune extends ShapeRune {
 		//return false;
 	}
 	@Override
-	public void tickPassive(ItemStack stack, ServerPlayer player, ServerLevel level, boolean strong, boolean unequipped) {
+	public void tickPassive(ItemStack stack, @NotNull ServerPlayer player, ServerLevel level, boolean strong, boolean unequipped) {
 		if (strong) {
 			long heldWay = WayUtil.getAvaliableWay(player);
 			long cost = 8;
 			boolean canAfford = heldWay >= cost;
-			Abilities a = player.getAbilities();
+			@NotNull Abilities a = player.getAbilities();
 			if (canAfford && !unequipped && !a.mayfly) {
 				WayUtil.consumeAvaliableWay(player, cost);
 				player.getAbilities().mayfly = true;
@@ -116,7 +117,7 @@ public class AirRune extends ShapeRune {
 		}
 	}
 	@Override
-	public void tickPassiveClient(ItemStack stack, Player player, Level level, boolean strong, boolean unequipped) {
+	public void tickPassiveClient(ItemStack stack, @NotNull Player player, Level level, boolean strong, boolean unequipped) {
 		if (!strong && this.passiveEnabled(stack) && !player.getAbilities().flying && !player.isFallFlying()) {
 			if (WayUtil.hasWay(player)) {
 				player.fallDistance = 0;
@@ -125,7 +126,7 @@ public class AirRune extends ShapeRune {
 		}
 	}
 	private static void attemptGustFlight(Player player) {
-		Vec3 newVec = player.getDeltaMovement();
+		@NotNull Vec3 newVec = player.getDeltaMovement();
 		if (ClientUtil.isJumpPressed()) {
 			newVec = newVec.add(0, 0.1, 0);
 		}
@@ -173,12 +174,12 @@ public class AirRune extends ShapeRune {
 		if (strong) player.level().playSound(null, player.blockPosition(), SoundEvents.ELYTRA_FLYING, SoundSource.PLAYERS, factor, 10);
 	}
 	
-	private HitResult swrgSuperSmite(Player player, Level level) {
+	private @NotNull HitResult swrgSuperSmite(Player player, Level level) {
 		Vec3 pos1 = player.getEyePosition();
-		Vec3 ray = player.getLookAngle().scale(120);
-		Vec3 pos2 = pos1.add(ray);
+		@NotNull Vec3 ray = player.getLookAngle().scale(120);
+		@NotNull Vec3 pos2 = pos1.add(ray);
 		// FIXME i cba right now but entity smite works through walls and that shouldnt be a thing
-		HitResult hitRes = ProjectileUtil.getEntityHitResult(player, pos1, pos2, AABB.ofSize(pos1, 0.05, 0.05, 0.05).expandTowards(ray).inflate(2), this::canBeSmitten, 0);
+		@Nullable HitResult hitRes = ProjectileUtil.getEntityHitResult(player, pos1, pos2, AABB.ofSize(pos1, 0.05, 0.05, 0.05).expandTowards(ray).inflate(2), this::canBeSmitten, 0);
 		if (hitRes != null && hitRes.getType() == HitResult.Type.ENTITY) {
 			Entity ent = ((EntityHitResult)hitRes).getEntity();
 			for (int i = 0; i < (level.isThundering() ? 10 : 1) ; i++) {

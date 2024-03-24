@@ -18,10 +18,11 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
 
 public class ItemTP extends ItemTagsProvider {
 	
-	public ItemTP(PackOutput out, CompletableFuture<HolderLookup.Provider> lp, ExistingFileHelper help, BlockTP blockTP) {
+	public ItemTP(PackOutput out, CompletableFuture<HolderLookup.Provider> lp, ExistingFileHelper help, @NotNull BlockTP blockTP) {
 		super(out, lp, blockTP.contentsGetter(), AASB.MODID, help);
     }
 	

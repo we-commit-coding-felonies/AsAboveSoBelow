@@ -37,7 +37,7 @@ public class ItemData {
 	/**
 	 * Creates an {@link ItemData} object from a given {@link Item} with an optional {@link CompoundTag} attached.
 	 */
-	public static ItemData fromItem(ItemLike item, @Nullable CompoundTag nbt) {
+	public static @NotNull ItemData fromItem(ItemLike item, @Nullable CompoundTag nbt) {
 		return new ItemData(item, nbt); // TODO trim out tags we dont care about?
 	}
 	
@@ -45,7 +45,7 @@ public class ItemData {
 		return new ItemData(item, null); // TODO trim out tags we dont care about?
 	}
 
-	public static ItemData fromStack(ItemStack stack) {
+	public static @NotNull ItemData fromStack(ItemStack stack) {
 		return fromItem(stack.getItem(), stack.getTag()); // TODO trim out tags we dont care about?
 	}
 	/**
@@ -81,7 +81,7 @@ public class ItemData {
 	 * @return A new {@link ItemStack} created from the stored {@link Item} and {@link CompoundTag}
 	 */
 	public ItemStack createStack() {
-		ItemStack stack = new ItemStack(item);
+		@NotNull ItemStack stack = new ItemStack(item);
 		CompoundTag nbt = getNBT();
 		if (nbt != null) {
 			//Only set the NBT if we have some, other then allow the item to use its default NBT
@@ -94,7 +94,7 @@ public class ItemData {
 	 * Writes the item and nbt fields to a NBT object.
 	 */
 	@SuppressWarnings("null") // If an item has a null ResourceLocation, that seems very bad and its probably OK to crash
-	public CompoundTag write(CompoundTag nbt) {
+	public @NotNull CompoundTag write(CompoundTag nbt) {
 		nbt.putString("item", ForgeRegistries.ITEMS.getKey(item).toString()); //item.getRegistryName().toString());
 		if (this.nbt != null) {
 			nbt.put("nbt", this.nbt);
@@ -126,7 +126,7 @@ public class ItemData {
 	@SuppressWarnings("null") // If an item has a null ResourceLocation, that seems very bad and its probably OK to crash
 	@Override
 	public String toString() {
-		String str = "";
+		@NotNull String str = "";
 		str += ForgeRegistries.ITEMS.getKey(item).toString();
 		if (nbt != null) {
 			str += nbt.toString();

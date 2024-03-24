@@ -14,6 +14,7 @@ import com.quartzshard.aasb.init.NetInit;
 import com.quartzshard.aasb.net.server.KeybindPacket;
 import com.quartzshard.aasb.net.server.KeybindPacket.BindState;
 import com.quartzshard.aasb.net.server.KeybindPacket.ServerBind;
+import com.quartzshard.aasb.util.ClientUtil.AstralProjection;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.KeyMapping;
@@ -29,7 +30,7 @@ import net.minecraftforge.fml.common.Mod;
 public class Keybinds {
 	public static final String CATEGORY = "key.categories."+AASB.MODID;
 	
-	public static Component fLoc(KeyMapping key) {
+	public static Component fLoc(@NotNull KeyMapping key) {
 		return Component.translatable("[%s]", key.getTranslatedKeyMessage().copy().withStyle(ChatFormatting.AQUA));
 	}
 	
@@ -72,7 +73,7 @@ public class Keybinds {
 		 * gets the server-friendly version of this (no client-only code references)
 		 * @return corresponding ServerBind
 		 */
-		public ServerBind packetFriendly() {
+		public @NotNull ServerBind packetFriendly() {
 			return valueOf(ServerBind.class, this.name());
 		}
 	}
@@ -103,26 +104,31 @@ public class Keybinds {
 				state = BindState.RELEASED;
 			} else continue;
 			
-			int toSend = 1;
-			switch (state) {
-			case PRESSED:
-				toSend = 0;
-				while (key.consumeClick()) {
-					toSend++;
+			if (state == BindState.PRESSED && AstralProjection.isEnabled()) { // Only disable on press, so that freecam is still a toggle and not a hold
+				// Do not send keybinds if we are freecam, instead just disable freecam
+				AstralProjection.toggle();
+			} else {
+				int toSend = 1;
+				switch (state) {
+				case PRESSED:
+					toSend = 0;
+					while (key.consumeClick()) {
+						toSend++;
+					}
+					toSend = Math.max(1, toSend);
+					break;
+				default:
+					break;
+				case RELEASED:
+					while (key.consumeClick()) {
+						// resets the click count to 0
+					}
+					break;
 				}
-				toSend = Math.max(1, toSend);
-				break;
-			default:
-				break;
-			case RELEASED:
-				while (key.consumeClick()) {
-					// resets the click count to 0
+				@NotNull KeybindPacket packet = new KeybindPacket(bind.getKey().packetFriendly(), state);
+				for (; toSend > 0; toSend--) {
+					NetInit.toServer(packet);
 				}
-				break;
-			}
-			KeybindPacket packet = new KeybindPacket(bind.getKey().packetFriendly(), state);
-			for (; toSend > 0; toSend--) {
-				NetInit.toServer(packet);
 			}
 		}
 	}

@@ -1,5 +1,7 @@
 package com.quartzshard.aasb.api.misc;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Something that has no inputs, nor any outputs. It just does something.
  */
@@ -12,7 +14,7 @@ public interface Executor {
 	 * @param other the Performer to be executed after this one
 	 * @return Combined Executor
 	 */
-	default Executor also(Executor other) {
+	default @NotNull Executor also(Executor other) {
 		return () -> {
 			this.execute();
 			other.execute();

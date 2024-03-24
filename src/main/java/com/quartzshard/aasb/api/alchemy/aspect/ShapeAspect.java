@@ -2,6 +2,9 @@ package com.quartzshard.aasb.api.alchemy.aspect;
 
 import java.util.Random;
 
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.Resource;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.quartzshard.aasb.AASB;
@@ -28,7 +31,8 @@ public enum ShapeAspect implements IAspect<ShapeAspect> {
 	
 	public final int color;
 	public final String lang;
-	private final Component loc, fLoc;
+	private final @NotNull Component loc, fLoc;
+	private final ResourceLocation symbol;
 
 	// duplicate code because cant call name() from within constructor
 	ShapeAspect(int color) {
@@ -37,12 +41,14 @@ public enum ShapeAspect implements IAspect<ShapeAspect> {
 		this.lang = lang;
 		loc = LangData.tc(lang);
 		fLoc = loc.copy().withStyle(Style.EMPTY.withColor(color));
+		symbol = AASB.rl("textures/symbol/aspect/shape/"+this.name().toLowerCase()+".png");
 	}
 	ShapeAspect(String lang, int color) {
 		this.color = color;
 		this.lang = lang;
 		loc = LangData.tc(lang);
 		fLoc = loc.copy().withStyle(Style.EMPTY.withColor(color));
+		symbol = AASB.rl("textures/symbol/aspect/shape/"+this.name().toLowerCase()+".png");
 	}
 	
 	private String autoLangKey() {
@@ -54,60 +60,51 @@ public enum ShapeAspect implements IAspect<ShapeAspect> {
 	public MutableComponent loc() {
 		return loc.copy();
 	}
-	public MutableComponent fLoc() {
+	public @NotNull MutableComponent fLoc() {
 		return fLoc.copy();
 	}
 	
 	@Override
-	public boolean flowsTo(ShapeAspect other) {
-		switch (this) {
-			case QUINTESSENCE:
-				return other != QUINTESSENCE;
-			case WATER:
-				return other == EARTH;
-			case EARTH:
-				return other == FIRE;
-			case FIRE:
-				return other == AIR;
-			case AIR:
-				return other == WATER;
-			default:
-				return false;
-		}
+	public boolean flowsTo(@Nullable ShapeAspect other) {
+		if (other == null) return false;
+		return switch (this) {
+			case QUINTESSENCE -> other != QUINTESSENCE;
+			case WATER -> other == EARTH;
+			case EARTH -> other == FIRE;
+			case FIRE -> other == AIR;
+			case AIR -> other == WATER;
+		};
 	}
 
 	@Override
-	public boolean flowsFrom(ShapeAspect other) {
-		return other.flowsTo(this);
+	public boolean flowsFrom(@Nullable ShapeAspect other) {
+		return other != null && other.flowsTo(this);
 	}
 
 	@Override
-	public float violationTo(ShapeAspect other) {
+	public float violationTo(@Nullable ShapeAspect other) {
+		if (other == null || other == QUINTESSENCE) return Float.POSITIVE_INFINITY;
 		if (!this.flowsTo(other)) {
 			if (this == other) return 0.25f;
-			switch (this) {
-				case WATER:
-					return other == AIR ? 0.5f : 1;
-				case EARTH:
-					return other == WATER ? 0.5f : 1;
-				case FIRE:
-					return other == EARTH ? 0.5f : 1;
-				case AIR:
-					return other == FIRE ? 0.5f : 1;
-				default:
-					return 1; // this only runs if this == other == QUINTESSENCE
-			}
+			return switch (this) {
+				case WATER -> other == AIR ? Float.POSITIVE_INFINITY : 0.5f;
+				case EARTH -> other == WATER ? Float.POSITIVE_INFINITY : 0.5f;
+				case FIRE -> other == EARTH ? Float.POSITIVE_INFINITY : 0.5f;
+				case AIR -> other == FIRE ? Float.POSITIVE_INFINITY : 0.5f;
+				case QUINTESSENCE -> 0; // this case should never run
+				//default -> other == QUINTESSENCE ? Float.POSITIVE_INFINITY : 0; // this only runs if this == other == QUINTESSENCE
+			};
 		}
 		return 0;
 	}
 
 	@Override
-	public float violationFrom(ShapeAspect other) {
-		return other.violationTo(this);
+	public float violationFrom(@Nullable ShapeAspect other) {
+		return other == null ? Float.POSITIVE_INFINITY : other.violationTo(this);
 	}
 	
 	@Override
-	public String toString() {
+	public @NotNull String toString() {
 		return "Shape."+this.name().toLowerCase();
 	}
 
@@ -115,7 +112,17 @@ public enum ShapeAspect implements IAspect<ShapeAspect> {
 	public String serialize() {
 		return toString();
 	}
-	
+
+	@Override
+	public ResourceLocation symbolTexture() {
+		return symbol;
+	}
+
+	@Override
+	public int getColor() {
+		return color;
+	}
+
 	/**
 	 * Deserializes a ShapeAspect from a String <br>
 	 * Expected format is "Shape.earth", returns null if it fails

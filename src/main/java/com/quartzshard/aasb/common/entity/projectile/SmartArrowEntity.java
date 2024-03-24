@@ -53,14 +53,14 @@ public class SmartArrowEntity extends Arrow {
 		this.maxLife = 200;
 	}
 
-	public SmartArrowEntity(Level level, LivingEntity shooter, float damage, int maxLife) {
+	public SmartArrowEntity(Level level, @NotNull LivingEntity shooter, float damage, int maxLife) {
 		super(level, shooter);
 		this.setBaseDamage(damage);
 		this.pickup = Pickup.CREATIVE_ONLY;
 		this.maxLife = maxLife;
 	}
 
-	public SmartArrowEntity(Level level, LivingEntity shooter, float damage, int maxLife, byte aiState) {
+	public SmartArrowEntity(@NotNull Level level, LivingEntity shooter, float damage, int maxLife, byte aiState) {
 		super(level, shooter);
 		this.setBaseDamage(damage);
 		this.pickup = Pickup.CREATIVE_ONLY;
@@ -78,7 +78,7 @@ public class SmartArrowEntity extends Arrow {
 	}
 	
 	@Override
-	protected boolean canHitEntity(Entity ent) {
+	protected boolean canHitEntity(@NotNull Entity ent) {
 		// we will never hit our owner
 		boolean canHit = !ent.is(getOwner());
 		if (canHit && getPierceLevel() > 0) {
@@ -168,12 +168,12 @@ public class SmartArrowEntity extends Arrow {
 	protected void findNewTarget() {
 		if (level().isClientSide()) return;
 		
-		List<LivingEntity> validTargets = level().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(64), SmartArrowEntity.this::isValidHomingTarget);
+		@NotNull List<LivingEntity> validTargets = level().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(64), SmartArrowEntity.this::isValidHomingTarget);
 		if (!validTargets.isEmpty()) {
 			validTargets.sort(Comparator.comparing(SmartArrowEntity.this::distanceToSqr, Double::compare));
 			LivingEntity target = validTargets.get(0);
 			Vec3 targetPos = target.getBoundingBox().getCenter();
-			for (ServerPlayer plr : ((ServerLevel)level()).players()) {
+			for (@NotNull ServerPlayer plr : ((ServerLevel)level()).players()) {
 				if (plr.blockPosition().closerToCenterThan(this.position(), 64d)) {
 					NetInit.toClient(new DrawParticleLinePacket(this.position(), targetPos, LineParticlePreset.ARROW_TARGET_LOCK), plr);
 				}
@@ -185,7 +185,7 @@ public class SmartArrowEntity extends Arrow {
 		}
 	}
 
-	protected Vec3 getTargetPos() {
+	protected @NotNull Vec3 getTargetPos() {
 		return new Vec3(entityData.get(TARGETPOS_X), entityData.get(TARGETPOS_Y), entityData.get(TARGETPOS_Z));
 	}
 	
@@ -205,7 +205,7 @@ public class SmartArrowEntity extends Arrow {
 		entityData.set(AI_STATE, newState);
 	}
 	
-	protected void changeTarget(Vec3 tPos) {
+	protected void changeTarget(@NotNull Vec3 tPos) {
 		entityData.set(TARGETPOS_X, (float)tPos.x);
 		entityData.set(TARGETPOS_Y, (float)tPos.y);
 		entityData.set(TARGETPOS_Z, (float)tPos.z);
@@ -219,8 +219,8 @@ public class SmartArrowEntity extends Arrow {
 		if (!level().isClientSide()) {
 			((ServerLevel)level()).sendParticles(ParticleTypes.ELECTRIC_SPARK, position().x, position().y, position().z, 3, 0.1, 0.1, 0.1, 0);
 		}
-		Vec3 vel = getDeltaMovement();
-		Vec3 arrowLoc = position();
+		@NotNull Vec3 vel = getDeltaMovement();
+		@NotNull Vec3 arrowLoc = position();
 		Vec3 targetLoc = getTargetPos();
 
 		// Get the vector that points straight from the arrow to the target
